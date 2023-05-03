@@ -9,11 +9,14 @@
 
 \usepackage[backend=biber, style=alphabetic]{biblatex}
 %\usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
-\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
+%\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
+\addbibresource{MA.bib}
+
+
+\KOMAoptions{parskip=full}
 
 \usepackage{amsmath}
-
-\usepackage{parskip}
+%\usepackage{parskip}
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -32,10 +35,12 @@
 %\newcommand{\textsfs}[1]{{\small{\normalfont\sffamily #1}}}
 %\newcommand{\textsft}[1]{{\tiny{\normalfont\sffamily #1}}}
 
-\addbibresource{MA.bib}
 
 \usepackage{lipsum}  % produces dummy text
+
+
 \begin{document}
+
 
 % ========== Title page
 
@@ -102,7 +107,14 @@
 	\item Semantic Hypergraphs can be a valuable tool for that because...
 \end{itemize}
 
-A Semantic Hypergraph (SH) \citep{menezes_semantic_2021} is...
+
+Human life in times of widespread use of the internet and smartphones is most certainly more than ever interspersed with text-based communication...
+
+
+A Semantic Hypergraphd \cite{menezes_semantic_2021} is a form of representation for Natural Language (NL) and therefore knowledge. \textit{NL} sentences can be modelled as a recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing \textit{SH}.
+
+The aim of the SH framework is to provide a \textit{open} and \textit{adaptive} framework to analyse text corpora, especially in the domain of computational social science (CSS) \cite{lazer2009computational}. The framework is \textit{open} in the sense that it's representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is based on adaptive subsystems (ML-based) and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness (???).
+
 
 
 
@@ -110,30 +122,42 @@ A Semantic Hypergraph (SH) \citep{menezes_semantic_2021} is...
 \chapter{Fundamentals and Related Work}
 \section{Semantic Hypergraph}
 
-\subsection{Notation}
+\subsection{Structure}
+
+\subsection{Syntax}
 
 Square bracket notation 
 
 
-\section{Text Similarity Measures}
-
-tf-idf, etc.?
-
-
 \section{Semantic Similarity}
 
+\subsection{Different Similarity Measures}
 
-\section{Embedding-based similarity}
+\subsubsection{String Similarity}
+Lievenstein distance, etc..
 
-\subsection{Embedding types}
+\subsubsection{Lexical Similarity}
+tf-idf, etc.?
 
-\subsubsection{Fixed word embeddings}
+\subsection{Types of Semantic Similarity}
 
-\subsubsection{Contextual embeddings}
+\subsubsection{Lexical Databases}
+WordNet and alike (not the scope of this work)
 
-\subsubsection{Sentence embeddings}
 
-\subsection{Embedding distance measures}
+\section{Embedding-based Similarity}
+
+\subsection{Embedding Types}
+
+\subsubsection{Fixed Word Embeddings}
+
+\subsubsection{Contextual Ebeddings}
+
+%\subsubsection{Sentence embeddings}
+
+\subsection{Distance Measures}
+
+Mean reference vector vs. pairwise distance
 
 
 
@@ -144,16 +168,29 @@ tf-idf, etc.?
 Combining Semantic Hypergraphs with neural embeddings
 
 \section{\texttt{semsim} Functional Pattern}
+pattern works only for atoms
+
+
+\subsection{Pattern Matching Process}
 
 \subsection{Pattern-wise Similarity Threshold}
 
 
-\section{Fixed word-vector based}
+\section{Fixed Word Embedding-based Matching}
+word2vec via gensim
 
 \subsection{Single Word}
 
 \subsection{Multi Word}
 \label{sec:semsim-multi-word}
+Square bracket notation 
+
+\section{Contextual Embedding-based Matching}
+
+
+\section{Similarity Threshold Discovery}
+detect change points in number of matches \\ 
+see https://github.com/deepcharles/ruptures
 
 
 % ========== 
@@ -162,12 +199,44 @@ Combining Semantic Hypergraphs with neural embeddings
 \section{Integration into the SH Framework}
 Realisation as functional pattern
 
+\section{Similarity Threshold}
+\label{sec:similarity-threshold}
+
+
+\section{Tokenization}
+
+\subsection{SpaCy}
+SpaCy linguistic tokenization (https://spacy.io/usage/linguistic-features how-tokenizer-works)
+spacy (without transformers) uses an purely rule based (but language depended) tokenizer as far as I understand: https://spacy.io/usage/linguistic-features how-tokenizer-works (the call it linguistic tokenizer)
+
+side note about using different transformer models than the provided one (because i was always confused about this):
+it it possible to exchange the underlying transformer component for basically every transformer model (as long as it follows the conventions that spacy expects), but you would have to retrain the spacy model to be able to use the task specific heads (like e.g. NER)
+footnote: https://github.com/explosion/spaCy/discussions/10327
+
+an alignment is provided between the transformer-tokenizer and the spacy-tokenizer
+lib: https://github.com/explosion/spacy-alignments
+
+footnote: https://explosion.ai/blog/spacy-transformers
+
+
+\subsection{WordPiece and SentencePiece}
+
+SentencePiece: https://github.com/google/sentencepiece
+
+
+
+\section{Matching edges to token embeddings}
+string matching
+
 
 \section{External Libraries and Models}
+Here list libs and models to be referenced later.
+
 Word2Vec
 Gensim
-
-
+SentenceTransformers
+Transformers
+SpaCy
 
 
 
@@ -179,7 +248,8 @@ Bracket notation for multi-word Semsim
 
 % ========== 
 \chapter{Results and Evaluation}
-%\section{Qualitative Results}
+In this chapter...
+
 \section{Case Study: Conflicts}
 This case study follows the approach presented in \cite[p.~22]{menezes_semantic_2021} where expressions of conflict are extracted from a SH constructed from a corpus of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.”
 
@@ -195,25 +265,57 @@ Pattern \ref{pat:conflict} is used to extract conflicts between two parties, whe
 
 
 
-To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the 20 most populous countries \citep{wiki:list_of_countries} is used:
+To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \cite{wiki_list_of_countries} is used (listed in descending order by population size):
 
-\textit{China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}
 
-Pattern \ref{pat:conflict-countries} shows the resulting pattern for conflicts between countries.
+\textit{India, China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}
+
+To avoid the repetition of that list in the following pattern, we introduce a variable:
+
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  COUNTRIES = [india,china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia,mexico, ajapan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]
+  \caption{Countries variable}
+  \label{pat:countries-var}
+\end{pattern}
+
+Pattern \ref{pat:conflict-countries} shows the resulting pattern for conflicts between countries:
 
 \begin{pattern}
   \normalfont\sffamily
   \centering
   ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
   ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
-  ( semsim/J >SOURCE/C [china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia, mexico,japan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]/C ) \(\wedge\) \\
-  ( semsim/J >TARGET/C [china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia, mexico,japan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]/C )
+  ( semsim/J >SOURCE/C COUNTRIES/C ) \(\wedge\) ( semsim/J >TARGET/C COUNTRIES/C )
   \caption{Country conflict pattern}
   \label{pat:conflict-countries}
 \end{pattern}
 
+In pattern \ref{pat:conflict-countries-threshold-countries} a sub-pattern specific threshold \(t_{sim}^{countries}\) for the countries \texttt{semsim} sub-pattern is introduced.
 
-In \ref{fig:case-study-conflict-countries} the number of matches that result from using this pattern is plotted against the similarity threshold for the \texttt{semsim} pattern.
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
+  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
+  ( semsim/J >SOURCE/C COUNTRIES/C \(t_{sim}^{countries}\) ) \(\wedge\) \\ 
+  ( semsim/J >TARGET/C COUNTRIES/C \(t_{sim}^{countries}\) )
+  \caption{Country conflict pattern}
+  \label{pat:conflict-countries-threshold-countries}
+\end{pattern}
+
+
+\subsection{Quantitative Results}
+
+
+%To asses the generalisation capabilities (recall?) of the introduced \texttt{semsim}-country-pattern,
+
+Pattern \ref{pat:conflict-countries} is matched against the described \textit{Reddit r/worldnews} hypergraph. The similarity threshold  \(t_{sim}\) for the \texttt{semsim} function (see \ref{sec:similarity-threshold}) is varied. \(t_{sim}\) is either varied for the entire pattern or for a specific \texttt{semsim} sub-pattern. 
+
+%for every matching operation which includes a \texttt{semsim} function or for
+
+%In \ref{fig:case-study-conflict-countries-1} the number of matches that result from using this pattern is plotted against the similarity threshold for the \texttt{semsim} pattern.
 
 
 \begin{figure}
@@ -223,7 +325,7 @@ In \ref{fig:case-study-conflict-countries} the number of matches that result fro
          \caption{Similarity threshold variation for all \textsf{semsim} patterns}
          \label{fig:countries_20-most-popul_thresholds}
      \end{subfigure}
-     \begin{subfigure}[t]{\textwidth}
+     \begin{subfigure}[t]{0.9\textwidth}
          \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries.png}
          \caption{Similarity threshold variation only for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns}
          \label{fig:countries_20-most-popul_thresholds-countries}
@@ -236,10 +338,8 @@ In \ref{fig:case-study-conflict-countries} the number of matches that result fro
      \centering
      \begin{subfigure}[t]{0.9\textwidth}
          \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries_greater-0.4.png}
-%         \caption{Similarity threshold variation only for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns}
-%         \label{fig:countries_20-most-popul_thresholds-countries-greater-0.4}
      \end{subfigure}
-\caption{Number of matches for conflict pattern in relation to similarity threshold with threshold variation for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns in the range \(0.4 >=\) threshold \(< 1.0\) (and y-axis limited to 2000 results)}
+\caption{Number of matches for conflict pattern in relation to similarity threshold with threshold variation for \textsf{SOURCE} and \textsf{TARGET} (i.e. COUNTRIES) \texttt{semsim} patterns in the range \(0.4 >=\) threshold \(< 1.0\) (and y-axis limited to 2000 results)}
 \label{fig:case-study-conflict-countries-2}   
 \end{figure}
 
