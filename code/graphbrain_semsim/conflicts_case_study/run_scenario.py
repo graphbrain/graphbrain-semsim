@@ -14,19 +14,6 @@ from graphbrain_semsim.utils.general import all_equal, save_json
 logger = logging.getLogger(__name__)
 
 
-"""
-parallelization
----
-objects to share between processes:
-- hypergraph
-- semsim matchers 
---> pass the matchers through the matching functions
---> monkey-patch the matchers into the hypergraph
---> monkey-patch the _matchers in the semsim interface
-
-"""
-
-
 def run(scenario: EvaluationScenario):
     logger.info(f"Creating evaluation runs for scenario '{scenario.id}'")
 
@@ -38,15 +25,15 @@ def run(scenario: EvaluationScenario):
         for semsim_type, semsim_config in scenario.semsim_configs.items():
             init_matcher(semsim_type, semsim_config)
 
-    # execute evaluation runs
+    # create evaluation runs
     for eval_run in create_eval_runs(scenario):
-        logger.info("-----")
-        logger.info(f"Running evaluation run {eval_run.run_idx}: '{eval_run.id}'")
-        exec_eval_run(hg, scenario.hg_sequence, eval_run)
-        # update scenario?
+        exec_eval_run(eval_run, hg, scenario.hg_sequence)
 
 
-def exec_eval_run(hg: Hypergraph, sequence: str, eval_run: EvaluationRun):
+def exec_eval_run(eval_run: EvaluationRun, hg: Hypergraph, sequence: str):
+    logger.info("-----")
+    logger.info(f"Running evaluation run {eval_run.run_idx}: '{eval_run.id}'")
+
     eval_run.start_time = datetime.now()
 
     eval_run.matches = []
