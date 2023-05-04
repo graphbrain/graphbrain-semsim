@@ -81,10 +81,14 @@ def make_conflict_pattern(
         source_pattern = country_pattern
         target_pattern = country_pattern
 
-    logger.info(f"PREP pattern: {prep_pattern}")
-    logger.info(f"PRED pattern: {pred_pattern}")
+    logger.debug(f"PREP pattern: {prep_pattern}")
+    logger.debug(f"PRED pattern: {pred_pattern}")
     if countries:
-        logger.info(f"Country pattern: {country_pattern}")  # noqa
+        logger.debug(f"Country pattern: {country_pattern}")  # noqa
 
-    return f"( (var {pred_pattern} PRED) (var {source_pattern} SOURCE) (var {target_pattern} TARGET) " \
-           f"({prep_pattern} {topic_pattern}) )"
+    conflict_pattern = \
+        f"( (var {pred_pattern} PRED) (var {source_pattern} SOURCE) (var {target_pattern} TARGET) " \
+        f"({prep_pattern} {topic_pattern}) )"
+
+    logger.debug(f"Conflict pattern: {conflict_pattern}")
+    return conflict_pattern
