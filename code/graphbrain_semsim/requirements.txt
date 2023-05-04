@@ -1,4 +1,0 @@
-graphbrain
-pandas
-matplotlib
-scienceplots

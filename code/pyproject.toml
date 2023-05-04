@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "graphbrain-semsim"
+version = "0.1.0"
+description = ""
+authors = ["wuxmax <github@max-reinhard.de>"]
+packages = [{include = "graphbrain_semsim"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+graphbrain = { path = "../../graphbrain/", develop = true }
+pandas = "^2.0.1"
+matplotlib = "^3.7.1"
+scienceplots = "^2.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
