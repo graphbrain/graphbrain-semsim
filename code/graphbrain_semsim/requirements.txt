@@ -1,4 +1,4 @@
-graphbrain
+-e ../../../graphbrain
 pandas
 matplotlib
 scienceplots
