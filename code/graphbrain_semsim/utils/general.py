@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def save_json(data: BaseModel, result_file_path: Path):
-    result_file_path.parent.mkdir(exist_ok=True)
+    result_file_path.parent.mkdir(exist_ok=True, parents=True)
     result_file_path.write_text(data.json())
     logger.info(f"Saved to '{result_file_path}'")
 

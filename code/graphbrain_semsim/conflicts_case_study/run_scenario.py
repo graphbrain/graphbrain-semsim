@@ -1,6 +1,7 @@
 import logging
 from copy import deepcopy
 from datetime import datetime
+from pathlib import Path
 
 from graphbrain.hypergraph import Hypergraph
 from graphbrain.semsim.interface import init_matcher
@@ -14,25 +15,37 @@ from graphbrain_semsim.utils.general import all_equal, save_json
 logger = logging.getLogger(__name__)
 
 
-def run(scenario: EvaluationScenario):
-    logger.info(f"Creating evaluation runs for scenario '{scenario.id}'")
-
+def run(scenario: EvaluationScenario, override: bool = False):
     # get hypergraph
     hg: Hypergraph = get_hgraph(scenario.hypergraph)
 
     # initialize semsim matchers
+    logger.info("---")
+    logger.info("Initializing SemSim matchers...")
     if scenario.semsim_configs:
         for semsim_type, semsim_config in scenario.semsim_configs.items():
             init_matcher(semsim_type, semsim_config)
 
     # create evaluation runs
-    for eval_run in create_eval_runs(scenario):
-        exec_eval_run(eval_run, hg, scenario.hg_sequence)
+    eval_runs: list[EvaluationRun] = make_eval_runs(scenario)
+    for eval_run in eval_runs:
+        eval_run_description: str = f"Eval run [{eval_run.run_idx}/{len(eval_runs)}]: '{eval_run.id}'"
+        results_file_path: Path = RESULT_DIR / scenario.id / f"{eval_run.id}.json"
+
+        logger.info(f"-----")
+        if results_file_path.exists() and not override:
+            logger.info(f"Skipping existing {eval_run_description}")
+            continue
+
+        logger.info(f"Executing {eval_run_description}...")
+        exec_eval_run(eval_run, hg, scenario.hg_sequence, results_file_path)
 
 
-def exec_eval_run(eval_run: EvaluationRun, hg: Hypergraph, sequence: str):
-    logger.info("-----")
-    logger.info(f"Running evaluation run {eval_run.run_idx}: '{eval_run.id}'")
+def exec_eval_run(
+        eval_run: EvaluationRun, hg: Hypergraph, sequence: str, results_file_path: Path, log_matches: bool = False
+):
+    # logger.info(f"Eval run info: {eval_run.json(indent=4)}")
+    logger.info(f"Pattern: {eval_run.pattern}")
 
     eval_run.start_time = datetime.now()
 
@@ -49,33 +62,29 @@ def exec_eval_run(eval_run: EvaluationRun, hg: Hypergraph, sequence: str):
             ]
         )
 
-        logger.info(pattern_match.edge)
-        logger.info(pattern_match.edge_text)
-        logger.info(pattern_match.variables)
-        logger.info(pattern_match.variables_text)
-        logger.info("---")
+        if log_matches:
+            log_pattern_match(pattern_match)
 
         eval_run.matches.append(pattern_match)
 
     eval_run.end_time = datetime.now()
     eval_run.duration = eval_run.end_time - eval_run.start_time
 
-    save_json(eval_run, RESULT_DIR / eval_run.scenario / f"{eval_run.id}.json")
-    logger.info("-----")
+    save_json(eval_run, results_file_path)
 
 
-def create_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
+def make_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
     if not scenario.threshold_values:
-        return [create_eval_run(scenario)]
+        return [make_eval_run(scenario)]
 
     threshold_combinations: list[dict[str, float]] = get_threshold_combinations(scenario)
     return [
-        create_eval_run(scenario, run_idx, threshold_combination)
+        make_eval_run(scenario, run_idx, threshold_combination)
         for run_idx, threshold_combination in enumerate(threshold_combinations)
     ]
 
 
-def create_eval_run(
+def make_eval_run(
         scenario: EvaluationScenario, run_idx: int = 0, threshold_combination: dict[str, float | None] = None
 ):
     sub_pattern_configs: dict[str, CompositionPattern] = deepcopy(scenario.sub_pattern_configs)
@@ -101,6 +110,14 @@ def create_eval_run(
         pattern=pattern,
         sub_pattern_configs=sub_pattern_configs
     )
+
+
+def log_pattern_match(pattern_match: PatternMatch):
+    logger.info(pattern_match.edge)
+    logger.info(pattern_match.edge_text)
+    logger.info(pattern_match.variables)
+    logger.info(pattern_match.variables_text)
+    logger.info("---")
 
 
 def get_threshold_combinations(scenario: EvaluationScenario):
