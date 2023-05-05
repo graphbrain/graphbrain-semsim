@@ -29,7 +29,9 @@ def run(scenario: EvaluationScenario, override: bool = False):
     # create evaluation runs
     eval_runs: list[EvaluationRun] = make_eval_runs(scenario)
     for eval_run in eval_runs:
-        eval_run_description: str = f"Eval run [{eval_run.run_idx}/{len(eval_runs)}]: '{eval_run.id}'"
+        # input()
+
+        eval_run_description: str = f"Eval run [{eval_run.run_idx + 1}/{len(eval_runs)}]: '{eval_run.id}'"
         results_file_path: Path = RESULT_DIR / scenario.id / f"{eval_run.id}.json"
 
         logger.info(f"-----")

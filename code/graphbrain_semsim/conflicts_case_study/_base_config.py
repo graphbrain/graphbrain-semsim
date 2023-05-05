@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logging.basicConfig(format='[{levelname}] {message}', style='{', level=logging.INFO)
 
 
-HG_DIR: Path = Path(__file__).parents[4]
+HG_DIR: Path = Path(__file__).parents[4] / "hypergraphs"
 HG_NAME = "reddit-worldnews-01012013-01082017.hg"
 
 

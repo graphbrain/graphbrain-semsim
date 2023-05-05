@@ -48,18 +48,18 @@ class ConflictsEvaluationScenario(EvaluationScenario):
 
 
 EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
-    # ConflictsEvaluationScenario(
-    #     scenario="1_original-pattern",
-    #     semsim_configs=None,
-    #     sub_pattern_configs={
-    #         "preds": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         ),
-    #         "preps": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         )
-    #     }
-    # ),
+    ConflictsEvaluationScenario(
+        scenario="1_original-pattern",
+        semsim_configs=None,
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        }
+    ),
     ConflictsEvaluationScenario(
         scenario="2-1_semsim-fix_preds",
         sub_pattern_configs={
