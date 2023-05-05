@@ -1,8 +1,6 @@
 import logging
-import inspect
 from pathlib import Path
 
-import graphbrain
 from graphbrain import hgraph
 from graphbrain.hypergraph import Hypergraph
 
@@ -11,7 +9,7 @@ logger = logging.getLogger()
 logging.basicConfig(format='[{levelname}] {message}', style='{', level=logging.INFO)
 
 
-HG_DIR = Path(inspect.getfile(graphbrain)).parents[2] / 'hypergraphs'
+HG_DIR: Path = Path(__file__).parents[4]
 HG_NAME = "reddit-worldnews-01012013-01082017.hg"
 
 
