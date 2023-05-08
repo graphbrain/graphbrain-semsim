@@ -48,87 +48,97 @@ class ConflictsEvaluationScenario(EvaluationScenario):
 
 
 EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
-    ConflictsEvaluationScenario(
-        scenario="1_original-pattern",
-        semsim_configs=None,
-        sub_pattern_configs={
-            "preds": CompositionPattern(
-                type=CompositionType.ANY,
-            ),
-            "preps": CompositionPattern(
-                type=CompositionType.ANY,
-            )
-        }
-    ),
-    ConflictsEvaluationScenario(
-        scenario="2-1_semsim-fix_preds",
-        sub_pattern_configs={
-            "preds": CompositionPattern(
-                type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
-            ),
-            "preps": CompositionPattern(
-                type=CompositionType.ANY,
-            )
-        },
-        threshold_values={
-            "preds": frange(0, 1, 0.01)
-        }
-    ),
-    ConflictsEvaluationScenario(
-        scenario="2-2_semsim-fix_preps",
-        sub_pattern_configs={
-            "preds": CompositionPattern(
-                type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
-            ),
-            "preps": CompositionPattern(
-                type=CompositionType.ANY,
-            )
-        },
-        threshold_values={
-            "preds": frange(0, 1, 0.01)
-        }
-    ),
     # ConflictsEvaluationScenario(
-    #     scenario="2-3_semsim-fix_preds_semsim-fix_preps",
-    #     pattern_config=PatternConfig(
-    #         comp_types={
-    #             "preds": CompositionType.SEMSIM,
-    #             "preps": CompositionType.SEMSIM,
-    #         },
-    #         semsim_types={
-    #             "preds": SemSimType.FIXED,
-    #             "preps": SemSimType.FIXED,
-    #         }
-    #     )
-    # ),
-    # ConflictsEvaluationScenario(
-    #     scenario="3-1_any_countries",
-    #     pattern_config=PatternConfig(
-    #         comp_types={
-    #             "preds": CompositionType.ANY,
-    #             "preps": CompositionType.ANY,
-    #             "countries": CompositionType.ANY
-    #         }
-    #     )
-    # ),
-    # ConflictsEvaluationScenario(
-    #     scenario="3-2_semsim-fix_countries",
-    #     pattern_config=PatternConfig(
-    #         comp_types={
-    #             "preds": CompositionType.ANY,
-    #             "preps": CompositionType.ANY,
-    #             "countries": CompositionType.SEMSIM
-    #         },
-    #         semsim_types={
-    #             "countries": SemSimType.FIXED,
-    #         }
-    #     ),
-    #     threshold_values={
-    #         "countries": frange(0, 1, 0.01)
+    #     scenario="1_original-pattern",
+    #     semsim_configs=None,
+    #     sub_pattern_configs={
+    #         "preds": CompositionPattern(
+    #             type=CompositionType.ANY,
+    #         ),
+    #         "preps": CompositionPattern(
+    #             type=CompositionType.ANY,
+    #         )
     #     }
     # ),
+    # ConflictsEvaluationScenario(
+    #     scenario="2-1_semsim-fix_preds",
+    #     sub_pattern_configs={
+    #         "preds": CompositionPattern(
+    #             type=CompositionType.SEMSIM,
+    #             semsim_type=SemSimType.FIXED,
+    #         ),
+    #         "preps": CompositionPattern(
+    #             type=CompositionType.ANY,
+    #         )
+    #     },
+    #     threshold_values={
+    #         "preds": frange(0, 1, 0.01)
+    #     }
+    # ),
+    # ConflictsEvaluationScenario(
+    #     scenario="2-2_semsim-fix_preps",
+    #     sub_pattern_configs={
+    #         "preds": CompositionPattern(
+    #             type=CompositionType.SEMSIM,
+    #             semsim_type=SemSimType.FIXED,
+    #         ),
+    #         "preps": CompositionPattern(
+    #             type=CompositionType.ANY,
+    #         )
+    #     },
+    #     threshold_values={
+    #         "preds": frange(0, 1, 0.01)
+    #     }
+    # ),
+    ConflictsEvaluationScenario(
+        scenario="2-3_semsim-fix_preds_semsim-fix_preps",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.FIXED,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.FIXED,
+            )
+        },
+        threshold_values={
+            "preds": frange(0, 1, 0.01),
+            "preps": frange(0, 1, 0.01)
+        }
+    ),
+    ConflictsEvaluationScenario(
+        scenario="3-1_any_countries",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "countries": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        }
+    ),
+    ConflictsEvaluationScenario(
+        scenario="3-2_semsim-fix_countries",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "countries": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.FIXED,
+            )
+        },
+        threshold_values={
+            "countries": frange(0, 1, 0.01)
+        }
+    ),
     # ConflictsEvaluationScenario(
     #     scenario="4-1_semsim-ctx_preds-general",
     #     pattern_config=PatternConfig(
