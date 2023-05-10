@@ -48,48 +48,48 @@ class ConflictsEvaluationScenario(EvaluationScenario):
 
 
 EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
-    # ConflictsEvaluationScenario(
-    #     scenario="1_original-pattern",
-    #     semsim_configs=None,
-    #     sub_pattern_configs={
-    #         "preds": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         ),
-    #         "preps": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         )
-    #     }
-    # ),
-    # ConflictsEvaluationScenario(
-    #     scenario="2-1_semsim-fix_preds",
-    #     sub_pattern_configs={
-    #         "preds": CompositionPattern(
-    #             type=CompositionType.SEMSIM,
-    #             semsim_type=SemSimType.FIXED,
-    #         ),
-    #         "preps": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         )
-    #     },
-    #     threshold_values={
-    #         "preds": frange(0, 1, 0.01)
-    #     }
-    # ),
-    # ConflictsEvaluationScenario(
-    #     scenario="2-2_semsim-fix_preps",
-    #     sub_pattern_configs={
-    #         "preds": CompositionPattern(
-    #             type=CompositionType.SEMSIM,
-    #             semsim_type=SemSimType.FIXED,
-    #         ),
-    #         "preps": CompositionPattern(
-    #             type=CompositionType.ANY,
-    #         )
-    #     },
-    #     threshold_values={
-    #         "preds": frange(0, 1, 0.01)
-    #     }
-    # ),
+    ConflictsEvaluationScenario(
+        scenario="1_original-pattern",
+        semsim_configs=None,
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.ANY,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        }
+    ),
+    ConflictsEvaluationScenario(
+        scenario="2-1_semsim-fix_preds",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.FIXED,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            "preds": frange(0, 1, 0.01)
+        }
+    ),
+    ConflictsEvaluationScenario(
+        scenario="2-2_semsim-fix_preps",
+        sub_pattern_configs={
+            "preps": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.FIXED,
+            ),
+            "preds": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            "preds": frange(0, 1, 0.01)
+        }
+    ),
     ConflictsEvaluationScenario(
         scenario="2-3_semsim-fix_preds_semsim-fix_preps",
         sub_pattern_configs={

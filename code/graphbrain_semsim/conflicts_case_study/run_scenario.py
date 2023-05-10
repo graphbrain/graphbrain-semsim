@@ -5,7 +5,7 @@ from pathlib import Path
 
 from graphbrain.hypergraph import Hypergraph
 from graphbrain.semsim.interface import init_matcher
-from graphbrain_semsim.conflicts_case_study import get_hgraph, RESULT_DIR
+from graphbrain_semsim import get_hgraph, RESULT_DIR
 from graphbrain_semsim.conflicts_case_study.models import (
     EvaluationScenario, EvaluationRun, CompositionPattern, PatternMatch
 )
