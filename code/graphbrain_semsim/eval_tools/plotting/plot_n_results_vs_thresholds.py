@@ -30,7 +30,7 @@ plt.rcParams.update({
 def plot_n_results_vs_threshold(
         plot_name: str,
         case_study: str,
-        scenario_ids: list[str],
+        scenarios: list[str],
         x_lim_data: tuple[float | None, float | None] = None,
         y_lim_data: tuple[float | None, float | None] = None,
         x_lim_view: tuple[float | None, float | None] = None,
@@ -40,7 +40,8 @@ def plot_n_results_vs_threshold(
     figure: Figure = Figure(figsize=(10, 7))
     axes: Axes = figure.add_axes((0, 0, 1, 1), xlabel="similarity threshold", ylabel="number of matches")
 
-    for scenario_id in scenario_ids:
+    for scenario_name in scenarios:
+        scenario_id: str = f"{case_study}_{scenario_name}"
         try:
             scenario: EvaluationScenario = [s for s in EVAL_SCENARIOS if s.id == scenario_id][0]
         except IndexError:
@@ -123,20 +124,22 @@ def plot_n_results_fix_threshold(
     axes.axhline(y=len(eval_runs[0].matches), label=scenario_id, linestyle='--')
 
 
-# plot_n_results_vs_threshold(
-#     plot_name="n_results_vs_thresholds_semsim-fix",
-#     case_study=CASE_STUDY,
-#     scenario_ids=[
-#         "conflicts_2-1_semsim-fix_preds",
-#         "conflicts_2-2_semsim-fix_preps",
-#         "conflicts_2-3_semsim-fix_preds_semsim-fix_preps"]
-# )
-
 plot_n_results_vs_threshold(
-    plot_name="n_results_vs_thresholds_counties_semsim-fix",
+    plot_name="n_results_vs_thresholds_semsim-fix",
     case_study=CASE_STUDY,
-    scenario_ids=[
-        "conflicts_3-1_any_countries",
-        "conflicts_3-2_semsim-fix_countries"
+    scenarios=[
+        "1_original-pattern",
+        "2-1_semsim-fix_preds",
+        # "2-2_semsim-fix_preps",
+        "2-3_semsim-fix_preds_semsim-fix_preps"
     ]
 )
+
+# plot_n_results_vs_threshold(
+#     plot_name="n_results_vs_thresholds_counties_semsim-fix",
+#     case_study=CASE_STUDY,
+#     scenario_ids=[
+#         "conflicts_3-1_any_countries",
+#         "conflicts_3-2_semsim-fix_countries"
+#     ]
+# )

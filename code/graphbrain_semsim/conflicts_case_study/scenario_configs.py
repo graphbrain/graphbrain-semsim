@@ -86,7 +86,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             )
         },
         threshold_values={
-            "preds": frange(0, 1, 0.01)
+            "preps": frange(0, 1, 0.01)
         }
     ),
     ConflictsEvaluationScenario(
