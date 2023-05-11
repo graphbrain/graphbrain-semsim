@@ -73,7 +73,7 @@ def make_conflict_pattern(
                     countries.semsim_type,
                     countries.components,
                     countries.threshold,
-                    arg_roles='T',
+                    arg_roles='C',
                 )
             case _:
                 raise ValueError(f"Invalid countries composition type: {countries.type}")

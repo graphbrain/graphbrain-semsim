@@ -15,7 +15,7 @@ from graphbrain_semsim.utils.general import all_equal, save_json
 logger = logging.getLogger(__name__)
 
 
-def run(scenario: EvaluationScenario, override: bool = False):
+def run(scenario: EvaluationScenario, override: bool = False, log_matches: bool = False):
     # get hypergraph
     hg: Hypergraph = get_hgraph(scenario.hypergraph)
 
@@ -40,7 +40,7 @@ def run(scenario: EvaluationScenario, override: bool = False):
             continue
 
         logger.info(f"Executing {eval_run_description}...")
-        exec_eval_run(eval_run, hg, scenario.hg_sequence, results_file_path)
+        exec_eval_run(eval_run, hg, scenario.hg_sequence, results_file_path, log_matches=log_matches)
 
 
 def exec_eval_run(
