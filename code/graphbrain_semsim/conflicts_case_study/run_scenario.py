@@ -39,10 +39,8 @@ def run(
         ]
 
     # create evaluation runs
-    eval_runs: list[EvaluationRun] = get_eval_runs(scenario)
+    eval_runs: list[EvaluationRun] = get_eval_runs(scenario, hg)
     for eval_run in eval_runs:
-        # input()
-
         eval_run_description: str = f"Eval run [{eval_run.run_idx + 1}/{len(eval_runs)}]: '{eval_run.id}'"
         results_file_path: Path = RESULT_DIR / scenario.id / f"{eval_run.id}.json"
 
@@ -62,9 +60,7 @@ def exec_eval_run(
         results_file_path: Path,
         log_matches: bool = False
 ):
-    # logger.info(f"Eval run info: {eval_run.json(indent=4)}")
     logger.info(f"Pattern: {eval_run.pattern}")
-
     eval_run.start_time = datetime.now()
 
     eval_run.matches = []
@@ -79,15 +75,12 @@ def exec_eval_run(
                 {var_name: hg.text(var_value) for var_name, var_value in variables_.items()} for variables_ in variables
             ]
         )
-
         if log_matches:
             log_pattern_match(pattern_match)
-
         eval_run.matches.append(pattern_match)
 
     eval_run.end_time = datetime.now()
     eval_run.duration = eval_run.end_time - eval_run.start_time
-
     save_json(eval_run, results_file_path)
 
 
@@ -99,7 +92,10 @@ def log_pattern_match(pattern_match: PatternMatch):
     logger.info("---")
 
 
-def get_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
+def get_eval_runs(scenario: EvaluationScenario, hg: Hypergraph) -> list[EvaluationRun]:
+    logger.info("---")
+    logger.info("Preparing evaluation runs...")
+
     if not scenario.threshold_values and not scenario.ref_edges:
         return [prepare_eval_run(scenario)]
 
@@ -110,18 +106,23 @@ def get_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
         *(parameter for parameter in [threshold_combinations, ref_edges_idxes] if parameter)
     ))
 
-    return [
-        prepare_eval_run(scenario, run_idx, *parameter_combination)
-        for run_idx, parameter_combination in enumerate(parameter_combinations)
-    ]
+    eval_runs: list[EvaluationRun] = []
+    for run_idx, parameter_combination in enumerate(parameter_combinations):
+        if eval_run := prepare_eval_run(scenario, hg, run_idx, *parameter_combination):
+            eval_runs.append(eval_run)
+
+    logger.info(f"Done. Number of evaluation runs: {len(eval_runs)}")
+    return eval_runs
 
 
 def prepare_eval_run(
         scenario: EvaluationScenario,
+        hg: Hypergraph,
         run_idx: int = 0,
         threshold_combination: dict[str, float] = None,
         ref_edges_idx: int = None
-) -> EvaluationRun:
+
+) -> EvaluationRun | None:
     sub_pattern_configs: dict[str, CompositionPattern] = deepcopy(scenario.sub_pattern_configs)
 
     # transform scenario info into sub-pattern info
@@ -136,7 +137,7 @@ def prepare_eval_run(
         countries=sub_pattern_configs.get("countries"),
     )
 
-    return EvaluationRun(
+    eval_run: EvaluationRun = EvaluationRun(
         case_study=scenario.case_study,
         scenario=scenario.name,
         run_idx=run_idx,
@@ -145,6 +146,24 @@ def prepare_eval_run(
         ref_edges_config=scenario.ref_edges_configs[ref_edges_idx] if ref_edges_idx is not None else None,
         ref_edges=scenario.ref_edges[ref_edges_idx] if ref_edges_idx is not None else None
     )
+
+    if not validate_ref_edges_for_pattern(eval_run.ref_edges, eval_run.pattern, hg):
+        return None
+    return eval_run
+
+
+def validate_ref_edges_for_pattern(ref_edges: list[str], pattern: str, hg: Hypergraph) -> bool:
+    matching_edges: list[str] = [str(match[0]) for match in hg.match_edges(ref_edges, pattern, ref_edges=ref_edges)]
+    non_matching_edges: list[str] = [edge for edge in ref_edges if edge not in matching_edges]
+    try:
+        assert not non_matching_edges
+    except AssertionError:
+        logger.error(
+            f"Pattern does not match {len(non_matching_edges)} / {len(ref_edges)} reference edges: "
+            f"pattern='{pattern}', ref_edges='{non_matching_edges}'"
+        )
+        return False
+    return True
 
 
 def get_threshold_combinations(scenario: EvaluationScenario) -> list[dict[str, float]] | None:
