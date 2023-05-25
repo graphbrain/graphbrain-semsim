@@ -32,8 +32,8 @@ def make_conflict_pattern(
         countries: CompositionPattern = None,
 ):
     topic_pattern = make_any_fun_pattern(["TOPIC"], arg_roles=["R", "S"])
-    source_pattern = "SOURCE/C"
-    target_pattern = "TARGET/C"
+    source_pattern = "*/C"
+    target_pattern = "*/C"
 
     match preds.type:
         case CompositionType.ANY:

@@ -1,16 +1,23 @@
 import logging
+from pathlib import Path
 
 from strenum import StrEnum
 
 from graphbrain.semsim.matching.matcher import SemSimConfig, SemSimType
-from graphbrain_semsim.conflicts_case_study.models import CompositionType, EvaluationScenario, CompositionPattern
+from graphbrain_semsim.conflicts_case_study.models import (
+    CompositionType, EvaluationScenario, CompositionPattern, RefEdgesConfig
+)
 from graphbrain_semsim.utils.general import frange
 
 logger = logging.getLogger(__name__)
 
 CASE_STUDY: str = "conflicts"
+
 HG_NAME: str = "reddit-worldnews-01012013-01082017.hg"
 SEQUENCE_NAME: str = "headers"
+
+REF_EDGES_FILE_NAME: str = "conflicts_ref_edges.json"
+REF_EDGES_FILE_PATH: Path = Path(__file__).parent / REF_EDGES_FILE_NAME
 
 
 class ConflictsSubPattern(StrEnum):
@@ -48,7 +55,7 @@ class ConflictsEvaluationScenario(EvaluationScenario):
 
 EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
     ConflictsEvaluationScenario(
-        scenario="1_original-pattern",
+        name="1_original-pattern",
         semsim_configs=None,
         sub_pattern_configs={
             "preds": CompositionPattern(
@@ -60,7 +67,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
-        scenario="2-1_semsim-fix_preds",
+        name="2-1_semsim-fix_preds",
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
@@ -75,7 +82,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
-        scenario="2-2_semsim-fix_preps",
+        name="2-2_semsim-fix_preps",
         sub_pattern_configs={
             "preps": CompositionPattern(
                 type=CompositionType.SEMSIM,
@@ -90,7 +97,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
-        scenario="2-3_semsim-fix_preds_semsim-fix_preps",
+        name="2-3_semsim-fix_preds_semsim-fix_preps",
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
@@ -107,7 +114,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
-        scenario="3-1_any_countries",
+        name="3-1_any_countries",
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.ANY,
@@ -121,7 +128,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
-        scenario="3-2_semsim-fix_countries",
+        name="3-2_semsim-fix_countries",
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.ANY,
@@ -138,32 +145,62 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             "countries": frange(0, 1, 0.01)
         }
     ),
-    # ConflictsEvaluationScenario(
-    #     scenario="4-1_semsim-ctx_preds-general",
-    #     pattern_config=PatternConfig(
-    #         comp_types={
-    #             "preds": CompositionType.SEMSIM,
-    #             "preps": CompositionType.ANY,
-    #         },
-    #         semsim_types={
-    #             "preds": SemSimType.CONTEXT,
-    #         }
-    #     )
-    # ),
-    # ConflictsEvaluationScenario(
-    #     scenario="4-2_semsim-ctx_preds-countries",
-    #     pattern_config=PatternConfig(
-    #         comp_types={
-    #             "preds": CompositionType.SEMSIM,
-    #             "preps": CompositionType.ANY,
-    #         },
-    #         semsim_types={
-    #             "preds": SemSimType.CONTEXT,
-    #         }
-    #     )
-    # )
-]
+    ConflictsEvaluationScenario(
+        name="4-1_semsim-ctx_preds-general",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.CONTEXT,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            # "preds": frange(0, 1, 0.01)
+            "preds": [0.5]
+        },
+        ref_edges_configs=[
+            RefEdgesConfig(
+                source_scenario="1_original-pattern",
+                num_ref_edges=3,
+            ),
+            RefEdgesConfig(
+                source_scenario="2-3_semsim-fix_preds_semsim-fix_preps",
+                num_ref_edges=3,
+                num_matches_percentile=50
+            )
+        ]
+    ),
+    ConflictsEvaluationScenario(
+        name="4-2_semsim-ctx_preds-countries",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.CONTEXT,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            # "preds": frange(0, 1, 0.01)
+            "preds": [0.5]
+        },
+        ref_edges_configs=[
+            RefEdgesConfig(
+                source_scenario="3-1_any_countries",
+                num_ref_edges=3,
+            ),
+            RefEdgesConfig(
+                source_scenario="3-2_semsim-fix_countries",
+                num_ref_edges=3,
+                num_matches_percentile=50
+            )
+        ]
 
+    ),
+]
 
 
 

@@ -7,15 +7,9 @@ import scienceplots  # noqa
 
 from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, EvaluationScenario
-from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS, CASE_STUDY
-from graphbrain_semsim.eval_tools.plotting.utils import get_eval_runs
-from graphbrain_semsim.utils.general import all_equal
+from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, EVAL_SCENARIOS
+from graphbrain_semsim.eval_tools.utils import get_eval_scenario, get_eval_runs, get_variable_threshold_sub_pattern
 
-# plt.rcParams.update({
-#     'text.usetex': True,
-#     'font.family': 'serif',
-#     # 'font.serif': ['CMU']
-# })
 
 plt.style.use(['science', 'grid'])
 
@@ -36,39 +30,32 @@ def plot_n_results_vs_threshold(
         x_lim_view: tuple[float | None, float | None] = None,
         y_lim_view: tuple[float | None, float | None] = None
 ):
+    logger.info(f"Making plot '{plot_name}'...")
 
     figure: Figure = Figure(figsize=(10, 7))
     axes: Axes = figure.add_axes((0, 0, 1, 1), xlabel="similarity threshold", ylabel="number of matches")
 
     for scenario_name in scenarios:
-        scenario_id: str = f"{case_study}_{scenario_name}"
         try:
-            scenario: EvaluationScenario = [s for s in EVAL_SCENARIOS if s.id == scenario_id][0]
-        except IndexError:
-            logger.error(f"Invalid scenario id: {scenario_id}")
+            scenario: EvaluationScenario = get_eval_scenario(
+                EVAL_SCENARIOS, scenario_name=scenario_name, case_study=case_study
+            )
+        except ValueError as e:
+            logger.error(e)
             continue
 
-        logger.info(f"Plotting n_results vs thresholds for scenario '{scenario_id}'...")
+        logger.info(f"Plotting n_results vs thresholds for scenario '{scenario.id}'...")
+
+        variable_threshold_sub_pattern: str = get_variable_threshold_sub_pattern(scenario)
 
         # single run
-        if not scenario.threshold_values:
-            plot_n_results_fix_threshold(axes, scenario_id)
+        if not variable_threshold_sub_pattern:
+            plot_n_results_vs_fix_threshold(axes, scenario.id)
             continue
 
         # multiple runs for different thresholds
-        variable_threshold_sub_patterns: list[str] = [
-            sub_pattern_name for sub_pattern_name, threshold_values in scenario.threshold_values.items()
-            if len(threshold_values) > 1
-        ]
-
-        if len(variable_threshold_sub_patterns) > 1 and not all_equal(
-                scenario.threshold_values[sub_pattern_name] for sub_pattern_name in variable_threshold_sub_patterns
-        ):
-            logger.error(f"Scenario '{scenario.id}': variable threshold sub patterns must have the same values")
-            continue
-
         plot_n_results_vs_variable_threshold(
-            axes, scenario_id, variable_threshold_sub_patterns[0], x_lim_data, y_lim_data, x_lim_view, y_lim_view
+            axes, scenario.id, variable_threshold_sub_pattern, x_lim_data, y_lim_data, x_lim_view, y_lim_view
         )
 
     figure.legend(loc='upper right')
@@ -77,6 +64,7 @@ def plot_n_results_vs_threshold(
     plot_file_path: Path = PLOT_DIR / f"{case_study}_{plot_name}.png"
     figure.savefig(plot_file_path, bbox_inches='tight')
     logger.info(f"Plot saved to '{plot_file_path}'")
+    logger.info("-----")
 
 
 def plot_n_results_vs_variable_threshold(
@@ -114,7 +102,7 @@ def plot_n_results_vs_variable_threshold(
     axes.plot('threshold', 'n_results', data=plot_data, label=scenario_id, marker='o', linestyle='-')
 
 
-def plot_n_results_fix_threshold(
+def plot_n_results_vs_fix_threshold(
         axes: Axes,
         scenario_id: str,
 ):
@@ -130,16 +118,16 @@ plot_n_results_vs_threshold(
     scenarios=[
         "1_original-pattern",
         "2-1_semsim-fix_preds",
-        # "2-2_semsim-fix_preps",
+        "2-2_semsim-fix_preps",
         "2-3_semsim-fix_preds_semsim-fix_preps"
     ]
 )
 
-# plot_n_results_vs_threshold(
-#     plot_name="n_results_vs_thresholds_counties_semsim-fix",
-#     case_study=CASE_STUDY,
-#     scenario_ids=[
-#         "conflicts_3-1_any_countries",
-#         "conflicts_3-2_semsim-fix_countries"
-#     ]
-# )
+plot_n_results_vs_threshold(
+    plot_name="n_results_vs_thresholds_counties_semsim-fix",
+    case_study=CASE_STUDY,
+    scenarios=[
+        "3-1_any_countries",
+        "3-2_semsim-fix_countries"
+    ]
+)

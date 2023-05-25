@@ -1,11 +1,21 @@
 import datetime
-from typing import Dict, List
 
 from pydantic import BaseModel
 from strenum import StrEnum
 
-from graphbrain.hyperedge import Hyperedge
 from graphbrain.semsim.matching.matcher import SemSimType, SemSimConfig
+
+
+class RefEdge(BaseModel):
+    edge: str
+    run_id: str
+    variable_threshold: float = None
+
+
+class RefEdgesConfig(BaseModel):
+    source_scenario: str
+    num_ref_edges: int
+    num_matches_percentile: int = None
 
 
 class PatternMatch(BaseModel):
@@ -24,7 +34,6 @@ class CompositionPattern(BaseModel):
     type: CompositionType
     semsim_type: SemSimType = None
     components: list[str] = None
-    ref_edges: list[Hyperedge] = None
     threshold: float = None
 
 
@@ -34,6 +43,9 @@ class EvaluationRun(BaseModel):
     run_idx: int
     pattern: str
     sub_pattern_configs: dict[str, CompositionPattern]
+    ref_edges_config: RefEdgesConfig = None
+    ref_edges: list[str] = None
+    # set by execution
     matches: list[PatternMatch] = None
     start_time: datetime.datetime = None
     end_time: datetime.datetime = None
@@ -45,17 +57,21 @@ class EvaluationRun(BaseModel):
 
 
 class EvaluationScenario(BaseModel):
+    name: str
+    case_study: str
     hypergraph: str
     hg_sequence: str
-    case_study: str
-    scenario: str
     sub_pattern_words: dict[str, list[str]]
     sub_pattern_configs: dict[str, CompositionPattern]
     semsim_configs: dict[SemSimType, SemSimConfig] = None
     threshold_values: dict[str, list[float]] = None
-    ref_edges: dict[str, list[Hyperedge]] = None
-    # eval_runs: list[EvaluationRun] = None
+    ref_edges_configs: list[RefEdgesConfig] = None
+    ref_edges: list[list[str]] = None
+
+    @classmethod
+    def get_id(cls, case_study: str, scenario: str) -> str:
+        return f"{case_study}_{scenario}"
 
     @property
     def id(self):
-        return f"{self.case_study}_{self.scenario}"
+        return EvaluationScenario.get_id(self.case_study, self.name)

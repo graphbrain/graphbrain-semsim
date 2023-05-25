@@ -1,3 +1,4 @@
+import itertools
 import logging
 from copy import deepcopy
 from datetime import datetime
@@ -7,7 +8,7 @@ from graphbrain.hypergraph import Hypergraph
 from graphbrain.semsim.interface import init_matcher
 from graphbrain_semsim import get_hgraph, RESULT_DIR
 from graphbrain_semsim.conflicts_case_study.models import (
-    EvaluationScenario, EvaluationRun, CompositionPattern, PatternMatch
+    EvaluationScenario, EvaluationRun, CompositionPattern, PatternMatch, RefEdge, RefEdgesConfig
 )
 from graphbrain_semsim.conflicts_case_study.make_pattern import make_conflict_pattern
 from graphbrain_semsim.utils.general import all_equal, save_json
@@ -15,7 +16,12 @@ from graphbrain_semsim.utils.general import all_equal, save_json
 logger = logging.getLogger(__name__)
 
 
-def run(scenario: EvaluationScenario, override: bool = False, log_matches: bool = False):
+def run(
+        scenario: EvaluationScenario,
+        ref_edges: dict[str, list[list[RefEdge]]] = None,
+        override: bool = False,
+        log_matches: bool = False
+):
     # get hypergraph
     hg: Hypergraph = get_hgraph(scenario.hypergraph)
 
@@ -26,8 +32,14 @@ def run(scenario: EvaluationScenario, override: bool = False, log_matches: bool 
         for semsim_type, semsim_config in scenario.semsim_configs.items():
             init_matcher(semsim_type, semsim_config)
 
+    # set reference edges if given and not already set
+    if not scenario.ref_edges and scenario.id in ref_edges:
+        scenario.ref_edges = [
+            [ref_edge.edge for ref_edge in ref_edges_] for ref_edges_ in ref_edges[scenario.id]
+        ]
+
     # create evaluation runs
-    eval_runs: list[EvaluationRun] = make_eval_runs(scenario)
+    eval_runs: list[EvaluationRun] = get_eval_runs(scenario)
     for eval_run in eval_runs:
         # input()
 
@@ -40,11 +52,15 @@ def run(scenario: EvaluationScenario, override: bool = False, log_matches: bool 
             continue
 
         logger.info(f"Executing {eval_run_description}...")
-        exec_eval_run(eval_run, hg, scenario.hg_sequence, results_file_path, log_matches=log_matches)
+        exec_eval_run(eval_run, scenario, hg, results_file_path, log_matches=log_matches)
 
 
 def exec_eval_run(
-        eval_run: EvaluationRun, hg: Hypergraph, sequence: str, results_file_path: Path, log_matches: bool = False
+        eval_run: EvaluationRun,
+        scenario: EvaluationScenario,
+        hg: Hypergraph,
+        results_file_path: Path,
+        log_matches: bool = False
 ):
     # logger.info(f"Eval run info: {eval_run.json(indent=4)}")
     logger.info(f"Pattern: {eval_run.pattern}")
@@ -52,7 +68,7 @@ def exec_eval_run(
     eval_run.start_time = datetime.now()
 
     eval_run.matches = []
-    for edge, variables in hg.match_sequence(sequence, eval_run.pattern):
+    for edge, variables in hg.match_sequence(scenario.hg_sequence, eval_run.pattern, ref_edges=eval_run.ref_edges):
         pattern_match: PatternMatch = PatternMatch(
             edge=str(edge),
             edge_text=hg.text(edge),
@@ -75,20 +91,37 @@ def exec_eval_run(
     save_json(eval_run, results_file_path)
 
 
-def make_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
-    if not scenario.threshold_values:
-        return [make_eval_run(scenario)]
+def log_pattern_match(pattern_match: PatternMatch):
+    logger.info(pattern_match.edge)
+    logger.info(pattern_match.edge_text)
+    logger.info(pattern_match.variables)
+    logger.info(pattern_match.variables_text)
+    logger.info("---")
 
-    threshold_combinations: list[dict[str, float]] = get_threshold_combinations(scenario)
+
+def get_eval_runs(scenario: EvaluationScenario) -> list[EvaluationRun]:
+    if not scenario.threshold_values and not scenario.ref_edges:
+        return [prepare_eval_run(scenario)]
+
+    threshold_combinations: list[dict[str, float]] | None = get_threshold_combinations(scenario)
+    ref_edges_idxes: list[int] | None = list(range(len(scenario.ref_edges))) if scenario.ref_edges else None
+
+    parameter_combinations: list[tuple] = list(itertools.product(
+        *(parameter for parameter in [threshold_combinations, ref_edges_idxes] if parameter)
+    ))
+
     return [
-        make_eval_run(scenario, run_idx, threshold_combination)
-        for run_idx, threshold_combination in enumerate(threshold_combinations)
+        prepare_eval_run(scenario, run_idx, *parameter_combination)
+        for run_idx, parameter_combination in enumerate(parameter_combinations)
     ]
 
 
-def make_eval_run(
-        scenario: EvaluationScenario, run_idx: int = 0, threshold_combination: dict[str, float | None] = None
-):
+def prepare_eval_run(
+        scenario: EvaluationScenario,
+        run_idx: int = 0,
+        threshold_combination: dict[str, float] = None,
+        ref_edges_idx: int = None
+) -> EvaluationRun:
     sub_pattern_configs: dict[str, CompositionPattern] = deepcopy(scenario.sub_pattern_configs)
 
     # transform scenario info into sub-pattern info
@@ -96,8 +129,6 @@ def make_eval_run(
         sub_pattern_config.components = scenario.sub_pattern_words[sub_pattern]
         if threshold_combination:
             sub_pattern_config.threshold = threshold_combination.get(sub_pattern)
-        if scenario.ref_edges:
-            sub_pattern_config.ref_edges = scenario.ref_edges.get(sub_pattern)
 
     pattern = make_conflict_pattern(
         preds=sub_pattern_configs["preds"],
@@ -107,22 +138,19 @@ def make_eval_run(
 
     return EvaluationRun(
         case_study=scenario.case_study,
-        scenario=scenario.scenario,
+        scenario=scenario.name,
         run_idx=run_idx,
         pattern=pattern,
-        sub_pattern_configs=sub_pattern_configs
+        sub_pattern_configs=sub_pattern_configs,
+        ref_edges_config=scenario.ref_edges_configs[ref_edges_idx] if ref_edges_idx is not None else None,
+        ref_edges=scenario.ref_edges[ref_edges_idx] if ref_edges_idx is not None else None
     )
 
 
-def log_pattern_match(pattern_match: PatternMatch):
-    logger.info(pattern_match.edge)
-    logger.info(pattern_match.edge_text)
-    logger.info(pattern_match.variables)
-    logger.info(pattern_match.variables_text)
-    logger.info("---")
+def get_threshold_combinations(scenario: EvaluationScenario) -> list[dict[str, float]] | None:
+    if not scenario.threshold_values:
+        return None
 
-
-def get_threshold_combinations(scenario: EvaluationScenario):
     # create all combinations of thresholds
     threshold_combinations: list[dict[str, float]] = []
     for threshold_idx in range(get_and_validate_threshold_range_length(scenario)):
