@@ -1,0 +1,9 @@
+\begin{tabular}{L{4cm}L{2cm}L{5cm}L{3cm}L{5cm}L{3cm}}
+\toprule
+Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. Edges Source \\
+\midrule
+1\_original-pattern & Pattern X & Erdogan slams ridicule of 'Muslims discovered Americas' claim\newline Iran forces 'kill Kurdish rebels on Iraq border\newline Ukraine Accuses Russia of Invasion & -/- & -/- & -/- \\
+2-1\_semsim-fix\_preds & Pattern X & Pakistani police kill feared militant leader in mysterious pre-dawn shootout\newline Al-Shabaab militants claim responsibility for deadly attack on Garissa University College in Kenya\newline Casualties as Congo troops, UN forces fight rebels & 'preds': 0.19\newline Percentile: 50 & -/- & -/- \\
+2-2\_semsim-fix\_preps & Pattern X & Iranian police have arrested merchants for selling clothing that featured the flags of the United States and Britain, two longtime foes of the Islamic republic\newline Syrian Air Force Strikes kill 38 ISIS fighters\newline Seven Libyan soldiers killed fighting off Islamists near Benghazi: source & 'preps': 0.54\newline Percentile: 50 & -/- & -/- \\
+\bottomrule
+\end{tabular}

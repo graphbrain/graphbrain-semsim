@@ -20,6 +20,12 @@
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{rotating}
+
+
+\usepackage{array}  % needed for '\newcolumntype' command
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
 
 
 \usepackage{newfloat}
@@ -231,8 +237,19 @@ SentencePiece: https://github.com/google/sentencepiece
 
 
 
-\section{Matching edges to token embeddings}
-string matching
+\section{Matching candidate edge and reference edge tokens}
+%both edges should match the pattern and should act as a valid ref edge for each other
+%but it is obvious that the tok_idx_trail that leads to the predicate in the one edge wont lead to the predicate in the other edge
+%that was the premise on which i built the matching (and which we discussed i think)
+%
+%so there are 2 cases:
+%[candidate edge is more specific than reference edge] the location trail of the token in the candidate edge is longer than in the reference edge. this case should be trivial. we can just cut off the location trail when we reach an atom in the reference tok_pos.
+%[reference edge is more specific than candidate edge] the location trail of the token in the candidate edge does not lead to an atom in the reference edge. in this case there is not enough information to match the tokens. i see two possible solutions:
+%use the whole sub-edge to compute the reference embedding (maybe i misunderstood and that was your conception all along)
+%try to get the information which token to use in some other way. possibly by matching via the atom types… this should work for cases like predicates but would not work if we are looking for a modifier or something else which can appear multiple times. i have the feeling that this should be recoverable through the graphbrain matching process somehow, i just don’t know how….
+%(edited)
+%
+%for now i have the tendency to implement 2a as it is much easier not sure about the semantic implications though
 
 
 \section{External Libraries and Models}
@@ -324,31 +341,53 @@ Pattern \ref{pat:conflict-countries} is matched against the described \textit{Re
 %In \ref{fig:case-study-conflict-countries-1} the number of matches that result from using this pattern is plotted against the similarity threshold for the \texttt{semsim} pattern.
 
 
-\begin{figure}
-     \centering
-     \begin{subfigure}[t]{0.9\textwidth}
-         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds.png}
-         \caption{Similarity threshold variation for all \textsf{semsim} patterns}
-         \label{fig:countries_20-most-popul_thresholds}
-     \end{subfigure}
-     \begin{subfigure}[t]{0.9\textwidth}
-         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries.png}
-         \caption{Similarity threshold variation only for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns}
-         \label{fig:countries_20-most-popul_thresholds-countries}
-     \end{subfigure}
-\caption{Number of matches for conflict pattern in relation to similarity threshold}
-\label{fig:case-study-conflict-countries-1}   
-\end{figure}
+%\begin{figure}
+%     \centering
+%     \begin{subfigure}[t]{0.9\textwidth}
+%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds.png}
+%         \caption{Similarity threshold variation for all \textsf{semsim} patterns}
+%         \label{fig:countries_20-most-popul_thresholds}
+%     \end{subfigure}
+%     \begin{subfigure}[t]{0.9\textwidth}
+%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries.png}
+%         \caption{Similarity threshold variation only for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns}
+%         \label{fig:countries_20-most-popul_thresholds-countries}
+%     \end{subfigure}
+%\caption{Number of matches for conflict pattern in relation to similarity threshold}
+%\label{fig:case-study-conflict-countries-1}   
+%\end{figure}
+%
+%\begin{figure}
+%     \centering
+%     \begin{subfigure}[t]{0.9\textwidth}
+%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries_greater-0.4.png}
+%     \end{subfigure}
+%\caption{Number of matches for conflict pattern in relation to similarity threshold with threshold variation for \textsf{SOURCE} and \textsf{TARGET} (i.e. COUNTRIES) \texttt{semsim} patterns in the range \(0.4 >=\) threshold \(< 1.0\) (and y-axis limited to 2000 results)}
+%\label{fig:case-study-conflict-countries-2}   
+%\end{figure}
 
-\begin{figure}
-     \centering
-     \begin{subfigure}[t]{0.9\textwidth}
-         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries_greater-0.4.png}
-     \end{subfigure}
-\caption{Number of matches for conflict pattern in relation to similarity threshold with threshold variation for \textsf{SOURCE} and \textsf{TARGET} (i.e. COUNTRIES) \texttt{semsim} patterns in the range \(0.4 >=\) threshold \(< 1.0\) (and y-axis limited to 2000 results)}
-\label{fig:case-study-conflict-countries-2}   
-\end{figure}
+\subsection{Qualitative Results}
 
+
+\begin{sidewaystable}
+%    \centering
+    \caption{hyper dyper table}
+
+\begin{tabular}{L{4cm}L{2cm}L{5cm}L{3cm}L{5cm}L{3cm}}
+\toprule
+Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. Edges Source \\
+\midrule
+1\_original-pattern & Pattern X & Erdogan slams ridicule of 'Muslims discovered Americas' claim\newline Iran forces 'kill Kurdish rebels on Iraq border\newline Ukraine Accuses Russia of Invasion & -/- & -/- & -/- \\
+2-1\_semsim-fix\_preds & Pattern X & Pakistani police kill feared militant leader in mysterious pre-dawn shootout\newline Al-Shabaab militants claim responsibility for deadly attack on Garissa University College in Kenya\newline Casualties as Congo troops, UN forces fight rebels & 'preds': 0.19\newline Percentile: 50 & -/- & -/- \\
+2-2\_semsim-fix\_preps & Pattern X & Iranian police have arrested merchants for selling clothing that featured the flags of the United States and Britain, two longtime foes of the Islamic republic\newline Syrian Air Force Strikes kill 38 ISIS fighters\newline Seven Libyan soldiers killed fighting off Islamists near Benghazi: source & 'preps': 0.54\newline Percentile: 50 & -/- & -/- \\
+\bottomrule
+\end{tabular}
+
+\end{sidewaystable}
+
+%\begin{table*}
+%\
+%\end{table*}
 
 % ========== 
 \chapter{Conclusion}

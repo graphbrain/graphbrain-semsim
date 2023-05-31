@@ -67,6 +67,7 @@ class EvaluationScenario(BaseModel):
     threshold_values: dict[str, list[float]] = None
     ref_edges_configs: list[RefEdgesConfig] = None
     ref_edges: list[list[str]] = None
+    description: str = None
 
     @classmethod
     def get_id(cls, case_study: str, scenario: str) -> str:

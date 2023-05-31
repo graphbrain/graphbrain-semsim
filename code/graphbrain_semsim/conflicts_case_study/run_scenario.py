@@ -8,7 +8,7 @@ from graphbrain.hypergraph import Hypergraph
 from graphbrain.semsim.interface import init_matcher
 from graphbrain_semsim import get_hgraph, RESULT_DIR
 from graphbrain_semsim.conflicts_case_study.models import (
-    EvaluationScenario, EvaluationRun, CompositionPattern, PatternMatch, RefEdge, RefEdgesConfig
+    EvaluationScenario, EvaluationRun, CompositionPattern, PatternMatch, RefEdge
 )
 from graphbrain_semsim.conflicts_case_study.make_pattern import make_conflict_pattern
 from graphbrain_semsim.utils.general import all_equal, save_json
