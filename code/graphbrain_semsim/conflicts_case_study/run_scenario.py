@@ -175,10 +175,7 @@ def get_threshold_combinations(scenario: EvaluationScenario) -> list[dict[str, f
     for threshold_idx in range(get_and_validate_threshold_range_length(scenario)):
         threshold_combination: dict[str, float] = {}
         for sub_pattern, threshold_range in scenario.threshold_values.items():
-            if len(threshold_range) == 1:
-                threshold_combination[sub_pattern] = threshold_range[0]
-            else:
-                threshold_combination[sub_pattern] = threshold_range[threshold_idx]
+            threshold_combination[sub_pattern] = threshold_range[threshold_idx]
         threshold_combinations.append(threshold_combination)
     return threshold_combinations
 
@@ -190,7 +187,7 @@ def get_and_validate_threshold_range_length(scenario: EvaluationScenario) -> int
         assert threshold_range, f"Threshold ranges for sub-pattern '{sub_pattern}' is empty."
         if len(threshold_range) > 1:
             threshold_range_lens.append(len(threshold_range))
-    assert all_equal(threshold_range_lens), f"Threshold ranges for sub-patterns are not of equal length (or 1)"
+    assert all_equal(threshold_range_lens), f"Threshold ranges for sub-patterns are not of equal length (or length 1)"
 
     if threshold_range_lens:
         return threshold_range_lens[0]
