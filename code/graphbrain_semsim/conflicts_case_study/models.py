@@ -3,7 +3,7 @@ import datetime
 from pydantic import BaseModel
 from strenum import StrEnum
 
-from graphbrain.semsim.matching.matcher import SemSimType, SemSimConfig
+from graphbrain.semsim import SemSimType, SemSimConfig
 
 
 class RefEdge(BaseModel):

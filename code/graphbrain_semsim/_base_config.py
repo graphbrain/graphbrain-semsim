@@ -8,6 +8,7 @@ from graphbrain.hypergraph import Hypergraph
 logger = logging.getLogger()
 # logging.basicConfig(format='[{asctime}] {name}: {message}', style='{', level=logging.INFO)
 logging.basicConfig(format='[{levelname}] {message}', style='{', level=logging.INFO)
+# logging.basicConfig(format='[{levelname}] {message}', style='{', level=logging.DEBUG)
 
 
 RNG_SEED: int = 24

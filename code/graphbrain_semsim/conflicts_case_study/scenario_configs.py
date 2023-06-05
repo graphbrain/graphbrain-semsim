@@ -3,7 +3,7 @@ from pathlib import Path
 
 from strenum import StrEnum
 
-from graphbrain.semsim.matching.matcher import SemSimConfig, SemSimType
+from graphbrain.semsim import SemSimConfig, SemSimType
 from graphbrain_semsim.conflicts_case_study.models import (
     CompositionType, EvaluationScenario, CompositionPattern, RefEdgesConfig
 )
@@ -41,11 +41,11 @@ class ConflictsEvaluationScenario(EvaluationScenario):
     hypergraph: str = HG_NAME
     hg_sequence: str = SEQUENCE_NAME
     semsim_configs: dict[SemSimType, SemSimConfig] | None = {
-        SemSimType.FIXED: SemSimConfig(
+        SemSimType.FIX: SemSimConfig(
             model_name='word2vec-google-news-300',
             similarity_threshold=0.0
         ),
-        SemSimType.CONTEXT: SemSimConfig(
+        SemSimType.CTX: SemSimConfig(
             model_name='intfloat/e5-base',
             similarity_threshold=0.0
         )
@@ -71,7 +71,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
+                semsim_type=SemSimType.FIX,
             ),
             "preps": CompositionPattern(
                 type=CompositionType.ANY,
@@ -86,7 +86,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         sub_pattern_configs={
             "preps": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
+                semsim_type=SemSimType.FIX,
             ),
             "preds": CompositionPattern(
                 type=CompositionType.ANY,
@@ -101,11 +101,11 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
+                semsim_type=SemSimType.FIX,
             ),
             "preps": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
+                semsim_type=SemSimType.FIX,
             )
         },
         threshold_values={
@@ -138,7 +138,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             ),
             "countries": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.FIXED,
+                semsim_type=SemSimType.FIX,
             )
         },
         threshold_values={
@@ -150,7 +150,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.CONTEXT,
+                semsim_type=SemSimType.CTX,
             ),
             "preps": CompositionPattern(
                 type=CompositionType.ANY,
@@ -177,7 +177,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.SEMSIM,
-                semsim_type=SemSimType.CONTEXT,
+                semsim_type=SemSimType.CTX,
             ),
             "preps": CompositionPattern(
                 type=CompositionType.ANY,

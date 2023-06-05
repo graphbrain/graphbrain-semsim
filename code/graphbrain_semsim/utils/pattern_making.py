@@ -1,6 +1,5 @@
-from graphbrain.semsim import get_matcher
-from graphbrain.semsim.matching.matcher import SemSimType
-from graphbrain.semsim.matching.fixed_matcher import FixedEmbeddingMatcher
+from graphbrain.semsim import get_matcher, SemSimType
+from graphbrain.semsim.matcher.fixed_matcher import FixedEmbeddingMatcher
 
 
 def make_any_fun_pattern(
@@ -36,13 +35,13 @@ def make_semsim_fun_pattern(
         filter_oov_words: bool = True
 ):
     match semsim_type:
-        case SemSimType.FIXED:
+        case SemSimType.FIX:
             if filter_oov_words:
                 matcher: FixedEmbeddingMatcher = get_matcher(semsim_type)
                 refs = matcher.filter_oov(refs)
             semsim_pattern = f"semsim-fix [{','.join(refs)}]"
 
-        case SemSimType.CONTEXT:
+        case SemSimType.CTX:
             semsim_pattern = f"semsim-ctx *"
 
         case _:

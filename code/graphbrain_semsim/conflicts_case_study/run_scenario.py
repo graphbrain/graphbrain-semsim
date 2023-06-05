@@ -77,6 +77,10 @@ def exec_eval_run(
         )
         if log_matches:
             log_pattern_match(pattern_match)
+
+        if logger.level == logging.DEBUG:
+            input()  # wait between matches
+
         eval_run.matches.append(pattern_match)
 
     eval_run.end_time = datetime.now()
@@ -106,10 +110,14 @@ def get_eval_runs(scenario: EvaluationScenario, hg: Hypergraph) -> list[Evaluati
         *(parameter for parameter in [threshold_combinations, ref_edges_idxes] if parameter)
     ))
 
-    eval_runs: list[EvaluationRun] = []
-    for run_idx, parameter_combination in enumerate(parameter_combinations):
-        if eval_run := prepare_eval_run(scenario, hg, run_idx, *parameter_combination):
-            eval_runs.append(eval_run)
+    # eval_runs: list[EvaluationRun] = []
+    # for run_idx, parameter_combination in enumerate(parameter_combinations):
+    #     if eval_run := prepare_eval_run(scenario, hg, run_idx, *parameter_combination):
+    #         eval_runs.append(eval_run)
+    eval_runs: list[EvaluationRun] = [
+        prepare_eval_run(scenario, hg, run_idx, *parameter_combination)
+        for run_idx, parameter_combination in enumerate(parameter_combinations)
+    ]
 
     logger.info(f"Done. Number of evaluation runs: {len(eval_runs)}")
     return eval_runs
@@ -147,23 +155,23 @@ def prepare_eval_run(
         ref_edges=scenario.ref_edges[ref_edges_idx] if ref_edges_idx is not None else None
     )
 
-    if not validate_ref_edges_for_pattern(eval_run.ref_edges, eval_run.pattern, hg):
-        return None
+    # if not validate_ref_edges_for_pattern(eval_run.ref_edges, eval_run.pattern, hg):
+    #     return None
     return eval_run
 
 
-def validate_ref_edges_for_pattern(ref_edges: list[str], pattern: str, hg: Hypergraph) -> bool:
-    matching_edges: list[str] = [str(match[0]) for match in hg.match_edges(ref_edges, pattern, ref_edges=ref_edges)]
-    non_matching_edges: list[str] = [edge for edge in ref_edges if edge not in matching_edges]
-    try:
-        assert not non_matching_edges
-    except AssertionError:
-        logger.error(
-            f"Pattern does not match {len(non_matching_edges)} / {len(ref_edges)} reference edges: "
-            f"pattern='{pattern}', ref_edges='{non_matching_edges}'"
-        )
-        return False
-    return True
+# def validate_ref_edges_for_pattern(ref_edges: list[str], pattern: str, hg: Hypergraph) -> bool:
+#     matching_edges: list[str] = [str(match[0]) for match in hg.match_edges(ref_edges, pattern, ref_edges=ref_edges)]
+#     non_matching_edges: list[str] = [edge for edge in ref_edges if edge not in matching_edges]
+#     try:
+#         assert not non_matching_edges
+#     except AssertionError:
+#         logger.error(
+#             f"Pattern does not match {len(non_matching_edges)} / {len(ref_edges)} reference edges: "
+#             f"pattern='{pattern}', ref_edges='{non_matching_edges}'"
+#         )
+#         return False
+#     return True
 
 
 def get_threshold_combinations(scenario: EvaluationScenario) -> list[dict[str, float]] | None:
