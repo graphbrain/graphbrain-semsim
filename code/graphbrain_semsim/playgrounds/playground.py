@@ -1,14 +1,13 @@
 import logging
 from graphbrain_semsim import get_hgraph
-from graphbrain.semsim import init_matcher
-from graphbrain.semsim.matching.matcher import SemSimConfig, SemSimType
+from graphbrain.semsim import init_matcher, SemSimConfig, SemSimType
 
 logger = logging.getLogger()
 
 hg = get_hgraph("reddit-worldnews-01012013-01082017.hg")
 
 config = SemSimConfig(model_name='intfloat/e5-base', similarity_threshold=0.0)
-init_matcher(matcher_type=SemSimType.CONTEXT, config=config)
+init_matcher(matcher_type=SemSimType.CTX, config=config)
 
 
 def search_for_pattern():
@@ -43,17 +42,18 @@ def search_for_pattern():
     # for result in hg.match(search_pattern, ref_edges=ref_edges):
     #     print(result)
 
-    for result in hg.match_sequence("headers", search_pattern, ref_edges=ref_edges):
-        print(result)
+    # for result in hg.match_sequence("headers", search_pattern, ref_edges=ref_edges):
+    #     print(result)
 
 
 if __name__ == "__main__":
-    search_for_pattern()
+    # search_for_pattern()
 
     # for seq in hg.sequences():
     #     print(seq)
-    #
+
     # for header in hg.sequence('headers'):
     #     print(header)
-    #
-    # header_edge = next(hg.sequence('headers'))
+
+    headers_seq = list(hg.sequence('headers'))
+    print(len(headers_seq))
