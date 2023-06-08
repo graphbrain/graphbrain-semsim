@@ -46,8 +46,9 @@ class ConflictsEvaluationScenario(EvaluationScenario):
             similarity_threshold=0.0
         ),
         SemSimType.CTX: SemSimConfig(
-            model_name='intfloat/e5-base',
-            similarity_threshold=0.0
+            model_name='intfloat/e5-large-v2',
+            similarity_threshold=0.0,
+            embedding_prefix="query:"
         )
     }
     sub_pattern_words: dict[str, list[str]] = SUB_PATTERN_WORDS
