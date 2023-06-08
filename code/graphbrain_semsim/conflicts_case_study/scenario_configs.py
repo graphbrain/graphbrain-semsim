@@ -157,8 +157,8 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             )
         },
         threshold_values={
-            # "preds": frange(0, 1, 0.01)
-            "preds": [0.5]
+            "preds": frange(0, 1, 0.01)
+            # "preds": [0.5]
         },
         ref_edges_configs=[
             RefEdgesConfig(
@@ -184,8 +184,8 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             )
         },
         threshold_values={
-            # "preds": frange(0, 1, 0.01)
-            "preds": [0.5]
+            "preds": frange(0, 1, 0.01)
+            # "preds": [0.5]
         },
         ref_edges_configs=[
             RefEdgesConfig(
