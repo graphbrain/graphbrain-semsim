@@ -6,7 +6,7 @@ logger = logging.getLogger()
 
 hg = get_hgraph("reddit-worldnews-01012013-01082017.hg")
 
-config = SemSimConfig(model_name='intfloat/e5-base', similarity_threshold=0.0)
+config = SemSimConfig(model_name='intfloat/e5-base', similarity_threshold=0.0, embedding_prefix="query:")
 init_matcher(matcher_type=SemSimType.CTX, config=config)
 
 
@@ -15,12 +15,13 @@ def search_for_pattern():
     # search_pattern = '((semsim [party,fight,survive]/P.{s-}) (semsim mother/C) VAR)'
 
     ref_edges = [
-        "(says/Pd.sr.|f--3s-/en obama/Cp.s/en ((will/Mm/en (not/Mn/en (be/Mv.-i-----/en intimidated/P.pa.<pf----/en))) america/Cp.s/en (by/T/en (of/Br.ma/en violence/Cc.s/en isis/Cp.s/en))))"
+        "(say/Pd.sr.|f--3s-/en obama/Cp.s/en ((will/Mm/en (not/Mn/en (be/Mv.-i-----/en intimidated/P.pa.<pf----/en))) america/Cp.s/en (by/T/en (of/Br.ma/en violence/Cc.s/en isis/Cp.s/en))))"
     ]
     
     # search_pattern = '((semsim say/P.{s-} 0.2) obama/C VAR)'
 
-    search_pattern = '((semsim-ctx say/P.{s-} 0.2) obama/C VAR)'
+    # search_pattern = '((semsim-ctx say/P.{s-} 0.2) obama/C VAR)'
+    search_pattern = '(says/P.{s-} (semsim-ctx */C 0.5) VAR)'
 
     # output_str = f"Pattern: {search_pattern}\n" \
     #              f"N of results: {len(search_results)}\n" \
@@ -42,12 +43,12 @@ def search_for_pattern():
     # for result in hg.match(search_pattern, ref_edges=ref_edges):
     #     print(result)
 
-    # for result in hg.match_sequence("headers", search_pattern, ref_edges=ref_edges):
-    #     print(result)
+    for result in hg.match_sequence("headers", search_pattern, ref_edges=ref_edges):
+        print(result)
 
 
 if __name__ == "__main__":
-    # search_for_pattern()
+    search_for_pattern()
 
     # for seq in hg.sequences():
     #     print(seq)
@@ -55,5 +56,5 @@ if __name__ == "__main__":
     # for header in hg.sequence('headers'):
     #     print(header)
 
-    headers_seq = list(hg.sequence('headers'))
-    print(len(headers_seq))
+    # headers_seq = list(hg.sequence('headers'))
+    # print(len(headers_seq))
