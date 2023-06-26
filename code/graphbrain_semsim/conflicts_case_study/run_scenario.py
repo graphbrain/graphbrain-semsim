@@ -61,6 +61,9 @@ def exec_eval_run(
         log_matches: bool = False
 ):
     logger.info(f"Pattern: {eval_run.pattern}")
+    if eval_run.ref_edges:
+        logger.info(f"Ref edges: {eval_run.ref_edges}")
+
     eval_run.start_time = datetime.now()
 
     eval_run.matches = []

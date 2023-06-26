@@ -20,9 +20,14 @@ def frange(start, stop, step, include_stop: bool = True) -> list[float]:
     except ValueError:
         raise ValueError("Step must be of the form 10^k")
 
+    frange_inlc_stop: list[float] = [
+        x / factor for x in (list(range(int(start * factor), int(stop * factor))) + [stop * factor])
+    ]
+
     if include_stop:
-        return [x / factor for x in (list(range(start * factor, stop * factor)) + [stop * factor])]
-    return [x / factor for x in range(start * factor, stop * factor)]
+        return frange_inlc_stop
+        
+    return frange_inlc_stop[:-1]
 
 
 def all_equal(iterable):
