@@ -5,19 +5,24 @@
 % \usepackage[ngerman]{babel}
 
 \usepackage{graphicx}
-\graphicspath{ {imgs/} {../evaluation/graphbrain_semsim/case_studies/plots/}}
+\graphicspath{ {../resources/imgs/} }
 
-\usepackage[backend=biber, style=alphabetic]{biblatex}
-%\usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
+%\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
 %\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
-\addbibresource{MA.bib}
+\let\cite\parencite  % makes \cite an alias for \parencite
+\addbibresource{../resources/MA.bib}
+%\addbibresource{MA.bib}
 
+\KOMAoptions{parskip=half}
 
-\KOMAoptions{parskip=full}
+\usepackage[margin=3cm]{geometry} % Adjust margins
 
+\usepackage{soul}
+\usepackage{todonotes}
 \usepackage{amsmath}
-%\usepackage{parskip}
 \usepackage{hyperref}
+\usepackage{cleveref}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{booktabs}
@@ -36,10 +41,17 @@
   within = none
 ]{pattern}
 
-%\let\textsf\undefined
-%\newcommand{\textsf}[1]{\normalfont\sffamily #1}}}
-%\newcommand{\textsfs}[1]{{\small{\normalfont\sffamily #1}}}
-%\newcommand{\textsft}[1]{{\tiny{\normalfont\sffamily #1}}}
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[
+  listname = {List of Hyperedges} ,
+  name = Hyperedge,
+  placement = h,
+  within = none
+]{hedge}
+
+\crefname{pattern}{Pattern}{Pattern}
+\crefname{hedge}{Hyperedge}{Hyperedges}
+
 
 
 \usepackage{lipsum}  % produces dummy text
@@ -69,16 +81,14 @@
 }
 
 \subject{Masters Thesis in Computer Science}
-\title{Extending Semantic Hypergraphs by neuronal semantic similarity matching to ???}
-\author{Max Reinhard}
+\title{Extending Semantic Hypergraphs by Neural Embedding-based Semantic Similarity for Pattern Matching}
+\author{Max Reinhard \\ \small Matrikelnummer: 359417}
 
 \date{\today}
 \publishers{Supervised by Prof. Dr. Manfred Hauswirth \\
 	Additional guidance by Prof. Dr. Camille Roth\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)} \ 
 	and Dr. Thilo Ernst\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
 	
-
-
 \maketitle
 
 % ========== Abstract
@@ -165,7 +175,9 @@ WordNet and alike (not the scope of this work)
 
 Mean reference vector vs. pairwise distance
 
-
+% ========== 
+\chapter{Problem Statement}
+\section{Research Questions}
 
 
 % ========== 
@@ -173,13 +185,11 @@ Mean reference vector vs. pairwise distance
 
 Combining Semantic Hypergraphs with neural embeddings
 
-\section{\texttt{semsim} Functional Pattern}
+\section{Integration into the Pattern Matching Process}
+\subsection{\texttt{semsim} Functional Pattern}
 pattern works only for atoms
 
-
-\subsection{Pattern Matching Process}
-
-\subsection{Pattern-wise Similarity Threshold}
+\subsection{Sub-pattern Similarity Thresholds}
 
 
 \section{Fixed Word Embedding-based Matching}
@@ -187,16 +197,20 @@ word2vec via gensim
 
 discussion about using transformer models for single word embeddings?
 
-\subsection{Single Word}
+single-word and multi-word reference
 
-\subsection{Multi Word}
 \label{sec:semsim-multi-word}
 Square bracket notation 
 
 \section{Contextual Embedding-based Matching}
+\subsection{Context References}
+\subsection{Token Mapping}
 
 
-\section{Similarity Threshold Discovery}
+
+\section{Similarity Threshold Control}
+
+\subsection{Breakpoint Discovery}
 detect change points in number of matches \\ 
 see https://github.com/deepcharles/ruptures
 
@@ -210,36 +224,50 @@ how to approach this for practical applications?
 % ========== 
 \chapter{Implementation}
 
-\section{Integration into the SH Framework}
-Realisation as functional pattern
+\section{Relevant external Software Libraries used}
+Here list libs and models to be referenced later.
 
-\section{Similarity Threshold}
-\label{sec:similarity-threshold}
+Word2Vec
+Gensim
+SentenceTransformers
+Transformers
+SpaCy
 
-
-\section{Tokenization}
-
-\subsection{SpaCy}
-SpaCy linguistic tokenization (https://spacy.io/usage/linguistic-features how-tokenizer-works)
-spacy (without transformers) uses an purely rule based (but language depended) tokenizer as far as I understand: https://spacy.io/usage/linguistic-features how-tokenizer-works (the call it linguistic tokenizer)
-
-side note about using different transformer models than the provided one (because i was always confused about this):
-it it possible to exchange the underlying transformer component for basically every transformer model (as long as it follows the conventions that spacy expects), but you would have to retrain the spacy model to be able to use the task specific heads (like e.g. NER)
-footnote: https://github.com/explosion/spaCy/discussions/10327
-
-an alignment is provided between the transformer-tokenizer and the spacy-tokenizer
-lib: https://github.com/explosion/spacy-alignments
-
-footnote: https://explosion.ai/blog/spacy-transformers
+\section{Modules newly added to the SH Framework}
+\section{Modifications of the SH Pattern Matching}
+\section{Modifications to the Hypergraph database}
 
 
-\subsection{WordPiece and SentencePiece}
-
-SentencePiece: https://github.com/google/sentencepiece
-
+%\section{SH Notation}
+%Bracket notation for multi-word Semsim
 
 
-\section{Matching candidate edge and reference edge tokens}
+%\section{Similarity Threshold}
+%\label{sec:similarity-threshold}
+
+
+%\section{Tokenization}
+%
+%\subsection{SpaCy}
+%SpaCy linguistic tokenization (https://spacy.io/usage/linguistic-features how-tokenizer-works)
+%spacy (without transformers) uses an purely rule based (but language depended) tokenizer as far as I understand: https://spacy.io/usage/linguistic-features how-tokenizer-works (the call it linguistic tokenizer)
+%
+%side note about using different transformer models than the provided one (because i was always confused about this):
+%it it possible to exchange the underlying transformer component for basically every transformer model (as long as it follows the conventions that spacy expects), but you would have to retrain the spacy model to be able to use the task specific heads (like e.g. NER)
+%footnote: https://github.com/explosion/spaCy/discussions/10327
+%
+%an alignment is provided between the transformer-tokenizer and the spacy-tokenizer
+%lib: https://github.com/explosion/spacy-alignments
+%
+%footnote: https://explosion.ai/blog/spacy-transformers
+%
+%
+%\subsection{WordPiece and SentencePiece}
+%
+%SentencePiece: https://github.com/google/sentencepiece
+
+
+%\section{Matching candidate edge and reference edge tokens}
 %both edges should match the pattern and should act as a valid ref edge for each other
 %but it is obvious that the tok_idx_trail that leads to the predicate in the one edge wont lead to the predicate in the other edge
 %that was the premise on which i built the matching (and which we discussed i think)
@@ -253,21 +281,6 @@ SentencePiece: https://github.com/google/sentencepiece
 %
 %for now i have the tendency to implement 2a as it is much easier not sure about the semantic implications though
 
-
-\section{External Libraries and Models}
-Here list libs and models to be referenced later.
-
-Word2Vec
-Gensim
-SentenceTransformers
-Transformers
-SpaCy
-
-
-
-
-\section{SH Notation}
-Bracket notation for multi-word Semsim
 
 
 
@@ -397,6 +410,8 @@ Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. 
 \chapter{Future Work}
 \section{Implementation Improvements}
 implemnt multiprocessing, i.e. server process for both hypergraph and semsim matchers. other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
+
+\section{Further Evaluations}
 
 
 

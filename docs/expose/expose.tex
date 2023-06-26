@@ -1,0 +1,288 @@
+%\documentclass[11pt]{scrartcl}
+\documentclass[11pt]{scrreprt}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+% \usepackage[ngerman]{babel}
+
+\usepackage{graphicx}
+\graphicspath{ {../resources/imgs/} }
+
+%\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
+%\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
+\let\cite\parencite  % makes \cite an alias for \parencite
+\addbibresource{../resources/MA.bib}
+%\addbibresource{MA.bib}
+
+\KOMAoptions{parskip=half}
+
+\usepackage[margin=3cm]{geometry} % Adjust margins
+
+\usepackage{soul}
+\usepackage{todonotes}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{rotating}
+
+
+\usepackage{array}  % needed for '\newcolumntype' command
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
+
+
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[
+  listname = {List of Patterns} ,
+  name = Pattern,
+  placement = h,
+  within = none
+]{pattern}
+
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[
+  listname = {List of Hyperedges} ,
+  name = Hyperedge,
+  placement = h,
+  within = none
+]{hedge}
+
+\crefname{pattern}{Pattern}{Pattern}
+\crefname{hedge}{Hyperedge}{Hyperedges}
+
+
+% ====== Expose specifics ======
+% ==============================
+
+% Reduce space below headings
+\RedeclareSectionCommands[
+  afterskip=1em,
+  beforeskip=1em,
+  afterindent=false
+]{section, subsection} % Modify values as needed
+
+\usepackage{chngcntr}
+% Removes dependency of section counter on chapter counter
+\counterwithout{section}{chapter}
+
+% === Mods for included TOC ===
+\usepackage{tocloft}
+
+\setlength{\cftbeforechapskip}{0pt} % for chapters
+\setlength{\cftbeforesecskip}{0pt} % for sections
+
+% Only include chapters and sections in the TOC
+\setcounter{tocdepth}{1} % 0-chapter, 1-section, 2-subsection, 3-subsubsection
+
+\cftpagenumbersoff{chapter} % for chapters
+\cftpagenumbersoff{section} % for sections
+
+%\usepackage{etoc}
+% ======
+
+
+\begin{document}
+
+
+% ========== Title page
+
+\titlehead
+{
+\begin{tabular}{ll}
+\begin{minipage}{0.5\textwidth}
+	\textbf{Technische Universität Berlin} \\
+	Fakultät IV: Elektrotechnik und Informatik \\
+	Institut für Telekommunikationssysteme \\
+	Fachgebiet Verteilte offene Systeme	
+\end{minipage}
+&
+\begin{minipage}{0.5\textwidth}
+	\raggedleft
+	\includegraphics[width=0.3\textwidth]{logos/tub_logo_bw.jpg}			
+\end{minipage}
+
+\end{tabular}
+}
+
+\subject{Masters Thesis Exposé in Computer Science}
+\title{Extending Semantic Hypergraphs by Neural Embedding-based Semantic Similarity for Pattern Matching}
+\author{Max Reinhard \\  \small Matrikelnummer: 359417}
+
+\date{\today}
+\publishers{Supervised by Prof. Dr. Manfred Hauswirth \\
+	Additional guidance by Prof. Dr. Camille Roth\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)} \ 
+	and Dr. Thilo Ernst\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
+	
+
+
+\maketitle
+
+
+% ========== Body
+% ==============================
+
+
+% ========== 
+\section{Introduction}
+\label{sec:intro}
+
+%Human life in times of widespread use of the internet and smartphones is most certainly more than ever interspersed with text-based communication...
+
+A significant part of the social world is nowadays being represented by digitally manifested text. Examples for this range from instant messaging, social media and any form of collective web activity to encyclopaedic websites, digitized libraries and government intelligence. The amount and richness of available social text makes it a valuable data source for social science research and simultaneously creating an interest in automatic systems to analyze these texts on a large scale \cite{evansMachineTranslationMining2016}. Such research can be understood as part of the domain of \textit{Computational Social Science} (CSS) \cite{lazerComputationalSocialScience2009}.
+
+Systems based on techniques from the field of \textit{ Natural Language Processing} (NLP), as well well as the interlinked fields of \textit{Information Retrieval} (IR) and \textit{Information Extraction} (IE), have demonstrated great success in a variety of task related to text analysis. This success is large attributed to the advancements of applying of \textit{Machine Learning} (ML) and especially \textit{Deep Learning} (DL) methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, ML- and specifically DL-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
+%DL models 
+
+The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing Natural Language (NL). \textit{NL} sentences can be modelled as an ordered, recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing SH. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of CSS. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness.
+
+
+%natural language processing (NLP), and information retrieval (IR) and extraction (IE)
+%Machine Learning / Deep Learning
+%
+%
+%* Nachvollziehbarkeit and Explainabily are important features for researches in CSS (source?)
+%* End-to-end ML / Deep Learning-basedNatural Language Processing (NLP) systems have proven to be successful in a variety of tasks (source?)
+%* They mitbringen the disadvantage of relying on internal representations which are hard to understand for humans and decision processes which are mostly intransparent (source?)
+
+
+
+
+% ========== 
+\section{Problem Statement}
+In the SH framework, text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+
+Users of the SH framework (e.g. CSS researchers) can define patterns in the SH formalism to match against a text corpus (e.g. news articles) that has previously been parsed as an SH. These patterns may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). Additionally the actual words that should match need to be specified i.e. the content to match against, if the structure of an edge matches the pattern. 
+There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every edge of a specific type and therefore discard content.
+
+To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-likes-apples} demonstrate how NL sentences are parsed to SH based on this simplified introduction the the SH representation.
+
+\begin{hedge}
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C apples/C ) 
+  \caption{SH representation for the sentence "Ann likes apples"}
+  \label{hed:ann-likes-apples}
+\end{hedge}
+
+\begin{hedge}
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C bananas/C ) 
+  \caption{SH representation for the sentence "Ann likes bananas"}
+  \label{hed:ann-likes-bananas}
+\end{hedge}
+
+
+\cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} both follow the same structure, but differ in the content of the last sub-edge. Both edges are hence matched by \cref{pat:ann-likes-something}, which does not specify content for this sub-edge.
+The SH pattern language also allows to define a pattern that matches both \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} via a list of words as in \cref{pat:ann-likes-apples-and-bananas}. However is not possible define a pattern that matches based on some form of \textit{Semantic Similarity} (SS) \cite{harispeSemanticSimilarityNatural2015} regarding content. \hl{Referring to the example above this means e.g. it is not possible to match an abstract semantic concept such as a \textit{fruit}. Using the SH framework to retrieve every sentences that declares that "Ann likes some kind of fruit", would require to provide a comprehensive list of every fruit.} \todo{not sure whether to include this sentence}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P Ann/C */C )
+  \caption{"Ann-likes-something" pattern}
+  \label{pat:ann-likes-something}
+\end{pattern}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C [apples, bananas]/C )
+  \caption{"Ann likes apples or bananas" pattern}
+  \label{pat:ann-likes-apples-and-bananas}
+\end{pattern}
+
+
+%Explicitly listing every word that should match the content of an edge restricts the versatility of the SH framework and potentially leads to a hight amount of manual work necessary to construct patterns with the desired expressiveness. Allowing some form of adaptiveness for the matching step regarding to edge content would allow users to define more generalising patterns and would presumably lower the amount of manual work needed.
+
+Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allows to specify matching edge content beyond isolated word semantics, although is may not always be desirable or necessary as in the example above. \hl{Nevertheless one could modify this example so that it is desired to match sentences which state that "Ann likes \textit{fruit}, because it is sour", while not being interested in the structure of the second clause. Providing a reference context by sentences like "Ann likes limes, since they are so sour" and "Ann likes lemons, because of their sourness", would possibly allow to capture the concept of \textit{sour fruit} implicitly.} \todo{not sure whether to include this sentence}
+
+The necessity to explicitly list every word that should match the content of an edge restricts the generalisation capabilities of the SH frameworks pattern matching and introduces a bias via the selection of those very words. Utilizing some form of SS regarding to edge content for the matching step would allow users to define more generalising patterns, though analogously it would introduce a bias from the system utilized for SS compuatation. 
+
+There exists a great variety of approaches for determining the SS of texts of which recently ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation or embedding of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based} (NE) in the following. 
+
+As illustrated earlier, these approaches principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard.
+
+%The assumed gain in usability of the SH framework due to a more adaptive matching process and the generally entailing restrictions to the matchings explicitness and therefore limitations for the openness of the framework would need to be balanced.
+
+%While a (partly) adaptive matching process may provide gains in usability for the SH framework it may conflict with its principal 
+
+% ========== 
+\section{Research Questions}
+
+%\subsection{Primary Questions}
+\textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the adaptiveness and therefore loss of explicitness in the matching process?
+
+%\subsection{Secondary Questions}
+\textbf{R.1} What neural embeddings model would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
+
+\textbf{R.2} To what extent does incorporating neural embedding-based semantic similarity improve the generalization (recall) performance when matching a pattern against a set of known desired matching results?
+
+\textbf{R.3} How can adaptiveness and explicitness of the matching process be effectively and transparently balanced and controlled?
+
+\todo{add the notion of trying to capture abstract semantic concepts with semantic similarity to the research questions? this would then obviously also needed to be included earlier}
+
+
+% ========== 
+\section{Proposed Solution}
+
+The solution proposed by this thesis to answer the above mentioned research questions is to conceptualize and implement a proof-of-concept and subject it to a suitable evaluation. 
+
+The implementation should fulfill the following criteria:
+
+\begin{itemize}
+	\item Efficiently integrate NESS into the SH frameworks pattern matching process while maintaining its original functionality
+	\item Allow for different NESS models to be used to compare their respective pattern matching results and enable integration of future developments in the field of NESS
+	\item Enable the user of the SH framework to control the adaptiveness of the pattern matching through e.g. a parameter
+\end{itemize}
+
+\todo{add something about contextuality? e.g. how to provide context?}
+
+Additionally the evaluation should fulfill the following:
+
+\begin{itemize}
+	\item Show the difference in matching results between adaptive and standard pattern matching, both qualitatively and quantitatively.
+	\item Show the difference in matching results for different NESS models, both qualitatively and quantitatively.
+	\item Show the difference in matching results for the adaptiveness control system, both qualitatively and quantitatively.
+
+
+\end{itemize}
+
+% ========== 
+\section{Approach}
+In order to implement the suggested solution, the following steps will be undertaken:
+
+\begin{enumerate}
+ 	\item \textbf{Research}
+	A study of the different types of NESS models will be carried out, paying particular attention to how they represent context. Those offering state-of-the-art performance and are best suited for integration into the SH pattern matching will be identified.
+ 	\item \textbf{Conceptualization}
+ 	The most opportune point for NESS integration within the SH framework's matching process will be located. The parts of the SH framework that need modification for NESS integration, as well as the missing subsystems for employing NESS in the SH pattern matching process will be determined. This will take into account the requirements of the NESS models selected in the previous step.
+ 	\item \textbf{Implementation}
+	Necessary subsystems will be added to the SH framework to enable NESS usage in the SH pattern matching. Additionally, the relevant parts of the SH framework will be modified.
+ 	\item \textbf{Evaluation}
+ 	An evaluation framework will be constructed to perform the evaluations outlined earlier.
+\end{enumerate}
+\todo{does this section need to be more specific?}
+
+
+% ========== 
+\section{Provisional Outline}
+
+\makeatletter
+\input{../thesis/.texpadtmp/thesis.toc}
+\makeatother
+
+
+% ========== 
+\section{Timeline}
+
+
+
+
+
+\printbibliography[title={References}]
+
+\end{document}
