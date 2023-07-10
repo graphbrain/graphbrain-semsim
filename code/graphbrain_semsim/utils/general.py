@@ -18,7 +18,7 @@ def frange(start, stop, step, include_stop: bool = True) -> list[float]:
     try:
         factor = int(factor)
     except ValueError:
-        raise ValueError("Step must be of the form 10^k")
+        raise ValueError("Step must be of the form that 1.0 / step is an integer")
 
     frange_inlc_stop: list[float] = [
         x / factor for x in (list(range(int(start * factor), int(stop * factor))) + [stop * factor])

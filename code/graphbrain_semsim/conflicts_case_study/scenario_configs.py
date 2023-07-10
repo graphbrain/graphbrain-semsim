@@ -158,9 +158,7 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
             )
         },
         threshold_values={
-            # "preds": frange(0, 1, 0.01)
-            "preds": frange(0, 0.59, 0.01) + frange(0.6, 1, 0.1)
-            # "preds": [0.5]
+            "preds": frange(0, 1, 0.1)
         },
         ref_edges_configs=[
             RefEdgesConfig(
@@ -187,7 +185,6 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         },
         threshold_values={
             "preds": frange(0, 1, 0.1)
-            # "preds": [0.5]
         },
         ref_edges_configs=[
             RefEdgesConfig(
@@ -200,7 +197,58 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
                 num_matches_percentile=50
             )
         ]
-
+    ),
+    ConflictsEvaluationScenario(
+        name="4-1_semsim-ctx_preds-general_n-refs-10",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.CTX,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            "preds": frange(0.5, 0.6, 0.02) + frange(0.6, 0.8, 0.1)
+        },
+        ref_edges_configs=[
+            RefEdgesConfig(
+                source_scenario="1_original-pattern",
+                num_ref_edges=10,
+            ),
+            RefEdgesConfig(
+                source_scenario="2-3_semsim-fix_preds_semsim-fix_preps",
+                num_ref_edges=10,
+                num_matches_percentile=50
+            )
+        ]
+    ),
+    ConflictsEvaluationScenario(
+        name="4-2_semsim-ctx_preds-countries_n-refs-10",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.SEMSIM,
+                semsim_type=SemSimType.CTX,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        },
+        threshold_values={
+            "preds": frange(0.5, 0.6, 0.02) + frange(0.6, 0.8, 0.1)
+        },
+        ref_edges_configs=[
+            RefEdgesConfig(
+                source_scenario="3-1_any_countries",
+                num_ref_edges=10,
+            ),
+            RefEdgesConfig(
+                source_scenario="3-2_semsim-fix_countries",
+                num_ref_edges=10,
+                num_matches_percentile=50
+            )
+        ]
     ),
 ]
 
