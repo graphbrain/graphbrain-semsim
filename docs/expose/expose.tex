@@ -11,6 +11,7 @@
 %\usepackage[backend=biber, style=ieee]{biblatex}
 \usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
 %\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
+\let\citef\cite  % makes \citef an alias for \cite
 \let\cite\parencite  % makes \cite an alias for \parencite
 \addbibresource{../resources/MA.bib}
 %\addbibresource{MA.bib}
@@ -133,7 +134,7 @@
 
 A significant part of the social world is nowadays being represented by digitally manifested text. Examples for this range from instant messaging, social media and any form of collective web activity to encyclopaedic websites, digitized libraries and government intelligence. The amount and richness of available social text makes it a valuable data source for social science research and simultaneously creating an interest in automatic systems to analyze these texts on a large scale \cite{evansMachineTranslationMining2016}. Such research can be understood as part of the domain of \textit{Computational Social Science} (CSS) \cite{lazerComputationalSocialScience2009}.
 
-Systems based on techniques from the field of \textit{ Natural Language Processing} (NLP), as well well as the interlinked fields of \textit{Information Retrieval} (IR) and \textit{Information Extraction} (IE), have demonstrated great success in a variety of task related to text analysis. This success is large attributed to the advancements of applying of \textit{Machine Learning} (ML) and especially \textit{Deep Learning} (DL) methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, ML- and specifically DL-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
+Systems based on techniques from the field of \textit{ Natural Language Processing} (NLP), as well well as the interlinked fields of \textit{Information Retrieval} (IR) and \textit{Information Extraction} (IE), have demonstrated great success in a variety of task related to text analysis. This success is largly attributed to the advancements of applying of \textit{Machine Learning} (ML) and especially \textit{Deep Learning} (DL) methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, ML- and specifically DL-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their prediction or decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
 %DL models 
 
 The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing Natural Language (NL). \textit{NL} sentences can be modelled as an ordered, recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing SH. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of CSS. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness.
@@ -152,10 +153,12 @@ The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a
 
 % ========== 
 \section{Problem Statement}
-In the SH framework, text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+CSS researches may typically be interested in retrieving statements of specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. One approach for performing the retrieval would be to use a system which allows to specify some form of pattern which abstractly represents the statements they are trying to capture. This requires the definition of some form of formal pattern language\footnote{The \textit{Google Search} query language can be seen as a simple example of such a pattern language, albeit with a different use case focus: \url{https://support.google.com/websearch/answer/2466433?hl=en}} and possibly the prior transformation of the text corpus into some form of structured format to match against. Another approach is to use a system, which accepts example statements concretely representing the statements that are desired to be retrieved. Those systems may require a large number of positive and negative examples to be able to perform the retrieval. The two types of retrieval systems described here are in tendency situated in the realms of symbolic IR/IE and probabilistic ML/DL respectively.
 
-Users of the SH framework (e.g. CSS researchers) can define patterns in the SH formalism to match against a text corpus (e.g. news articles) that has previously been parsed as an SH. These patterns may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). Additionally the actual words that should match need to be specified i.e. the content to match against, if the structure of an edge matches the pattern. 
-There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every edge of a specific type and therefore discard content.
+The SH framework is more situated in the former symbolic realm. In SH text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+
+Users of the SH framework (e.g. CSS researchers) can define patterns in the SH formalism to match against a text corpus (e.g. a collection of news articles) that has previously been parsed as an SH. These patterns may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). Additionally the actual words that should match need to be specified i.e. the content to match against, if the structure of an edge matches the pattern. 
+There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every atomic edge edge of a specific type and therefore discard content.
 
 To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-likes-apples} demonstrate how NL sentences are parsed to SH based on this simplified introduction the the SH representation.
 
@@ -177,7 +180,9 @@ To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-
 
 
 \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} both follow the same structure, but differ in the content of the last sub-edge. Both edges are hence matched by \cref{pat:ann-likes-something}, which does not specify content for this sub-edge.
-The SH pattern language also allows to define a pattern that matches both \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} via a list of words as in \cref{pat:ann-likes-apples-and-bananas}. However is not possible define a pattern that matches based on some form of \textit{Semantic Similarity} (SS) \cite{harispeSemanticSimilarityNatural2015} regarding content. \hl{Referring to the example above this means e.g. it is not possible to match an abstract semantic concept such as a \textit{fruit}. Using the SH framework to retrieve every sentences that declares that "Ann likes some kind of fruit", would require to provide a comprehensive list of every fruit.} \todo{not sure whether to include this sentence}
+The SH pattern language also allows to define a pattern that matches both \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} via a list of words as in \cref{pat:ann-likes-apples-and-bananas}. However is not possible define a pattern that matches based on some form of \textit{Semantic Relatedness} (SR) or \textit{Semantic Similarity} (SS) \cite{harispeSemanticSimilarityNatural2015} regarding content.
+Referring to the example above this means using the SH framework it is not directly possible to to retrieve every sentences that declares that "Ann likes \textit{some kind of fruit}" or that "Ann likes \textit{fruits similar to apples}". This former would require to provide a comprehensive list of every fruit while the latter would require the user to specify all fruits he deems similar to apples.
+
 
 \begin{pattern}[h!]
   \normalfont\sffamily
@@ -196,15 +201,24 @@ The SH pattern language also allows to define a pattern that matches both \cref{
 \end{pattern}
 
 
+
+Utilizing some form of SR/SS regarding to edge content for the matching step would allow users to define more generalising patterns. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the explicitness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches, which have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation or embedding of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based} (NE) in the following. 
+
+Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
+
+
+
+
+As illustrated earlier, these approaches principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard. While the SH framework generally can be situated in the realm of symbolic approaches, this integration would build a bridge between it and the realm of probabilistic approaches.
+
+
+%Referring to the example above this means e.g. it is not possible to match an abstract semantic concept such as a \textit{fruit}. Using the SH framework to retrieve every sentences that declares that "Ann likes some kind of fruit", would require to provide a comprehensive list of every fruit.} \todo{not sure whether to include this sentence
+
 %Explicitly listing every word that should match the content of an edge restricts the versatility of the SH framework and potentially leads to a hight amount of manual work necessary to construct patterns with the desired expressiveness. Allowing some form of adaptiveness for the matching step regarding to edge content would allow users to define more generalising patterns and would presumably lower the amount of manual work needed.
 
-Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allows to specify matching edge content beyond isolated word semantics, although is may not always be desirable or necessary as in the example above. \hl{Nevertheless one could modify this example so that it is desired to match sentences which state that "Ann likes \textit{fruit}, because it is sour", while not being interested in the structure of the second clause. Providing a reference context by sentences like "Ann likes limes, since they are so sour" and "Ann likes lemons, because of their sourness", would possibly allow to capture the concept of \textit{sour fruit} implicitly.} \todo{not sure whether to include this sentence}
-
-The necessity to explicitly list every word that should match the content of an edge restricts the generalisation capabilities of the SH frameworks pattern matching and introduces a bias via the selection of those very words. Utilizing some form of SS regarding to edge content for the matching step would allow users to define more generalising patterns, though analogously it would introduce a bias from the system utilized for SS compuatation. 
-
-There exists a great variety of approaches for determining the SS of texts of which recently ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation or embedding of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based} (NE) in the following. 
-
-As illustrated earlier, these approaches principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard.
+%\hl{Nevertheless one could modify this example so that it is desired to match sentences which state that "Ann likes \textit{fruit}, because it is sour", while not being interested in the structure of the second clause. Providing a reference context by sentences like "Ann likes limes, since they are so sour" and "Ann likes lemons, because of their sourness", would possibly allow to capture the concept of \textit{sour fruit} implicitly.} \todo{not sure whether to include this sentence}
+%The necessity to explicitly list every word that should match the content of an edge restricts the generalisation capabilities of the SH frameworks pattern matching and introduces a bias via the selection of those very words. 
+% ... , though analogously it would introduce a bias from the system utilized for SS computation.
 
 %The assumed gain in usability of the SH framework due to a more adaptive matching process and the generally entailing restrictions to the matchings explicitness and therefore limitations for the openness of the framework would need to be balanced.
 
@@ -223,8 +237,6 @@ As illustrated earlier, these approaches principally do not provide the explicit
 
 \textbf{R.3} How can adaptiveness and explicitness of the matching process be effectively and transparently balanced and controlled?
 
-\todo{add the notion of trying to capture abstract semantic concepts with semantic similarity to the research questions? this would then obviously also needed to be included earlier}
-
 
 % ========== 
 \section{Proposed Solution}
@@ -234,19 +246,20 @@ The solution proposed by this thesis to answer the above mentioned research ques
 The implementation should fulfill the following criteria:
 
 \begin{itemize}
-	\item Efficiently integrate NESS into the SH frameworks pattern matching process while maintaining its original functionality
-	\item Allow for different NESS models to be used to compare their respective pattern matching results and enable integration of future developments in the field of NESS
-	\item Enable the user of the SH framework to control the adaptiveness of the pattern matching through e.g. a parameter
+	\item Efficiently integrate NESS into the SH frameworks pattern matching process while maintaining its original functionality.
+	\item Allow for different NESS models to be used to compare their respective pattern matching results and enable integration of future developments in the field of NESS.
+	\item Allow for the integration of context into the NESS for the pattern matching while providing an effective way for the user to provide the necessary context references.
+	\item Enable the user of the SH framework to control the adaptiveness of the pattern matching through e.g. a parameter.
 \end{itemize}
 
-\todo{add something about contextuality? e.g. how to provide context?}
+Additionally the evaluation should be performed on text corpus which is of typical research interest in CSS and solve a retrieval/extraction task that also is typical for CSS research. 
 
-Additionally the evaluation should fulfill the following:
+In doing so, it should fulfill the following criteria:
 
 \begin{itemize}
 	\item Show the difference in matching results between adaptive and standard pattern matching, both qualitatively and quantitatively.
 	\item Show the difference in matching results for different NESS models, both qualitatively and quantitatively.
-	\item Show the difference in matching results for the adaptiveness control system, both qualitatively and quantitatively.
+	\item Show the difference in matching results in relation to the controlled adaptiveness of the matching process, both qualitatively and quantitatively.
 
 
 \end{itemize}
@@ -263,12 +276,13 @@ In order to implement the suggested solution, the following steps will be undert
  	\item \textbf{Implementation}
 	Necessary subsystems will be added to the SH framework to enable NESS usage in the SH pattern matching. Additionally, the relevant parts of the SH framework will be modified.
  	\item \textbf{Evaluation}
- 	An evaluation framework will be constructed to perform the evaluations outlined earlier.
+ 	An evaluation framework will be constructed to perform the evaluations outlined earlier. Following \citef{menezesSemanticHypergraphs2021} it will be partly based on extracting statements of inter-actor conflict from a  corpus of news headers. Additionally it will be investigated if the "Event Causality Identification with Causal News Corpus"\footnote{\url{https://github.com/tanfiona/CausalNewsCorpus}} task can be used for further evaluation.
+ 	
 \end{enumerate}
-\todo{does this section need to be more specific?}
 
 
 % ========== 
+\newpage
 \section{Provisional Outline}
 
 \makeatletter
@@ -277,6 +291,7 @@ In order to implement the suggested solution, the following steps will be undert
 
 
 % ========== 
+\newpage
 \section{Timeline}
 
 
