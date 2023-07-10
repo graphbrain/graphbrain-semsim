@@ -202,14 +202,11 @@ Referring to the example above this means using the SH framework it is not direc
 
 
 
-Utilizing some form of SR/SS regarding to edge content for the matching step would allow users to define more generalising patterns. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the explicitness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches, which have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation or embedding of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based} (NE) in the following. 
+Utilizing some form of SR/SS regarding to edge content for the matching step would allow users to define more generalising patterns. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the explicitness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based Semantic Similarity} (NESS) measures in the following. 
 
 Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
 
-
-
-
-As illustrated earlier, these approaches principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard. While the SH framework generally can be situated in the realm of symbolic approaches, this integration would build a bridge between it and the realm of probabilistic approaches.
+As illustrated earlier, NESS measures principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard. While the SH framework generally can be situated in the realm of symbolic approaches, this integration would build a bridge between it and the realm of probabilistic approaches.
 
 
 %Referring to the example above this means e.g. it is not possible to match an abstract semantic concept such as a \textit{fruit}. Using the SH framework to retrieve every sentences that declares that "Ann likes some kind of fruit", would require to provide a comprehensive list of every fruit.} \todo{not sure whether to include this sentence
@@ -233,7 +230,7 @@ As illustrated earlier, these approaches principally do not provide the explicit
 %\subsection{Secondary Questions}
 \textbf{R.1} What neural embeddings model would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
 
-\textbf{R.2} To what extent does incorporating neural embedding-based semantic similarity improve the generalization (recall) performance when matching a pattern against a set of known desired matching results?
+\textbf{R.2} To what extent does incorporating neural embedding-based semantic similarity improve the generalization performance (recall) and how does it impact precision when matching a pattern against a set of known desired matching results?
 
 \textbf{R.3} How can adaptiveness and explicitness of the matching process be effectively and transparently balanced and controlled?
 
@@ -254,7 +251,7 @@ The implementation should fulfill the following criteria:
 
 Additionally the evaluation should be performed on text corpus which is of typical research interest in CSS and solve a retrieval/extraction task that also is typical for CSS research. 
 
-In doing so, it should fulfill the following criteria:
+The evaluation should fulfill the following criteria:
 
 \begin{itemize}
 	\item Show the difference in matching results between adaptive and standard pattern matching, both qualitatively and quantitatively.
