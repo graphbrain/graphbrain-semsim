@@ -1,0 +1,440 @@
+[INFO] ### OVERRIDE: False ###
+[INFO] -----
+[INFO] Running evaluation scenarios for case study 'conflicts'
+[INFO] Loading reference edges from '/home/maxreinhard/MA/graphbrain-semsim/code/graphbrain_semsim/conflicts_case_study/conflicts_ref_edges.json'...
+[INFO] -----
+[INFO] Running scenario [1/1]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10'
+[INFO] ---
+[INFO] Initializing SemSim matchers...
+[INFO] loading KeyedVectors object from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300
+[INFO] loading vectors from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300.vectors.npy with mmap=None
+[INFO] KeyedVectors lifecycle event {'fname': '/root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300', 'datetime': '2023-07-28T09:05:26.103897', 'gensim': '4.3.1', 'python': '3.11.3 (main, May  4 2023, 15:12:58) [GCC 9.4.0]', 'platform': 'Linux-5.19.0-46-generic-x86_64-with-glibc2.35', 'event': 'loaded'}
+[INFO] Initialized SemSim matcher for type 'SemSimType.FIX': config=SemSimConfig(model_name='word2vec-google-news-300', similarity_threshold=0.0, embedding_prefix=None)
+[INFO] Creating SpaCy transformer pipeline...
+[INFO] Done creating SpaCy transformer pipeline!
+[INFO] Initialized SemSim matcher for type 'SemSimType.CTX': config=SemSimConfig(model_name='intfloat/e5-large-v2', similarity_threshold=0.0, embedding_prefix='query:')
+[INFO] ---
+[INFO] Preparing evaluation runs...
+[INFO] Done. Number of evaluation runs: 54
+[INFO] -----
+[INFO] Skipping existing Eval run [1/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-000'
+[INFO] -----
+[INFO] Skipping existing Eval run [2/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-001'
+[INFO] -----
+[INFO] Skipping existing Eval run [3/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-002'
+[INFO] -----
+[INFO] Skipping existing Eval run [4/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-003'
+[INFO] -----
+[INFO] Skipping existing Eval run [5/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-004'
+[INFO] -----
+[INFO] Skipping existing Eval run [6/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-005'
+[INFO] -----
+[INFO] Skipping existing Eval run [7/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-006'
+[INFO] -----
+[INFO] Skipping existing Eval run [8/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-007'
+[INFO] -----
+[INFO] Skipping existing Eval run [9/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-008'
+[INFO] -----
+[INFO] Skipping existing Eval run [10/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-009'
+[INFO] -----
+[INFO] Skipping existing Eval run [11/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-010'
+[INFO] -----
+[INFO] Skipping existing Eval run [12/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-011'
+[INFO] -----
+[INFO] Skipping existing Eval run [13/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-012'
+[INFO] -----
+[INFO] Skipping existing Eval run [14/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-013'
+[INFO] -----
+[INFO] Skipping existing Eval run [15/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-014'
+[INFO] -----
+[INFO] Skipping existing Eval run [16/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-015'
+[INFO] -----
+[INFO] Skipping existing Eval run [17/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-016'
+[INFO] -----
+[INFO] Skipping existing Eval run [18/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-017'
+[INFO] -----
+[INFO] Skipping existing Eval run [19/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-018'
+[INFO] -----
+[INFO] Skipping existing Eval run [20/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-019'
+[INFO] -----
+[INFO] Skipping existing Eval run [21/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-020'
+[INFO] -----
+[INFO] Skipping existing Eval run [22/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-021'
+[INFO] -----
+[INFO] Skipping existing Eval run [23/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-022'
+[INFO] -----
+[INFO] Skipping existing Eval run [24/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-023'
+[INFO] -----
+[INFO] Skipping existing Eval run [25/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-024'
+[INFO] -----
+[INFO] Skipping existing Eval run [26/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-025'
+[INFO] -----
+[INFO] Skipping existing Eval run [27/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-026'
+[INFO] -----
+[INFO] Skipping existing Eval run [28/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-027'
+[INFO] -----
+[INFO] Skipping existing Eval run [29/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-028'
+[INFO] -----
+[INFO] Skipping existing Eval run [30/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-029'
+[INFO] -----
+[INFO] Skipping existing Eval run [31/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-030'
+[INFO] -----
+[INFO] Skipping existing Eval run [32/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-031'
+[INFO] -----
+[INFO] Skipping existing Eval run [33/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-032'
+[INFO] -----
+[INFO] Skipping existing Eval run [34/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-033'
+[INFO] -----
+[INFO] Skipping existing Eval run [35/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-034'
+[INFO] -----
+[INFO] Skipping existing Eval run [36/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-035'
+[INFO] -----
+[INFO] Skipping existing Eval run [37/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-036'
+[INFO] -----
+[INFO] Skipping existing Eval run [38/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-037'
+[INFO] -----
+[INFO] Skipping existing Eval run [39/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-038'
+[INFO] -----
+[INFO] Skipping existing Eval run [40/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-039'
+[INFO] -----
+[INFO] Skipping existing Eval run [41/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-040'
+[INFO] -----
+[INFO] Skipping existing Eval run [42/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-041'
+[INFO] -----
+[INFO] Skipping existing Eval run [43/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-042'
+[INFO] -----
+[INFO] Skipping existing Eval run [44/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-043'
+[INFO] -----
+[INFO] Skipping existing Eval run [45/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-044'
+[INFO] -----
+[INFO] Skipping existing Eval run [46/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-045'
+[INFO] -----
+[INFO] Skipping existing Eval run [47/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-046'
+[INFO] -----
+[INFO] Skipping existing Eval run [48/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-047'
+[INFO] -----
+[INFO] Skipping existing Eval run [49/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-048'
+[INFO] -----
+[INFO] Skipping existing Eval run [50/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-049'
+[INFO] -----
+[INFO] Skipping existing Eval run [51/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-050'
+[INFO] -----
+[INFO] Skipping existing Eval run [52/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-051'
+[INFO] -----
+[INFO] Skipping existing Eval run [53/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-052'
+[INFO] -----
+[INFO] Skipping existing Eval run [54/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-053'
+[INFO] ### OVERRIDE: False ###
+[INFO] -----
+[INFO] Running evaluation scenarios for case study 'conflicts'
+[INFO] Loading reference edges from '/home/maxreinhard/MA/graphbrain-semsim/code/graphbrain_semsim/conflicts_case_study/conflicts_ref_edges.json'...
+[INFO] -----
+[INFO] Running scenario [1/1]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10'
+[INFO] ---
+[INFO] Initializing SemSim matchers...
+[INFO] loading KeyedVectors object from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300
+[INFO] loading vectors from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300.vectors.npy with mmap=None
+[INFO] KeyedVectors lifecycle event {'fname': '/root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300', 'datetime': '2023-07-28T09:05:37.149453', 'gensim': '4.3.1', 'python': '3.11.3 (main, May  4 2023, 15:12:58) [GCC 9.4.0]', 'platform': 'Linux-5.19.0-46-generic-x86_64-with-glibc2.35', 'event': 'loaded'}
+[INFO] Initialized SemSim matcher for type 'SemSimType.FIX': config=SemSimConfig(model_name='word2vec-google-news-300', similarity_threshold=0.0, embedding_prefix=None)
+[INFO] Creating SpaCy transformer pipeline...
+[INFO] Done creating SpaCy transformer pipeline!
+[INFO] Initialized SemSim matcher for type 'SemSimType.CTX': config=SemSimConfig(model_name='intfloat/e5-large-v2', similarity_threshold=0.0, embedding_prefix='query:')
+[INFO] ---
+[INFO] Preparing evaluation runs...
+[INFO] Done. Number of evaluation runs: 54
+[INFO] -----
+[INFO] Skipping existing Eval run [1/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-000'
+[INFO] -----
+[INFO] Skipping existing Eval run [2/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-001'
+[INFO] -----
+[INFO] Skipping existing Eval run [3/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-002'
+[INFO] -----
+[INFO] Skipping existing Eval run [4/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-003'
+[INFO] -----
+[INFO] Skipping existing Eval run [5/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-004'
+[INFO] -----
+[INFO] Skipping existing Eval run [6/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-005'
+[INFO] -----
+[INFO] Skipping existing Eval run [7/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-006'
+[INFO] -----
+[INFO] Skipping existing Eval run [8/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-007'
+[INFO] -----
+[INFO] Skipping existing Eval run [9/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-008'
+[INFO] -----
+[INFO] Skipping existing Eval run [10/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-009'
+[INFO] -----
+[INFO] Skipping existing Eval run [11/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-010'
+[INFO] -----
+[INFO] Skipping existing Eval run [12/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-011'
+[INFO] -----
+[INFO] Skipping existing Eval run [13/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-012'
+[INFO] -----
+[INFO] Skipping existing Eval run [14/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-013'
+[INFO] -----
+[INFO] Skipping existing Eval run [15/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-014'
+[INFO] -----
+[INFO] Skipping existing Eval run [16/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-015'
+[INFO] -----
+[INFO] Skipping existing Eval run [17/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-016'
+[INFO] -----
+[INFO] Skipping existing Eval run [18/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-017'
+[INFO] -----
+[INFO] Skipping existing Eval run [19/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-018'
+[INFO] -----
+[INFO] Skipping existing Eval run [20/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-019'
+[INFO] -----
+[INFO] Skipping existing Eval run [21/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-020'
+[INFO] -----
+[INFO] Skipping existing Eval run [22/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-021'
+[INFO] -----
+[INFO] Skipping existing Eval run [23/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-022'
+[INFO] -----
+[INFO] Skipping existing Eval run [24/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-023'
+[INFO] -----
+[INFO] Skipping existing Eval run [25/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-024'
+[INFO] -----
+[INFO] Skipping existing Eval run [26/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-025'
+[INFO] -----
+[INFO] Skipping existing Eval run [27/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-026'
+[INFO] -----
+[INFO] Skipping existing Eval run [28/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-027'
+[INFO] -----
+[INFO] Skipping existing Eval run [29/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-028'
+[INFO] -----
+[INFO] Skipping existing Eval run [30/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-029'
+[INFO] -----
+[INFO] Skipping existing Eval run [31/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-030'
+[INFO] -----
+[INFO] Skipping existing Eval run [32/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-031'
+[INFO] -----
+[INFO] Skipping existing Eval run [33/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-032'
+[INFO] -----
+[INFO] Skipping existing Eval run [34/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-033'
+[INFO] -----
+[INFO] Skipping existing Eval run [35/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-034'
+[INFO] -----
+[INFO] Skipping existing Eval run [36/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-035'
+[INFO] -----
+[INFO] Skipping existing Eval run [37/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-036'
+[INFO] -----
+[INFO] Skipping existing Eval run [38/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-037'
+[INFO] -----
+[INFO] Skipping existing Eval run [39/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-038'
+[INFO] -----
+[INFO] Skipping existing Eval run [40/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-039'
+[INFO] -----
+[INFO] Skipping existing Eval run [41/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-040'
+[INFO] -----
+[INFO] Skipping existing Eval run [42/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-041'
+[INFO] -----
+[INFO] Skipping existing Eval run [43/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-042'
+[INFO] -----
+[INFO] Skipping existing Eval run [44/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-043'
+[INFO] -----
+[INFO] Skipping existing Eval run [45/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-044'
+[INFO] -----
+[INFO] Skipping existing Eval run [46/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-045'
+[INFO] -----
+[INFO] Skipping existing Eval run [47/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-046'
+[INFO] -----
+[INFO] Skipping existing Eval run [48/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-047'
+[INFO] -----
+[INFO] Skipping existing Eval run [49/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-048'
+[INFO] -----
+[INFO] Skipping existing Eval run [50/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-049'
+[INFO] -----
+[INFO] Skipping existing Eval run [51/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-050'
+[INFO] -----
+[INFO] Skipping existing Eval run [52/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-051'
+[INFO] -----
+[INFO] Skipping existing Eval run [53/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-052'
+[INFO] -----
+[INFO] Skipping existing Eval run [54/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-053'
+[INFO] ### OVERRIDE: False ###
+[INFO] -----
+[INFO] Running evaluation scenarios for case study 'conflicts'
+[INFO] Loading reference edges from '/home/maxreinhard/MA/graphbrain-semsim/code/graphbrain_semsim/conflicts_case_study/conflicts_ref_edges.json'...
+[INFO] -----
+[INFO] Running scenario [1/1]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10'
+[INFO] ---
+[INFO] Initializing SemSim matchers...
+[INFO] loading KeyedVectors object from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300
+[INFO] loading vectors from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300.vectors.npy with mmap=None
+[INFO] KeyedVectors lifecycle event {'fname': '/root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300', 'datetime': '2023-07-28T09:05:48.957358', 'gensim': '4.3.1', 'python': '3.11.3 (main, May  4 2023, 15:12:58) [GCC 9.4.0]', 'platform': 'Linux-5.19.0-46-generic-x86_64-with-glibc2.35', 'event': 'loaded'}
+[INFO] Initialized SemSim matcher for type 'SemSimType.FIX': config=SemSimConfig(model_name='word2vec-google-news-300', similarity_threshold=0.0, embedding_prefix=None)
+[INFO] Creating SpaCy transformer pipeline...
+[INFO] ### OVERRIDE: False ###
+[INFO] -----
+[INFO] Running evaluation scenarios for case study 'conflicts'
+[INFO] Loading reference edges from '/home/maxreinhard/MA/graphbrain-semsim/code/graphbrain_semsim/conflicts_case_study/conflicts_ref_edges.json'...
+[INFO] -----
+[INFO] Running scenario [1/2]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10'
+[INFO] ---
+[INFO] Initializing SemSim matchers...
+[INFO] loading KeyedVectors object from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300
+[INFO] loading vectors from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300.vectors.npy with mmap=None
+[INFO] KeyedVectors lifecycle event {'fname': '/root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300', 'datetime': '2023-07-28T09:05:55.440043', 'gensim': '4.3.1', 'python': '3.11.3 (main, May  4 2023, 15:12:58) [GCC 9.4.0]', 'platform': 'Linux-5.19.0-46-generic-x86_64-with-glibc2.35', 'event': 'loaded'}
+[INFO] Initialized SemSim matcher for type 'SemSimType.FIX': config=SemSimConfig(model_name='word2vec-google-news-300', similarity_threshold=0.0, embedding_prefix=None)
+[INFO] Creating SpaCy transformer pipeline...
+[INFO] Done creating SpaCy transformer pipeline!
+[INFO] Initialized SemSim matcher for type 'SemSimType.CTX': config=SemSimConfig(model_name='intfloat/e5-large-v2', similarity_threshold=0.0, embedding_prefix='query:')
+[INFO] ---
+[INFO] Preparing evaluation runs...
+[INFO] Done. Number of evaluation runs: 54
+[INFO] -----
+[INFO] Skipping existing Eval run [1/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-000'
+[INFO] -----
+[INFO] Skipping existing Eval run [2/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-001'
+[INFO] -----
+[INFO] Skipping existing Eval run [3/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-002'
+[INFO] -----
+[INFO] Skipping existing Eval run [4/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-003'
+[INFO] -----
+[INFO] Skipping existing Eval run [5/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-004'
+[INFO] -----
+[INFO] Skipping existing Eval run [6/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-005'
+[INFO] -----
+[INFO] Skipping existing Eval run [7/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-006'
+[INFO] -----
+[INFO] Skipping existing Eval run [8/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-007'
+[INFO] -----
+[INFO] Skipping existing Eval run [9/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-008'
+[INFO] -----
+[INFO] Skipping existing Eval run [10/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-009'
+[INFO] -----
+[INFO] Skipping existing Eval run [11/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-010'
+[INFO] -----
+[INFO] Skipping existing Eval run [12/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-011'
+[INFO] -----
+[INFO] Skipping existing Eval run [13/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-012'
+[INFO] -----
+[INFO] Skipping existing Eval run [14/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-013'
+[INFO] -----
+[INFO] Skipping existing Eval run [15/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-014'
+[INFO] -----
+[INFO] Skipping existing Eval run [16/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-015'
+[INFO] -----
+[INFO] Skipping existing Eval run [17/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-016'
+[INFO] -----
+[INFO] Skipping existing Eval run [18/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-017'
+[INFO] -----
+[INFO] Skipping existing Eval run [19/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-018'
+[INFO] -----
+[INFO] Skipping existing Eval run [20/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-019'
+[INFO] -----
+[INFO] Skipping existing Eval run [21/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-020'
+[INFO] -----
+[INFO] Skipping existing Eval run [22/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-021'
+[INFO] -----
+[INFO] Skipping existing Eval run [23/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-022'
+[INFO] -----
+[INFO] Skipping existing Eval run [24/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-023'
+[INFO] -----
+[INFO] Skipping existing Eval run [25/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-024'
+[INFO] -----
+[INFO] Skipping existing Eval run [26/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-025'
+[INFO] -----
+[INFO] Skipping existing Eval run [27/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-026'
+[INFO] -----
+[INFO] Skipping existing Eval run [28/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-027'
+[INFO] -----
+[INFO] Skipping existing Eval run [29/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-028'
+[INFO] -----
+[INFO] Skipping existing Eval run [30/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-029'
+[INFO] -----
+[INFO] Skipping existing Eval run [31/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-030'
+[INFO] -----
+[INFO] Skipping existing Eval run [32/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-031'
+[INFO] -----
+[INFO] Skipping existing Eval run [33/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-032'
+[INFO] -----
+[INFO] Skipping existing Eval run [34/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-033'
+[INFO] -----
+[INFO] Skipping existing Eval run [35/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-034'
+[INFO] -----
+[INFO] Skipping existing Eval run [36/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-035'
+[INFO] -----
+[INFO] Skipping existing Eval run [37/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-036'
+[INFO] -----
+[INFO] Skipping existing Eval run [38/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-037'
+[INFO] -----
+[INFO] Skipping existing Eval run [39/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-038'
+[INFO] -----
+[INFO] Skipping existing Eval run [40/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-039'
+[INFO] -----
+[INFO] Skipping existing Eval run [41/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-040'
+[INFO] -----
+[INFO] Skipping existing Eval run [42/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-041'
+[INFO] -----
+[INFO] Skipping existing Eval run [43/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-042'
+[INFO] -----
+[INFO] Skipping existing Eval run [44/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-043'
+[INFO] -----
+[INFO] Skipping existing Eval run [45/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-044'
+[INFO] -----
+[INFO] Skipping existing Eval run [46/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-045'
+[INFO] -----
+[INFO] Skipping existing Eval run [47/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-046'
+[INFO] -----
+[INFO] Skipping existing Eval run [48/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-047'
+[INFO] -----
+[INFO] Skipping existing Eval run [49/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-048'
+[INFO] -----
+[INFO] Skipping existing Eval run [50/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-049'
+[INFO] -----
+[INFO] Skipping existing Eval run [51/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-050'
+[INFO] -----
+[INFO] Skipping existing Eval run [52/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-051'
+[INFO] -----
+[INFO] Skipping existing Eval run [53/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-052'
+[INFO] -----
+[INFO] Skipping existing Eval run [54/54]: 'conflicts_4-1_semsim-ctx_preds-general_n-refs-10_run-053'
+[INFO] -----
+[INFO] Running scenario [2/2]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10'
+[INFO] ---
+[INFO] Initializing SemSim matchers...
+[INFO] loading KeyedVectors object from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300
+[INFO] loading vectors from /root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300.vectors.npy with mmap=None
+[INFO] KeyedVectors lifecycle event {'fname': '/root/.graphbrain-data/models/gensim-data/word2vec-google-news-300_bin/word2vec-google-news-300', 'datetime': '2023-07-28T09:06:08.018797', 'gensim': '4.3.1', 'python': '3.11.3 (main, May  4 2023, 15:12:58) [GCC 9.4.0]', 'platform': 'Linux-5.19.0-46-generic-x86_64-with-glibc2.35', 'event': 'loaded'}
+[INFO] Initialized SemSim matcher for type 'SemSimType.FIX': config=SemSimConfig(model_name='word2vec-google-news-300', similarity_threshold=0.0, embedding_prefix=None)
+[INFO] Creating SpaCy transformer pipeline...
+[INFO] Done creating SpaCy transformer pipeline!
+[INFO] Initialized SemSim matcher for type 'SemSimType.CTX': config=SemSimConfig(model_name='intfloat/e5-large-v2', similarity_threshold=0.0, embedding_prefix='query:')
+[INFO] ---
+[INFO] Preparing evaluation runs...
+[INFO] Done. Number of evaluation runs: 54
+[INFO] -----
+[INFO] Skipping existing Eval run [1/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-000'
+[INFO] -----
+[INFO] Skipping existing Eval run [2/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-001'
+[INFO] -----
+[INFO] Skipping existing Eval run [3/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-002'
+[INFO] -----
+[INFO] Skipping existing Eval run [4/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-003'
+[INFO] -----
+[INFO] Skipping existing Eval run [5/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-004'
+[INFO] -----
+[INFO] Skipping existing Eval run [6/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-005'
+[INFO] -----
+[INFO] Skipping existing Eval run [7/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-006'
+[INFO] -----
+[INFO] Skipping existing Eval run [8/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-007'
+[INFO] -----
+[INFO] Skipping existing Eval run [9/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-008'
+[INFO] -----
+[INFO] Skipping existing Eval run [10/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-009'
+[INFO] -----
+[INFO] Skipping existing Eval run [11/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-010'
+[INFO] -----
+[INFO] Skipping existing Eval run [12/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-011'
+[INFO] -----
+[INFO] Skipping existing Eval run [13/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-012'
+[INFO] -----
+[INFO] Skipping existing Eval run [14/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-013'
+[INFO] -----
+[INFO] Skipping existing Eval run [15/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-014'
+[INFO] -----
+[INFO] Executing Eval run [16/54]: 'conflicts_4-2_semsim-ctx_preds-countries_n-refs-10_run-015'...
+[INFO] Pattern: ( (var (atoms (semsim-ctx */P.{so,x} 0.61) ) PRED) (var */C SOURCE) (var */C TARGET) ((any against/T for/T of/T over/T) (any TOPIC/R TOPIC/S)) )
+[INFO] Ref edges: ['(slam/Pd.soxx.|f-----/en palestinians/Cp.p/en obama/Cp.s/en (for/T/en (causing/P.r.|pg----/en (+/B.mm/. syria/Cp.s/en bloodshed/Cc.s/en))) (prompting/Pd.ox.|pg----/en despair/Cc.s/en ((even/M/en from/T/en) supporters/Cc.p/en)))', '(accuses/Pd.soxx.|f--3s-/en britain/Cp.s/en spain/Cp.s/en (of/T/en (violating/P.o.|pg----/en (+/B.am/. gibraltar/Cp.s/en sovereignty/Cc.s/en))) (after/T/en (chase/Pd.s.|f-----/en drugs/Cc.p/en)))', '(accuses/Pd.sox.|f--3s-/en taiwan/Cp.s/en china/Cp.s/en (of/T/en (abducting/P.o.|pg----/en (its/Mp/en citizens/Cc.p/en))))', '(accuses/Pd.sox.|f--3s-/en china/Cp.s/en japan/Cp.s/en (of/T/en (raising/P.ox.|pg----/en tensions/Cc.p/en (after/T/en (says/Pd.sr.|f--3s-/en tokyo/Cp.s/en ((has/Mv.|f--3s-/en increased/P.so.<pf----/en) it/Ci/en (+/B.am/. jet/Cc.s/en scrambles/Cc.p/en)))))))', '(accuses/Pd.sox.|f--3s-/en yemen/Cp.s/en iran/Cp.s/en (of/T/en (pursuing/P.o.|pg----/en (its/Mp/en destruction/Cc.s/en))))', '(accuses/Pd.sox.|f--3s-/en afghanistan/Cp.s/en pakistan/Cp.s/en (of/T/en (supporting/P.o.|pg----/en (+/B.am/. taliban/Cp.s/en militants/Cc.p/en))))', '(accuses/Pd.sox.|f--3s-/en iran/Cp.s/en israel/Cp.s/en (of/T/en (being/P.x.|pg----/en (behind/T/en (+/B.am/. beirut/Cp.s/en bombings/Cc.p/en)))))', '(warns/Pd.sox?.|f--3s-/en putin/Cp.s/en ukraine/Cp.s/en (against/T/en (implementing/P.o.|pg----/en (+/B.am/. eu/Cp.s/en deal/Cc.s/en))) -letter/C/en)', '(warns/Pd.sox.|f--3s-/en obama/Cp.s/en china/Cp.s/en (against/T/en (throwing/P.ox.|pg----/en elbows/Cc.p/en (in/T/en (+/B.am/. sea/Cc.s/en dispute/Cc.s/en)))))', '(accuses/Pd.sox.|f--3s-/en ukraine/Cp.s/en russia/Cp.s/en (of/T/en (deploying/P.ox.|pg----/en troops/Cc.p/en (in/T/en crimea/Cp.s/en))))']
+[ERROR] Candidate edge has no 'tok_pos' attribute: (improve/Pd.so.|f-----/en (indian/Ma/en firms/Cc.p/en) (+/B.mm/. ((female/Ma/en friendly/Ma/en) (+/B.mm/. (+/B.am/. safety/Cc.s/en measures/Cc.p/en) %20/C/en)) video/Cc.s/en))
