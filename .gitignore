@@ -1,5 +1,7 @@
 **/results/**
 
+data/plots/util_data/*
+
 .idea
 .DS_Store
 .texpadtmp
