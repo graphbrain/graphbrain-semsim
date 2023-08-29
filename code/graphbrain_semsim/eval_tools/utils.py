@@ -1,16 +1,22 @@
+import json
 from pathlib import Path
 
 import numpy as np
+from pydantic import ValidationError
 
-from graphbrain_semsim import RESULT_DIR
+from graphbrain_semsim import logger, RESULT_DIR
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, EvaluationScenario, PatternMatch
 from graphbrain_semsim.utils.general import all_equal
 
 
 def get_eval_runs(scenario_id: str) -> list[EvaluationRun]:
     results_dir_path: Path = RESULT_DIR / scenario_id
-    eval_runs: list[EvaluationRun] = [EvaluationRun.parse_file(file_name)
-                                      for file_name in results_dir_path.iterdir()]
+    eval_runs: list[EvaluationRun] = []
+    for file_name in results_dir_path.iterdir():
+        try:
+            eval_runs.append(EvaluationRun.parse_file(file_name))
+        except (json.decoder.JSONDecodeError, ValidationError):
+            logger.error(f"Invalid evaluation run file: {file_name}")
 
     assert eval_runs, f"No evaluation runs found for scenario '{scenario_id}'"
     return eval_runs
@@ -46,6 +52,10 @@ def get_variable_threshold_sub_pattern(scenario: EvaluationScenario) -> str | No
             scenario.threshold_values[sub_pattern_name] for sub_pattern_name in variable_threshold_sub_patterns
     ):
         raise ValueError(f"Scenario '{scenario.id}': variable threshold sub patterns must have the same values")
+
+    if len(variable_threshold_sub_patterns) > 1:
+        logger.warning(f"Scenario '{scenario.id}': multiple variable threshold sub patterns found, "
+                       f"using '{variable_threshold_sub_patterns[0]}'")
 
     return variable_threshold_sub_patterns[0]
 

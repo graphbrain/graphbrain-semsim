@@ -1,25 +1,15 @@
 from pathlib import Path
-
-from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
-import scienceplots  # noqa
 
 from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, EvaluationScenario, RefEdgesConfig
 from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, EVAL_SCENARIOS
 from graphbrain_semsim.eval_tools.utils import get_eval_scenario, get_eval_runs, get_variable_threshold_sub_pattern
+from graphbrain_semsim.eval_tools.plots import plot_base_config
 
 
-plt.style.use(['science', 'grid'])
-
-# Increase the font size
-plt.rcParams.update({
-    'text.usetex': False,
-    'font.size': 14,            # Set the global font size
-    'xtick.labelsize': 14,      # Set the font size for the x-axis tick labels
-    'ytick.labelsize': 14,      # Set the font size for the y-axis tick labels
-})
+plot_base_config()
 
 
 def plot_n_results_vs_threshold(
@@ -194,12 +184,20 @@ def plot_n_results_vs_fix_threshold(
 # )
 
 
+# plot_n_results_vs_threshold(
+#     plot_name="n_results_vs_thresholds_semsim-ctx_preds",
+#     case_study=CASE_STUDY,
+#     scenarios=[
+#         "4-1_semsim-ctx_preds-general",
+#         "4-2_semsim-ctx_preds-countries"
+#     ]
+# )
+
 plot_n_results_vs_threshold(
-    plot_name="n_results_vs_thresholds_semsim-ctx_preds",
+    plot_name="n_results_vs_thresholds_semsim-ctx_preds_thresh-0.5-0.8_n-refs-10",
     case_study=CASE_STUDY,
     scenarios=[
-        "4-1_semsim-ctx_preds-general",
-        "4-2_semsim-ctx_preds-countries"
+        "4-1_semsim-ctx_preds-general_n-refs-10",
+        "4-2_semsim-ctx_preds-countries_n-refs-10"
     ]
 )
-

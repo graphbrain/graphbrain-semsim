@@ -1,6 +1,8 @@
 import logging
+import pickle
 from itertools import groupby
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -33,3 +35,29 @@ def frange(start, stop, step, include_stop: bool = True) -> list[float]:
 def all_equal(iterable):
     g = groupby(iterable)
     return next(g, True) and not next(g, False)
+
+
+def save_to_pickle(data: Any, file_path: Path):
+    file_path.parent.mkdir(exist_ok=True, parents=True)
+
+    try:
+        with file_path.open('wb') as f:
+            pickle.dump(data, f)
+        logger.info(f"Data successfully saved to {file_path}")
+    except Exception as e:
+        logger.error(f"Failed to save data to {file_path}. Error: {e}")
+
+
+def load_from_pickle(file_path: Path):
+    if not file_path.exists():
+        logger.error(f"File {file_path} does not exist")
+        return None
+
+    try:
+        with file_path.open('rb') as f:
+            data = pickle.load(f)
+        logger.info(f"Data successfully loaded from {file_path}")
+        return data
+    except Exception as e:
+        logger.error(f"Failed to load data from {file_path}. Error: {e}")
+        return None
