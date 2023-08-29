@@ -1,3 +1,4 @@
+%\documentclass[11pt]{scrartcl}
 \documentclass[11pt]{scrreprt}
 
 \usepackage[T1]{fontenc}
@@ -10,9 +11,9 @@
 %\usepackage[backend=biber, style=ieee]{biblatex}
 \usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
 %\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
+\let\citef\cite  % makes \citef an alias for \cite
 \let\cite\parencite  % makes \cite an alias for \parencite
 \addbibresource{../resources/MA.bib}
-%\addbibresource{MA.bib}
 
 \KOMAoptions{parskip=half}
 
@@ -177,11 +178,78 @@ Mean reference vector vs. pairwise distance
 
 % ========== 
 \chapter{Problem Statement}
+\label{cha:problem-statement}
+CSS researches may typically be interested in retrieving statements of specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. One approach for performing the retrieval would be to use a system which allows to specify some form of pattern which abstractly represents the statements they are trying to capture. This requires the definition of some form of formal pattern language\footnote{The \textit{Google Search} query language can be seen as a simple example of such a pattern language, albeit with a different use case focus: \url{https://support.google.com/websearch/answer/2466433?hl=en}} and possibly the prior transformation of the text corpus into some form of structured format to match against. Another approach is to use a system, which accepts example statements concretely representing the statements that are desired to be retrieved. Those systems may require a large number of positive and negative examples to be able to perform the retrieval. The two types of retrieval systems described here are in tendency situated in the realms of symbolic IR/IE and probabilistic ML/DL respectively.
+
+The SH framework is more situated in the former symbolic realm. In SH text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+
+Users of the SH framework (e.g. CSS researchers) can define patterns in the SH formalism to match against a text corpus (e.g. a collection of news articles) that has previously been parsed as an SH. These patterns may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). Additionally the actual words that should match need to be specified i.e. the content to match against, if the structure of an edge matches the pattern. 
+There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every atomic edge edge of a specific type and therefore discard content.
+
+To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-likes-apples} demonstrate how NL sentences are parsed to SH based on this simplified introduction the the SH representation.
+
+\begin{hedge}
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C apples/C ) 
+  \caption{SH representation for the sentence "Ann likes apples"}
+  \label{hed:ann-likes-apples}
+\end{hedge}
+
+\begin{hedge}
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C bananas/C ) 
+  \caption{SH representation for the sentence "Ann likes bananas"}
+  \label{hed:ann-likes-bananas}
+\end{hedge}
+
+\cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} both follow the same structure, but differ in the content of the last sub-edge. Both edges are hence matched by \cref{pat:ann-likes-something}, which does not specify content for this sub-edge.
+The SH pattern language also allows to define a pattern that matches both \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} via a list of words as in \cref{pat:ann-likes-apples-and-bananas}. However is not possible define a pattern that matches based on some form of \textit{Semantic Relatedness} (SR) or \textit{Semantic Similarity} (SS) \cite{harispeSemanticSimilarityNatural2015} regarding content.
+Referring to the example above this means using the SH framework it is not directly possible to to retrieve every sentences that declares that "Ann likes \textit{some kind of fruit}" or that "Ann likes \textit{fruits similar to apples}". This former would require to provide a comprehensive list of every fruit while the latter would require the user to specify all fruits he deems similar to apples.
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P Ann/C */C )
+  \caption{"Ann-likes-something" pattern}
+  \label{pat:ann-likes-something}
+\end{pattern}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C [apples, bananas]/C )
+  \caption{"Ann likes apples or bananas" pattern}
+  \label{pat:ann-likes-apples-and-bananas}
+\end{pattern}
+
+Utilizing some form of SR/SS regarding to edge content for the matching step would allow users to define more generalising patterns. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the explicitness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based Semantic Similarity} (NESS) measures in the following. 
+
+Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
+
+As illustrated earlier, NESS measures principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard. While the SH framework generally can be situated in the realm of symbolic approaches, this integration would build a bridge between it and the realm of probabilistic approaches.
+
+% ========== 
 \section{Research Questions}
+\label{sec:research-questions}
+Based on the problem statement outlined above, we pose the following research questions:
+
+\subsection{Primary Question}
+\textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the adaptiveness and therefore loss of explicitness in the matching process?
+
+\subsection{Secondary Questions}
+\textbf{R.1} What neural embeddings model would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
+
+\textbf{R.2} To what extent does incorporating neural embedding-based semantic similarity improve the generalization performance (recall) and how does it impact precision when matching a pattern against a set of known desired matching results?
+
+\textbf{R.3} How can adaptiveness and explicitness of the matching process be effectively and transparently balanced and controlled?
 
 
 % ========== 
 \chapter{Solution Approach}
+In this chapter we present the approach that was developed to answer the research questions (see \cref{sec:research-questions}). Therefore trying to provide a solution to the problem of extending the SH framework by Neural Semantic Similarity Matching, which is described in \cref{cha:problem-statement} where the relevancy of this problem for has also been derived.
+
 
 Combining Semantic Hypergraphs with neural embeddings
 
@@ -203,6 +271,12 @@ single-word and multi-word reference
 Square bracket notation 
 
 \section{Contextual Embedding-based Matching}
+
+i generally like your idea of contrasting the discrete and continous space as it allows to point out that there cant be one single point, also for a set of words which represents the meaning, but rather some subspace depending on the specific context
+Regarding the point of the semantic entities in continuous space being either word- or phrase based, the important difference is, that in case of semsim with context we do not compare the embedding representation of the phrases themselves. rather the sententences/phrases influence the embedding representations of the word (or maybe phrases)
+ I tend to see this a bit like a blurring algo. The meaning of each token starts bleeding into its neighbours.
+
+
 \subsection{Context References}
 \subsection{Token Mapping}
 
@@ -289,7 +363,9 @@ SpaCy
 In this chapter...
 
 \section{Case Study: Conflicts}
-This case study follows the approach presented in \cite[p.~22]{menezes_semantic_2021} where expressions of conflict are extracted from a SH constructed from a corpus of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.” (Number of headers: 479384)
+This case study follows the approach presented in \cite[p.~22]{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a SH constructed from a corpus of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.” 
+
+Number of news headers in corpus: 479384\todo{Add dataset statistics}
 
 Pattern \ref{pat:conflict} is used to extract conflicts between two parties, where the \textsf{SOURCE} shows some form of aggression against the \textsf{TARGET}, potentially regarding some \textsf{TOPIC}:
 
@@ -303,7 +379,7 @@ Pattern \ref{pat:conflict} is used to extract conflicts between two parties, whe
 
 
 
-To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \cite{wiki_list_of_countries} is used (listed in descending order by population size):
+To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \footnote{Based on \url{https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population}, Accessed on XYZ} is used (listed in descending order by population size):
 
 
 \textit{India, China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}

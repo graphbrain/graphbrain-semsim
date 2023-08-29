@@ -1,3 +1,34 @@
+@book{aggarwalMiningTextData2012,
+  title = {Mining {{Text Data}}},
+  editor = {Aggarwal, Charu C. and Zhai, ChengXiang},
+  date = {2012},
+  publisher = {{Springer US}},
+  location = {{Boston, MA}},
+  doi = {10.1007/978-1-4614-3223-4},
+  url = {https://link.springer.com/10.1007/978-1-4614-3223-4},
+  urldate = {2023-07-31},
+  isbn = {978-1-4614-3222-7 978-1-4614-3223-4},
+  langid = {english},
+  keywords = {Clustering,Data mining,Databases,Embedded,Heterogeneous,Machine learning and e-commerce,Mining text,Multimedia data,Networking applications,Networks,Social networks,Text mining}
+}
+
+@online{almeidaWordEmbeddingsSurvey2023,
+  title = {Word {{Embeddings}}: {{A Survey}}},
+  shorttitle = {Word {{Embeddings}}},
+  author = {Almeida, Felipe and Xexéo, Geraldo},
+  date = {2023-05-01},
+  eprint = {1901.09069},
+  eprinttype = {arxiv},
+  eprintclass = {cs, stat},
+  doi = {10.48550/arXiv.1901.09069},
+  url = {http://arxiv.org/abs/1901.09069},
+  urldate = {2023-07-26},
+  abstract = {This work lists and describes the main recent strategies for building fixed-length, dense and distributed representations for words, based on the distributional hypothesis. These representations are now commonly called word embeddings and, in addition to encoding surprisingly good syntactic and semantic information, have been proven useful as extra features in many downstream NLP tasks.},
+  pubstate = {preprint},
+  keywords = {A.1,Computer Science - Computation and Language,Computer Science - Machine Learning,I.2.7,Statistics - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/J9FX9QHF/Almeida and Xexéo - 2023 - Word Embeddings A Survey.pdf;/Users/max18768/Zotero/storage/DPI8VERS/1901.html}
+}
+
 @inproceedings{bevilacquaRecentTrendsWord2021,
   title = {Recent {{Trends}} in {{Word Sense Disambiguation}}: {{A Survey}}},
   shorttitle = {Recent {{Trends}} in {{Word Sense Disambiguation}}},
@@ -15,6 +46,39 @@
   file = {/Users/max18768/Zotero/storage/PES3YZW5/Bevilacqua et al. - 2021 - Recent Trends in Word Sense Disambiguation A Surv.pdf}
 }
 
+@online{bhattacharjeeTextTransformationsContrastive2022,
+  title = {Text {{Transformations}} in {{Contrastive Self-Supervised Learning}}: {{A Review}}},
+  shorttitle = {Text {{Transformations}} in {{Contrastive Self-Supervised Learning}}},
+  author = {Bhattacharjee, Amrita and Karami, Mansooreh and Liu, Huan},
+  date = {2022-06-06},
+  eprint = {2203.12000},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2203.12000},
+  url = {http://arxiv.org/abs/2203.12000},
+  urldate = {2023-08-01},
+  abstract = {Contrastive self-supervised learning has become a prominent technique in representation learning. The main step in these methods is to contrast semantically similar and dissimilar pairs of samples. However, in the domain of Natural Language Processing (NLP), the augmentation methods used in creating similar pairs with regard to contrastive learning (CL) assumptions are challenging. This is because, even simply modifying a word in the input might change the semantic meaning of the sentence, and hence, would violate the distributional hypothesis. In this review paper, we formalize the contrastive learning framework, emphasize the considerations that need to be addressed in the data transformation step, and review the state-of-the-art methods and evaluations for contrastive representation learning in NLP. Finally, we describe some challenges and potential directions for learning better text representations using contrastive methods.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/QAQYMN9Y/Bhattacharjee et al. - 2022 - Text Transformations in Contrastive Self-Supervise.pdf;/Users/max18768/Zotero/storage/I9J2UVBX/2203.html}
+}
+
+@article{bojanowskiEnrichingWordVectors2017,
+  title = {Enriching {{Word Vectors}} with {{Subword Information}}},
+  author = {Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas},
+  date = {2017},
+  journaltitle = {Transactions of the Association for Computational Linguistics},
+  volume = {5},
+  pages = {135--146},
+  publisher = {{MIT Press}},
+  location = {{Cambridge, MA}},
+  doi = {10.1162/tacl_a_00051},
+  url = {https://aclanthology.org/Q17-1010},
+  urldate = {2023-07-31},
+  abstract = {Continuous word representations, trained on large unlabeled corpora are useful for many natural language processing tasks. Popular models that learn such representations ignore the morphology of words, by assigning a distinct vector to each word. This is a limitation, especially for languages with large vocabularies and many rare words. In this paper, we propose a new approach based on the skipgram model, where each word is represented as a bag of character n-grams. A vector representation is associated to each character n-gram; words being represented as the sum of these representations. Our method is fast, allowing to train models on large corpora quickly and allows us to compute word representations for words that did not appear in the training data. We evaluate our word representations on nine different languages, both on word similarity and analogy tasks. By comparing to recently proposed morphological word representations, we show that our vectors achieve state-of-the-art performance on these tasks.},
+  file = {/Users/max18768/Zotero/storage/8IP8ZNRN/Bojanowski et al. - 2017 - Enriching Word Vectors with Subword Information.pdf}
+}
+
 @article{chandrasekaranEvolutionSemanticSimilarity2021,
   title = {Evolution of {{Semantic Similarity}}—{{A Survey}}},
   author = {Chandrasekaran, Dhivya and Mago, Vijay},
@@ -29,8 +93,59 @@
   url = {https://dl.acm.org/doi/10.1145/3440755},
   urldate = {2023-06-17},
   abstract = {Estimating the semantic similarity between text data is one of the challenging and open research problems in the field of Natural Language Processing (NLP). The versatility of natural language makes it difficult to define rule-based methods for determining semantic similarity measures. To address this issue, various semantic similarity methods have been proposed over the years. This survey article traces the evolution of such methods beginning from traditional NLP techniques such as kernel-based methods to the most recent research work on transformer-based models, categorizing them based on their underlying principles as knowledge-based, corpus-based, deep neural network–based methods, and hybrid methods. Discussing the strengths and weaknesses of each method, this survey provides a comprehensive view of existing systems in place for new researchers to experiment and develop innovative ideas to address the issue of semantic similarity.},
-  keywords = {corpus-based methods,knowledge-based methods,linguistics,Semantic similarity,supervised and unsupervised methods,word embeddings},
-  file = {/Users/max18768/Zotero/storage/K9ZC823Q/chandrasekaran2021.pdf.pdf;/Users/max18768/Zotero/storage/XDG47NLS/Chandrasekaran and Mago - 2021 - Evolution of Semantic Similarity—A Survey.pdf}
+  keywords = {corpus-based methods,knowledge-based methods,linguistics,Prio 1,Semantic similarity,supervised and unsupervised methods,word embeddings},
+  file = {/Users/max18768/Zotero/storage/K9ZC823Q/chandrasekaran2021.pdf.pdf}
+}
+
+@online{chuangDiffCSEDifferencebasedContrastive2022,
+  title = {{{DiffCSE}}: {{Difference-based Contrastive Learning}} for {{Sentence Embeddings}}},
+  shorttitle = {{{DiffCSE}}},
+  author = {Chuang, Yung-Sung and Dangovski, Rumen and Luo, Hongyin and Zhang, Yang and Chang, Shiyu and Soljačić, Marin and Li, Shang-Wen and Yih, Wen-tau and Kim, Yoon and Glass, James},
+  date = {2022-04-21},
+  eprint = {2204.10298},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2204.10298},
+  url = {http://arxiv.org/abs/2204.10298},
+  urldate = {2023-08-01},
+  abstract = {We propose DiffCSE, an unsupervised contrastive learning framework for learning sentence embeddings. DiffCSE learns sentence embeddings that are sensitive to the difference between the original sentence and an edited sentence, where the edited sentence is obtained by stochastically masking out the original sentence and then sampling from a masked language model. We show that DiffSCE is an instance of equivariant contrastive learning (Dangovski et al., 2021), which generalizes contrastive learning and learns representations that are insensitive to certain types of augmentations and sensitive to other "harmful" types of augmentations. Our experiments show that DiffCSE achieves state-of-the-art results among unsupervised sentence representation learning methods, outperforming unsupervised SimCSE by 2.3 absolute points on semantic textual similarity tasks.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/GDSZ58ER/Chuang et al. - 2022 - DiffCSE Difference-based Contrastive Learning for.pdf;/Users/max18768/Zotero/storage/VCT5CTN8/2204.html}
+}
+
+@inproceedings{devlinBERTPretrainingDeep2019,
+  title = {{{BERT}}: {{Pre-training}} of {{Deep Bidirectional Transformers}} for {{Language Understanding}}},
+  shorttitle = {{{BERT}}},
+  booktitle = {Proceedings of the 2019 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}, {{Volume}} 1 ({{Long}} and {{Short Papers}})},
+  author = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina},
+  date = {2019-06},
+  pages = {4171--4186},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Minneapolis, Minnesota}},
+  doi = {10.18653/v1/N19-1423},
+  url = {https://aclanthology.org/N19-1423},
+  urldate = {2023-07-31},
+  abstract = {We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7\% (4.6\% absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).},
+  eventtitle = {{{NAACL-HLT}} 2019},
+  file = {/Users/max18768/Zotero/storage/XWP3KIKZ/Devlin et al. - 2019 - BERT Pre-training of Deep Bidirectional Transform.pdf}
+}
+
+@inproceedings{ethayarajhHowContextualAre2019,
+  title = {How {{Contextual}} Are {{Contextualized Word Representations}}? {{Comparing}} the {{Geometry}} of {{BERT}}, {{ELMo}}, and {{GPT-2 Embeddings}}},
+  shorttitle = {How {{Contextual}} Are {{Contextualized Word Representations}}?},
+  booktitle = {Proceedings of the 2019 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}} and the 9th {{International Joint Conference}} on {{Natural Language Processing}} ({{EMNLP-IJCNLP}})},
+  author = {Ethayarajh, Kawin},
+  date = {2019-11},
+  pages = {55--65},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Hong Kong, China}},
+  doi = {10.18653/v1/D19-1006},
+  url = {https://aclanthology.org/D19-1006},
+  urldate = {2023-07-25},
+  abstract = {Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models such as ELMo and BERT? Are there infinitely many context-specific representations for each word, or are words essentially assigned one of a finite number of word-sense representations? For one, we find that the contextualized representations of all words are not isotropic in any layer of the contextualizing model. While representations of the same word in different contexts still have a greater cosine similarity than those of two different words, this self-similarity is much lower in upper layers. This suggests that upper layers of contextualizing models produce more context-specific representations, much like how upper layers of LSTMs produce more task-specific representations. In all layers of ELMo, BERT, and GPT-2, on average, less than 5\% of the variance in a word's contextualized representations can be explained by a static embedding for that word, providing some justification for the success of contextualized representations.},
+  eventtitle = {{{EMNLP-IJCNLP}} 2019},
+  file = {/Users/max18768/Zotero/storage/4QH29R33/Ethayarajh - 2019 - How Contextual are Contextualized Word Representat.pdf}
 }
 
 @online{evansMachineTranslationMining2016,
@@ -68,6 +183,65 @@
   file = {/Users/max18768/Zotero/storage/2CEFWD5L/Gao et al. - 2022 - SimCSE Simple Contrastive Learning of Sentence Em.pdf;/Users/max18768/Zotero/storage/ZUAGJRDI/2104.html}
 }
 
+@inproceedings{garcia-ferreroBenchmarkingMetaembeddingsWhat2021,
+  title = {Benchmarking {{Meta-embeddings}}: {{What Works}} and {{What Does Not}}},
+  shorttitle = {Benchmarking {{Meta-embeddings}}},
+  booktitle = {Findings of the {{Association}} for {{Computational Linguistics}}: {{EMNLP}} 2021},
+  author = {García-Ferrero, Iker and Agerri, Rodrigo and Rigau, German},
+  date = {2021-11},
+  pages = {3957--3972},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Punta Cana, Dominican Republic}},
+  doi = {10.18653/v1/2021.findings-emnlp.333},
+  url = {https://aclanthology.org/2021.findings-emnlp.333},
+  urldate = {2023-08-01},
+  abstract = {In the last few years, several methods have been proposed to build meta-embeddings. The general aim was to obtain new representations integrating complementary knowledge from different source pre-trained embeddings thereby improving their overall quality. However, previous meta-embeddings have been evaluated using a variety of methods and datasets, which makes it difficult to draw meaningful conclusions regarding the merits of each approach. In this paper we propose a unified common framework, including both intrinsic and extrinsic tasks, for a fair and objective meta-embeddings evaluation. Furthermore, we present a new method to generate meta-embeddings, outperforming previous work on a large number of intrinsic evaluation benchmarks. Our evaluation framework also allows us to conclude that previous extrinsic evaluations of meta-embeddings have been overestimated.},
+  eventtitle = {Findings 2021},
+  file = {/Users/max18768/Zotero/storage/X57QCF8Y/García-Ferrero et al. - 2021 - Benchmarking Meta-embeddings What Works and What .pdf}
+}
+
+@article{gerthComparisonWordEmbedding2021,
+  title = {A {{Comparison}} of {{Word Embedding Techniques}} for {{Similarity Analysis}}},
+  author = {Gerth, Tyler},
+  date = {2021-05-01},
+  journaltitle = {Computer Science and Computer Engineering Undergraduate Honors Theses},
+  url = {https://scholarworks.uark.edu/csceuht/85},
+  file = {/Users/max18768/Zotero/storage/B4LTGZPJ/85.html}
+}
+
+@inproceedings{ghannayWordEmbeddingEvaluation2016,
+  title = {Word {{Embedding Evaluation}} and {{Combination}}},
+  booktitle = {Proceedings of the {{Tenth International Conference}} on {{Language Resources}} and {{Evaluation}} ({{LREC}}'16)},
+  author = {Ghannay, Sahar and Favre, Benoit and Estève, Yannick and Camelin, Nathalie},
+  date = {2016-05},
+  pages = {300--305},
+  publisher = {{European Language Resources Association (ELRA)}},
+  location = {{Portorož, Slovenia}},
+  url = {https://aclanthology.org/L16-1046},
+  urldate = {2023-07-25},
+  abstract = {Word embeddings have been successfully used in several natural language processing tasks (NLP) and speech processing. Different approaches have been introduced to calculate word embeddings through neural networks. In the literature, many studies focused on word embedding evaluation, but for our knowledge, there are still some gaps. This paper presents a study focusing on a rigorous comparison of the performances of different kinds of word embeddings. These performances are evaluated on different NLP and linguistic tasks, while all the word embeddings are estimated on the same training data using the same vocabulary, the same number of dimensions, and other similar characteristics. The evaluation results reported in this paper match those in the literature, since they point out that the improvements achieved by a word embedding in one task are not consistently observed across all tasks. For that reason, this paper investigates and evaluates approaches to combine word embeddings in order to take advantage of their complementarity, and to look for the effective word embeddings that can achieve good performances on all tasks. As a conclusion, this paper provides new perceptions of intrinsic qualities of the famous word embedding families, which can be different from the ones provided by works previously published in the scientific literature.},
+  eventtitle = {{{LREC}} 2016},
+  file = {/Users/max18768/Zotero/storage/Q3JQYHX7/Ghannay et al. - 2016 - Word Embedding Evaluation and Combination.pdf}
+}
+
+@article{goikoetxeaBilingualEmbeddingsRandom2018,
+  title = {Bilingual Embeddings with Random Walks over Multilingual Wordnets},
+  author = {Goikoetxea, Josu and Soroa, Aitor and Agirre, Eneko},
+  date = {2018-06-15},
+  journaltitle = {Knowledge-Based Systems},
+  shortjournal = {Knowledge-Based Systems},
+  volume = {150},
+  pages = {218--230},
+  issn = {0950-7051},
+  doi = {10.1016/j.knosys.2018.03.017},
+  url = {https://www.sciencedirect.com/science/article/pii/S0950705118301412},
+  urldate = {2023-08-01},
+  abstract = {Bilingual word embeddings represent words of two languages in the same space, and allow to transfer knowledge from one language to the other without machine translation. The main approach is to train monolingual embeddings first and then map them using bilingual dictionaries. In this work, we present a novel method to learn bilingual embeddings based on multilingual knowledge bases (KB) such as WordNet. Our method extracts bilingual information from multilingual wordnets via random walks and learns a joint embedding space in one go. We further reinforce cross-lingual equivalence adding bilingual constraints in the loss function of the popular Skip-gram model. Our experiments on twelve cross-lingual word similarity and relatedness datasets in six language pairs covering four languages show that: 1) our method outperforms the state-of-the-art mapping method using dictionaries; 2) multilingual wordnets on their own improve over text-based systems in similarity datasets; 3) the combination of wordnet-generated information and text is key for good results. Our method can be applied to richer KBs like DBpedia or BabelNet, and can be easily extended to multilingual embeddings. All our software and resources are open source.},
+  langid = {english},
+  keywords = {Distributional semantics,Embeddings,Multilinguality,Random walks,Wordnet},
+  file = {/Users/max18768/Zotero/storage/7XTASVZ6/Goikoetxea et al. - 2018 - Bilingual embeddings with random walks over multil.pdf;/Users/max18768/Zotero/storage/EEVITBME/S0950705118301412.html}
+}
+
 @article{grimmerTextDataPromise2013,
   title = {Text as {{Data}}: {{The Promise}} and {{Pitfalls}} of {{Automatic Content Analysis Methods}} for {{Political Texts}}},
   shorttitle = {Text as {{Data}}},
@@ -87,6 +261,24 @@
   file = {/Users/max18768/Zotero/storage/7K82FEB6/Grimmer and Stewart - 2013 - Text as Data The Promise and Pitfalls of Automati.pdf;/Users/max18768/Zotero/storage/IKGLLVQA/grimmer2013.pdf.pdf}
 }
 
+@article{hanSurveyTechniquesApplications2021,
+  title = {A Survey on the Techniques, Applications, and Performance of Short Text Semantic Similarity},
+  author = {Han, Mengting and Zhang, Xuan and Yuan, Xin and Jiang, Jiahao and Yun, Wei and Gao, Chen},
+  date = {2021},
+  journaltitle = {Concurrency and Computation: Practice and Experience},
+  volume = {33},
+  number = {5},
+  pages = {e5971},
+  issn = {1532-0634},
+  doi = {10.1002/cpe.5971},
+  url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/cpe.5971},
+  urldate = {2023-07-13},
+  abstract = {Short text similarity plays an important role in natural language processing (NLP). It has been applied in many fields. Due to the lack of sufficient context in the short text, it is difficult to measure the similarity. The use of semantics similarity to calculate textual similarity has attracted the attention of academia and industry and achieved better results. In this survey, we have conducted a comprehensive and systematic analysis of semantic similarity. We first propose three categories of semantic similarity: corpus-based, knowledge-based, and deep learning (DL)-based. We analyze the pros and cons of representative and novel algorithms in each category. Our analysis also includes the applications of these similarity measurement methods in other areas of NLP. We then evaluate state-of-the-art DL methods on four common datasets, which proved that DL-based can better solve the challenges of the short text similarity, such as sparsity and complexity. Especially, bidirectional encoder representations from transformer model can fully employ scarce information of short texts and semantic information and obtain higher accuracy and F1 value. We finally put forward some future directions.},
+  langid = {english},
+  keywords = {BERT,deep learning,Prio 2,semantic similarity,short text},
+  file = {/Users/max18768/Zotero/storage/CHLP92XM/10.1002@cpe.5971.pdf.pdf;/Users/max18768/Zotero/storage/SSJKLL8Z/cpe.html}
+}
+
 @book{harispeSemanticSimilarityNatural2015,
   title = {Semantic {{Similarity}} from {{Natural Language}} and {{Ontology Analysis}}},
   author = {Harispe, Sébastien and Ranwez, Sylvie and Janaqi, Stefan and Montmain, Jacky},
@@ -98,7 +290,7 @@
   url = {http://arxiv.org/abs/1704.05295},
   urldate = {2023-06-19},
   abstract = {Artificial Intelligence federates numerous scientific fields in the aim of developing machines able to assist human operators performing complex treatments -- most of which demand high cognitive skills (e.g. learning or decision processes). Central to this quest is to give machines the ability to estimate the likeness or similarity between things in the way human beings estimate the similarity between stimuli. In this context, this book focuses on semantic measures: approaches designed for comparing semantic entities such as units of language, e.g. words, sentences, or concepts and instances defined into knowledge bases. The aim of these measures is to assess the similarity or relatedness of such semantic entities by taking into account their semantics, i.e. their meaning -- intuitively, the words tea and coffee, which both refer to stimulating beverage, will be estimated to be more semantically similar than the words toffee (confection) and coffee, despite that the last pair has a higher syntactic similarity. The two state-of-the-art approaches for estimating and quantifying semantic similarities/relatedness of semantic entities are presented in detail: the first one relies on corpora analysis and is based on Natural Language Processing techniques and semantic models while the second is based on more or less formal, computer-readable and workable forms of knowledge such as semantic networks, thesaurus or ontologies. (...) Beyond a simple inventory and categorization of existing measures, the aim of this monograph is to convey novices as well as researchers of these domains towards a better understanding of semantic similarity estimation and more generally semantic measures.},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Prio 3},
   file = {/Users/max18768/Zotero/storage/6MP3F3YL/Harispe et al. - 2015 - Semantic Similarity from Natural Language and Onto.pdf;/Users/max18768/Zotero/storage/UIFSXE5V/1704.html}
 }
 
@@ -118,6 +310,22 @@
   file = {/Users/max18768/Zotero/storage/J9BT4UJV/hirschberg2015.pdf.pdf}
 }
 
+@inproceedings{howardUniversalLanguageModel2018,
+  title = {Universal {{Language Model Fine-tuning}} for {{Text Classification}}},
+  booktitle = {Proceedings of the 56th {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}} ({{Volume}} 1: {{Long Papers}})},
+  author = {Howard, Jeremy and Ruder, Sebastian},
+  date = {2018-07},
+  pages = {328--339},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Melbourne, Australia}},
+  doi = {10.18653/v1/P18-1031},
+  url = {https://aclanthology.org/P18-1031},
+  urldate = {2023-08-01},
+  abstract = {Inductive transfer learning has greatly impacted computer vision, but existing approaches in NLP still require task-specific modifications and training from scratch. We propose Universal Language Model Fine-tuning (ULMFiT), an effective transfer learning method that can be applied to any task in NLP, and introduce techniques that are key for fine-tuning a language model. Our method significantly outperforms the state-of-the-art on six text classification tasks, reducing the error by 18-24\% on the majority of datasets. Furthermore, with only 100 labeled examples, it matches the performance of training from scratch on 100 times more data. We open-source our pretrained models and code.},
+  eventtitle = {{{ACL}} 2018},
+  file = {/Users/max18768/Zotero/storage/BJ4RHWNT/Howard and Ruder - 2018 - Universal Language Model Fine-tuning for Text Clas.pdf}
+}
+
 @online{huangWhiteningBERTEasyUnsupervised2021,
   title = {{{WhiteningBERT}}: {{An Easy Unsupervised Sentence Embedding Approach}}},
   shorttitle = {{{WhiteningBERT}}},
@@ -135,6 +343,50 @@
   file = {/Users/max18768/Zotero/storage/H87Z7KXH/Huang et al. - 2021 - WhiteningBERT An Easy Unsupervised Sentence Embed.pdf;/Users/max18768/Zotero/storage/QPDXM2JW/2104.html}
 }
 
+@article{khomsahAccuracyComparisonWord2Vec2022,
+  title = {The {{Accuracy Comparison Between Word2Vec}} and {{FastText On Sentiment Analysis}} of {{Hotel Reviews}}},
+  author = {Khomsah, Siti and Ramadhani, Rima and Wijaya, Sena},
+  date = {2022-06-30},
+  journaltitle = {Jurnal RESTI (Rekayasa Sistem dan Teknologi Informasi)},
+  shortjournal = {Jurnal RESTI (Rekayasa Sistem dan Teknologi Informasi)},
+  volume = {6},
+  pages = {352--358},
+  doi = {10.29207/resti.v6i3.3711},
+  abstract = {Word embedding vectorization is more efficient than Bag-of-Word in word vector size. Word embedding also overcomes the loss of information related to sentence context, word order, and semantic relationships between words in sentences. Several kinds of Word Embedding are often considered for sentiment analysis, such as Word2Vec and FastText. Fast Text works on N-Gram, while Word2Vec is based on the word. This research aims to compare the accuracy of the sentiment analysis model using Word2Vec and FastText. Both models are tested in the sentiment analysis of Indonesian hotel reviews using the dataset from TripAdvisor.Word2Vec and FastText use the Skip-gram model. Both methods use the same parameters: number of features, minimum word count, number of parallel threads, and the context window size. Those vectorizers are combined by ensemble learning: Random Forest, Extra Tree, and AdaBoost. The Decision Tree is used as a baseline for measuring the performance of both models. The results showed that both FastText and Word2Vec well-to-do increase accuracy on Random Forest and Extra Tree. FastText reached higher accuracy than Word2Vec when using Extra Tree and Random Forest as classifiers. FastText leverage accuracy 8\% (baseline: Decision Tree 85\%), it is proofed by the accuracy of 93\%, with 100 estimators.},
+  file = {/Users/max18768/Zotero/storage/WI9UWLFX/Khomsah et al. - 2022 - The Accuracy Comparison Between Word2Vec and FastT.pdf}
+}
+
+@inproceedings{komninosDependencyBasedEmbeddings2016,
+  title = {Dependency {{Based Embeddings}} for {{Sentence Classification Tasks}}},
+  booktitle = {Proceedings of the 2016 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}},
+  author = {Komninos, Alexandros and Manandhar, Suresh},
+  date = {2016-06},
+  pages = {1490--1500},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{San Diego, California}},
+  doi = {10.18653/v1/N16-1175},
+  url = {https://aclanthology.org/N16-1175},
+  urldate = {2023-08-01},
+  eventtitle = {{{NAACL-HLT}} 2016},
+  file = {/Users/max18768/Zotero/storage/6EPCTFXZ/Komninos and Manandhar - 2016 - Dependency Based Embeddings for Sentence Classific.pdf}
+}
+
+@online{lauscherSpecializingUnsupervisedPretraining2020,
+  title = {Specializing {{Unsupervised Pretraining Models}} for {{Word-Level Semantic Similarity}}},
+  author = {Lauscher, Anne and Vulić, Ivan and Ponti, Edoardo Maria and Korhonen, Anna and Glavaš, Goran},
+  date = {2020-04-20},
+  eprint = {1909.02339},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1909.02339},
+  url = {http://arxiv.org/abs/1909.02339},
+  urldate = {2023-07-13},
+  abstract = {Unsupervised pretraining models have been shown to facilitate a wide range of downstream NLP applications. These models, however, retain some of the limitations of traditional static word embeddings. In particular, they encode only the distributional knowledge available in raw text corpora, incorporated through language modeling objectives. In this work, we complement such distributional knowledge with external lexical knowledge, that is, we integrate the discrete knowledge on word-level semantic similarity into pretraining. To this end, we generalize the standard BERT model to a multi-task learning setting where we couple BERT's masked language modeling and next sentence prediction objectives with an auxiliary task of binary word relation classification. Our experiments suggest that our "Lexically Informed" BERT (LIBERT), specialized for the word-level semantic similarity, yields better performance than the lexically blind "vanilla" BERT on several language understanding tasks. Concretely, LIBERT outperforms BERT in 9 out of 10 tasks of the GLUE benchmark and is on a par with BERT in the remaining one. Moreover, we show consistent gains on 3 benchmarks for lexical simplification, a task where knowledge about word-level semantic similarity is paramount.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language,Prio 3},
+  file = {/Users/max18768/Zotero/storage/MHFBI2IU/Lauscher et al. - 2020 - Specializing Unsupervised Pretraining Models for W.pdf;/Users/max18768/Zotero/storage/RN5U5PS5/1909.html}
+}
+
 @article{lazerComputationalSocialScience2009,
   title = {Computational {{Social Science}}},
   author = {Lazer, David and Pentland, Alex and Adamic, Lada and Aral, Sinan and Barabási, Albert-László and Brewer, Devon and Christakis, Nicholas and Contractor, Noshir and Fowler, James and Gutmann, Myron and Jebara, Tony and King, Gary and Macy, Michael and Roy, Deb and Van Alstyne, Marshall},
@@ -148,6 +400,60 @@
   url = {https://www.science.org/doi/full/10.1126/science.1167742},
   urldate = {2023-06-15},
   file = {/Users/max18768/Zotero/storage/A9USLW4A/Lazer et al. - 2009 - Computational Social Science.pdf;/Users/max18768/Zotero/storage/BXT75E6T/lazer2009.pdf.pdf}
+}
+
+@online{liuSurveyContextualEmbeddings2020,
+  title = {A {{Survey}} on {{Contextual Embeddings}}},
+  author = {Liu, Qi and Kusner, Matt J. and Blunsom, Phil},
+  date = {2020-04-13},
+  eprint = {2003.07278},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2003.07278},
+  url = {http://arxiv.org/abs/2003.07278},
+  urldate = {2023-07-31},
+  abstract = {Contextual embeddings, such as ELMo and BERT, move beyond global word representations like Word2Vec and achieve ground-breaking performance on a wide range of natural language processing tasks. Contextual embeddings assign each word a representation based on its context, thereby capturing uses of words across varied contexts and encoding knowledge that transfers across languages. In this survey, we review existing contextual embedding models, cross-lingual polyglot pre-training, the application of contextual embeddings in downstream tasks, model compression, and model analyses.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/SNHIBIZP/Liu et al. - 2020 - A Survey on Contextual Embeddings.pdf;/Users/max18768/Zotero/storage/2TX5TELA/2003.html}
+}
+
+@incollection{liWordEmbeddingUnderstanding2018,
+  title = {Word {{Embedding}} for {{Understanding Natural Language}}: {{A Survey}}},
+  shorttitle = {Word {{Embedding}} for {{Understanding Natural Language}}},
+  booktitle = {Guide to {{Big Data Applications}}},
+  author = {Li, Yang and Yang, Tao},
+  editor = {Srinivasan, S.},
+  date = {2018},
+  series = {Studies in {{Big Data}}},
+  pages = {83--104},
+  publisher = {{Springer International Publishing}},
+  location = {{Cham}},
+  doi = {10.1007/978-3-319-53817-4_4},
+  url = {https://doi.org/10.1007/978-3-319-53817-4_4},
+  urldate = {2023-07-26},
+  abstract = {Word embedding, where semantic and syntactic features are captured from unlabeled text data, is a basic procedure in Natural Language Processing (NLP). The extracted features thus could be organized in low dimensional space. Some representative word embedding approaches include Probability Language Model, Neural Networks Language Model, Sparse Coding, etc. The state-of-the-art methods like skip-gram negative samplings, noise-contrastive estimation, matrix factorization and hierarchical structure regularizer are applied correspondingly to resolve those models. Most of these literatures are working on the observed count and co-occurrence statistic to learn the word embedding. The increasing scale of data, the sparsity of data representation, word position, and training speed are the main challenges for designing word embedding algorithms. In this survey, we first introduce the motivation and background of word embedding. Next we will introduce the methods of text representation as preliminaries, as well as some existing word embedding approaches such as Neural Network Language Model and Sparse Coding Approach, along with their evaluation metrics. In the end, we summarize the applications of word embedding and discuss its future directions.},
+  isbn = {978-3-319-53817-4},
+  langid = {english},
+  keywords = {Neural Network Language Model,Probability Language Model,Sparse coding approach,Word embedding,Word representation},
+  file = {/Users/max18768/Zotero/storage/EBUM93ZK/Li and Yang - 2018 - Word Embedding for Understanding Natural Language.pdf}
+}
+
+@online{mccannLearnedTranslationContextualized2018,
+  title = {Learned in {{Translation}}: {{Contextualized Word Vectors}}},
+  shorttitle = {Learned in {{Translation}}},
+  author = {McCann, Bryan and Bradbury, James and Xiong, Caiming and Socher, Richard},
+  date = {2018-06-20},
+  eprint = {1708.00107},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1708.00107},
+  url = {http://arxiv.org/abs/1708.00107},
+  urldate = {2023-07-31},
+  abstract = {Computer vision has benefited from initializing multiple deep layers with weights pretrained on large supervised training sets like ImageNet. Natural language processing (NLP) typically sees initialization of only the lowest layer of deep models with pretrained word vectors. In this paper, we use a deep LSTM encoder from an attentional sequence-to-sequence model trained for machine translation (MT) to contextualize word vectors. We show that adding these context vectors (CoVe) improves performance over using only unsupervised word and character vectors on a wide variety of common NLP tasks: sentiment analysis (SST, IMDb), question classification (TREC), entailment (SNLI), and question answering (SQuAD). For fine-grained sentiment analysis and entailment, CoVe improves performance of our baseline models to the state of the art.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/5L99XCYA/McCann et al. - 2018 - Learned in Translation Contextualized Word Vector.pdf;/Users/max18768/Zotero/storage/PPKHKTLY/1708.html}
 }
 
 @online{menezesSemanticHypergraphs2021,
@@ -197,6 +503,182 @@
   pubstate = {preprint},
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning},
   file = {/Users/max18768/Zotero/storage/DCMZTKVP/Mikolov et al. - 2013 - Distributed Representations of Words and Phrases a.pdf;/Users/max18768/Zotero/storage/KABIGKIP/1310.html}
+}
+
+@online{mikolovEfficientEstimationWord2013,
+  title = {Efficient {{Estimation}} of {{Word Representations}} in {{Vector Space}}},
+  author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
+  date = {2013-09-06},
+  eprint = {1301.3781},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1301.3781},
+  url = {http://arxiv.org/abs/1301.3781},
+  urldate = {2023-07-24},
+  abstract = {We propose two novel model architectures for computing continuous vector representations of words from very large data sets. The quality of these representations is measured in a word similarity task, and the results are compared to the previously best performing techniques based on different types of neural networks. We observe large improvements in accuracy at much lower computational cost, i.e. it takes less than a day to learn high quality word vectors from a 1.6 billion words data set. Furthermore, we show that these vectors provide state-of-the-art performance on our test set for measuring syntactic and semantic word similarities.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/7F2CFSU3/Mikolov et al. - 2013 - Efficient Estimation of Word Representations in Ve.pdf;/Users/max18768/Zotero/storage/BAX8DJHQ/1301.html}
+}
+
+@inproceedings{mikolovLinguisticRegularitiesContinuous2013,
+  title = {Linguistic {{Regularities}} in {{Continuous Space Word Representations}}},
+  booktitle = {Proceedings of the 2013 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}},
+  author = {Mikolov, Tomas and Yih, Wen-tau and Zweig, Geoffrey},
+  date = {2013-06},
+  pages = {746--751},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Atlanta, Georgia}},
+  url = {https://aclanthology.org/N13-1090},
+  urldate = {2023-07-31},
+  eventtitle = {{{NAACL-HLT}} 2013},
+  file = {/Users/max18768/Zotero/storage/7NEZLG9M/Mikolov et al. - 2013 - Linguistic Regularities in Continuous Space Word R.pdf}
+}
+
+@article{minaeeDeepLearningBased2021,
+  title = {Deep {{Learning--based Text Classification}}: {{A Comprehensive Review}}},
+  shorttitle = {Deep {{Learning--based Text Classification}}},
+  author = {Minaee, Shervin and Kalchbrenner, Nal and Cambria, Erik and Nikzad, Narjes and Chenaghlu, Meysam and Gao, Jianfeng},
+  date = {2021-04-17},
+  journaltitle = {ACM Computing Surveys},
+  shortjournal = {ACM Comput. Surv.},
+  volume = {54},
+  number = {3},
+  pages = {62:1--62:40},
+  issn = {0360-0300},
+  doi = {10.1145/3439726},
+  url = {https://dl.acm.org/doi/10.1145/3439726},
+  urldate = {2023-07-31},
+  abstract = {Deep learning--based models have surpassed classical machine learning--based approaches in various text classification tasks, including sentiment analysis, news categorization, question answering, and natural language inference. In this article, we provide a comprehensive review of more than 150 deep learning--based models for text classification developed in recent years, and we discuss their technical contributions, similarities, and strengths. We also provide a summary of more than 40 popular datasets widely used for text classification. Finally, we provide a quantitative analysis of the performance of different deep learning models on popular benchmarks, and we discuss future research directions.},
+  keywords = {deep learning,natural language inference,news categorization,question answering,sentiment analysis,Text classification,topic classification},
+  file = {/Users/max18768/Zotero/storage/NSS5SX6L/Minaee et al. - 2021 - Deep Learning--based Text Classification A Compre.pdf}
+}
+
+@online{muennighoffMTEBMassiveText2023,
+  title = {{{MTEB}}: {{Massive Text Embedding Benchmark}}},
+  shorttitle = {{{MTEB}}},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
+  date = {2023-03-19},
+  eprint = {2210.07316},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2210.07316},
+  url = {http://arxiv.org/abs/2210.07316},
+  urldate = {2023-07-25},
+  abstract = {Text embeddings are commonly evaluated on a small set of datasets from a single task not covering their possible applications to other tasks. It is unclear whether state-of-the-art embeddings on semantic textual similarity (STS) can be equally well applied to other tasks like clustering or reranking. This makes progress in the field difficult to track, as various models are constantly being proposed without proper evaluation. To solve this problem, we introduce the Massive Text Embedding Benchmark (MTEB). MTEB spans 8 embedding tasks covering a total of 58 datasets and 112 languages. Through the benchmarking of 33 models on MTEB, we establish the most comprehensive benchmark of text embeddings to date. We find that no particular text embedding method dominates across all tasks. This suggests that the field has yet to converge on a universal text embedding method and scale it up sufficiently to provide state-of-the-art results on all embedding tasks. MTEB comes with open-source code and a public leaderboard at https://github.com/embeddings-benchmark/mteb.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language,Computer Science - Information Retrieval,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/RP3D73ND/Muennighoff et al. - 2023 - MTEB Massive Text Embedding Benchmark.pdf;/Users/max18768/Zotero/storage/MC7ME5FQ/2210.html}
+}
+
+@online{neelakantanTextCodeEmbeddings2022,
+  title = {Text and {{Code Embeddings}} by {{Contrastive Pre-Training}}},
+  author = {Neelakantan, Arvind and Xu, Tao and Puri, Raul and Radford, Alec and Han, Jesse Michael and Tworek, Jerry and Yuan, Qiming and Tezak, Nikolas and Kim, Jong Wook and Hallacy, Chris and Heidecke, Johannes and Shyam, Pranav and Power, Boris and Nekoul, Tyna Eloundou and Sastry, Girish and Krueger, Gretchen and Schnurr, David and Such, Felipe Petroski and Hsu, Kenny and Thompson, Madeleine and Khan, Tabarak and Sherbakov, Toki and Jang, Joanne and Welinder, Peter and Weng, Lilian},
+  date = {2022-01-24},
+  eprint = {2201.10005},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2201.10005},
+  url = {http://arxiv.org/abs/2201.10005},
+  urldate = {2023-08-01},
+  abstract = {Text embeddings are useful features in many applications such as semantic search and computing text similarity. Previous work typically trains models customized for different use cases, varying in dataset choice, training objective and model architecture. In this work, we show that contrastive pre-training on unsupervised data at scale leads to high quality vector representations of text and code. The same unsupervised text embeddings that achieve new state-of-the-art results in linear-probe classification also display impressive semantic search capabilities and sometimes even perform competitively with fine-tuned models. On linear-probe classification accuracy averaging over 7 tasks, our best unsupervised model achieves a relative improvement of 4\% and 1.8\% over previous best unsupervised and supervised text embedding models respectively. The same text embeddings when evaluated on large-scale semantic search attains a relative improvement of 23.4\%, 14.7\%, and 10.6\% over previous best unsupervised methods on MSMARCO, Natural Questions and TriviaQA benchmarks, respectively. Similarly to text embeddings, we train code embedding models on (text, code) pairs, obtaining a 20.8\% relative improvement over prior best work on code search.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/YT3IFIQT/Neelakantan et al. - 2022 - Text and Code Embeddings by Contrastive Pre-Traini.pdf;/Users/max18768/Zotero/storage/3KMQMC8I/2201.html}
+}
+
+@inproceedings{ngocExtendedBenchmarkSystem2020,
+  title = {An {{Extended Benchmark System}} of {{Word Embedding Methods}} for {{Vulnerability Detection}}},
+  booktitle = {The 4th {{International Conference}} on {{Future Networks}} and {{Distributed Systems}} ({{ICFNDS}})},
+  author = {Ngoc, Hai Nguyen and Viet, Hoang Nguyen and Uehara, Tetsutaro},
+  date = {2020-11-26},
+  pages = {1--8},
+  publisher = {{ACM}},
+  location = {{St.Petersburg Russian Federation}},
+  doi = {10.1145/3440749.3442661},
+  url = {https://dl.acm.org/doi/10.1145/3440749.3442661},
+  urldate = {2023-07-25},
+  eventtitle = {{{ICFNDS}} '20: {{The}} 4th {{International Conference}} on {{Future Networks}} and {{Distributed Systems}}},
+  isbn = {978-1-4503-8886-3},
+  langid = {english},
+  file = {/Users/max18768/Zotero/storage/VA73E69D/ngoc2020.pdf.pdf;/Users/max18768/Zotero/storage/YVF9KPPA/Ngoc et al. - 2020 - An Extended Benchmark System of Word Embedding Met.pdf}
+}
+
+@inproceedings{p.SurveySemanticSimilarity2019,
+  title = {A {{Survey}} on {{Semantic Similarity}}},
+  booktitle = {2019 {{International Conference}} on {{Advances}} in {{Computing}}, {{Communication}} and {{Control}} ({{ICAC3}})},
+  author = {P., Sunilkumar and Shaji, Athira P.},
+  date = {2019-12},
+  pages = {1--8},
+  doi = {10.1109/ICAC347590.2019.9036843},
+  abstract = {This paper provides a survey of semantic similarity of text documents. Semantic Similarity is an important task in Natural Language Processing (NLP). It is widely used for information retrieval, text classification, question answering, and plagiarism detection. This survey will classify different types of semantic similarity approaches such as corpus-based, knowledge-based and string-based. Various papers are reviewed and prepared performance analysis in this survey.},
+  eventtitle = {2019 {{International Conference}} on {{Advances}} in {{Computing}}, {{Communication}} and {{Control}} ({{ICAC3}})},
+  keywords = {Corpus Based,Cosine Similarity,Jaccard Similarity,Knowledge based systems,Knowledge Graph Based,Performance analysis,Plagiarism,Prio 2,Semantic Similarity,Semantics,String Based,Task analysis,Text categorization,WordNet},
+  file = {/Users/max18768/Zotero/storage/CV2SGWY3/p2019.pdf.pdf;/Users/max18768/Zotero/storage/RDQ9STQK/P. and Shaji - 2019 - A Survey on Semantic Similarity.pdf;/Users/max18768/Zotero/storage/LHCLQ7NC/9036843.html}
+}
+
+@article{patilSurveyTextRepresentation2023,
+  title = {A {{Survey}} of {{Text Representation}} and {{Embedding Techniques}} in {{NLP}}},
+  author = {Patil, Rajvardhan and Boit, Sorio and Gudivada, Venkat and Nandigam, Jagadeesh},
+  date = {2023},
+  journaltitle = {IEEE Access},
+  volume = {11},
+  pages = {36120--36146},
+  issn = {2169-3536},
+  doi = {10.1109/ACCESS.2023.3266377},
+  abstract = {Natural Language Processing (NLP) is a research field where a language in consideration is processed to understand its syntactic, semantic, and sentimental aspects. The advancement in the NLP area has helped solve problems in the domains such as Neural Machine Translation, Name Entity Recognition, Sentiment Analysis, and Chatbots, to name a few. The topic of NLP broadly consists of two main parts: the representation of the input text (raw data) into numerical format (vectors or matrix) and the design of models for processing the numerical data. This paper focuses on the former part and surveys how the NLP field has evolved from rule-based, statistical to more context-sensitive learned representations. For each embedding type, we list their representation, issues they addressed, limitations, and applications. This survey covers the history of text representations from the 1970s and onwards, from regular expressions to the latest vector representations used to encode the raw text data. It demonstrates how the NLP field progressed from where it could comprehend just bits and pieces to all the significant aspects of the text over time.},
+  eventtitle = {{{IEEE Access}}},
+  keywords = {Electronic mail,embeddings,Grammar,Indexes,language models,literature review,Natural language processing,NLP,Semantics,Sparse matrices,survey,Text mining,text representation,Vocabulary,word embeddings,word vectors},
+  file = {/Users/max18768/Zotero/storage/Y62QWT6H/Patil et al. - 2023 - A Survey of Text Representation and Embedding Tech.pdf}
+}
+
+@inproceedings{penningtonGloVeGlobalVectors2014,
+  title = {{{GloVe}}: {{Global Vectors}} for {{Word Representation}}},
+  shorttitle = {{{GloVe}}},
+  booktitle = {Proceedings of the 2014 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}} ({{EMNLP}})},
+  author = {Pennington, Jeffrey and Socher, Richard and Manning, Christopher},
+  date = {2014-10},
+  pages = {1532--1543},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Doha, Qatar}},
+  doi = {10.3115/v1/D14-1162},
+  url = {https://aclanthology.org/D14-1162},
+  urldate = {2023-07-26},
+  eventtitle = {{{EMNLP}} 2014},
+  file = {/Users/max18768/Zotero/storage/5WYU8SBW/Pennington et al. - 2014 - GloVe Global Vectors for Word Representation.pdf}
+}
+
+@inproceedings{petersDeepContextualizedWord2018,
+  title = {Deep {{Contextualized Word Representations}}},
+  booktitle = {Proceedings of the 2018 {{Conference}} of the {{North American Chapter}} of           the {{Association}} for {{Computational Linguistics}}: {{Human Language}}           {{Technologies}}, {{Volume}} 1 ({{Long Papers}})},
+  author = {Peters, Matthew and Neumann, Mark and Iyyer, Mohit and Gardner, Matt and Clark, Christopher and Lee, Kenton and Zettlemoyer, Luke},
+  date = {2018},
+  pages = {2227--2237},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{New Orleans, Louisiana}},
+  doi = {10.18653/v1/N18-1202},
+  url = {http://aclweb.org/anthology/N18-1202},
+  urldate = {2023-07-31},
+  abstract = {We introduce a new type of deep contextualized word representation that models both (1) complex characteristics of word use (e.g., syntax and semantics), and (2) how these uses vary across linguistic contexts (i.e., to model polysemy). Our word vectors are learned functions of the internal states of a deep bidirectional language model (biLM), which is pretrained on a large text corpus. We show that these representations can be easily added to existing models and significantly improve the state of the art across six challenging NLP problems, including question answering, textual entailment and sentiment analysis. We also present an analysis showing that exposing the deep internals of the pre-trained network is crucial, allowing downstream models to mix different types of semi-supervision signals.},
+  eventtitle = {Proceedings of the 2018 {{Conference}} of the {{North American Chapter}} of           the {{Association}} for {{Computational Linguistics}}: {{Human Language}}           {{Technologies}}, {{Volume}} 1 ({{Long Papers}})},
+  langid = {english},
+  file = {/Users/max18768/Zotero/storage/CITKQCEQ/Peters et al. - 2018 - Deep Contextualized Word Representations.pdf}
+}
+
+@inproceedings{petersDeepContextualizedWord2018a,
+  title = {Deep {{Contextualized Word Representations}}},
+  booktitle = {Proceedings of the 2018 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}, {{Volume}} 1 ({{Long Papers}})},
+  author = {Peters, Matthew E. and Neumann, Mark and Iyyer, Mohit and Gardner, Matt and Clark, Christopher and Lee, Kenton and Zettlemoyer, Luke},
+  date = {2018-06},
+  pages = {2227--2237},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{New Orleans, Louisiana}},
+  doi = {10.18653/v1/N18-1202},
+  url = {https://aclanthology.org/N18-1202},
+  urldate = {2023-07-31},
+  abstract = {We introduce a new type of deep contextualized word representation that models both (1) complex characteristics of word use (e.g., syntax and semantics), and (2) how these uses vary across linguistic contexts (i.e., to model polysemy). Our word vectors are learned functions of the internal states of a deep bidirectional language model (biLM), which is pre-trained on a large text corpus. We show that these representations can be easily added to existing models and significantly improve the state of the art across six challenging NLP problems, including question answering, textual entailment and sentiment analysis. We also present an analysis showing that exposing the deep internals of the pre-trained network is crucial, allowing downstream models to mix different types of semi-supervision signals.},
+  eventtitle = {{{NAACL-HLT}} 2018},
+  file = {/Users/max18768/Zotero/storage/84I4PNVW/Peters et al. - 2018 - Deep Contextualized Word Representations.pdf}
 }
 
 @article{qiuPretrainedModelsNatural2020,
@@ -254,6 +736,21 @@
   file = {/Users/max18768/Zotero/storage/FMUDZ8CT/Rodriguez and Spirling - 2022 - Word Embeddings What Works, What Doesn’t, and How.pdf}
 }
 
+@article{rodriguezWordEmbeddingsWhat2022a,
+  title = {Word {{Embeddings}}: {{What Works}}, {{What Doesn}}’t, and {{How}} to {{Tell}} the {{Difference}} for {{Applied Research}}},
+  shorttitle = {Word {{Embeddings}}},
+  author = {Rodriguez, Pedro L. and Spirling, Arthur},
+  date = {2022-01-01},
+  journaltitle = {The Journal of Politics},
+  publisher = {{The University of Chicago PressChicago, IL}},
+  doi = {10.1086/715162},
+  url = {https://www.journals.uchicago.edu/doi/10.1086/715162},
+  urldate = {2023-07-25},
+  abstract = {Word embeddings are becoming popular for political science research, yet we know little about their properties and performance. To help scholars seeking to use these techniques, we explore the effects of key parameter choices—including context window length, embedding vector dimensions, and pretrained versus locally fit variants—on the efficiency and quality of inferences possible with these models. Reassuringly we show that results are generally robust to such choices for political corpora of various sizes and in various languages. Beyond reporting extensive technical findings, we provide a novel crowdsourced “Turing test”–style method for examining the relative performance of any two models that produce substantive, text-based outputs. Our results are encouraging: popular, easily available pretrained embeddings perform at a level close to—or surpassing—both human coders and more complicated locally fit models. For completeness, we provide best practice advice for cases where local fitting is required.},
+  langid = {english},
+  file = {/Users/max18768/Zotero/storage/BZE3JPV9/715162.html}
+}
+
 @article{rudinStopExplainingBlack2019,
   title = {Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead},
   author = {Rudin, Cynthia},
@@ -273,6 +770,216 @@
   langid = {english},
   keywords = {Computer science,Criminology,Science,Statistics,technology and society},
   file = {/Users/max18768/Zotero/storage/7KJHMGRV/Rudin - 2019 - Stop explaining black box machine learning models .pdf;/Users/max18768/Zotero/storage/W9H5GJ4P/10.1038@s42256-019-0048-x.pdf.pdf}
+}
+
+@article{sabbehComparativeAnalysisWord2023,
+  title = {A {{Comparative Analysis}} of {{Word Embedding}} and {{Deep Learning}} for {{Arabic Sentiment Classification}}},
+  author = {Sabbeh, Sahar F. and Fasihuddin, Heba A.},
+  date = {2023-01},
+  journaltitle = {Electronics},
+  volume = {12},
+  number = {6},
+  pages = {1425},
+  publisher = {{Multidisciplinary Digital Publishing Institute}},
+  issn = {2079-9292},
+  doi = {10.3390/electronics12061425},
+  url = {https://www.mdpi.com/2079-9292/12/6/1425},
+  urldate = {2023-07-25},
+  abstract = {Sentiment analysis on social media platforms (i.e., Twitter or Facebook) has become an important tool to learn about users’ opinions and preferences. However, the accuracy of sentiment analysis is disrupted by the challenges of natural language processing (NLP). Recently, deep learning models have proved superior performance over statistical- and lexical-based approaches in NLP-related tasks. Word embedding is an important layer of deep learning models to generate input features. Many word embedding models have been presented for text representation of both classic and context-based word embeddings. In this paper, we present a comparative analysis to evaluate both classic and contextualized word embeddings for sentiment analysis. The four most frequently used word embedding techniques were used in their trained and pre-trained versions. The selected embedding represents classical and contextualized techniques. Classical word embedding includes algorithms such as GloVe, Word2vec, and FastText. By contrast, ARBERT is used as a contextualized embedding model. Since word embedding is more typically employed as the input layer in deep networks, we used deep learning architectures BiLSTM and CNN for sentiment classification. To achieve these goals, the experiments were applied to a series of benchmark datasets: HARD, Khooli, AJGT, ArSAS, and ASTD. Finally, a comparative analysis was conducted on the results obtained for the experimented models. Our outcomes indicate that, generally, generated embedding by one technique achieves higher performance than its pretrained version for the same technique by around 0.28 to 1.8\% accuracy, 0.33 to 2.17\% precision, and 0.44 to 2\% recall. Moreover, the contextualized transformer-based embedding model BERT achieved the highest performance in its pretrained and trained versions. Additionally, the results indicate that BiLSTM outperforms CNN by approximately 2\% in 3 datasets, HARD, Khooli, and ArSAS, while CNN achieved around 2\% higher performance in the smaller datasets, AJGT and ASTD.},
+  issue = {6},
+  langid = {english},
+  keywords = {Arabic sentiment analysis,BiLSTM,CNN word embedding,deep learning},
+  file = {/Users/max18768/Zotero/storage/U85KZXXU/Sabbeh and Fasihuddin - 2023 - A Comparative Analysis of Word Embedding and Deep .pdf}
+}
+
+@online{salleEnhancingLexVecDistributed2016,
+  title = {Enhancing the {{LexVec Distributed Word Representation Model Using Positional Contexts}} and {{External Memory}}},
+  author = {Salle, Alexandre and Idiart, Marco and Villavicencio, Aline},
+  date = {2016-06-03},
+  eprint = {1606.01283},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1606.01283},
+  url = {http://arxiv.org/abs/1606.01283},
+  urldate = {2023-07-31},
+  abstract = {In this paper we take a state-of-the-art model for distributed word representation that explicitly factorizes the positive pointwise mutual information (PPMI) matrix using window sampling and negative sampling and address two of its shortcomings. We improve syntactic performance by using positional contexts, and solve the need to store the PPMI matrix in memory by working on aggregate data in external memory. The effectiveness of both modifications is shown using word similarity and analogy tasks.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/8EEE75GA/Salle et al. - 2016 - Enhancing the LexVec Distributed Word Representati.pdf;/Users/max18768/Zotero/storage/GM8MJNIQ/1606.html}
+}
+
+@inproceedings{salleIncorporatingSubwordInformation2018,
+  title = {Incorporating {{Subword Information}} into {{Matrix Factorization Word Embeddings}}},
+  booktitle = {Proceedings of the {{Second Workshop}} on {{Subword}}/{{Character LEvel Models}}},
+  author = {Salle, Alexandre and Villavicencio, Aline},
+  date = {2018-06},
+  pages = {66--71},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{New Orleans}},
+  doi = {10.18653/v1/W18-1209},
+  url = {https://aclanthology.org/W18-1209},
+  urldate = {2023-07-31},
+  abstract = {The positive effect of adding subword information to word embeddings has been demonstrated for predictive models. In this paper we investigate whether similar benefits can also be derived from incorporating subwords into counting models. We evaluate the impact of different types of subwords (n-grams and unsupervised morphemes), with results confirming the importance of subword information in learning representations of rare and out-of-vocabulary words.},
+  eventtitle = {{{SCLeM}} 2018},
+  file = {/Users/max18768/Zotero/storage/6IGZGTN8/Salle and Villavicencio - 2018 - Incorporating Subword Information into Matrix Fact.pdf}
+}
+
+@inproceedings{salleMatrixFactorizationUsing2016,
+  title = {Matrix {{Factorization}} Using {{Window Sampling}} and {{Negative Sampling}} for {{Improved Word Representations}}},
+  booktitle = {Proceedings of the 54th {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}} ({{Volume}} 2: {{Short Papers}})},
+  author = {Salle, Alexandre and Villavicencio, Aline and Idiart, Marco},
+  date = {2016-08},
+  pages = {419--424},
+  publisher = {{Association for Computational Linguistics}},
+  location = {{Berlin, Germany}},
+  doi = {10.18653/v1/P16-2068},
+  url = {https://aclanthology.org/P16-2068},
+  urldate = {2023-07-31},
+  eventtitle = {{{ACL}} 2016},
+  file = {/Users/max18768/Zotero/storage/G3UURFDR/Salle et al. - 2016 - Matrix Factorization using Window Sampling and Neg.pdf}
+}
+
+@online{salleWhyRoleNegative2019,
+  title = {Why {{So Down}}? {{The Role}} of {{Negative}} (and {{Positive}}) {{Pointwise Mutual Information}} in {{Distributional Semantics}}},
+  shorttitle = {Why {{So Down}}?},
+  author = {Salle, Alexandre and Villavicencio, Aline},
+  date = {2019-08-19},
+  eprint = {1908.06941},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1908.06941},
+  url = {http://arxiv.org/abs/1908.06941},
+  urldate = {2023-07-31},
+  abstract = {In distributional semantics, the pointwise mutual information (\$\textbackslash mathit\{PMI\}\$) weighting of the cooccurrence matrix performs far better than raw counts. There is, however, an issue with unobserved pair cooccurrences as \$\textbackslash mathit\{PMI\}\$ goes to negative infinity. This problem is aggravated by unreliable statistics from finite corpora which lead to a large number of such pairs. A common practice is to clip negative \$\textbackslash mathit\{PMI\}\$ (\$\textbackslash mathit\{\textbackslash texttt\{-\} PMI\}\$) at \$0\$, also known as Positive \$\textbackslash mathit\{PMI\}\$ (\$\textbackslash mathit\{PPMI\}\$). In this paper, we investigate alternative ways of dealing with \$\textbackslash mathit\{\textbackslash texttt\{-\} PMI\}\$ and, more importantly, study the role that negative information plays in the performance of a low-rank, weighted factorization of different \$\textbackslash mathit\{PMI\}\$ matrices. Using various semantic and syntactic tasks as probes into models which use either negative or positive \$\textbackslash mathit\{PMI\}\$ (or both), we find that most of the encoded semantics and syntax come from positive \$\textbackslash mathit\{PMI\}\$, in contrast to \$\textbackslash mathit\{\textbackslash texttt\{-\} PMI\}\$ which contributes almost exclusively syntactic information. Our findings deepen our understanding of distributional semantics, while also introducing novel \$PMI\$ variants and grounding the popular \$PPMI\$ measure.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/AJ4YPGSK/Salle and Villavicencio - 2019 - Why So Down The Role of Negative (and Positive) P.pdf;/Users/max18768/Zotero/storage/4BPKZT9Z/1908.html}
+}
+
+@inproceedings{selvabirundaReviewWordEmbedding2021,
+  title = {A {{Review}} on {{Word Embedding Techniques}} for {{Text Classification}}},
+  booktitle = {Innovative {{Data Communication Technologies}} and {{Application}}},
+  author = {Selva Birunda, S. and Kanniga Devi, R.},
+  editor = {Raj, Jennifer S. and Iliyasu, Abdullah M. and Bestak, Robert and Baig, Zubair A.},
+  date = {2021},
+  series = {Lecture {{Notes}} on {{Data Engineering}} and {{Communications Technologies}}},
+  pages = {267--281},
+  publisher = {{Springer}},
+  location = {{Singapore}},
+  doi = {10.1007/978-981-15-9651-3_23},
+  abstract = {Word embeddings are fundamentally a form of word representation that links the human understanding of knowledge meaningfully to the understanding of a machine. The representations can be a set of real numbers (a vector). Word embeddings are scattered depiction of a text in an n-dimensional space, which tries to capture the word meanings. This paper aims to provide an overview of the different types of word embedding techniques. It is found from the review that there exist three dominant word embeddings namely, Traditional word embedding, Static word embedding, and Contextualized word embedding. BERT is a bidirectional transformer-based Contextualized word embedding which is more efficient as it can be pre-trained and fine-tuned. As a future scope, this word embedding along with the neural network models can be used to increase the model accuracy and it excels in sentiment classification, text classification, next sentence prediction, and other Natural Language Processing tasks. Some of the open issues are also discussed and future research scope for the improvement of word representation.},
+  isbn = {9789811596513},
+  langid = {english},
+  keywords = {Bag of words,Contextualized word embeddings,Natural language processing,Text classification,Transformer,Word embeddings}
+}
+
+@online{sezererSurveyNeuralWord2021,
+  title = {A {{Survey On Neural Word Embeddings}}},
+  author = {Sezerer, Erhan and Tekir, Selma},
+  date = {2021-10-04},
+  eprint = {2110.01804},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2110.01804},
+  url = {http://arxiv.org/abs/2110.01804},
+  urldate = {2023-07-26},
+  abstract = {Understanding human language has been a sub-challenge on the way of intelligent machines. The study of meaning in natural language processing (NLP) relies on the distributional hypothesis where language elements get meaning from the words that co-occur within contexts. The revolutionary idea of distributed representation for a concept is close to the working of a human mind in that the meaning of a word is spread across several neurons, and a loss of activation will only slightly affect the memory retrieval process. Neural word embeddings transformed the whole field of NLP by introducing substantial improvements in all NLP tasks. In this survey, we provide a comprehensive literature review on neural word embeddings. We give theoretical foundations and describe existing work by an interplay between word embeddings and language modelling. We provide broad coverage on neural word embeddings, including early word embeddings, embeddings targeting specific semantic relations, sense embeddings, morpheme embeddings, and finally, contextual representations. Finally, we describe benchmark datasets in word embeddings' performance evaluation and downstream tasks along with the performance results of/due to word embeddings.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  file = {/Users/max18768/Zotero/storage/SIIW63LS/Sezerer and Tekir - 2021 - A Survey On Neural Word Embeddings.pdf;/Users/max18768/Zotero/storage/G4BCRP4A/2110.html}
+}
+
+@article{siebersSurveyTextRepresentation2022,
+  title = {A {{Survey}} of {{Text Representation Methods}} and {{Their Genealogy}}},
+  author = {Siebers, Philipp and Janiesch, Christian and Zschech, Patrick},
+  date = {2022},
+  journaltitle = {IEEE Access},
+  volume = {10},
+  pages = {96492--96513},
+  issn = {2169-3536},
+  doi = {10.1109/ACCESS.2022.3205719},
+  abstract = {In recent years, with the advent of highly scalable artificial-neural-network-based text representation methods the field of natural language processing has seen unprecedented growth and sophistication. It has become possible to distill complex linguistic information of text into multidimensional dense numeric vectors with the use of the distributional hypothesis. As a consequence, text representation methods have been evolving at such a quick pace that the research community is struggling to retain knowledge of the methods and their interrelations. We contribute threefold to this lack of compilation, composition, and systematization by providing a survey of current approaches, by arranging them in a genealogy, and by conceptualizing a taxonomy of text representation methods to examine and explain the state-of-the-art. Our research is a valuable guide and reference for artificial intelligence researchers and practitioners interested in natural language processing applications such as recommender systems, chatbots, and sentiment analysis.},
+  eventtitle = {{{IEEE Access}}},
+  keywords = {Artificial neural networks,Encoding,genealogy,natural language processing,Natural language processing,Pragmatics,Semantics,survey,taxonomy,Text recognition,text representation,Vocabulary},
+  file = {/Users/max18768/Zotero/storage/WQTNRYXT/Siebers et al. - 2022 - A Survey of Text Representation Methods and Their .pdf;/Users/max18768/Zotero/storage/CN4AKJQZ/9885209.html}
+}
+
+@inproceedings{sitikhuComparisonSemanticSimilarity2019,
+  title = {A {{Comparison}} of {{Semantic Similarity Methods}} for {{Maximum Human Interpretability}}},
+  booktitle = {2019 {{Artificial Intelligence}} for {{Transforming Business}} and {{Society}} ({{AITB}})},
+  author = {Sitikhu, Pinky and Pahi, Kritish and Thapa, Pujan and Shakya, Subarna},
+  date = {2019-11},
+  volume = {1},
+  pages = {1--4},
+  doi = {10.1109/AITB48515.2019.8947433},
+  abstract = {The inclusion of semantic information in any similarity measures improves the efficiency of the similarity measure and provides human interpretable results for further analysis. The similarity calculation method that focuses on features related to the text's words only, will give less accurate results. This paper presents three different methods that not only focus on the text's words but also incorporates semantic information of texts in their feature vector and computes semantic similarities. These methods are based on corpus-based and knowledge-based methods, which are: cosine similarity using tf-idf vectors, cosine similarity using word embedding and soft cosine similarity using word embedding. Among these three, cosine similarity using tf-idf vectors performed best in finding similarities between short news texts. The similar texts given by the method are easy to interpret and can be used directly in other information retrieval applications.},
+  eventtitle = {2019 {{Artificial Intelligence}} for {{Transforming Business}} and {{Society}} ({{AITB}})},
+  keywords = {Computational modeling,cosine similarity,Indexes,Information retrieval,Knowledge based systems,Measurement,Prio 2,semantic similarity,Semantics,soft cosine similarity,Sparse matrices,word embedding},
+  file = {/Users/max18768/Zotero/storage/75P5ZWQE/Sitikhu et al. - 2019 - A Comparison of Semantic Similarity Methods for Ma.pdf;/Users/max18768/Zotero/storage/L8PFXD5Z/sitikhu2019.pdf.pdf;/Users/max18768/Zotero/storage/D6QY45IK/8947433.html}
+}
+
+@inproceedings{speerConceptNetOpenMultilingual2017,
+  title = {{{ConceptNet}} 5.5: An Open Multilingual Graph of General Knowledge},
+  shorttitle = {{{ConceptNet}} 5.5},
+  booktitle = {Proceedings of the {{Thirty-First AAAI Conference}} on {{Artificial Intelligence}}},
+  author = {Speer, Robyn and Chin, Joshua and Havasi, Catherine},
+  date = {2017-02-04},
+  series = {{{AAAI}}'17},
+  pages = {4444--4451},
+  publisher = {{AAAI Press}},
+  location = {{San Francisco, California, USA}},
+  abstract = {Machine learning about language can be improved by supplying it with specific knowledge and sources of external information. We present here a new version of the linked open data resource ConceptNet that is particularly well suited to be used with modern NLP techniques such as word embeddings. ConceptNet is a knowledge graph that connects words and phrases of natural language with labeled edges. Its knowledge is collected from many sources that include expert-created resources, crowd-sourcing, and games with a purpose. It is designed to represent the general knowledge involved in understanding language, improving natural language applications by allowing the application to better understand the meanings behind the words people use. When ConceptNet is combined with word embeddings acquired from distributional semantics (such as word2vec), it provides applications with understanding that they would not acquire from distributional semantics alone, nor from narrower resources such as WordNet or DBPedia. We demonstrate this with state-of-the-art results on intrinsic evaluations of word relatedness that translate into improvements on applications of word vectors, including solving SAT-style analogies.}
+}
+
+@online{speerConceptNetOpenMultilingual2018,
+  title = {{{ConceptNet}} 5.5: {{An Open Multilingual Graph}} of {{General Knowledge}}},
+  shorttitle = {{{ConceptNet}} 5.5},
+  author = {Speer, Robyn and Chin, Joshua and Havasi, Catherine},
+  date = {2018-12-11},
+  eprint = {1612.03975},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.1612.03975},
+  url = {http://arxiv.org/abs/1612.03975},
+  urldate = {2023-07-31},
+  abstract = {Machine learning about language can be improved by supplying it with specific knowledge and sources of external information. We present here a new version of the linked open data resource ConceptNet that is particularly well suited to be used with modern NLP techniques such as word embeddings. ConceptNet is a knowledge graph that connects words and phrases of natural language with labeled edges. Its knowledge is collected from many sources that include expert-created resources, crowd-sourcing, and games with a purpose. It is designed to represent the general knowledge involved in understanding language, improving natural language applications by allowing the application to better understand the meanings behind the words people use. When ConceptNet is combined with word embeddings acquired from distributional semantics (such as word2vec), it provides applications with understanding that they would not acquire from distributional semantics alone, nor from narrower resources such as WordNet or DBPedia. We demonstrate this with state-of-the-art results on intrinsic evaluations of word relatedness that translate into improvements on applications of word vectors, including solving SAT-style analogies.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language,I.2.7},
+  file = {/Users/max18768/Zotero/storage/BPEUQWVB/Speer et al. - 2018 - ConceptNet 5.5 An Open Multilingual Graph of Gene.pdf;/Users/max18768/Zotero/storage/Z45MTNZT/1612.html}
+}
+
+@online{suOneEmbedderAny2023,
+  title = {One {{Embedder}}, {{Any Task}}: {{Instruction-Finetuned Text Embeddings}}},
+  shorttitle = {One {{Embedder}}, {{Any Task}}},
+  author = {Su, Hongjin and Shi, Weijia and Kasai, Jungo and Wang, Yizhong and Hu, Yushi and Ostendorf, Mari and Yih, Wen-tau and Smith, Noah A. and Zettlemoyer, Luke and Yu, Tao},
+  date = {2023-05-30},
+  eprint = {2212.09741},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2212.09741},
+  url = {http://arxiv.org/abs/2212.09741},
+  urldate = {2023-07-31},
+  abstract = {We introduce INSTRUCTOR, a new method for computing text embeddings given task instructions: every text input is embedded together with instructions explaining the use case (e.g., task and domain descriptions). Unlike encoders from prior work that are more specialized, INSTRUCTOR is a single embedder that can generate text embeddings tailored to different downstream tasks and domains, without any further training. We first annotate instructions for 330 diverse tasks and train INSTRUCTOR on this multitask mixture with a contrastive loss. We evaluate INSTRUCTOR on 70 embedding evaluation tasks (66 of which are unseen during training), ranging from classification and information retrieval to semantic textual similarity and text generation evaluation. INSTRUCTOR, while having an order of magnitude fewer parameters than the previous best model, achieves state-of-the-art performance, with an average improvement of 3.4\% compared to the previous best results on the 70 diverse datasets. Our analysis suggests that INSTRUCTOR is robust to changes in instructions, and that instruction finetuning mitigates the challenge of training a single model on diverse datasets. Our model, code, and data are available at https://instructor-embedding.github.io.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/GNDY2UQJ/Su et al. - 2023 - One Embedder, Any Task Instruction-Finetuned Text.pdf;/Users/max18768/Zotero/storage/9TKZG8LM/2212.html}
+}
+
+@inproceedings{toshevskaComparativeAnalysisWord2020,
+  title = {Comparative {{Analysis}} of {{Word Embeddings}} for {{Capturing Word Similarities}}},
+  booktitle = {6th {{International Conference}} on {{Natural Language Processing}} ({{NATP}} 2020)},
+  author = {Toshevska, Martina and Stojanovska, Frosina and Kalajdjieski, Jovan},
+  date = {2020-04-25},
+  eprint = {2005.03812},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  pages = {09--24},
+  doi = {10.5121/csit.2020.100402},
+  url = {http://arxiv.org/abs/2005.03812},
+  urldate = {2023-07-31},
+  abstract = {Distributed language representation has become the most widely used technique for language representation in various natural language processing tasks. Most of the natural language processing models that are based on deep learning techniques use already pre-trained distributed word representations, commonly called word embeddings. Determining the most qualitative word embeddings is of crucial importance for such models. However, selecting the appropriate word embeddings is a perplexing task since the projected embedding space is not intuitive to humans. In this paper, we explore different approaches for creating distributed word representations. We perform an intrinsic evaluation of several state-of-the-art word embedding methods. Their performance on capturing word similarities is analysed with existing benchmark datasets for word pairs similarities. The research in this paper conducts a correlation analysis between ground truth word similarities and similarities obtained by different word embedding methods.},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/max18768/Zotero/storage/XQ9IX8TV/Toshevska et al. - 2020 - Comparative Analysis of Word Embeddings for Captur.pdf;/Users/max18768/Zotero/storage/FESIIUZA/2005.html}
 }
 
 @misc{TwoSidesEnvironmental,
@@ -313,6 +1020,25 @@
   file = {/Users/max18768/Zotero/storage/P5EMTFQ6/Wang et al. - 2022 - Deep neural network-based relation extraction an .pdf}
 }
 
+@article{wangSurveyWordEmbeddings2020,
+  title = {A Survey of Word Embeddings Based on Deep Learning},
+  author = {Wang, Shirui and Zhou, Wenan and Jiang, Chao},
+  date = {2020-03-01},
+  journaltitle = {Computing},
+  shortjournal = {Computing},
+  volume = {102},
+  number = {3},
+  pages = {717--740},
+  issn = {1436-5057},
+  doi = {10.1007/s00607-019-00768-7},
+  url = {https://doi.org/10.1007/s00607-019-00768-7},
+  urldate = {2023-07-26},
+  abstract = {The representational basis for downstream natural language processing tasks is word embeddings, which capture lexical semantics in numerical form to handle the abstract semantic concept of words. Recently, the word embeddings approaches, represented by deep learning, has attracted extensive attention and widely used in many tasks, such as text classification, knowledge mining, question-answering, smart Internet of Things systems and so on. These neural networks-based models are based on the distributed hypothesis while the semantic association between words can be efficiently calculated in low-dimensional space. However, the expressed semantics of most models are constrained by the context distribution of each word in the corpus while the logic and common knowledge are not better utilized. Therefore, how to use the massive multi-source data to better represent natural language and world knowledge still need to be explored. In this paper, we introduce the recent advances of neural networks-based word embeddings with their technical features, summarizing the key challenges and existing solutions, and further give a future outlook on the research and application.},
+  langid = {english},
+  keywords = {68T50,Distributed hypothesis,Multi-source data,Neural networks,Word embeddings},
+  file = {/Users/max18768/Zotero/storage/7UDS6I3N/Wang et al. - 2020 - A survey of word embeddings based on deep learning.pdf}
+}
+
 @online{wangTextEmbeddingsWeaklySupervised2022,
   title = {Text {{Embeddings}} by {{Weakly-Supervised Contrastive Pre-training}}},
   author = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
@@ -344,6 +1070,22 @@
   pubstate = {preprint},
   keywords = {Computer Science - Computation and Language},
   file = {/Users/max18768/Zotero/storage/JEW32I97/Wang et al. - 2021 - TSDAE Using Transformer-based Sequential Denoisin.pdf;/Users/max18768/Zotero/storage/DVMG5EK5/2104.html}
+}
+
+@article{wietingParaphraseDatabaseCompositional2015,
+  title = {From {{Paraphrase Database}} to {{Compositional Paraphrase Model}} and {{Back}}},
+  author = {Wieting, John and Bansal, Mohit and Gimpel, Kevin and Livescu, Karen},
+  date = {2015},
+  journaltitle = {Transactions of the Association for Computational Linguistics},
+  volume = {3},
+  pages = {345--358},
+  publisher = {{MIT Press}},
+  location = {{Cambridge, MA}},
+  doi = {10.1162/tacl_a_00143},
+  url = {https://aclanthology.org/Q15-1025},
+  urldate = {2023-08-01},
+  abstract = {The Paraphrase Database (PPDB; Ganitkevitch et al., 2013) is an extensive semantic resource, consisting of a list of phrase pairs with (heuristic) confidence estimates. However, it is still unclear how it can best be used, due to the heuristic nature of the confidences and its necessarily incomplete coverage. We propose models to leverage the phrase pairs from the PPDB to build parametric paraphrase models that score paraphrase pairs more accurately than the PPDB's internal scores while simultaneously improving its coverage. They allow for learning phrase embeddings as well as improved word embeddings. Moreover, we introduce two new, manually annotated datasets to evaluate short-phrase paraphrasing models. Using our paraphrase model trained using PPDB, we achieve state-of-the-art results on standard word and bigram similarity tasks and beat strong baselines on our new short phrase paraphrase tasks.},
+  file = {/Users/max18768/Zotero/storage/SJSIUCHU/Wieting et al. - 2015 - From Paraphrase Database to Compositional Paraphra.pdf}
 }
 
 @online{wilkersonLargeScaleComputerizedText2017,
@@ -397,4 +1139,34 @@
   pubstate = {preprint},
   keywords = {Computer Science - Computation and Language},
   file = {/Users/max18768/Zotero/storage/NWL9T54I/Young et al. - 2018 - Recent Trends in Deep Learning Based Natural Langu.pdf;/Users/max18768/Zotero/storage/WXUJTMXJ/1708.html}
+}
+
+@inproceedings{zadSurveyDeepLearning2021,
+  title = {A {{Survey}} of {{Deep Learning Methods}} on {{Semantic Similarity}} and {{Sentence Modeling}}},
+  booktitle = {2021 {{IEEE}} 12th {{Annual Information Technology}}, {{Electronics}} and {{Mobile Communication Conference}} ({{IEMCON}})},
+  author = {Zad, Samira and Heidari, Maryam and Hajibabaee, Parisa and Malekzadeh, Masoud},
+  date = {2021-10},
+  pages = {0466--0472},
+  issn = {2644-3163},
+  doi = {10.1109/IEMCON53756.2021.9623078},
+  abstract = {Semantics is a research field that has gained an extensive interest recently. This survey describes recent works in the field of semantics, a part of the broader area of computational linguistics. One of the important aspects of computational linguistics is using proper methods to distribute semantics for obtaining representations of the meaning of words. This survey summarizes the latest state of the art approaches in semantics that use deep learning methods, datasets, and lexical databases, specifying semantics under two categories such as semantic similarity and sentence modeling.},
+  eventtitle = {2021 {{IEEE}} 12th {{Annual Information Technology}}, {{Electronics}} and {{Mobile Communication Conference}} ({{IEMCON}})},
+  keywords = {computational linguistics,Computational modeling,Conferences,Databases,deep learning,Deep learning,Mobile communication,natural language processing,Natural language processing,neural networks,Prio 1,Semantic similarity,semantic textual similarity,Semantics,sentence modeling,survey,word embeddings},
+  file = {/Users/max18768/Zotero/storage/JI5VFQKF/Zad et al. - 2021 - A Survey of Deep Learning Methods on Semantic Simi.pdf;/Users/max18768/Zotero/storage/4B9ZG27E/9623078.html}
+}
+
+@online{zhangContrastiveLearningSentence2023,
+  title = {Contrastive {{Learning}} of {{Sentence Embeddings}} from {{Scratch}}},
+  author = {Zhang, Junlei and Lan, Zhenzhong and He, Junxian},
+  date = {2023-05-24},
+  eprint = {2305.15077},
+  eprinttype = {arxiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2305.15077},
+  url = {http://arxiv.org/abs/2305.15077},
+  urldate = {2023-07-31},
+  abstract = {Contrastive learning has been the dominant approach to train state-of-the-art sentence embeddings. Previous studies have typically learned sentence embeddings either through the use of human-annotated natural language inference (NLI) data or via large-scale unlabeled sentences in an unsupervised manner. However, even in the case of unlabeled data, their acquisition presents challenges in certain domains due to various reasons. To address these issues, we present SynCSE, a contrastive learning framework that trains sentence embeddings with synthesized data. Specifically, we explore utilizing large language models to synthesize the required data samples for contrastive learning, including (1) producing positive and negative annotations given unlabeled sentences (SynCSE-partial), and (2) generating sentences along with their corresponding annotations from scratch (SynCSE-scratch). Experimental results on sentence similarity and reranking tasks indicate that both SynCSE-partial and SynCSE-scratch greatly outperform unsupervised baselines, and SynCSE-partial even achieves comparable performance to the supervised models in most settings.},
+  pubstate = {preprint},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/max18768/Zotero/storage/H5Y3PGQN/Zhang et al. - 2023 - Contrastive Learning of Sentence Embeddings from S.pdf;/Users/max18768/Zotero/storage/VUEYN4BJ/2305.html}
 }
