@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 from matplotlib import cm
@@ -8,33 +7,18 @@ from matplotlib.pyplot import colorbar
 from matplotlib.axes import Axes
 from matplotlib.colors import Normalize
 from matplotlib.figure import Figure
-from pydantic import BaseModel
 from sklearn.manifold import TSNE
 
-from graphbrain.semsim import SemSimType
-from graphbrain.semsim.matcher.fixed_matcher import FixedEmbeddingMatcher
 from graphbrain_semsim import logger, PLOT_DIR
+from graphbrain_semsim.eval_tools.plots.embedding_utils import filter_embeddings, get_embedding_infos, WordEmbeddingInfo
 from graphbrain_semsim.utils.general import save_to_pickle, load_from_pickle
-from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, EvaluationScenario
-from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, EVAL_SCENARIOS
-from graphbrain_semsim.eval_tools.utils import get_eval_scenario, get_eval_runs, get_variable_threshold_sub_pattern
+from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY
 from graphbrain_semsim.eval_tools.plots import plot_base_config
 
 plot_base_config()
 
 
 REFERENCE_SIMILARITY_MEASURES = ["mean", "max"]
-
-
-class WordEmbeddingInfo(BaseModel):
-    word: str
-    embedding: np.ndarray
-    reference: bool = False
-    similarity_mean: Optional[float] = None
-    similarity_max: Optional[float] = None
-
-    class Config:
-        arbitrary_types_allowed = True
 
 
 def plot_embedding_space_structure(
@@ -47,10 +31,10 @@ def plot_embedding_space_structure(
         annotate_words: bool = False,
 ):
     assert ref_sim_measure in REFERENCE_SIMILARITY_MEASURES, f"{ref_sim_measure} not in {REFERENCE_SIMILARITY_MEASURES}"
-    util_data_dir_path: Path = PLOT_DIR / "util_data" / f"ess_{case_study}_{scenario_name}"
+    util_data_dir_path: Path = PLOT_DIR / "util_data" / f"{case_study}_{scenario_name}"
 
     if not util_data_dir_path.exists():
-        embedding_infos: list[WordEmbeddingInfo] = _get_embedding_infos(
+        embedding_infos: list[WordEmbeddingInfo] = get_embedding_infos(
             case_study, scenario_name, variable_name
         )
 
@@ -116,7 +100,7 @@ def _make_ess_plot(
             )
         case 2:
             _make_2d_ess_plot(
-                fig, plot_name, embedding_infos, embeddings_1d, ref_sim_measure, annotate_words, sim_range
+                fig, plot_name, embedding_infos, embeddings_2d, ref_sim_measure, annotate_words, sim_range
             )
         case _:
             raise ValueError(f"Invalid T-SNE dimension: {tsne_dimensions}")
@@ -134,7 +118,7 @@ def _make_2d_ess_plot(
     ax: Axes = fig.add_axes((0, 0, 1, 1), xlabel="T-SNE embed. dim. 1", ylabel="T-SNE embed. dim. 2")
     ax.set_title(f"Embedding space structure 2D - {ref_sim_measure} similarity: {sim_range[0]}-{sim_range[1]}")
 
-    embedding_infos, embeddings_2d, similarities = _filter_embeddings(
+    embedding_infos, embeddings_2d, similarities = filter_embeddings(
         embedding_infos, embeddings_2d, ref_sim_measure, sim_range
     )
 
@@ -189,7 +173,7 @@ def _make_1d_ess_plot(
     ax: Axes = fig.add_axes((0, 0, 1, 1), xlabel="T-SNE embed. dim.", ylabel="Cosine similarity")
     ax.set_title(f"Embedding space structure 1D - {ref_sim_measure} similarity: {sim_range[0]}-{sim_range[1]}")
 
-    embedding_infos, embeddings_1d, similarities = _filter_embeddings(
+    embedding_infos, embeddings_1d, similarities = filter_embeddings(
         embedding_infos, embeddings_1d, ref_sim_measure, sim_range
     )
 
@@ -223,99 +207,6 @@ def _make_1d_ess_plot(
     save_path: Path = PLOT_DIR / f"{plot_name}.png"
     logger.info(f"Saving plot '{save_path}'...")
     fig.savefig(save_path, bbox_inches='tight')
-
-
-def _filter_embeddings(
-        embedding_infos: list[WordEmbeddingInfo],
-        embeddings_tsne: np.ndarray,
-        reference_measure: str,
-        sim_range: tuple[float, float] = (0.0, 1.0)
-) -> tuple[list[WordEmbeddingInfo], np.ndarray, list[float]]:
-    sim_attribute: str = f"similarity_{reference_measure}"
-
-    embedding_infos_filtered = [
-        info for info in embedding_infos
-        if getattr(info, sim_attribute) is None or sim_range[0] <= getattr(info, sim_attribute) <= sim_range[1]
-    ]
-    embeddings_2d_filtered = embeddings_tsne[
-        [
-            getattr(info, sim_attribute) is None or sim_range[0] <= getattr(info, sim_attribute) <= sim_range[1]
-            for info in embedding_infos
-        ]
-    ]
-    similarities = [
-        getattr(info, sim_attribute) if getattr(info, sim_attribute) is not None else 0
-        for info in embedding_infos_filtered
-    ]
-
-    assert len(embedding_infos_filtered) == len(embeddings_2d_filtered) == len(similarities), (
-        f"Number of data points mismatch after filtering: "
-        f"{len(embedding_infos_filtered)} != {len(embeddings_2d_filtered)} != {len(similarities)}"
-    )
-
-    # Normalize your similarities for color mapping
-    # v_min, v_max = min(similarities), max(similarities)
-    # if v_min != v_max:
-    #     similarities = [(sim - v_min) / (v_max - v_min) for sim in similarities]
-
-    return embedding_infos_filtered, embeddings_2d_filtered, similarities
-
-
-def _get_embedding_infos(
-        case_study: str,
-        scenario_name: str,
-        variable_name: str,
-) -> list[WordEmbeddingInfo]:
-    logger.info("Preparing data for embedding space structure plot...")
-
-    scenario: EvaluationScenario = get_eval_scenario(
-        EVAL_SCENARIOS, scenario_name=scenario_name, case_study=case_study
-    )
-    eval_runs: list[EvaluationRun] = get_eval_runs(scenario.id)
-    assert eval_runs and len(eval_runs) > 1, f"Scenario '{scenario.id}' has no eval runs or only one"
-
-    fix_semsim_matcher: FixedEmbeddingMatcher = FixedEmbeddingMatcher(scenario.semsim_configs[SemSimType.FIX])
-    kv_model: KeyedVectors = fix_semsim_matcher._model  # noqa
-
-    variable_threshold_sub_pattern: str = get_variable_threshold_sub_pattern(scenario)
-    assert variable_threshold_sub_pattern.upper()[:-1] == variable_name, (
-        f"Variable name '{variable_name}' does not match "
-        f"variable threshold sub pattern '{variable_threshold_sub_pattern}'"
-    )
-
-    embedding_infos: list[WordEmbeddingInfo] = []
-
-    ref_words: list[str] = eval_runs[0].sub_pattern_configs[variable_threshold_sub_pattern].components
-    filtered_ref_words: list[str] = fix_semsim_matcher.filter_oov(ref_words)
-    for ref_word in filtered_ref_words:
-        embedding_infos.append(
-            WordEmbeddingInfo(
-                word=ref_word,
-                embedding=kv_model[ref_word],
-                reference=True,
-            )
-        )
-    ref_embeddings: np.ndarray = np.vstack([info.embedding.reshape(1, -1) for info in embedding_infos])
-
-    match_words: set[str] = set()
-    for eval_run in eval_runs:
-        for match in eval_run.matches:
-            match_words.update([variables_text_[variable_name] for variables_text_ in match.variables_text])
-
-    filtered_match_words: list[str] = fix_semsim_matcher.filter_oov(list(match_words))
-    for word in filtered_match_words:
-        if word not in embedding_infos:
-            embedding: np.ndarray = kv_model[word]
-            embedding_infos.append(
-                WordEmbeddingInfo(
-                    word=word,
-                    embedding=embedding,
-                    similarity_mean=kv_model.cosine_similarities(embedding, ref_embeddings).mean(),
-                    similarity_max=kv_model.cosine_similarities(embedding, ref_embeddings).max(initial=0.0),
-                )
-            )
-
-    return embedding_infos
 
 
 if __name__ == '__main__':
