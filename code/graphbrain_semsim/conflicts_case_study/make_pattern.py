@@ -6,36 +6,21 @@ from graphbrain_semsim.utils.pattern_making import make_any_fun_pattern, make_se
 logger = logging.getLogger(__name__)
 
 
-# def get_countries() -> list[str]:
-#     countries_file_path: Path = Path(__file__).parent / 'data' / 'countries.json'
-#     with open(countries_file_path) as fp:
-#         countries_dict = json.load(fp)
-#     return [country_dict['en'].lower() for country_dict in countries_dict]
-
-
-# original pattern:
-# '( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) '
-# '∧ ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )'
-
-# PREDS = ["accuse", "arrest", "clash", "condemn", "kill", "slam", "warn"]
-# PREPS = ["against", "for", "of", "over"]
-#
-# COUNTRIES = [
-#     "china", "india,", "usa", "indonesia", "pakistan", "nigeria", "brazil", "bangladesh", "russia", "mexico", "japan",
-#     "philippines", "ethiopia", "egypt", "vietnam", "congo", "iran", "turkey", "germany", "france"
-# ]
-#
-
 def make_conflict_pattern(
         preds: CompositionPattern,
         preps: CompositionPattern,
         countries: CompositionPattern = None,
 ):
-    topic_pattern = make_any_fun_pattern(["TOPIC"], arg_roles=["R", "S"])
-    source_pattern = "*/C"
-    target_pattern = "*/C"
+    topic_pattern: str = make_any_fun_pattern(["TOPIC"], arg_roles=["R", "S"])
+    source_pattern: str = "*/C"
+    target_pattern: str = "*/C"
+
+    preds_arg_roles: str = "P.{so,x}"
+    preps_arg_roles: str = "T"
 
     match preds.type:
+        case CompositionType.WILDCARD:
+            pred_pattern = f"*/{preds_arg_roles}"
         case CompositionType.ANY:
             pred_pattern = make_any_fun_pattern(
                 preds.components, inner_funcs=["atoms", "lemma"], arg_roles=["P.{so,x}"]
@@ -45,13 +30,15 @@ def make_conflict_pattern(
                 preds.semsim_type,
                 preds.components,
                 preds.threshold,
-                arg_roles='P.{so,x}',
+                arg_roles=preds_arg_roles,
             )
             pred_pattern = f"(atoms {semsim_pattern} )"
         case _:
             raise ValueError(f"Invalid preds composition type: {preds.type}")
 
     match preps.type:
+        case CompositionType.WILDCARD:
+            prep_pattern = f"*/{preps_arg_roles}"
         case CompositionType.ANY:
             prep_pattern = make_any_fun_pattern(preps.components, arg_roles=["T"])
         case CompositionType.SEMSIM:
@@ -59,7 +46,7 @@ def make_conflict_pattern(
                 preps.semsim_type,
                 preps.components,
                 preps.threshold,
-                arg_roles='T',
+                arg_roles=preps_arg_roles,
             )
         case _:
             raise ValueError(f"Invalid preps composition type: {preps.type}")

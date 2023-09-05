@@ -92,11 +92,11 @@ def exec_eval_run(
 
 
 def log_pattern_match(pattern_match: PatternMatch):
+    logger.info("---")
     logger.info(pattern_match.edge)
     logger.info(pattern_match.edge_text)
     logger.info(pattern_match.variables)
     logger.info(pattern_match.variables_text)
-    logger.info("---")
 
 
 def get_eval_runs(scenario: EvaluationScenario, hg: Hypergraph) -> list[EvaluationRun]:
@@ -128,7 +128,6 @@ def get_eval_runs(scenario: EvaluationScenario, hg: Hypergraph) -> list[Evaluati
 
 def prepare_eval_run(
         scenario: EvaluationScenario,
-        hg: Hypergraph,
         run_idx: int = 0,
         threshold_combination: dict[str, float] = None,
         ref_edges_idx: int = None

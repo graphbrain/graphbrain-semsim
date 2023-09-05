@@ -28,6 +28,7 @@ class PatternMatch(BaseModel):
 class CompositionType(StrEnum):
     ANY = "any"
     SEMSIM = "semsim"
+    WILDCARD = "wildcard"
 
 
 class CompositionPattern(BaseModel):

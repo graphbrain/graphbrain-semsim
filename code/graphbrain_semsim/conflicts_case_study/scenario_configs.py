@@ -68,6 +68,18 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
         }
     ),
     ConflictsEvaluationScenario(
+        name="1-1_wildcard_preds",
+        semsim_configs=None,
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.WILDCARD,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.ANY,
+            )
+        }
+    ),
+    ConflictsEvaluationScenario(
         name="2-1_semsim-fix_preds",
         sub_pattern_configs={
             "preds": CompositionPattern(
