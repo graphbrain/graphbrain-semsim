@@ -5,14 +5,13 @@ from random import sample, seed
 
 from pydantic import BaseModel
 
-from graphbrain.hypergraph import Hypergraph, Hyperedge, hedge
-from graphbrain.utils.lemmas import lemma as get_lemma
 
 from graphbrain_semsim import logger, get_hgraph, RNG_SEED
 from graphbrain_semsim.utils.general import load_json, save_json
 from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, HG_NAME
 from graphbrain_semsim.conflicts_case_study.models import EvaluationScenario, EvaluationRun, PatternMatch
-from graphbrain_semsim.eval_tools.utils import get_eval_runs
+from graphbrain_semsim.eval_tools.utils.result_data import get_eval_runs
+from graphbrain_semsim.eval_tools.utils.lemmas import get_words_and_lemmas_from_match, map_matches_to_lemmas
 
 
 seed(RNG_SEED)
@@ -116,29 +115,6 @@ def get_full_dataset(
     )
     save_json(full_dataset, full_dataset_file_path)
     return full_dataset
-
-
-def map_matches_to_lemmas(eval_run: EvaluationRun, hg_name: str, var_name: str):
-    hg: Hypergraph = get_hgraph(hg_name)
-
-    lemmas_to_matches: dict[str, list[PatternMatch]] = defaultdict(list)
-    unique_words: set[str] = set()
-    for match in eval_run.matches:
-        for variable_assignments in match.variables:
-            if var_name in variable_assignments:
-                lemma: str | None = None
-                var_val_hedged: Hyperedge = hedge(variable_assignments[var_name])
-                if var_val_hedged:
-                    lemma: str = get_lemma(hg, var_val_hedged)
-                if lemma:
-                    lemmas_to_matches[hg.text(lemma)].append(match)
-
-        for variable_assignments in match.variables_text:
-            if var_name in variable_assignments:
-                unique_words.add(variable_assignments[var_name].lower())
-
-    logger.info(f"Found {len(lemmas_to_matches.keys())} lemmas for {len(unique_words)} words.")
-    return lemmas_to_matches
 
 
 def subsample_matches(
