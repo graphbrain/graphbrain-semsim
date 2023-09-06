@@ -2,17 +2,29 @@ import logging
 import pickle
 from itertools import groupby
 from pathlib import Path
-from typing import Any
+from typing import Any, Type
 
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 
-def save_json(data: BaseModel, result_file_path: Path):
-    result_file_path.parent.mkdir(exist_ok=True, parents=True)
-    result_file_path.write_text(data.json())
-    logger.info(f"Saved to '{result_file_path}'")
+def save_json(data: BaseModel, file_path: Path):
+    file_path.parent.mkdir(exist_ok=True, parents=True)
+    file_path.write_text(data.json())
+    logger.info(f"Saved to '{file_path}'")
+
+
+def load_json(file_path: Path, model: Type[BaseModel]) -> BaseModel | None:
+    if not file_path.exists():
+        logger.error(f"File {file_path} does not exist")
+        return None
+
+    try:
+        return model.parse_file(file_path)
+    except Exception as e:
+        logger.error(f"Failed to load data from {file_path}. Error: {e}")
+        return None
 
 
 def frange(start, stop, step, include_stop: bool = True) -> list[float]:

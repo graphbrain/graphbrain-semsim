@@ -75,5 +75,5 @@ class EvaluationScenario(BaseModel):
         return f"{case_study}_{scenario}"
 
     @property
-    def id(self):
+    def id(self) -> str:
         return EvaluationScenario.get_id(self.case_study, self.name)

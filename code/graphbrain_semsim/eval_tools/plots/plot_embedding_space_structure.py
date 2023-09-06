@@ -31,7 +31,7 @@ def plot_embedding_space_structure(
         annotate_words: bool = False,
 ):
     assert ref_sim_measure in REFERENCE_SIMILARITY_MEASURES, f"{ref_sim_measure} not in {REFERENCE_SIMILARITY_MEASURES}"
-    util_data_dir_path: Path = PLOT_DIR / "util_data" / f"{case_study}_{scenario_name}"
+    util_data_dir_path: Path = PLOT_DIR / "_util_data" / f"{case_study}_{scenario_name}"
 
     if not util_data_dir_path.exists():
         embedding_infos: list[WordEmbeddingInfo] = get_embedding_infos(

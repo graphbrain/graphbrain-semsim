@@ -36,7 +36,7 @@ def plot(
         sim_range: tuple[float, float] = (0.0, 1.0),
         annotate_words: bool = False,
 ):
-    util_data_dir_path: Path = PLOT_DIR / "util_data" / f"{case_study}_{scenario_name}"
+    util_data_dir_path: Path = PLOT_DIR / "_util_data" / f"{case_study}_{scenario_name}"
 
     if not (util_data_dir_path / "embedding_infos.pickle").exists():
         embedding_infos: list[WordEmbeddingInfo] = get_embedding_infos(

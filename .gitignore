@@ -1,6 +1,6 @@
 **/results/**
 
-data/plots/util_data/*
+data/plots/_util_data/*
 
 .idea
 .DS_Store
