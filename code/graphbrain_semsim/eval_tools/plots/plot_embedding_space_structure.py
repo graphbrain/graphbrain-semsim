@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 from sklearn.manifold import TSNE
 
 from graphbrain_semsim import logger, PLOT_DIR
-from graphbrain_semsim.eval_tools.plots.embedding_utils import filter_embeddings, get_embedding_infos, WordEmbeddingInfo
+from graphbrain_semsim.eval_tools.plots.embedding_utils import filter_embeddings, get_embedding_infos, WordLemmaEmbeddingInfo
 from graphbrain_semsim.utils.general import save_to_pickle, load_from_pickle
 from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY
 from graphbrain_semsim.eval_tools.plots import plot_base_config
@@ -34,7 +34,7 @@ def plot_embedding_space_structure(
     util_data_dir_path: Path = PLOT_DIR / "_util_data" / f"{case_study}_{scenario_name}"
 
     if not util_data_dir_path.exists():
-        embedding_infos: list[WordEmbeddingInfo] = get_embedding_infos(
+        embedding_infos: list[WordLemmaEmbeddingInfo] = get_embedding_infos(
             case_study, scenario_name, variable_name
         )
 
@@ -51,7 +51,7 @@ def plot_embedding_space_structure(
         save_to_pickle(embeddings_1d, util_data_dir_path / "embeddings_1d.pickle")
 
     else:
-        embedding_infos: list[WordEmbeddingInfo] = load_from_pickle(util_data_dir_path / "embedding_infos.pickle")
+        embedding_infos: list[WordLemmaEmbeddingInfo] = load_from_pickle(util_data_dir_path / "embedding_infos.pickle")
         embeddings_2d: np.ndarray = load_from_pickle(util_data_dir_path / "embeddings_2d.pickle")
         embeddings_1d: np.ndarray = load_from_pickle(util_data_dir_path / "embeddings_1d.pickle")
         assert all(obj is not None for obj in [embedding_infos, embeddings_2d, embeddings_1d]), (
@@ -72,7 +72,7 @@ def plot_embedding_space_structure(
 
 
 def _make_ess_plot(
-        embedding_infos: list[WordEmbeddingInfo],
+        embedding_infos: list[WordLemmaEmbeddingInfo],
         embeddings_2d: np.ndarray,
         embeddings_1d: np.ndarray,
         tsne_dimensions: int,
@@ -109,7 +109,7 @@ def _make_ess_plot(
 def _make_2d_ess_plot(
         fig: Figure,
         plot_name: str,
-        embedding_infos: list[WordEmbeddingInfo],
+        embedding_infos: list[WordLemmaEmbeddingInfo],
         embeddings_2d: np.ndarray,
         ref_sim_measure: str,
         annotate_words: bool,
@@ -164,7 +164,7 @@ def _make_2d_ess_plot(
 def _make_1d_ess_plot(
         fig: Figure,
         plot_name: str,
-        embedding_infos: list[WordEmbeddingInfo],
+        embedding_infos: list[WordLemmaEmbeddingInfo],
         embeddings_1d: np.ndarray,
         ref_sim_measure: str,
         annotate_words: bool,

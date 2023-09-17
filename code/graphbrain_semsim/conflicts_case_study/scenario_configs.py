@@ -57,7 +57,6 @@ class ConflictsEvaluationScenario(EvaluationScenario):
 EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
     ConflictsEvaluationScenario(
         name="1_original-pattern",
-        semsim_configs=None,
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.ANY,
@@ -69,7 +68,6 @@ EVAL_SCENARIOS: list[ConflictsEvaluationScenario] = [
     ),
     ConflictsEvaluationScenario(
         name="1-1_wildcard_preds",
-        semsim_configs=None,
         sub_pattern_configs={
             "preds": CompositionPattern(
                 type=CompositionType.WILDCARD,

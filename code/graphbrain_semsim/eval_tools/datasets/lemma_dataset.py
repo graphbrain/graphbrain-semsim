@@ -11,7 +11,7 @@ from graphbrain_semsim.utils.general import load_json, save_json
 from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, HG_NAME
 from graphbrain_semsim.conflicts_case_study.models import EvaluationScenario, EvaluationRun, PatternMatch
 from graphbrain_semsim.eval_tools.utils.result_data import get_eval_runs
-from graphbrain_semsim.eval_tools.utils.lemmas import get_words_and_lemmas_from_match, map_matches_to_lemmas
+from graphbrain_semsim.eval_tools.utils.lemmas import get_words_and_lemmas_from_match, get_lemma_to_matches_mapping
 
 
 seed(RNG_SEED)
@@ -101,17 +101,18 @@ def get_full_dataset(
     eval_runs: list[EvaluationRun] = get_eval_runs(scenario_id)
     assert len(eval_runs) == 1, f"Scenario '{scenario_id}' must have exactly one evaluation run"
 
-    lemma_matches: dict[str, list[PatternMatch]] = map_matches_to_lemmas(eval_runs[0], hg_name, var_name)
+    lemma_matches: dict[str, list[PatternMatch]] = get_lemma_to_matches_mapping(eval_runs[0], hg_name, var_name)
     full_dataset: LemmaDataset = LemmaDataset(
         scenario_id=scenario_id,
         eval_run_id=eval_runs[0].id,
-        n_samples=len(eval_runs[0].matches),
+        n_samples=sum(len(matches) for matches in lemma_matches.values()),
         full_dataset=True,
         lemma_matches=lemma_matches
     )
     logger.info(
         f"Created full dataset based on scenario '{scenario_name}': "
-        f"n_lemmas={len(lemma_matches.keys())}, n_samples={full_dataset.n_samples}"
+        f"n_lemmas={len(lemma_matches.keys())}, "
+        f"n_samples={full_dataset.n_samples}"
     )
     save_json(full_dataset, full_dataset_file_path)
     return full_dataset
