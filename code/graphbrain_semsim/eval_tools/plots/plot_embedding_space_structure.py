@@ -12,7 +12,7 @@ from sklearn.manifold import TSNE
 from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.eval_tools.plots.embedding_utils import filter_embeddings, get_embedding_infos, WordLemmaEmbeddingInfo
 from graphbrain_semsim.utils.general import save_to_pickle, load_from_pickle
-from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY
+from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY
 from graphbrain_semsim.eval_tools.plots import plot_base_config
 
 plot_base_config()

@@ -7,8 +7,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 from graphbrain_semsim import logger, PLOT_DIR
-from graphbrain_semsim.conflicts_case_study.scenario_configs import CASE_STUDY, HG_NAME
-from graphbrain_semsim.eval_tools.datasets.lemma_dataset import LemmaDataset, get_full_dataset
+from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY, HG_NAME
+from graphbrain_semsim.eval_tools.datasets.make_dataset import get_full_dataset, get_lemma_distribution
+from graphbrain_semsim.eval_tools.datasets.dataset_models import LemmaDataset
 from graphbrain_semsim.eval_tools.plots import plot_base_config
 
 plot_base_config()
@@ -29,11 +30,7 @@ def plot_lemma_distribution(
     fig_size: tuple[int, int] = (10, 7)
     fig, ax = plt.subplots(figsize=fig_size)
 
-    n_matches_per_lemma: list[tuple[str, int]] = sorted(
-        ((lemma, len(matches)) for lemma, matches in dataset.lemma_matches.items()), key=lambda t: t[1], reverse=True
-    )
-
-    # n_matches_per_lemma = [(l, n) for l, n in n_matches_per_lemma if n > 10]
+    n_matches_per_lemma: list[tuple[str, int]] = get_lemma_distribution(dataset)
 
     ax.bar(range(len(n_matches_per_lemma)), [n for lemma, n in n_matches_per_lemma], width=1.0, color="blue")
     ax.set_xlabel("Lemmas")

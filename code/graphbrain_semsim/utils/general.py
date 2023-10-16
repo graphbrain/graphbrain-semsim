@@ -2,26 +2,34 @@ import logging
 import pickle
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Type
+from typing import Any, Type, TypeVar
 
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
+BaseModelType = TypeVar('BaseModelType', bound=BaseModel)
+
 
 def save_json(data: BaseModel, file_path: Path):
     file_path.parent.mkdir(exist_ok=True, parents=True)
-    file_path.write_text(data.json())
+    file_path.write_text(data.model_dump_json())
     logger.info(f"Saved to '{file_path}'")
 
 
-def load_json(file_path: Path, model: Type[BaseModel]) -> BaseModel | None:
+def load_json(file_path: Path, model: Type[BaseModelType]) -> BaseModelType | None:
     if not file_path.exists():
         logger.error(f"File {file_path} does not exist")
         return None
 
     try:
-        return model.parse_file(file_path)
+        json_str: str = file_path.read_text()
+    except Exception as e:
+        logger.error(f"Failed to load data from {file_path}. Error: {e}")
+        return None
+
+    try:
+        return model.model_validate_json(json_str)
     except Exception as e:
         logger.error(f"Failed to load data from {file_path}. Error: {e}")
         return None

@@ -1,10 +1,18 @@
 from collections import defaultdict
 
+from graphbrain.hyperedge import Atom  # noqa
 from graphbrain.hypergraph import Hypergraph, Hyperedge, hedge
-from graphbrain.utils.lemmas import lemma as get_lemma
+from graphbrain.utils.lemmas import deep_lemma
 
 from graphbrain_semsim import logger, get_hgraph
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, PatternMatch
+from graphbrain_semsim.eval_tools.datasets.dataset_models import LemmaMatch
+
+
+def get_atom(edge: Hyperedge) -> Atom:
+    if edge.is_atom():
+        return edge
+    return get_atom(edge[1])
 
 
 def get_words_and_lemmas_from_match(
@@ -24,11 +32,13 @@ def get_words_and_lemmas_from_match(
         lemma_edge: Hyperedge | None = None
         lemma_text: str | None = None
         word: str | None = None
+
         if var_val_hedged:
-            lemma_edge = get_lemma(hg, var_val_hedged)
+            word: str = hg.text(get_atom(var_val_hedged))
+            lemma_edge = deep_lemma(hg, var_val_hedged)
+
         if lemma_edge:
             lemma_text: str = hg.text(lemma_edge)
-            word: str = variable_text_assignments[var_name].lower()
         if lemma_text and word:
             words_lemmas.add((word, lemma_text))
 
@@ -45,24 +55,29 @@ def get_words_and_lemmas_from_match(
 
 def get_words_and_lemmas_from_matches(
         matches: list[PatternMatch], var_name: str, hg: Hypergraph, return_lemma_to_matches: bool = False
-) -> dict[str, list[PatternMatch]] | set[tuple[str, str]]:
+) -> dict[str, list[LemmaMatch]] | set[tuple[str, str]]:
     word_lemmas: set[tuple[str, str]] = set()
     no_lemma_var_vals: list[str] = []
     no_word_var_vals: list[str] = []
 
-    lemmas_to_matches: dict[str, list[PatternMatch]] = defaultdict(list)
+    lemmas_to_matches: dict[str, list[LemmaMatch]] = defaultdict(list)
 
+    sample_idx: int = 0
     for match in matches:
-        word_lemmas_, no_lemma_var_vals_, no_word_var_vals_ = get_words_and_lemmas_from_match(
+        word_lemmas_, no_lemma_var_vals_, no_text_var_vals_ = get_words_and_lemmas_from_match(
             match, var_name, hg, return_invalid_var_vals=True
         )
         word_lemmas.update(word_lemmas_)
         no_lemma_var_vals.extend(no_lemma_var_vals_)
-        no_word_var_vals.extend(no_word_var_vals_)
+        no_word_var_vals.extend(no_text_var_vals_)
 
         if return_lemma_to_matches:
             for word, lemma in word_lemmas_:
-                lemmas_to_matches[lemma].append(match)
+                if match not in [lemma_match.match for lemma_match in lemmas_to_matches[lemma]]:
+                    lemmas_to_matches[lemma].append(
+                        LemmaMatch(idx=sample_idx, word=word, lemma=lemma, match=match, var_name=var_name)
+                    )
+                sample_idx += 1
 
     if no_lemma_var_vals:
         logger.warning(
@@ -90,7 +105,8 @@ def get_words_and_lemmas_from_matches(
     if return_lemma_to_matches:
         logger.info(
             f"Total number of matches: {len(matches)}, "
-            f"Number of matches with valid lemma: {sum(len(matches) for matches in lemmas_to_matches.values())}"
+            f"Number of unique matches with valid lemma: "
+            f"{sum(len(matches) for matches in lemmas_to_matches.values())}"
         )
         return lemmas_to_matches
 

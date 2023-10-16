@@ -5,8 +5,8 @@ from graphbrain_semsim.conflicts_case_study.models import RefEdge
 from graphbrain_semsim.eval_tools.utils.ref_edges import get_and_save_ref_edges
 from graphbrain_semsim.conflicts_case_study.run_scenario import run
 from graphbrain_semsim.conflicts_case_study.scenario_configs import (
-    CASE_STUDY, EVAL_SCENARIOS, REF_EDGES_FILE_PATH,
-)
+    EVAL_SCENARIOS, )
+from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY, REF_EDGES_FILE_PATH
 
 
 def main(args):

@@ -12,6 +12,7 @@ pandas = "^2.0.1"
 matplotlib = "^3.7.1"
 scienceplots = "^2.0.1"
 strenum = "^0.4.10"
+openpyxl = "^3.1.2"
 
 
 [build-system]

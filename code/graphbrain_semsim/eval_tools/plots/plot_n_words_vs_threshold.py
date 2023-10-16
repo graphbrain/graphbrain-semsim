@@ -4,9 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from graphbrain_semsim import PLOT_DIR, logger
-from graphbrain_semsim.conflicts_case_study.scenario_configs import (
-    CASE_STUDY, HG_NAME, SUB_PATTERN_WORDS, ConflictsSubPattern
-)
+from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY, HG_NAME, ConflictsSubPattern, SUB_PATTERN_WORDS
 
 from graphbrain_semsim.eval_tools.plots import plot_base_config
 from graphbrain_semsim.eval_tools.plots.embedding_utils import WordLemmaEmbeddingInfo, get_embedding_infos
