@@ -23,7 +23,7 @@ def make_conflict_pattern(
             pred_pattern = f"*/{preds_arg_roles}"
         case CompositionType.ANY:
             pred_pattern = make_any_fun_pattern(
-                preds.components, inner_funcs=["atoms", "lemma"], arg_roles=["P.{so,x}"]
+                preds.components, inner_funcs=["atoms", "lemma"], arg_roles=[preds_arg_roles]
             )
         case CompositionType.SEMSIM:
             semsim_pattern = make_semsim_fun_pattern(
@@ -31,6 +31,7 @@ def make_conflict_pattern(
                 preds.components,
                 preds.threshold,
                 arg_roles=preds_arg_roles,
+                semsim_fix_lemma=preds.semsim_fix_lemma
             )
             pred_pattern = f"(atoms {semsim_pattern} )"
         case _:
@@ -40,13 +41,14 @@ def make_conflict_pattern(
         case CompositionType.WILDCARD:
             prep_pattern = f"*/{preps_arg_roles}"
         case CompositionType.ANY:
-            prep_pattern = make_any_fun_pattern(preps.components, arg_roles=["T"])
+            prep_pattern = make_any_fun_pattern(preps.components, arg_roles=[preps_arg_roles])
         case CompositionType.SEMSIM:
             prep_pattern = make_semsim_fun_pattern(
                 preps.semsim_type,
                 preps.components,
                 preps.threshold,
                 arg_roles=preps_arg_roles,
+                semsim_fix_lemma=preps.semsim_fix_lemma
             )
         case _:
             raise ValueError(f"Invalid preps composition type: {preps.type}")

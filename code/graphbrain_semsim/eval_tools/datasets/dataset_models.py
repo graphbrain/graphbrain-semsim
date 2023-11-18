@@ -7,7 +7,6 @@ class LemmaMatch(BaseModel):
     idx: int  # Unique id
     word: str
     lemma: str
-    var_name: str
     match: PatternMatch
     label: int | None = None
 
@@ -19,7 +18,6 @@ class LemmaDataset(BaseModel):
     eval_run_id: str
     full_dataset: bool
     n_samples: int
-    var_name: str
     lemma_matches: dict[str, list[LemmaMatch]]
 
     @property

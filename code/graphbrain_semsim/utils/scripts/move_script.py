@@ -22,6 +22,6 @@ def move_files(src_dir: str, dest_dir: str):
                         break
 
 
-src_directory = '../../../../data/results/conflicts_4-1_semsim-ctx_preds-general'
+src_directory = '../../../../data/_old_results/conflicts_4-1_semsim-ctx_preds-general'
 destination_directory = "./_old/conflicts_4-1_semsim-ctx_preds-general"
 move_files(src_directory, destination_directory)

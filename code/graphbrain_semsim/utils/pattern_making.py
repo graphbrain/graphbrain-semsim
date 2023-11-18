@@ -32,20 +32,28 @@ def make_semsim_fun_pattern(
         refs: list[str],
         threshold: float = None,
         arg_roles: str = None,
+        semsim_fix_lemma: bool = False,
         filter_oov_words: bool = True
 ):
+    semsim_arg = "*"
+
     match semsim_type:
         case SemSimType.FIX:
-            if filter_oov_words:
+            semsim_fun = "semsim-fix" if not semsim_fix_lemma else "semsim-fix-lemma"
+
+            if refs and filter_oov_words:
                 matcher: FixedEmbeddingMatcher = get_matcher(semsim_type)
                 refs = matcher.filter_oov(refs)
-            semsim_pattern = f"semsim-fix [{','.join(refs)}]"
+            if refs:
+                semsim_arg = f"[{','.join(refs)}]"
 
         case SemSimType.CTX:
-            semsim_pattern = f"semsim-ctx *"
+            semsim_fun = f"semsim-ctx"
 
         case _:
             raise ValueError(f"Invalid SemSim type: {semsim_type}")
+
+    semsim_pattern = f"{semsim_fun} {semsim_arg}"
 
     if arg_roles:
         semsim_pattern += f"/{arg_roles}"
