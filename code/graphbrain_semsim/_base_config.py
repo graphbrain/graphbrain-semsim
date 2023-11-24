@@ -23,7 +23,7 @@ def get_hgraph(hg_name: str = HG_NAME) -> Hypergraph:
 
 
 DATA_DIR: Path = Path(graphbrain_semsim.__file__).parents[2] / 'data'
-RESULT_DIR: Path = DATA_DIR / 'results'
+EVAL_DIR: Path = DATA_DIR / 'evaluations'
 PLOT_DIR: Path = DATA_DIR / 'plots'
 
 

@@ -1,11 +1,16 @@
 import logging
 from itertools import islice
 
+from graphbrain.semsim import get_matcher, SemSimConfig, SemSimType, DEFAULT_CONFIGS
 from graphbrain_semsim import get_hgraph
 
 logger = logging.getLogger()
 
 hg = get_hgraph("reddit-worldnews-01012013-01082017.hg")
+
+semsim_ctx_config = DEFAULT_CONFIGS[SemSimType.CTX]
+semsim_ctx_config.similarity_threshold = 0.7
+
 
 # for seq in hg.sequences():
 #     print(seq)
@@ -46,5 +51,6 @@ ref_edges = [
     '(says/Pd.sr.|f--3s-/en obama/Cp.s/en (than/Jr.ma/en (larger/P.x.-------/en (+/B.aa/. iran/Cm/en (nuclear/Ma/en row/Cc.s/en))) (+/B.am/. syria/Cp.s/en crisis/Cc.s/en)))'
 ]
 matches = hg.match_sequence("headers", pattern=semsim_pattern, ref_edges=ref_edges, skip_semsim=False)
+# matches = hg.match_edges(ref_edges, pattern=semsim_pattern, ref_edges=ref_edges, skip_semsim=False)
 for match in matches:
     print(match)

@@ -1247,7 +1247,7 @@ files = [
 [[package]]
 name = "pure-eval"
 version = "0.2.2"
-description = "Safely evaluate AST nodes without side effects"
+description = "Safely evaluate_pattern AST nodes without side effects"
 category = "main"
 optional = false
 python-versions = "*"

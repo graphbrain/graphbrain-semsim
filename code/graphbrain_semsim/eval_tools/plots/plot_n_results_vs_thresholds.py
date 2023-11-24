@@ -7,7 +7,7 @@ from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, Evaluat
 from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS
 from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY
 from graphbrain_semsim.eval_tools.utils.result_data import (
-    get_eval_scenario, get_eval_runs, get_variable_threshold_sub_pattern
+    get_eval_scenario, get_pattern_eval_runs, get_variable_threshold_sub_pattern
 )
 from graphbrain_semsim.eval_tools.plots import plot_base_config
 
@@ -74,7 +74,7 @@ def plot_n_results_vs_variable_threshold(
         y_lim_view: tuple[float | None, float | None] = None
 
 ):
-    eval_runs: list[EvaluationRun] = get_eval_runs(scenario_id)
+    eval_runs: list[EvaluationRun] = get_pattern_eval_runs(scenario_id)
 
     if ref_edges_configs:
         eval_runs_by_ref_edges_source_scenario: dict[str, list[EvaluationRun]] = {
@@ -156,7 +156,7 @@ def plot_n_results_vs_fix_threshold(
         axes: Axes,
         scenario_id: str,
 ):
-    eval_runs: list[EvaluationRun] = get_eval_runs(scenario_id)
+    eval_runs: list[EvaluationRun] = get_pattern_eval_runs(scenario_id)
     assert len(eval_runs) == 1, f"Scenario '{scenario_id}' must have exactly one evaluation run"
 
     axes.axhline(y=len(eval_runs[0].matches), label=scenario_id, linestyle='--')

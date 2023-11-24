@@ -33,6 +33,7 @@ def make_semsim_fun_pattern(
         threshold: float = None,
         arg_roles: str = None,
         semsim_fix_lemma: bool = False,
+        outer_funs: list[str] = None,
         filter_oov_words: bool = True
 ):
     semsim_arg = "*"
@@ -60,5 +61,9 @@ def make_semsim_fun_pattern(
 
     if threshold is not None:
         semsim_pattern += f" {threshold}"
+
+    if outer_funs:
+        for fun in reversed(outer_funs):
+            semsim_pattern = f"{fun} ({semsim_pattern})"
 
     return f"({semsim_pattern})"

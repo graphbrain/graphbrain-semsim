@@ -1,3 +1,4 @@
+import json
 import logging
 import pickle
 from itertools import groupby
@@ -17,21 +18,20 @@ def save_json(data: BaseModel, file_path: Path):
     logger.info(f"Saved to '{file_path}'")
 
 
-def load_json(file_path: Path, model: Type[BaseModelType]) -> BaseModelType | None:
+def load_json(file_path: Path, model: Type[BaseModelType], exit_on_error: bool = False) -> BaseModelType | None:
     if not file_path.exists():
-        logger.error(f"File {file_path} does not exist")
+        error_msg = f"File {file_path} does not exist"
+        if exit_on_error:
+            raise ValueError(error_msg)
+        logger.error(error_msg)
         return None
 
     try:
-        json_str: str = file_path.read_text()
+        return model.model_validate(json.loads(file_path.read_text()))
     except Exception as e:
-        logger.error(f"Failed to load data from {file_path}. Error: {e}")
-        return None
-
-    try:
-        return model.model_validate_json(json_str)
-    except Exception as e:
-        logger.error(f"Failed to load data from {file_path}. Error: {e}")
+        logger.error(f"Failed to load data from {file_path}. {e.__class__.__name__}: {e}")
+        if exit_on_error:
+            exit(1)
         return None
 
 

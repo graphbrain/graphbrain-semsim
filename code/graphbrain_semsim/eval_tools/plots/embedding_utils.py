@@ -12,7 +12,7 @@ from graphbrain_semsim.conflicts_case_study.models import EvaluationScenario, Ev
 from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS
 
 from graphbrain_semsim.eval_tools.utils.result_data import (
-    get_eval_scenario, get_eval_runs, get_variable_threshold_sub_pattern
+    get_eval_scenario, get_pattern_eval_runs, get_variable_threshold_sub_pattern
 )
 from graphbrain_semsim.eval_tools.utils.lemmas import get_words_and_lemmas_from_matches
 
@@ -92,7 +92,7 @@ def get_embedding_infos(
     scenario: EvaluationScenario = get_eval_scenario(
         EVAL_SCENARIOS, scenario_name=scenario_name, case_study=case_study
     )
-    eval_runs: list[EvaluationRun] = get_eval_runs(scenario.id)
+    eval_runs: list[EvaluationRun] = get_pattern_eval_runs(scenario.id)
     # assert eval_runs and len(eval_runs) > 1, f"Scenario '{scenario.id}' has no eval runs or only one"
 
     fix_semsim_matcher: FixedEmbeddingMatcher = FixedEmbeddingMatcher(scenario.semsim_configs[SemSimType.FIX])
