@@ -3,6 +3,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 
+from tqdm import tqdm
+
 from graphbrain.hypergraph import Hypergraph, Hyperedge
 from graphbrain_semsim import get_hgraph
 from graphbrain_semsim.case_studies.models import (
@@ -108,7 +110,7 @@ def exec_eval_run(
     ) if not edges_subset else hg.match_edges(
         edges_subset, eval_run.pattern, skip_semsim=eval_run.skip_semsim
     )
-    for match in match_iterator:
+    for match in tqdm(match_iterator, total=len(edges_subset) if edges_subset else None):
         semsim_instances = None
         if eval_run.skip_semsim:
             edge, variables, semsim_instances = match
