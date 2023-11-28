@@ -46,10 +46,10 @@ class PatternMatch(BaseModel):
     def convert_semsim_instances(cls, semsim_instances) -> list[SemSimInstance]:
         if semsim_instances:
             converted_semsim_instances: list[SemSimInstance] = copy.deepcopy(semsim_instances)
-            for instance in converted_semsim_instances:
-                instance.edge = cls.convert_edge(instance.edge)
-                if instance.tok_pos:
-                    instance.tok_pos = cls.convert_edge(instance.tok_pos)
+            for instance_dict in converted_semsim_instances:
+                instance_dict['edge'] = cls.convert_edge(instance_dict['edge'])
+                if instance_dict['tok_pos']:
+                    instance_dict['tok_pos'] = cls.convert_edge(instance_dict['tok_pos'])
             return converted_semsim_instances
         return semsim_instances
 
