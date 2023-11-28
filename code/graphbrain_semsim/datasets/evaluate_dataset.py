@@ -1,9 +1,12 @@
+import random
 from pathlib import Path
+
+from tqdm import tqdm
 
 from graphbrain.hypergraph import Hyperedge, Hypergraph, hedge
 from graphbrain.patterns.semsim.processing import match_semsim_instances
 from graphbrain.semsim import init_matcher, SemSimConfig, SemSimType
-from graphbrain_semsim import logger, get_hgraph
+from graphbrain_semsim import logger, get_hgraph, RNG_SEED
 from graphbrain_semsim.case_studies.models import PatternEvaluationConfig, PatternEvaluationRun
 from graphbrain_semsim.case_studies.evaluate_pattern import evaluate_pattern
 from graphbrain_semsim.datasets.config import DATA_LABELS, DATASET_DIR, DATASET_EVAL_DIR
@@ -15,6 +18,11 @@ from graphbrain_semsim.case_studies.conflicts.pattern_configs import (
     PATTERN_CONFIGS, SUB_PATTERN_WORDS, ConflictsSubPattern
 )
 
+random.seed(RNG_SEED)
+
+_HG_STORE: dict[str, Hypergraph] = {}
+
+
 EVALUATION_FILE_SUFFIX: str = "evaluation"
 
 
@@ -25,7 +33,8 @@ def evaluate_dataset_for_pattern(
         semsim_threshold_range: list[float] = None,
         semsim_configs: dict[SemSimType, SemSimConfig] = None,
         ref_words: list[str] = None,
-        sample_ref_edges: bool = False,
+        n_ref_edges: int = None,
+        sample_mod: int = None,
         override: bool = False
 ) -> DatasetEvaluation:
     logger.info("-" * 80)
@@ -41,10 +50,9 @@ def evaluate_dataset_for_pattern(
         pattern_configs, pattern_config_name, dataset, override=override
     )
 
-    # TODO: replace with sampling
     ref_edges: list[Hyperedge] | None = None
-    if sample_ref_edges:
-        ref_edges: list[Hyperedge] = dataset_positives[:3]
+    if n_ref_edges:
+        ref_edges: list[Hyperedge] = sample_ref_edges(dataset_positives, n_ref_edges, sample_mod)
 
     dataset_evaluation: DatasetEvaluation = DatasetEvaluation(
         dataset_name=dataset_name,
@@ -66,8 +74,16 @@ def evaluate_dataset_for_pattern(
         dataset_negatives,
     )
 
-    dataset_evaluation_file_name: str = f"{dataset.name}_{EVALUATION_FILE_SUFFIX}_{pattern_eval_config.id}.json"
-    dataset_evaluation_file_path: Path = DATASET_EVAL_DIR / dataset_evaluation_file_name
+    ref_edges_descriptor: str = None
+    if n_ref_edges:
+        ref_edges_descriptor = f"_nref-{n_ref_edges}"
+    if n_ref_edges and sample_mod is not None:
+        ref_edges_descriptor += f"_smod-{sample_mod}"
+
+    dataset_evaluation_file_stem: str = f"{dataset.name}_{EVALUATION_FILE_SUFFIX}_{pattern_eval_config.id}"
+    if ref_edges_descriptor:
+        dataset_evaluation_file_stem += ref_edges_descriptor
+    dataset_evaluation_file_path: Path = DATASET_EVAL_DIR / f"{dataset_evaluation_file_stem}.json"
     save_json(dataset_evaluation, dataset_evaluation_file_path)
     return dataset_evaluation
 
@@ -180,6 +196,7 @@ def get_symbolic_eval_score(
         if edge not in eval_run_positives
     ]
 
+    logger.info("Done computing symbolic evaluation score!")
     return compute_eval_score(
         dataset_positives,
         dataset_negatives,
@@ -200,7 +217,9 @@ def get_semsim_eval_scores(
 ) -> dict[float, EvaluationScore]:
     logger.info("Computing SemSim evaluation scores...")
 
-    hg: Hypergraph = get_hgraph(hg_name)
+    if hg_name not in _HG_STORE:
+        _HG_STORE[hg_name] = get_hgraph(hg_name)
+    hg: Hypergraph = _HG_STORE[hg_name]
 
     # Initialize the semsim matcher if configs given
     if semsim_configs:
@@ -208,8 +227,9 @@ def get_semsim_eval_scores(
             init_matcher(matcher_type, semsim_config)
 
     eval_scores: dict[float, EvaluationScore] = {}
-    for semsim_threshold in semsim_threshold_range:
-        # Post-process the semsim instances if necessary
+    for st_idx, semsim_threshold in enumerate(semsim_threshold_range):
+        logger.info(f"Getting matches for threshold [{st_idx + 1}/{len(semsim_threshold_range)}]: {semsim_threshold}")
+
         eval_run_positives: list[Hyperedge] = get_post_semsim_match_edges(
             pattern_eval_run, semsim_threshold, ref_words, ref_edges, hg
         )
@@ -236,8 +256,10 @@ def get_post_semsim_match_edges(
         ref_edges: list[Hyperedge],
         hg: Hypergraph
 ) -> list[Hyperedge]:
-    return [
-        match.edge for match in pattern_eval_run.matches
+    post_semsim_match_edges: list[Hyperedge] = []
+    for match in tqdm(pattern_eval_run.matches):
+        # either match has no semsim instances
+        # or they need to be matched now
         if not match.semsim_instances or match_semsim_instances(
             semsim_instances=match.semsim_instances,
             pattern=hedge(pattern_eval_run.pattern),
@@ -246,8 +268,19 @@ def get_post_semsim_match_edges(
             threshold=threshold,
             ref_words=ref_words,
             ref_edges=ref_edges,
-        )
-     ]
+        ):
+            post_semsim_match_edges.append(match.edge)
+    return post_semsim_match_edges
+
+
+def sample_ref_edges(
+        dataset_positives: list[Hyperedge], 
+        n_ref_edges: int,
+        sample_mod: int = None
+    ) -> list[Hyperedge]:
+    if sample_mod:
+        random.seed(RNG_SEED + sample_mod)
+    return list(random.sample(dataset_positives, k=n_ref_edges))
 
 
 def compute_eval_score(
@@ -261,9 +294,9 @@ def compute_eval_score(
     false_positives: int = len(set(dataset_negatives) & set(eval_run_positives))
     false_negatives: int = len(set(dataset_positives) & set(eval_run_negatives))
 
-    precision: float = true_positives / (true_positives + false_positives)
-    recall: float = true_positives / (true_positives + false_negatives)
-    f1: float = 2 * precision * recall / (precision + recall)
+    precision: float = true_positives / (true_positives + false_positives) if true_positives + false_positives > 0 else 0.0
+    recall: float = true_positives / (true_positives + false_negatives) if true_positives + false_negatives > 0 else 0.0
+    f1: float = 2 * precision * recall / (precision + recall) if precision + recall > 0 else 0.0
 
     return EvaluationScore(
         precision=precision,
@@ -295,12 +328,16 @@ if __name__ == "__main__":
     #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
     #     override=True
     # )
-    evaluate_dataset_for_pattern(
-        dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
-        pattern_config_name="2-3_preds_semsim-ctx_wildcard",
-        pattern_configs=PATTERN_CONFIGS,
-        semsim_threshold_range=frange(0.0, 1.0, 0.1),
-        sample_ref_edges=True,
-        override=True
-    )
+
+    for sample_mod in range(5):
+        for n_ref_edges in [1, 5, 10]:
+            evaluate_dataset_for_pattern(
+                dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+                pattern_config_name="2-3_preds_semsim-ctx_wildcard",
+                pattern_configs=PATTERN_CONFIGS,
+                semsim_threshold_range=frange(0.0, 1.0, 0.05),
+                n_ref_edges=n_ref_edges,
+                sample_mod=sample_mod,
+                override=False
+            )
 
