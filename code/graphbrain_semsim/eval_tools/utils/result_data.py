@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from graphbrain_semsim import logger
 from graphbrain_semsim.case_studies.config import PATTERN_EVAL_DIR
 from graphbrain_semsim.case_studies.models import PatternEvaluationRun, PatternEvaluationConfig, PatternMatch
-from graphbrain_semsim.utils.general import all_equal
+from graphbrain_semsim.utils.general import all_equal, load_json
 
 
 def get_pattern_eval_run(pattern_config_id: str, dataset_name: str = None) -> PatternEvaluationRun | None:
@@ -34,11 +34,11 @@ def get_pattern_eval_runs(pattern_config_id: str, dataset_name: str = None) -> l
         return None
 
     eval_runs: list[PatternEvaluationRun] = []
-    for file_name in results_dir_path.iterdir():
+    for file_path in results_dir_path.iterdir():
         try:
-            eval_runs.append(PatternEvaluationRun.model_validate(json.loads(file_name.read_text())))
+            eval_runs.append(load_json(file_path, PatternEvaluationRun))
         except (json.decoder.JSONDecodeError, ValidationError) as e:
-            logger.error(f"Invalid evaluation run file: {file_name}. Error: {e}")
+            logger.error(f"Invalid evaluation run file: {file_path}. Error: {e}")
 
     if not eval_runs:
         logger.warning(f"No evaluation runs found for pattern config '{pattern_config_id}'")

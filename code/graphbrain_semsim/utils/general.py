@@ -14,7 +14,7 @@ BaseModelType = TypeVar('BaseModelType', bound=BaseModel)
 
 def save_json(data: BaseModel, file_path: Path):
     file_path.parent.mkdir(exist_ok=True, parents=True)
-    file_path.write_text(data.model_dump_json())
+    file_path.write_text(data.model_dump_json(), encoding="utf-8")
     logger.info(f"Saved to '{file_path}'")
 
 
@@ -27,7 +27,7 @@ def load_json(file_path: Path, model: Type[BaseModelType], exit_on_error: bool =
         return None
 
     try:
-        return model.model_validate(json.loads(file_path.read_text()))
+        return model.model_validate(json.loads(file_path.read_text(encoding="utf-8")))
     except Exception as e:
         logger.error(f"Failed to load data from {file_path}. {e.__class__.__name__}: {e}")
         if exit_on_error:
