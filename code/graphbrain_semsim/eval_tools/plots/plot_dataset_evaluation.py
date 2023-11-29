@@ -21,7 +21,7 @@ def plot(
         dataset_name: str,
         pattern_eval_config_names: list[str],
         eval_metrics: list[str],
-        plot_name_suffix: str
+        plot_name_suffix: str,
 ):
     """
     Plot the evaluation results for the given dataset.
@@ -99,7 +99,7 @@ def plot(
     axes.legend(loc='upper left', bbox_to_anchor=(1.04, 1), borderaxespad=0)
     axes.set_title(f"Evaluation of {dataset_name}")
 
-    plot_file_name: str = f"{dataset_name}_{EVALUATION_FILE_SUFFIX}_{'-'.join(eval_metrics)}_{plot_name_suffix}.png"
+    plot_file_name: str = f"{dataset_name}_{EVALUATION_FILE_SUFFIX}_{plot_name_suffix}_{'-'.join(eval_metrics)}.png"
     plot_file_path: Path = PLOT_DIR / PLOT_DIR_NAME / plot_file_name
     figure.savefig(plot_file_path, bbox_inches='tight')
     logger.info(f"Plot saved to '{plot_file_path}'")
@@ -113,10 +113,9 @@ if __name__ == "__main__":
             "1-1_original-pattern",
             "2-1_preds_semsim-fix_wildcard",
             "2-2_preds_semsim-fix-lemma_wildcard",
-            # "2-3_preds_semsim-ctx_wildcard",
         ],
         eval_metrics=["precision", "recall"],
-        plot_name_suffix="all"
+        plot_name_suffix="original_vs_semsim-fix"
     )
     plot(
         case_study=CASE_STUDY,
@@ -125,8 +124,51 @@ if __name__ == "__main__":
             "1-1_original-pattern",
             "2-1_preds_semsim-fix_wildcard",
             "2-2_preds_semsim-fix-lemma_wildcard",
-            # "2-3_preds_semsim-ctx_wildcard",
         ],
         eval_metrics=["f1"],
-        plot_name_suffix="all"
+        plot_name_suffix="original_vs_semsim-fix"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000",
+        pattern_eval_config_names=[
+            "2-2_preds_semsim-fix-lemma_wildcard",
+            # "2-3_preds_semsim-ctx_wildcard",
+            "2-3_preds_semsim-ctx_wildcard_nref-10_smod-0"
+        ],
+        eval_metrics=["precision", "recall"],
+        plot_name_suffix="semsim-fix_vs_semsim-ctx"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000",
+        pattern_eval_config_names=[
+            "2-2_preds_semsim-fix-lemma_wildcard",
+            # "2-3_preds_semsim-ctx_wildcard",
+            "2-3_preds_semsim-ctx_wildcard_nref-10_smod-0"
+        ],
+        eval_metrics=["f1"],
+        plot_name_suffix="semsim-fix_vs_semsim-ctx"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000",
+        pattern_eval_config_names=[
+            "1-1_original-pattern",
+            # "2-3_preds_semsim-ctx_wildcard",
+            "2-3_preds_semsim-ctx_wildcard_nref-10_smod-0"
+        ],
+        eval_metrics=["precision", "recall"],
+        plot_name_suffix="original_vs_semsim-ctx"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000",
+        pattern_eval_config_names=[
+            "1-1_original-pattern",
+            # "2-3_preds_semsim-ctx_wildcard",
+            "2-3_preds_semsim-ctx_wildcard_nref-10_smod-0"
+        ],
+        eval_metrics=["f1"],
+        plot_name_suffix="original_vs_semsim-ctx"
     )

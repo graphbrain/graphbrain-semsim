@@ -65,6 +65,7 @@ class EvaluationScore(BaseModel):
     recall: float
     f1: float
 
+from typing import Any
 
 class DatasetEvaluation(BaseModel):
     dataset_name: str
@@ -74,7 +75,8 @@ class DatasetEvaluation(BaseModel):
     num_negative: int
     semsim_configs: Optional[dict[SemSimType, SemSimConfig]] = None
     ref_words: Optional[list[str]] = None
-    ref_edges: Optional[list[Hyperedge]] = None
+    # ref_edges: Optional[list[Hyperedge]] = None
+    ref_edges: Optional[list[Any]] = None
     symbolic_eval_score: Optional[EvaluationScore] = None
     semsim_eval_scores: Optional[dict[float, EvaluationScore]] = None
 

@@ -74,16 +74,10 @@ def evaluate_dataset_for_pattern(
         dataset_negatives,
     )
 
-    ref_edges_descriptor: str = None
-    if n_ref_edges:
-        ref_edges_descriptor = f"_nref-{n_ref_edges}"
-    if n_ref_edges and sample_mod is not None:
-        ref_edges_descriptor += f"_smod-{sample_mod}"
+    dataset_evaluation_file_path: Path = get_dataset_evaluation_file_path(
+        dataset_name, pattern_eval_config.id, n_ref_edges, sample_mod
+    )
 
-    dataset_evaluation_file_stem: str = f"{dataset.name}_{EVALUATION_FILE_SUFFIX}_{pattern_eval_config.id}"
-    if ref_edges_descriptor:
-        dataset_evaluation_file_stem += ref_edges_descriptor
-    dataset_evaluation_file_path: Path = DATASET_EVAL_DIR / f"{dataset_evaluation_file_stem}.json"
     save_json(dataset_evaluation, dataset_evaluation_file_path)
     return dataset_evaluation
 
@@ -277,7 +271,7 @@ def sample_ref_edges(
         dataset_positives: list[Hyperedge], 
         n_ref_edges: int,
         sample_mod: int = None
-    ) -> list[Hyperedge]:
+) -> list[Hyperedge]:
     if sample_mod:
         random.seed(RNG_SEED + sample_mod)
     return list(random.sample(dataset_positives, k=n_ref_edges))
@@ -305,6 +299,30 @@ def compute_eval_score(
     )
 
 
+def get_dataset_evaluation_file_path(
+    dataset_name: str,
+    pattern_eval_config_id: str,
+    n_ref_edges: int = None,
+    sample_mod: int = None,
+):
+    n_ref_edges_descriptor: str | None = f"nref-{n_ref_edges}" if n_ref_edges else None
+    sample_mod_descriptor: str | None = f"smod-{sample_mod}" if sample_mod else None
+
+    dataset_evaluation_descriptor: str = f"{dataset_name}_{EVALUATION_FILE_SUFFIX}_{pattern_eval_config_id}"
+
+    dataset_evaluation_file_stem: str = dataset_evaluation_descriptor
+    if n_ref_edges:
+        dataset_evaluation_file_stem += f"_{n_ref_edges_descriptor}"
+    if n_ref_edges and sample_mod:
+        dataset_evaluation_file_stem += f"_{sample_mod_descriptor}"
+
+    dataset_evaluation_file_dir: Path = DATASET_EVAL_DIR / dataset_evaluation_descriptor
+    if n_ref_edges:
+        dataset_evaluation_file_dir /= n_ref_edges_descriptor
+
+    return dataset_evaluation_file_dir / f"{dataset_evaluation_file_stem}.json"
+
+
 if __name__ == "__main__":
     # evaluate_dataset_for_pattern(
     #     dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
@@ -329,15 +347,14 @@ if __name__ == "__main__":
     #     override=True
     # )
 
-    for sample_mod in range(5):
-        for n_ref_edges in [1, 5, 10]:
+    for sample_mod_ in range(5):
+        for n_ref_edges_ in [1, 5, 10]:
             evaluate_dataset_for_pattern(
                 dataset_name="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
                 pattern_config_name="2-3_preds_semsim-ctx_wildcard",
                 pattern_configs=PATTERN_CONFIGS,
                 semsim_threshold_range=frange(0.0, 1.0, 0.05),
-                n_ref_edges=n_ref_edges,
-                sample_mod=sample_mod,
-                override=False
+                n_ref_edges=n_ref_edges_,
+                sample_mod=sample_mod_,
             )
 
