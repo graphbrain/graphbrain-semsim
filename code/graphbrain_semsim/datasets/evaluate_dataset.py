@@ -50,9 +50,7 @@ def evaluate_dataset_for_pattern(
         pattern_configs, pattern_config_name, dataset, override=override
     )
 
-    ref_edges: list[Hyperedge] | None = None
-    if n_ref_edges:
-        ref_edges: list[Hyperedge] = sample_ref_edges(dataset_positives, n_ref_edges, sample_mod)
+    ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives, n_ref_edges, sample_mod)
 
     dataset_evaluation: DatasetEvaluation = DatasetEvaluation(
         dataset_name=dataset_name,
@@ -267,11 +265,16 @@ def get_post_semsim_match_edges(
     return post_semsim_match_edges
 
 
-def sample_ref_edges(
+def get_ref_edges(
         dataset_positives: list[Hyperedge], 
-        n_ref_edges: int,
+        n_ref_edges: int = None,
         sample_mod: int = None
-) -> list[Hyperedge]:
+) -> list[Hyperedge] | None:
+    if not n_ref_edges:
+        return None
+    
+    logger.info(f"Sampling '{n_ref_edges}' with RNG offset '{sample_mod}'")
+    
     if sample_mod:
         random.seed(RNG_SEED + sample_mod)
     return list(random.sample(dataset_positives, k=n_ref_edges))
