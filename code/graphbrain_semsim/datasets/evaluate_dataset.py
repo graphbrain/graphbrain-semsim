@@ -272,9 +272,7 @@ def get_ref_edges(
 ) -> list[Hyperedge] | None:
     if not n_ref_edges:
         return None
-    
     logger.info(f"Sampling '{n_ref_edges}' with RNG offset '{sample_mod}'")
-    
     if sample_mod:
         random.seed(RNG_SEED + sample_mod)
     return list(random.sample(dataset_positives, k=n_ref_edges))
