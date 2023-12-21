@@ -10,8 +10,7 @@ from graphbrain_semsim.datasets.models import LemmaDataset, LemmaMatch
 from graphbrain_semsim.case_studies.models import PatternEvaluationConfig, PatternEvaluationRun
 from graphbrain_semsim.eval_tools.utils.result_data import get_pattern_eval_run
 from graphbrain_semsim.eval_tools.utils.lemmas import get_lemma_to_matches_mapping
-from graphbrain_semsim.utils.general import load_json, save_json
-
+from graphbrain_semsim.utils.file_handling import save_json, load_json
 
 from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
 
@@ -44,7 +43,7 @@ def make_dataset(
             var_name=var_name,
         )
 
-    make_dataset_table(lemma_dataset, DATASET_DIR / f"{lemma_dataset.name}.xlsx", annotators, divided_for_annotators)
+    make_dataset_table(lemma_dataset, DATASET_DIR / f"{lemma_dataset.id}.xlsx", annotators, divided_for_annotators)
 
 
 def get_subsampled_dataset(
@@ -58,7 +57,7 @@ def get_subsampled_dataset(
         f"Getting subsampled dataset for pattern evaluation config '{pattern_eval_config_name}' with {n_samples} matches..."
     )
 
-    dataset_file_name: str = f"{LemmaDataset.get_name(case_study, pattern_eval_config_name, n_samples=n_samples)}.json"
+    dataset_file_name: str = f"{LemmaDataset.get_id(case_study, pattern_eval_config_name, n_samples=n_samples)}.json"
     dataset_file_path: Path = DATASET_DIR / dataset_file_name
     if dataset := load_json(dataset_file_path, LemmaDataset):
         logger.info(f"Loaded subsampled dataset from '{dataset_file_path}'.")
@@ -75,7 +74,7 @@ def get_subsampled_dataset(
         n_samples=n_samples,
         lemma_matches=subsample_matches(full_dataset, n_samples)
     )
-    logger.info(f"Created subsampled dataset based on full dataset '{full_dataset.name}'.")
+    logger.info(f"Created subsampled dataset based on full dataset '{full_dataset.id}'.")
     save_json(subsampled_dataset, dataset_file_path)
     return subsampled_dataset
 
@@ -83,7 +82,7 @@ def get_subsampled_dataset(
 def get_full_dataset(
         case_study: str, pattern_eval_config_name: str, hg_name: str, var_name: str
 ) -> LemmaDataset:
-    dataset_name: str = LemmaDataset.get_name(case_study, pattern_eval_config_name, full_dataset=True)
+    dataset_name: str = LemmaDataset.get_id(case_study, pattern_eval_config_name, full_dataset=True)
     full_dataset_file_path: Path = DATASET_DIR / f"{dataset_name}.json"
 
     if dataset := load_json(full_dataset_file_path, LemmaDataset):

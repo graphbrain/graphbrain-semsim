@@ -5,8 +5,9 @@ from typing import Optional, Any
 from pydantic import BaseModel, ConfigDict, field_validator, field_serializer
 from strenum import StrEnum
 
-from graphbrain.hypergraph import Hyperedge, hedge
-from graphbrain.patterns.semsim.instances import SemSimInstance
+from graphbrain_semsim.models import Hyperedge, hedge
+from graphbrain_semsim.models import SemSimInstance as ModifiedSemSimInstance
+from graphbrain.patterns.semsim.instances import SemSimInstance as OriginalSemSimInstance
 from graphbrain.semsim import SemSimType, SemSimConfig
 
 
@@ -27,53 +28,53 @@ class PatternMatch(BaseModel):
     edge_text: str
     variables: list[dict[str, Hyperedge]]
     variables_text: list[dict[str, str]]
-    semsim_instances: Optional[list[SemSimInstance]] = None
+    semsim_instances: Optional[list[OriginalSemSimInstance | ModifiedSemSimInstance]] = None
 
-    @field_validator('edge', mode='before')
-    def convert_edge(cls, edge) -> Hyperedge:
-        if isinstance(edge, str):
-            return hedge(edge)
-        return edge
-
-    @field_validator('variables', mode='before')
-    def convert_variables(cls, variables) -> list[dict[str, Hyperedge]]:
-        if isinstance(variables, list):
-            return [
-                {k: cls.convert_edge(edge) for k, edge in variables_.items()} for variables_ in variables
-            ]
-
-    @field_validator('semsim_instances', mode='before')
-    def convert_semsim_instances(cls, semsim_instances) -> list[SemSimInstance]:
-        if semsim_instances:
-            converted_semsim_instances: list[SemSimInstance] = copy.deepcopy(semsim_instances)
-            for instance_dict in converted_semsim_instances:
-                instance_dict['edge'] = cls.convert_edge(instance_dict['edge'])
-                if instance_dict['tok_pos']:
-                    instance_dict['tok_pos'] = cls.convert_edge(instance_dict['tok_pos'])
-            return converted_semsim_instances
-        return semsim_instances
-
-    @field_serializer('edge')
-    def serialize_edge(self, v) -> str:
-        return str(v)
-
-    @field_serializer('variables')
-    def serialize_variables(self, v) -> list[dict[str, str]]:
-        return [{k: str(v) for k, v in v_.items()} for v_ in v]
-
-    @field_serializer('semsim_instances')
-    def serialize_semsim_instances(self, v) -> list[dict[str, Any]]:
-        if v:
-            v_dicts: list[dict[str, Any]] = []
-            for v_ in v:
-                v_dict: dict[str, Any] = copy.deepcopy(vars(v_))
-                for var_k, var_v in v_dict.items():
-                    if isinstance(var_v, Hyperedge):
-                        v_dict[var_k] = str(var_v)
-                v_dicts.append(v_dict)
-            return v_dicts
-        return v
-
+    # @field_validator('edge', mode='before')
+    # def convert_edge(cls, edge) -> Hyperedge:
+    #     if isinstance(edge, str):
+    #         return hedge(edge)
+    #     return edge
+    # 
+    # @field_validator('variables', mode='before')
+    # def convert_variables(cls, variables) -> list[dict[str, Hyperedge]]:
+    #     if isinstance(variables, list):
+    #         return [
+    #             {k: cls.convert_edge(edge) for k, edge in variables_.items()} for variables_ in variables
+    #         ]
+    # 
+    # @field_validator('semsim_instances', mode='before')
+    # def convert_semsim_instances(cls, semsim_instances) -> list[SemSimInstance]:
+    #     if semsim_instances:
+    #         converted_semsim_instances: list[SemSimInstance] = copy.deepcopy(semsim_instances)
+    #         for instance_dict in converted_semsim_instances:
+    #             instance_dict['edge'] = cls.convert_edge(instance_dict['edge'])
+    #             if instance_dict['tok_pos']:
+    #                 instance_dict['tok_pos'] = cls.convert_edge(instance_dict['tok_pos'])
+    #         return converted_semsim_instances
+    #     return semsim_instances
+    # 
+    # @field_serializer('edge')
+    # def serialize_edge(self, v) -> str:
+    #     return str(v)
+    # 
+    # @field_serializer('variables')
+    # def serialize_variables(self, v) -> list[dict[str, str]]:
+    #     return [{k: str(v) for k, v in v_.items()} for v_ in v]
+    # 
+    # @field_serializer('semsim_instances')
+    # def serialize_semsim_instances(self, v) -> list[dict[str, Any]]:
+    #     if v:
+    #         v_dicts: list[dict[str, Any]] = []
+    #         for v_ in v:
+    #             v_dict: dict[str, Any] = copy.deepcopy(vars(v_))
+    #             for var_k, var_v in v_dict.items():
+    #                 if isinstance(var_v, Hyperedge):
+    #                     v_dict[var_k] = str(var_v)
+    #             v_dicts.append(v_dict)
+    #         return v_dicts
+    #     return v
+    # 
     model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True)
 
 
@@ -129,8 +130,6 @@ class PatternEvaluationConfig(BaseModel):
     # threshold_values: Optional[dict[str, Optional[list[float]]]] = None
     # ref_edges_configs: Optional[list[RefEdgesConfig]] = None
     # ref_edges: Optional[list[list[str]]] = None
-
-    model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True)
 
     @classmethod
     def get_id(cls, case_study: str, config_name: str) -> str:

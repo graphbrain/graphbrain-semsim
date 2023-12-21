@@ -5,7 +5,7 @@ from pathlib import Path
 
 from graphbrain_semsim import RESULT_DIR
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun
-from graphbrain_semsim.utils.general import save_json
+from graphbrain_semsim.utils.file_handling import save_json
 
 logger = logging.getLogger(__name__)
 

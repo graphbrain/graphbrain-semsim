@@ -19,7 +19,7 @@ def make_dataset_table(
         annotators: list[str] = None,
         divided_for_annotators: bool = False,
 ):
-    logger.info(f"Making dataset table for '{lemma_dataset.name}'...")
+    logger.info(f"Making dataset table for '{lemma_dataset.id}'...")
 
     # Prepare columns for DataFrame
     idxes: list[int] = []
@@ -53,10 +53,10 @@ def make_dataset_table(
         # Write DataFrame to Excel starting from offset n_header_rows
         df.to_excel(writer, startrow=N_HEADER_ROWS, index=False, sheet_name='Dataset')
 
-        # Access the created sheet and write the header (dataset's name)
+        # Access the created sheet and write the header (dataset's id)
         # and the annotation labels to Excel
         worksheet = writer.sheets['Dataset']
-        worksheet.cell(row=1, column=1, value=f"Dataset name: {lemma_dataset.name}")
+        worksheet.cell(row=1, column=1, value=f"Dataset id: {lemma_dataset.id}")
         worksheet.cell(row=2, column=1, value=f"Annotation labels: {ANNOTATION_LABELS}")
 
         if annotators:

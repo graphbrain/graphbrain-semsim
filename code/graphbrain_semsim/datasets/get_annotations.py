@@ -7,7 +7,7 @@ from graphbrain_semsim import logger
 from graphbrain_semsim.datasets.config import DATASET_DIR, DATA_LABELS
 from graphbrain_semsim.datasets.models import LemmaDataset, LemmaMatch
 from graphbrain_semsim.datasets.dataset_table import N_HEADER_ROWS
-from graphbrain_semsim.utils.general import load_json, save_json
+from graphbrain_semsim.utils.file_handling import save_json, load_json
 
 VALID_LABELS: list[int] = [DATA_LABELS['positive'], DATA_LABELS['negative']]
 ANNOTATION_FILE_SUFFIX: str = "annotated"
@@ -55,7 +55,7 @@ def recreate_dataset_from_table(dataset_name: str, full_dataset_name: str):
     # Create the subsampled dataset
     n_samples: int = sum(len(lemma_matches) for lemma_matches in sub_lemma_matches.values())
     recreated_dataset: LemmaDataset = full_dataset.model_copy(
-        # update={'name': dataset_name, 'lemma_matches': sub_lemma_matches, 'n_samples': n_samples}
+        # update={'id': dataset_id, 'lemma_matches': sub_lemma_matches, 'n_samples': n_samples}
         update={'lemma_matches': sub_lemma_matches, 'n_samples': n_samples, 'full_dataset': False}
     )
 
@@ -121,7 +121,7 @@ def update_labels(dataset: LemmaDataset, idx_to_label: dict[int, int]):
             if not lemma_match.label:
                 num_unlabelled_samples += 1
 
-    logger.info(f"Updated labels for {num_updated_labels} / {dataset.n_samples} samples in '{dataset.name}'")
+    logger.info(f"Updated labels for {num_updated_labels} / {dataset.n_samples} samples in '{dataset.id}'")
     logger.info(f"Found {num_unlabelled_samples} unlabelled samples in dataset")
 
 

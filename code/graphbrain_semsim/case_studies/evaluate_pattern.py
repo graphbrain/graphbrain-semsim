@@ -13,7 +13,7 @@ from graphbrain_semsim.case_studies.models import (
 from graphbrain_semsim.case_studies.config import PATTERN_EVAL_DIR
 from graphbrain_semsim.case_studies.conflicts.make_pattern import make_conflict_pattern
 from graphbrain_semsim.datasets.models import LemmaDataset
-from graphbrain_semsim.utils.general import save_json
+from graphbrain_semsim.utils.file_handling import save_json
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +26,7 @@ def evaluate_pattern(
 ) -> list[PatternEvaluationRun]:
     # get hypergraph
     hg: Hypergraph = get_hgraph(pattern_config.hypergraph)
+    assert hg, f"Hypergraph '{pattern_config.hypergraph}' not loaded."
 
     # set edges subset if given
     edges_subset: list[Hyperedge] | None = [
@@ -52,7 +53,7 @@ def evaluate_pattern(
 
         results_dir_path: Path = PATTERN_EVAL_DIR / pattern_config.id
         if dataset:
-            results_dir_path /= dataset.name
+            results_dir_path /= dataset.id
         results_file_path: Path = results_dir_path / f"{eval_run.id}.json"
 
         logger.info(f"-----")
@@ -81,7 +82,7 @@ def prepare_eval_run(
         case_study=pattern_config.case_study,
         config_name=pattern_config.name,
         skip_semsim=pattern_config.skip_semsim,
-        dataset_name=dataset.name if dataset else None,
+        dataset_name=dataset.id if dataset else None,
         run_idx=run_idx,
         pattern=pattern,
     )
@@ -203,7 +204,7 @@ def log_pattern_match(pattern_match: PatternMatch):
 #
 #     eval_run: EvaluationRun = EvaluationRun(
 #         case_study=scenario.case_study,
-#         scenario=scenario.name,
+#         scenario=scenario.id,
 #         run_idx=run_idx,
 #         pattern=pattern,
 #         sub_pattern_configs=sub_pattern_configs,
