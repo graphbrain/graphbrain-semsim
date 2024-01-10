@@ -28,7 +28,8 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{rotating}
-
+\usepackage{pdfpages}
+\usepackage{csquotes}
 
 \usepackage{array}  % needed for '\newcolumntype' command
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
@@ -87,8 +88,8 @@
 
 \date{\today}
 \publishers{Supervised by Prof. Dr. Manfred Hauswirth \\
-	Additional guidance by Prof. Dr. Camille Roth\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)} \ 
-	and Dr. Thilo Ernst\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
+	Additional guidance by Prof. Dr. Camille Roth\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)} \\ 
+	and Dipl.-Math. Thilo Ernst\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
 	
 \maketitle
 
@@ -141,9 +142,22 @@ The aim of the SH framework is to provide a \textit{open} and \textit{adaptive} 
 
 \subsection{Structure}
 
+Edge
+
+Edge Content
+
+Root edge / Sequencen (i use the term "sequence root edge")
+
 \subsection{Syntax}
 
+wildcard operator
+
+Variables
+
 Square bracket notation 
+
+Differences between the formal notation and the notation sued in the implementation
+(or should this be contained in the implementation chapter?)
 
 
 \section{Semantic Similarity}
@@ -248,10 +262,16 @@ Based on the problem statement outlined above, we pose the following research qu
 
 % ========== 
 \chapter{Solution Approach}
-In this chapter we present the approach that was developed to answer the research questions (see \cref{sec:research-questions}). Therefore trying to provide a solution to the problem of extending the SH framework by Neural Semantic Similarity Matching, which is described in \cref{cha:problem-statement} where the relevancy of this problem for has also been derived.
+\label{cha:solution-approach}
+In this chapter we present the approach that was developed to answer the research questions (see \cref{sec:research-questions}). Therefore trying to provide a solution to the problem of extending the SH framework by Neural Embedding-based Semantic Similarity Matching, which is described in \cref{cha:problem-statement} where the relevancy of this problem for has also been derived.
+
+The system is described here will in the following be referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} or:
+\begin{center}
+\textit{\textbf{NESS-SHPM}} aka \textit{\textbf{NESSeSHyPaM}}	
+\end{center}
 
 
-Combining Semantic Hypergraphs with neural embeddings
+
 
 \section{Integration into the Pattern Matching Process}
 \subsection{\texttt{semsim} Functional Pattern}
@@ -297,6 +317,7 @@ how to approach this for practical applications?
 
 % ========== 
 \chapter{Implementation}
+\label{cha:implementation}
 
 \section{Relevant external Software Libraries used}
 Here list libs and models to be referenced later.
@@ -359,73 +380,131 @@ SpaCy
 
 
 % ========== 
-\chapter{Results and Evaluation}
-In this chapter...
+\chapter{Evaluation and Results}
+In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the NESS-SHPM system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. In this case study quantitative results as well as qualitative examinations of the behaviour of NESS-SHPM are conducted. The quantitative results display the systems performance using metrics which are established for retrieval and classification tasks. The qualitative results exemplary showcase detailed aspects of the systems behaviour in the given use case.
+\todo{refer to the RQs more specifically?}
 
 \section{Case Study: Conflicts}
-This case study follows the approach presented in \cite[p.~22]{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a SH constructed from a corpus of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.” 
+The conflicts case study follows the approach presented in \cite[p.~22]{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a given SH using a single pattern. In their work they build upon the information extracted by the pattern (e.g. the two conflict parties) to conduct further analysis, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently the task is to to retrieve exactly all those edges whose content is an expression of conflict.
 
-Number of news headers in corpus: 479384\todo{Add dataset statistics}
+\todo[inline]{should I explain why specifically the conflicts and not some other case study (i.e. dataset) --> because there was none... but then I need to show why there was none and what are the criteria for a case study to be suitable to evaluate the system}
 
-Pattern \ref{pat:conflict} is used to extract conflicts between two parties, where the \textsf{SOURCE} shows some form of aggression against the \textsf{TARGET}, potentially regarding some \textsf{TOPIC}:
+\subsection{Reddit Worldnews Corpus}
+The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.” This corpus will in the following be referred to as the \textit{Worldnews-Corpus} and contains 479,384 news headers. 
 
-\begin{pattern}
-  \normalfont\sffamily
-  \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
-  \caption{Conflict pattern}
-  \label{pat:conflict}
-\end{pattern}
+Each of these headers is comprised of a single sentence and is represented as a sequence root edge in the corresponding SH. The SH that is constructed from this corpus will in the following be referred to as the \textit{Worldnews-SH}.
 
+\todo{refer to examples}
 
+\subsection{Original Conflict Pattern}
 
-To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \footnote{Based on \url{https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population}, Accessed on XYZ} is used (listed in descending order by population size):
-
-
-\textit{India, China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}
-
-To avoid the repetition of that list in the following pattern, we introduce a variable:
+Pattern \ref{pat:original-conflict} is used in \cite[p.~22]{menezesSemanticHypergraphs2021} to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}:
 
 \begin{pattern}
   \normalfont\sffamily
   \centering
-  COUNTRIES = [india,china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia,mexico, ajapan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]
-  \caption{Countries variable}
-  \label{pat:countries-var}
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
+  \caption{Original conflict pattern}
+  \label{pat:original-conflict}
 \end{pattern}
 
-Pattern \ref{pat:conflict-countries} shows the resulting pattern for conflicts between countries:
+Matching this pattern against the Worldnews-SH yields XYZ matches. \todo{add examples}
+
+
+\subsection{SemSim Conflict Patterns}
+The part of \cref{pat:original-conflict} that mostly defines its retrieval performance is the list of predicates. This list has been manually constructed by \cite{menezesSemanticHypergraphs2021} by investigating the Worldnews-Corpus. To evaluate the NESS-SHPH, this pattern will be modified to include the semsim functional pattern instead of the lemma functional pattern and the fixed word list. The general form of of such a pattern is shown by \cref{pat:semsim-conflict}. This means only the matching of the predicate will be subject NESS, which allows to isolate the effects of the integration of NESS in the pattern matching process. 
 
 \begin{pattern}
   \normalfont\sffamily
   \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
-  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
-  ( semsim/J >SOURCE/C COUNTRIES/C ) \(\wedge\) ( semsim/J >TARGET/C COUNTRIES/C )
-  \caption{Country conflict pattern}
-  \label{pat:conflict-countries}
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( semsim/J PRED/P .../P )
+  \caption{Original conflict pattern}
+  \label{pat:semsim-conflict}
 \end{pattern}
 
-In pattern \ref{pat:conflict-countries-threshold-countries} a sub-pattern specific threshold \(t_{sim}^{countries}\) for the countries \texttt{semsim} sub-pattern is introduced.
+\subsection{Conflict Dataset}
+To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an statement of conflict or not. Since such a dataset did not exists it needs to be constructed. In the following the characteristics and the creation process of the dataset which was used for the evaluation in this case study will be shown.
+
+\subsubsection{Definition of Conflict}
+Firstly an expression of conflict in the context of this case study is defined as a sentence which bears the following characteristics:
+
+\begin{displayquote}
+There is a conflict between two explicitly named actors, wherever these actors are mentioned in the sentence; whereby a conflict is defined as antagonizing desired outcomes.
+
+\end{displayquote}
+
+\subsubsection{Creation Process}
+The set of edges that can be retrieved by a pattern following the form of \cref{pat:semsim-conflict} is restricted the general structure of this pattern.
+That means every set of matches for a pattern of this form will be a subset of the matches of the pattern which uses a wildcard operator to match the predicate (see \cref{pat:wildcard-pred}). The results of matching this pattern against the Worldnews-SH are therefore used as the basis set of edges from which the conflict dataset is constructed instead of the entirety of all its sequence root edges.
 
 \begin{pattern}
   \normalfont\sffamily
   \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
-  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
-  ( semsim/J >SOURCE/C COUNTRIES/C \(t_{sim}^{countries}\) ) \(\wedge\) \\ 
-  ( semsim/J >TARGET/C COUNTRIES/C \(t_{sim}^{countries}\) )
-  \caption{Country conflict pattern}
-  \label{pat:conflict-countries-threshold-countries}
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ ( PRED/P */P )
+  \caption{Wildcard predicate pattern}
+  \label{pat:wildcard-pred}
 \end{pattern}
 
 
-\subsection{Quantitative Results}
+\paragraph{Sampling}
+Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in
+
+sampling the dataset from the pattern matching results
+--> lemma-based binning
+
+
+\paragraph{Labeling}
+-> 50 edges labeled by everyone, then asses disagreements and refine understanding of conflict. 
+
+%To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \footnote{Based on \url{https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population}, Accessed on XYZ} is used (listed in descending order by population size):
+%
+%
+%\textit{India, China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}
+%
+%To avoid the repetition of that list in the following pattern, we introduce a variable:
+%
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  COUNTRIES = [india,china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia,mexico, ajapan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]
+%  \caption{Countries variable}
+%  \label{pat:countries-var}
+%\end{pattern}
+%
+%Pattern \ref{pat:original-conflict-countries} shows the resulting pattern for conflicts between countries:
+%
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
+%  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
+%  ( semsim/J >SOURCE/C COUNTRIES/C ) \(\wedge\) ( semsim/J >TARGET/C COUNTRIES/C )
+%  \caption{Country conflict pattern}
+%  \label{pat:original-conflict-countries}
+%\end{pattern}
+%
+%In pattern \ref{pat:original-conflict-countries-threshold-countries} a sub-pattern specific threshold \(t_{sim}^{countries}\) for the countries \texttt{semsim} sub-pattern is introduced.
+%
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
+%  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
+%  ( semsim/J >SOURCE/C COUNTRIES/C \(t_{sim}^{countries}\) ) \(\wedge\) \\ 
+%  ( semsim/J >TARGET/C COUNTRIES/C \(t_{sim}^{countries}\) )
+%  \caption{Country conflict pattern}
+%  \label{pat:original-conflict-countries-threshold-countries}
+%\end{pattern}
+%
+
+%\subsection{Quantitative Results}
 
 
 %To asses the generalisation capabilities (recall?) of the introduced \texttt{semsim}-country-pattern,
-
-Pattern \ref{pat:conflict-countries} is matched against the described \textit{Reddit r/worldnews} hypergraph. The similarity threshold  \(t_{sim}\) for the \texttt{semsim} function (see \ref{sec:similarity-threshold}) is varied. \(t_{sim}\) is either varied for the entire pattern or for a specific \texttt{semsim} sub-pattern. 
+%
+%Pattern \ref{pat:original-conflict-countries} is matched against the described \textit{Reddit r/worldnews} hypergraph. The similarity threshold  \(t_{sim}\) for the \texttt{semsim} function (see \ref{sec:similarity-threshold}) is varied. \(t_{sim}\) is either varied for the entire pattern or for a specific \texttt{semsim} sub-pattern. 
 
 %for every matching operation which includes a \texttt{semsim} function or for
 
@@ -457,24 +536,24 @@ Pattern \ref{pat:conflict-countries} is matched against the described \textit{Re
 %\label{fig:case-study-conflict-countries-2}   
 %\end{figure}
 
-\subsection{Qualitative Results}
-
-
-\begin{sidewaystable}
-%    \centering
-    \caption{hyper dyper table}
-
-\begin{tabular}{L{4cm}L{2cm}L{5cm}L{3cm}L{5cm}L{3cm}}
-\toprule
-Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. Edges Source \\
-\midrule
-1\_original-pattern & Pattern X & Erdogan slams ridicule of 'Muslims discovered Americas' claim\newline Iran forces 'kill Kurdish rebels on Iraq border\newline Ukraine Accuses Russia of Invasion & -/- & -/- & -/- \\
-2-1\_semsim-fix\_preds & Pattern X & Pakistani police kill feared militant leader in mysterious pre-dawn shootout\newline Al-Shabaab militants claim responsibility for deadly attack on Garissa University College in Kenya\newline Casualties as Congo troops, UN forces fight rebels & 'preds': 0.19\newline Percentile: 50 & -/- & -/- \\
-2-2\_semsim-fix\_preps & Pattern X & Iranian police have arrested merchants for selling clothing that featured the flags of the United States and Britain, two longtime foes of the Islamic republic\newline Syrian Air Force Strikes kill 38 ISIS fighters\newline Seven Libyan soldiers killed fighting off Islamists near Benghazi: source & 'preps': 0.54\newline Percentile: 50 & -/- & -/- \\
-\bottomrule
-\end{tabular}
-
-\end{sidewaystable}
+%\subsection{Qualitative Results}
+%
+%
+%\begin{sidewaystable}
+%%    \centering
+%    \caption{hyper dyper table}
+%
+%\begin{tabular}{L{4cm}L{2cm}L{5cm}L{3cm}L{5cm}L{3cm}}
+%\toprule
+%Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. Edges Source \\
+%\midrule
+%1\_original-pattern & Pattern X & Erdogan slams ridicule of 'Muslims discovered Americas' claim\newline Iran forces 'kill Kurdish rebels on Iraq border\newline Ukraine Accuses Russia of Invasion & -/- & -/- & -/- \\
+%2-1\_semsim-fix\_preds & Pattern X & Pakistani police kill feared militant leader in mysterious pre-dawn shootout\newline Al-Shabaab militants claim responsibility for deadly attack on Garissa University College in Kenya\newline Casualties as Congo troops, UN forces fight rebels & 'preds': 0.19\newline Percentile: 50 & -/- & -/- \\
+%2-2\_semsim-fix\_preps & Pattern X & Iranian police have arrested merchants for selling clothing that featured the flags of the United States and Britain, two longtime foes of the Islamic republic\newline Syrian Air Force Strikes kill 38 ISIS fighters\newline Seven Libyan soldiers killed fighting off Islamists near Benghazi: source & 'preps': 0.54\newline Percentile: 50 & -/- & -/- \\
+%\bottomrule
+%\end{tabular}
+%
+%\end{sidewaystable}
 
 %\begin{table*}
 %\
@@ -488,8 +567,6 @@ Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. 
 implemnt multiprocessing, i.e. server process for both hypergraph and semsim matchers. other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
 
 \section{Further Evaluations}
-
-
 
 
 
