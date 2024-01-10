@@ -1,5 +1,5 @@
-data/_old_results/**
-
+data/_old_results
+data/evaluations/*
 data/plots/_util_data/*
 
 .idea

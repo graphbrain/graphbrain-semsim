@@ -25,13 +25,50 @@ random.seed(RNG_SEED)
 
 EVALUATION_FILE_SUFFIX: str = "evaluation"
 
+SEM_SIM_EVAL_CONFIGS: dict[str, dict[SemSimType, SemSimConfig]] = {
+    "w2v": {
+        SemSimType.FIX: SemSimConfig(
+            model_name='word2vec-google-news-300',
+        )
+    },
+    "cn": {
+        SemSimType.FIX: SemSimConfig(
+            model_name='conceptnet-numberbatch-17-06-300',
+        )
+    },
+    "e5": {
+        SemSimType.CTX: SemSimConfig(
+            model_name='intfloat/e5-large-v2',
+            embedding_prefix="query:"
+        )
+    },
+    "e5-at": {
+        SemSimType.CTX: SemSimConfig(
+            model_name='intfloat/e5-large-v2',
+            embedding_prefix="query:",
+            use_all_tokens=True
+        )
+    },
+    "gte": {
+        SemSimType.CTX: SemSimConfig(
+            model_name='thenlper/gte-large',
+        )
+    },
+    "gte-at": {
+        SemSimType.CTX: SemSimConfig(
+            model_name='thenlper/gte-large',
+            use_all_tokens=True
+        )
+    },
+}
+
 
 def evaluate_dataset_for_pattern(
         dataset_id: str,
         pattern_config_name: str,
         pattern_configs: list[PatternEvaluationConfig],
         semsim_threshold_range: list[float] = None,
-        semsim_configs: dict[SemSimType, SemSimConfig] = None,
+        semsim_configs_name: str = None,
         ref_words: list[str] = None,
         n_ref_edges: int = None,
         sample_mod: int = None,
@@ -51,6 +88,7 @@ def evaluate_dataset_for_pattern(
     )
 
     ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives, n_ref_edges, sample_mod)
+    semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(semsim_configs_name)
 
     dataset_evaluation: DatasetEvaluation = DatasetEvaluation(
         dataset_id=dataset_id,
@@ -76,7 +114,7 @@ def evaluate_dataset_for_pattern(
     produce_lemma_eval_results(dataset_evaluation, dataset.lemma_matches)
 
     dataset_evaluation_file_path: Path = get_dataset_evaluation_file_path(
-        dataset.id, pattern_eval_config.id, n_ref_edges, sample_mod
+        dataset.id, pattern_eval_config.id, semsim_configs_name, n_ref_edges, sample_mod,
     )
 
     save_json(dataset_evaluation, dataset_evaluation_file_path)
@@ -157,6 +195,13 @@ def get_ref_edges(
     return list(random.sample(dataset_positives, k=n_ref_edges))
 
 
+def get_semsim_configs(semsim_configs_name: str) -> dict[SemSimType, SemSimConfig] | None:
+    if semsim_configs_name:
+        assert semsim_configs_name in SEM_SIM_EVAL_CONFIGS, "Invalid SemSim configs name given"
+        return SEM_SIM_EVAL_CONFIGS[semsim_configs_name]
+    return None
+
+
 def produce_eval_results(
         dataset_evaluation: DatasetEvaluation,
         pattern_eval_run: PatternEvaluationRun,
@@ -192,17 +237,15 @@ def get_symbolic_eval_results(
         dataset_negatives: list[Hyperedge],
 ) -> EvaluationResult:
     logger.info(f"Processing symbolic pattern matches...")
-
     eval_run_positives: list[Hyperedge] = [
         match.edge for match in pattern_eval_run.matches
     ]
     eval_run_negatives: list[Hyperedge] = [
-        edge for edge in [
-            match.edge for match in pattern_eval_run.matches
-        ] if edge not in eval_run_positives
+        edge for edge in dataset_positives + dataset_negatives
+        if edge not in eval_run_positives
     ]
-
     logger.info("Done!")
+
     return compute_eval_result(
         eval_run_positives,
         eval_run_negatives,
@@ -230,24 +273,26 @@ def get_semsim_eval_results(
 
     total_iterations: int = len(semsim_threshold_range) * len(pattern_eval_run.matches)
     logger.info(
-        f"Processing SemSim pattern matches for {len(semsim_threshold_range)} thresholds"
+        f"Processing SemSim pattern matches for {len(semsim_threshold_range)} thresholds "
         f"and {len(pattern_eval_run.matches)} matches ({total_iterations} iterations)...")
-    eval_scores: dict[float, EvaluationResult] = {}
-    for semsim_threshold in tqdm(semsim_threshold_range, total=total_iterations):
-        eval_run_positives: list[Hyperedge] = get_post_semsim_match_edges(
-            pattern_eval_run, semsim_threshold, ref_words, ref_edges, hg
-        )
-        eval_run_negatives: list[Hyperedge] = [
-            match.edge for match in pattern_eval_run.matches
-            if match.edge not in eval_run_positives
-        ]
 
-        eval_scores[semsim_threshold] = compute_eval_result(
-            eval_run_positives,
-            eval_run_negatives,
-            dataset_positives,
-            dataset_negatives,
-        )
+    eval_scores: dict[float, EvaluationResult] = {}
+    with tqdm(total=total_iterations) as pbar:
+        for semsim_threshold in semsim_threshold_range:
+            eval_run_positives: list[Hyperedge] = get_post_semsim_match_edges(
+                pattern_eval_run, semsim_threshold, ref_words, ref_edges, hg, pbar
+            )
+            eval_run_negatives: list[Hyperedge] = [
+                match.edge for match in pattern_eval_run.matches
+                if match.edge not in eval_run_positives
+            ]
+
+            eval_scores[semsim_threshold] = compute_eval_result(
+                eval_run_positives,
+                eval_run_negatives,
+                dataset_positives,
+                dataset_negatives,
+            )
 
     logger.info(f"Done!")
     return eval_scores
@@ -258,7 +303,8 @@ def get_post_semsim_match_edges(
         threshold: float,
         ref_words: list[str],
         ref_edges: list[Hyperedge],
-        hg: Hypergraph
+        hg: Hypergraph,
+        pbar: tqdm,
 ) -> list[Hyperedge]:
     post_semsim_match_edges: list[Hyperedge] = []
     for match in pattern_eval_run.matches:
@@ -274,6 +320,7 @@ def get_post_semsim_match_edges(
             ref_edges=ref_edges,
         ):
             post_semsim_match_edges.append(match.edge)
+        pbar.update()
     return post_semsim_match_edges
 
 
@@ -290,22 +337,12 @@ def produce_lemma_eval_results(
             } for lemma, lemma_matches_ in lemma_matches.items()
         }
 
-        # for semsim_threshold, semsim_eval_result in dataset_evaluation.semsim_eval_results.items():
-        #     for lemma, lemma_matches_ in lemma_matches.items():
-        #         dataset_evaluation.lemma_semsim_eval_results[lemma][semsim_threshold] = compute_eval_result(
-        #             *get_lemma_positives_and_negatives(lemma_matches_, semsim_eval_result.matches)
-        #         )
     if dataset_evaluation.symbolic_eval_result:
         dataset_evaluation.lemma_symbolic_eval_results = {
             lemma: compute_eval_result(
                 *get_lemma_positives_and_negatives(lemma_matches_, dataset_evaluation.symbolic_eval_result.matches)
             ) for lemma, lemma_matches_ in lemma_matches.items()
         }
-
-        # for lemma, lemma_matches_ in lemma_matches.items():
-        #     dataset_evaluation.lemma_symbolic_eval_results[lemma] = compute_eval_result(
-        #         *get_lemma_positives_and_negatives(lemma_matches_, dataset_evaluation.symbolic_eval_result.matches)
-        #     )
 
 
 def get_lemma_positives_and_negatives(
@@ -321,7 +358,7 @@ def get_lemma_positives_and_negatives(
         lemma_match.match.edge for lemma_match in lemma_matches if lemma_match.match.edge not in eval_result_matches
     ]
 
-    return lemma_dataset_positives, lemma_dataset_negatives, lemma_eval_run_positives, lemma_eval_run_negatives
+    return lemma_eval_run_positives, lemma_eval_run_negatives, lemma_dataset_positives, lemma_dataset_negatives
 
 
 def compute_eval_result(
@@ -354,6 +391,7 @@ def compute_eval_result(
 def get_dataset_evaluation_file_path(
     dataset_name: str,
     pattern_eval_config_id: str,
+    semsim_configs_name: str = None,
     n_ref_edges: int = None,
     sample_mod: int = None,
 ):
@@ -361,6 +399,9 @@ def get_dataset_evaluation_file_path(
     sample_mod_descriptor: str | None = f"smod-{sample_mod}" if sample_mod else None
 
     dataset_evaluation_descriptor: str = f"{dataset_name}_{EVALUATION_FILE_SUFFIX}_{pattern_eval_config_id}"
+
+    if semsim_configs_name:
+        dataset_evaluation_descriptor += f"_{semsim_configs_name}"
 
     dataset_evaluation_file_stem: str = dataset_evaluation_descriptor
     if n_ref_edges:
@@ -376,25 +417,56 @@ def get_dataset_evaluation_file_path(
 
 
 if __name__ == "__main__":
-    evaluate_dataset_for_pattern(
-        dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
-        pattern_config_name="1-1_original-pattern",
-        pattern_configs=PATTERN_CONFIGS,
-    )
-    evaluate_dataset_for_pattern(
-        dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
-        pattern_config_name="2-1_preds_semsim-fix_wildcard",
-        pattern_configs=PATTERN_CONFIGS,
-        semsim_threshold_range=frange(0.0, 1.0, 0.01),
-        ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
-    )
-    evaluate_dataset_for_pattern(
-        dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
-        pattern_config_name="2-2_preds_semsim-fix-lemma_wildcard",
-        pattern_configs=PATTERN_CONFIGS,
-        semsim_threshold_range=frange(0.0, 1.0, 0.01),
-        ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
-    )
+
+    # evaluate_dataset_for_pattern(
+    #     dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #     pattern_config_name="1-1_original-pattern",
+    #     pattern_configs=PATTERN_CONFIGS,
+    # )
+    # evaluate_dataset_for_pattern(
+    #     dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #     pattern_config_name="2-1_preds_semsim-fix_wildcard",
+    #     pattern_configs=PATTERN_CONFIGS,
+    #     semsim_configs_name="w2v",
+    #     semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
+    # )
+    # evaluate_dataset_for_pattern(
+    #     dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #     pattern_config_name="2-2_preds_semsim-fix-lemma_wildcard",
+    #     pattern_configs=PATTERN_CONFIGS,
+    #     semsim_configs_name="w2v",
+    #     semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
+    # )
+    # evaluate_dataset_for_pattern(
+    #     dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #     pattern_config_name="2-1_preds_semsim-fix_wildcard",
+    #     pattern_configs=PATTERN_CONFIGS,
+    #     semsim_configs_name="cn",
+    #     semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
+    # )
+    # evaluate_dataset_for_pattern(
+    #     dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #     pattern_config_name="2-2_preds_semsim-fix-lemma_wildcard",
+    #     pattern_configs=PATTERN_CONFIGS,
+    #     semsim_configs_name="cn",
+    #     semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
+    # )
+
+    # for sample_mod_ in range(1, 6):
+    #     for n_ref_edges_ in [1, 10]:
+    #         evaluate_dataset_for_pattern(
+    #             dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #             pattern_config_name="2-3_preds_semsim-ctx_wildcard",
+    #             pattern_configs=PATTERN_CONFIGS,
+    #             semsim_configs_name="e5",
+    #             semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #             n_ref_edges=n_ref_edges_,
+    #             sample_mod=sample_mod_,
+    #         )
 
     for sample_mod_ in range(1, 6):
         for n_ref_edges_ in [1, 10]:
@@ -402,7 +474,32 @@ if __name__ == "__main__":
                 dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
                 pattern_config_name="2-3_preds_semsim-ctx_wildcard",
                 pattern_configs=PATTERN_CONFIGS,
+                semsim_configs_name="e5-at",
                 semsim_threshold_range=frange(0.0, 1.0, 0.01),
                 n_ref_edges=n_ref_edges_,
                 sample_mod=sample_mod_,
             )
+    #
+    # for sample_mod_ in range(1, 6):
+    #     for n_ref_edges_ in [1, 10]:
+    #         evaluate_dataset_for_pattern(
+    #             dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #             pattern_config_name="2-3_preds_semsim-ctx_wildcard",
+    #             pattern_configs=PATTERN_CONFIGS,
+    #             semsim_configs_name="gte",
+    #             semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #             n_ref_edges=n_ref_edges_,
+    #             sample_mod=sample_mod_,
+    #         )
+    #
+    # for sample_mod_ in range(1, 6):
+    #     for n_ref_edges_ in [1, 10]:
+    #         evaluate_dataset_for_pattern(
+    #             dataset_id="dataset_conflicts_1-1_wildcard_preds_subsample-2000_recreated",
+    #             pattern_config_name="2-3_preds_semsim-ctx_wildcard",
+    #             pattern_configs=PATTERN_CONFIGS,
+    #             semsim_configs_name="gte-at",
+    #             semsim_threshold_range=frange(0.0, 1.0, 0.01),
+    #             n_ref_edges=n_ref_edges_,
+    #             sample_mod=sample_mod_,
+    #         )
