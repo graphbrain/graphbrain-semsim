@@ -30,6 +30,8 @@
 \usepackage{rotating}
 \usepackage{pdfpages}
 \usepackage{csquotes}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \usepackage{array}  % needed for '\newcolumntype' command
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
@@ -291,6 +293,8 @@ single-word and multi-word reference
 Square bracket notation 
 
 \section{Contextual Embedding-based Matching}
+\textit{Contextual Neural Embedding-based Semantic Similarity} (CNESS)
+
 
 i generally like your idea of contrasting the discrete and continous space as it allows to point out that there cant be one single point, also for a set of words which represents the meaning, but rather some subspace depending on the specific context
 Regarding the point of the semantic entities in continuous space being either word- or phrase based, the important difference is, that in case of semsim with context we do not compare the embedding representation of the phrases themselves. rather the sententences/phrases influence the embedding representations of the word (or maybe phrases)
@@ -390,15 +394,14 @@ The conflicts case study follows the approach presented in \cite[p.~22]{menezes
 \todo[inline]{should I explain why specifically the conflicts and not some other case study (i.e. dataset) --> because there was none... but then I need to show why there was none and what are the criteria for a case study to be suitable to evaluate the system}
 
 \subsection{Reddit Worldnews Corpus}
-The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}\footnote{\url{http://reddit.com/r/worldnews}}, which is described as: “A place for major news from around the world, excluding US-internal news.” This corpus will in the following be referred to as the \textit{Worldnews-Corpus} and contains 479,384 news headers. 
+The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}, which is described as: “A place for major news from around the world, excluding US-internal news.”\footnote{\url{http://reddit.com/r/worldnews}} This corpus contains 479,384 news headers and is in the following referred to as the \textit{Worldnews-Corpus}.
 
-Each of these headers is comprised of a single sentence and is represented as a sequence root edge in the corresponding SH. The SH that is constructed from this corpus will in the following be referred to as the \textit{Worldnews-SH}.
-
+Each of these headers is comprised of a single sentence and is represented as a sequence root edge in the SH constructed from it. In the following this SH is referred to as the \textit{Worldnews-SH}. Parsing errors that may potentially occur during this constructed and can obstruct a correct retrieval of a wrongly parsed edge i.e. wrongly represented sentence. These errors are out of scope of this work. All edges in the Worldnews-SH are assumed to be correctly parsed.
 \todo{refer to examples}
 
 \subsection{Original Conflict Pattern}
 
-Pattern \ref{pat:original-conflict} is used in \cite[p.~22]{menezesSemanticHypergraphs2021} to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}:
+Pattern \ref{pat:original-conflict} is used in \cite[p.~22]{menezesSemanticHypergraphs2021} to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}.
 
 \begin{pattern}
   \normalfont\sffamily
@@ -409,35 +412,49 @@ Pattern \ref{pat:original-conflict} is used in \cite[p.~22]{menezesSemanticHyper
   \label{pat:original-conflict}
 \end{pattern}
 
-Matching this pattern against the Worldnews-SH yields XYZ matches. \todo{add examples}
+%Matching this pattern against the Worldnews-SH yields XYZ matches. \todo{add examples}
 
 
 \subsection{SemSim Conflict Patterns}
-The part of \cref{pat:original-conflict} that mostly defines its retrieval performance is the list of predicates. This list has been manually constructed by \cite{menezesSemanticHypergraphs2021} by investigating the Worldnews-Corpus. To evaluate the NESS-SHPH, this pattern will be modified to include the semsim functional pattern instead of the lemma functional pattern and the fixed word list. The general form of of such a pattern is shown by \cref{pat:semsim-conflict}. This means only the matching of the predicate will be subject NESS, which allows to isolate the effects of the integration of NESS in the pattern matching process. 
+The part of \cref{pat:original-conflict} that mostly defines its retrieval performance is the list of predicates. This list has been manually constructed by \cite{menezesSemanticHypergraphs2021} by investigating the Worldnews-Corpus. \todo{add proof / restructure this} To evaluate the NESS-SHPH, this pattern will be modified to include the semsim functional pattern instead of the lemma functional pattern and the fixed word list. The general form of of such a pattern is shown by \cref{pat:semsim-conflict}. This means only the matching of the predicate will be subject NESS, which allows to isolate the effects of the integration of NESS in the pattern matching process. 
 
 \begin{pattern}
   \normalfont\sffamily
   \centering
   ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
   ( semsim/J PRED/P .../P )
-  \caption{Original conflict pattern}
+  \caption{General SemSim pattern}
   \label{pat:semsim-conflict}
 \end{pattern}
 
+
+\subsection{Edge predicate lemmas}
+Every matching edge in the full dataset contains a predicate sub-edge, which will be assigned to the \textsf{PRED} variable. Everyone of those sub-edges has an innermost atom which is a verb that has a lemma. In the following this will be called the \textit{predicate lemma} of an edge. Each of the edges of \cref{pat:original-conflict} or a pattern in the form of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
+
 \subsection{Conflict Dataset}
-To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an statement of conflict or not. Since such a dataset did not exists it needs to be constructed. In the following the characteristics and the creation process of the dataset which was used for the evaluation in this case study will be shown.
+To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an statement of conflict or not. Since such a dataset did not exists it needs to be constructed. In the following the characteristics and the construction process of the dataset which was used for the evaluation in this case study will be shown.
 
 \subsubsection{Definition of Conflict}
-Firstly an expression of conflict in the context of this case study is defined as a sentence which bears the following characteristics:
+An expression of conflict in the context of this case study is defined as a sentence which fulfils the following properties:
 
 \begin{displayquote}
 There is a conflict between two explicitly named actors, wherever these actors are mentioned in the sentence; whereby a conflict is defined as antagonizing desired outcomes.
-
 \end{displayquote}
 
-\subsubsection{Creation Process}
+\subsubsection{Desired Characteristics}
+\label{sec:dataset-characteristics}
+To effectively evaluate the effectiveness of the application of NESS by matching a pattern in the form of \cref{pat:semsim-conflict}, the dataset used for this should have the following characteristics:
+
+\begin{itemize}
+	\item Contain the largest possible number of unique predicate lemmas
+	\item Contain the largest possible number of edges per unique predicate lemma
+\end{itemize}
+
+On the one hand it is desired to have as many different unique predicate lemmas as possible in the dataset to be able to evaluate whether NESS can differentiate if a predicate lemma indicates an expression of conflict or not. On the other hand it is desired to have as many different edges per unique lemma as possible in the dataset to be able to evaluate whether CNESS is able to differentiate if edges represent an expression of conflict or not, given that they correspond to the same predicate lemma.
+
+\subsubsection{Construction Process}
 The set of edges that can be retrieved by a pattern following the form of \cref{pat:semsim-conflict} is restricted the general structure of this pattern.
-That means every set of matches for a pattern of this form will be a subset of the matches of the pattern which uses a wildcard operator to match the predicate (see \cref{pat:wildcard-pred}). The results of matching this pattern against the Worldnews-SH are therefore used as the basis set of edges from which the conflict dataset is constructed instead of the entirety of all its sequence root edges.
+That means every set of matching edges for a pattern of this form will be a subset of the matching edges of the pattern which uses a wildcard operator to match the predicate (see \cref{pat:wildcard-pred}). The results of matching this pattern against the Worldnews-SH are therefore used as the basis set of edges from which the conflict dataset is constructed, instead of the entirety of all its sequence root edges.
 
 \begin{pattern}
   \normalfont\sffamily
@@ -447,16 +464,84 @@ That means every set of matches for a pattern of this form will be a subset of t
   \label{pat:wildcard-pred}
 \end{pattern}
 
+Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in \(n_{f} = 69 380\) matching edges. In the following the set of those edges will be referred to as the \textit{full} dataset.
 
-\paragraph{Sampling}
-Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in
+\paragraph{Sampling} Due to the excessive time required for labelling \(n_f\) edges and the limited availability of just three annotators, the full dataset needs to be subsampled to create the labelled dataset. The edges in the full dataset correspond to \(n_{l} = 1800\)\todo{exact number} unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every  predicate lemma contained in the full dataset is statistically represented multiple times in the subsampled dataset.
 
-sampling the dataset from the pattern matching results
---> lemma-based binning
+A dataset size of \(n_{s}=2000\) was chosen, wich means \(m_{l} < 2\) and  \(n_s << n_f\). This entails that a trade-off between the desired dataset characteristics has to be made. To account for this, a sampling method is applied that offers more control over the distribution of predicate lemmas in the subsampled dataset than uniform random sampling does. This sampling method is based on the idea of \textit{Stratified Sampling} \cite{parsonsStratifiedSampling2017} \todo{is this correct?} and is described in detail in \cref{algo:dataset-sampling}. 
+
+The procedure splits the full dataset into multiple bins after the edges are sorted by number of occurrence of their predicate lemma and then uniformly randomly samples from each bin. This method guarantees that predicate lemmas which correspond to a relatively small number of edges in the full dataset will be represented in the subsampled dataset, while still representing the distribution of the full dataset. \todo{do I have to show this in some way? should I then mention it at all?}
 
 
-\paragraph{Labeling}
--> 50 edges labeled by everyone, then asses disagreements and refine understanding of conflict. 
+\begin{algorithm}
+\begin{enumerate}
+	\item Create a list of tuples \(t\) of edges and their corresponding predicate lemma: \\ \(L = [(l_k, e_i), ...]\) with \(k \in \{0,...,m\}\) and \(i \in \{0,...,n\}\)
+	\item Sort this list by the number of tuples containing a predicate lemma to create the list: \\ \(L_{sort} = [(l_0, e_0), ... (l_m, e_n)]\), so that:
+	\begin{itemize}
+		\item \(n_k\) is the number of tuples containing a lemma \(l_k\)
+		\item \(t_j\) with \(j > i\) is a tuple wich sorted after tuple \(t_i\)
+		\item \(n_o >= n_p\) if \(t_i = (l_o, e_i)\) and \(t_j = (l_p, e_j)\)
+	\end{itemize}			
+	\item Split the list \(L_{sort}\) into \(n_{b}\) bins.
+	\item Uniformly sample \(n_{sb}\) items from each bin.
+	\item Build a set of all edges \(e\) contained in the sampled tuples.
+\end{enumerate}
+\caption{Dataset sampling algorithm}
+\label{algo:dataset-sampling}
+\end{algorithm}
+
+The resulting dataset size is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the dataset that is labelled.
+
+
+\paragraph{Labelling}
+The labelling task is shared between the three annotators. A given edge will be either labeled as \textit{conflict} or \textit{no conflict} by an annotator following the definition given above. Because of the aforementioned time constraints, every edge is only labeled by one annotator. To nonetheless ensure a consistent labelling among all annotators, a set of 50 edge is labelled by all three annotators. Every edge for which a disagreement in labelling occurs between at least two of the annotators, is inspected to reach an agreement on the label. Utilizing this process, the annotators understanding of what constitutes an expression of conflict is refined. Following this preliminary step, the \(n_s\) edge of the dataset are equally distributed among the three annotators and individually labelled by them.
+
+% It was confirmed that the percentage of edges that represent an expression of conflict in relation to all edges in the subset given to an annotator did not vary more than ... among all three annotators.
+
+\subsubsection{Dataset Description}
+
+
+\begin{table}
+\begin{tabular}{lrrr}
+\toprule
+\multicolumn{1}{l}{Dataset name}		& \multicolumn{1}{l}{Number of} 		& \multicolumn{1}{l}{Number of} 		& \multicolumn{1}{l}{Number of} \\
+\multicolumn{1}{l}{} 				& \multicolumn{1}{l}{all edges} 		& \multicolumn{1}{l}{conflict edges} 	& \multicolumn{1}{l}{no conflict edges} \\
+\multicolumn{1}{l}{} 				& \multicolumn{1}{l}{} 				& \multicolumn{1}{l}{(\% of all edges)} & \multicolumn{1}{l}{(\% of all edges)} \\
+\midrule
+Worldnews-SH						& 479384		& -/-				& -/- \\
+pred\_wildcard\_full				& 69380 		& -/- 				& -/- \\
+pred\_wildcard\_subsample-2000		& 2000 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
+\bottomrule
+\end{tabular}
+\caption{Dataset descriptions}
+\label{tab:dataset-descriptions}
+\end{table}
+
+
+\subsection{Evaluation Process}
+
+
+\subsubsection{Evaluation Patterns}
+
+\begin{table}
+\begin{tabular}{lcccc}
+\toprule
+\multicolumn{1}{l}{Pattern name}		& \multicolumn{1}{c}{Lemma}		& \multicolumn{1}{c}{SemSim}	& \multicolumn{1}{c}{Requires}		& \multicolumn{1}{c}{Requires} \\
+\multicolumn{1}{l}{} 				& \multicolumn{1}{c}{based} 		& \multicolumn{1}{c}{type} 		& \multicolumn{1}{c}{ref. words} 	& \multicolumn{1}{c}{ref. edges} \\
+\midrule
+Original conflict pattern			& Yes 		& -/- 		& -/-		& -/- \\
+pred\_semsim-fix\_wildcard			& No			& FIXED		& Yes		& No \\
+pred\_semsim-fix-lemma\_wildcard 	& Yes 		& FIXED		& Yes		& No \\
+pred\_semsim-ctx\_wildcard			& No			& CONTEXT	& No			& Yes \\
+\bottomrule
+\end{tabular}
+\caption{Evaluation patterns}
+\label{tab:evaluation-patterns}
+\end{table}
+
+
+
+
 
 %To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \footnote{Based on \url{https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population}, Accessed on XYZ} is used (listed in descending order by population size):
 %
