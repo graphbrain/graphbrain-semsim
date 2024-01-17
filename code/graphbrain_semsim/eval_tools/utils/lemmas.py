@@ -5,8 +5,8 @@ from graphbrain.hypergraph import Hypergraph, Hyperedge, hedge
 from graphbrain.utils.lemmas import deep_lemma
 
 from graphbrain_semsim import logger, get_hgraph
-from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, PatternMatch
-from graphbrain_semsim.eval_tools.datasets.dataset_models import LemmaMatch
+from graphbrain_semsim.case_studies.models import PatternEvaluationRun, PatternMatch
+from graphbrain_semsim.datasets.models import LemmaMatch
 
 
 def get_atom(edge: Hyperedge) -> Atom:
@@ -113,7 +113,7 @@ def get_words_and_lemmas_from_matches(
     return word_lemmas
 
 
-def get_lemma_to_matches_mapping(eval_run: EvaluationRun, hg_name: str, var_name: str):
+def get_lemma_to_matches_mapping(eval_run: PatternEvaluationRun, hg_name: str, var_name: str):
     hg: Hypergraph = get_hgraph(hg_name)
     return get_words_and_lemmas_from_matches(
         eval_run.matches, var_name, hg, return_lemma_to_matches=True
