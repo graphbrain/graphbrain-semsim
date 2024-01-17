@@ -10,18 +10,6 @@ from graphbrain.patterns.semsim.instances import SemSimInstance as OriginalSemSi
 from graphbrain.semsim import SemSimType
 
 
-# class RefEdge(BaseModel):
-#     edge: str
-#     run_id: str
-#     variable_threshold: Optional[float] = None
-#
-#
-# class RefEdgesConfig(BaseModel):
-#     source_scenario: str
-#     num_ref_edges: int
-#     num_matches_percentile: Optional[int] = None
-
-
 class PatternMatch(BaseModel):
     edge: Hyperedge
     edge_text: str
@@ -54,11 +42,8 @@ class PatternEvaluationRun(BaseModel):
     pattern: str
     skip_semsim: bool
     dataset_name: Optional[str] = None
-    # sub_pattern_configs: dict[str, CompositionPattern]
-    # ref_edges_config: Optional[RefEdgesConfig] = None
 
     # set on runtime
-    # ref_edges: Optional[list[str]] = None
     matches: Optional[list[PatternMatch]] = None
     start_time: Optional[datetime.datetime] = None
     end_time: Optional[datetime.datetime] = None
@@ -80,10 +65,6 @@ class PatternEvaluationConfig(BaseModel):
     hg_sequence: str
     skip_semsim: bool = False
     sub_pattern_configs: dict[str, CompositionPattern]
-    # semsim_configs: Optional[dict[SemSimType, Optional[SemSimConfig]]] = None
-    # threshold_values: Optional[dict[str, Optional[list[float]]]] = None
-    # ref_edges_configs: Optional[list[RefEdgesConfig]] = None
-    # ref_edges: Optional[list[list[str]]] = None
 
     @classmethod
     def get_id(cls, case_study: str, config_name: str) -> str:

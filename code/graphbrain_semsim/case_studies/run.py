@@ -19,14 +19,9 @@ def main(args):
         pattern_configs_to_run = [scenario for scenario in PATTERN_CONFIGS if scenario.name in args.pattern_configs]
         assert len(pattern_configs_to_run) == len(args.pattern_configs), "Invalid pattern config IDs"
 
-    # ref_edges: dict[str, list[list[RefEdge]]] = get_and_save_ref_edges(
-    #     CASE_STUDY, REF_EDGES_FILE_PATH, EVAL_SCENARIOS, override=args.override_ref_edges
-    # )
-
     for config_idx, config in enumerate(pattern_configs_to_run):
         logger.info("-----")
         logger.info(f"Evaluating pattern config [{config_idx + 1}/{len(pattern_configs_to_run)}]: '{config.id}'")
-        # run(scenario, ref_edges=ref_edges, override=args.override, log_matches=args.log_matches)
         evaluate_pattern(config, override=args.override, log_matches=args.log_matches)
 
 
@@ -37,6 +32,5 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pattern-configs", nargs="+", help="List of pattern config IDs to run, separated by space"
     )
-    # parser.add_argument("--override-ref-edges", action="store_true", help="Enable override mode for saving ref edges")
     main_args = parser.parse_args()
     main(main_args)

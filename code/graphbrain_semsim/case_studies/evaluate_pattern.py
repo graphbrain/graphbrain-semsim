@@ -33,20 +33,6 @@ def evaluate_pattern(
         lemma_match.match.edge for lemma_match in dataset.all_lemma_matches
     ] if dataset else None
 
-    # # initialize semsim matchers
-    # logger.info("---")
-    # logger.info("Initializing SemSim matchers...")
-    # if scenario.semsim_configs:
-    #     for semsim_type, semsim_config in scenario.semsim_configs.items():
-    #         init_matcher(semsim_type, semsim_config)
-    #
-    # # set reference edges if given and not already set
-    # if not scenario.ref_edges and scenario.id in ref_edges:
-    #     scenario.ref_edges = [
-    #         [ref_edge.edge for ref_edge in ref_edges_] for ref_edges_ in ref_edges[scenario.id]
-    #     ]
-
-    # eval_runs: list[EvaluationRun] = get_eval_runs(scenario, hg)
     eval_runs: list[PatternEvaluationRun] = [prepare_eval_run(pattern_config, dataset)]
     for eval_run in eval_runs:
         eval_run_description: str = f"eval run [{eval_run.run_idx + 1}/{len(eval_runs)}]: '{eval_run.id}'"
@@ -99,18 +85,16 @@ def exec_eval_run(
         log_matches: bool = False
 ):
     logger.info(f"Pattern: {eval_run.pattern}")
-    # if eval_run.ref_edges:
-    #     logger.info(f"Ref edges: {eval_run.ref_edges}")
-
     eval_run.start_time = datetime.now()
 
     eval_run.matches = []
-    # for edge, variables in hg.match_sequence(scenario.hg_sequence, eval_run.pattern, ref_edges=eval_run.ref_edges):
+
     match_iterator: Iterator = hg.match_sequence(
         pattern_config.hg_sequence, eval_run.pattern, skip_semsim=eval_run.skip_semsim
     ) if not edges_subset else hg.match_edges(
         edges_subset, eval_run.pattern, skip_semsim=eval_run.skip_semsim
     )
+
     for match in tqdm(match_iterator, total=len(edges_subset) if edges_subset else None):
         semsim_instances = None
         if eval_run.skip_semsim:
@@ -152,93 +136,3 @@ def log_pattern_match(pattern_match: PatternMatch):
     logger.info(pattern_match.variables_text)
     if pattern_match.semsim_instances:
         logger.info(pattern_match.semsim_instances)
-
-
-# def get_eval_runs(scenario: EvaluationScenario, hg: Hypergraph) -> list[EvaluationRun]:
-#     logger.info("---")
-#     logger.info("Preparing evaluation runs...")
-#
-#     if not scenario.threshold_values and not scenario.ref_edges:
-#         return [prepare_eval_run(scenario)]
-#
-#     threshold_combinations: list[dict[str, float]] | None = get_threshold_combinations(scenario)
-#     ref_edges_idxes: list[int] | None = list(range(len(scenario.ref_edges))) if scenario.ref_edges else None
-#
-#     parameter_combinations: list[tuple] = list(itertools.product(
-#         *(parameter for parameter in [threshold_combinations, ref_edges_idxes] if parameter)
-#     ))
-#
-#     # eval_runs: list[EvaluationRun] = []
-#     # for run_idx, parameter_combination in enumerate(parameter_combinations):
-#     #     if eval_run := prepare_eval_run(scenario, hg, run_idx, *parameter_combination):
-#     #         eval_runs.append(eval_run)
-#     eval_runs: list[EvaluationRun] = [
-#         prepare_eval_run(scenario, hg, run_idx, *parameter_combination)
-#         for run_idx, parameter_combination in enumerate(parameter_combinations)
-#     ]
-#
-#     logger.info(f"Done. Number of evaluation runs: {len(eval_runs)}")
-#     return eval_runs
-
-
-# def prepare_eval_run(
-#         scenario: EvaluationScenario,
-#         run_idx: int = 0,
-#         threshold_combination: dict[str, float] = None,
-#         ref_edges_idx: int = None
-#
-# ) -> EvaluationRun | None:
-#     sub_pattern_configs: dict[str, CompositionPattern] = deepcopy(scenario.sub_pattern_configs)
-#
-#     # transform scenario info into sub-pattern info
-#     for sub_pattern, sub_pattern_config in sub_pattern_configs.items():
-#         sub_pattern_config.components = scenario.sub_pattern_words[sub_pattern]
-#         if threshold_combination:
-#             sub_pattern_config.threshold = threshold_combination.get(sub_pattern)
-#
-#     pattern = make_conflict_pattern(
-#         preds=sub_pattern_configs["preds"],
-#         preps=sub_pattern_configs["preps"],
-#         countries=sub_pattern_configs.get("countries"),
-#     )
-#
-#     eval_run: EvaluationRun = EvaluationRun(
-#         case_study=scenario.case_study,
-#         scenario=scenario.id,
-#         run_idx=run_idx,
-#         pattern=pattern,
-#         sub_pattern_configs=sub_pattern_configs,
-#         ref_edges_config=scenario.ref_edges_configs[ref_edges_idx] if ref_edges_idx is not None else None,
-#         ref_edges=scenario.ref_edges[ref_edges_idx] if ref_edges_idx is not None else None
-#     )
-#
-#     return eval_run
-#
-#
-# def get_threshold_combinations(scenario: EvaluationScenario) -> list[dict[str, float]] | None:
-#     if not scenario.threshold_values:
-#         return None
-#
-#     # create all combinations of thresholds
-#     threshold_combinations: list[dict[str, float]] = []
-#     for threshold_idx in range(get_and_validate_threshold_range_length(scenario)):
-#         threshold_combination: dict[str, float] = {}
-#         for sub_pattern, threshold_range in scenario.threshold_values.items():
-#             threshold_combination[sub_pattern] = threshold_range[threshold_idx]
-#         threshold_combinations.append(threshold_combination)
-#     return threshold_combinations
-#
-#
-# def get_and_validate_threshold_range_length(scenario: EvaluationScenario) -> int:
-#     # assert all threshold ranges are of equal length or of length 1
-#     threshold_range_lens: list[int] = []
-#     for sub_pattern, threshold_range in scenario.threshold_values.items():
-#         assert threshold_range, f"Threshold ranges for sub-pattern '{sub_pattern}' is empty."
-#         if len(threshold_range) > 1:
-#             threshold_range_lens.append(len(threshold_range))
-#     assert all_equal(threshold_range_lens), f"Threshold ranges for sub-patterns are not of equal length (or length 1)"
-#
-#     if threshold_range_lens:
-#         return threshold_range_lens[0]
-#     return 1
-

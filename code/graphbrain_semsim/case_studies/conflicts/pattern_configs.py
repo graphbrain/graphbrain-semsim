@@ -57,6 +57,17 @@ PATTERN_CONFIGS: list[ConflictsPatternEvaluationConfig] = [
         }
     ),
     ConflictsPatternEvaluationConfig(
+        name="1-2_preds_wildcard_preps_wildcard",
+        sub_pattern_configs={
+            "preds": CompositionPattern(
+                type=CompositionType.WILDCARD,
+            ),
+            "preps": CompositionPattern(
+                type=CompositionType.WILDCARD,
+            )
+        }
+    ),
+    ConflictsPatternEvaluationConfig(
         name="2-1_preds_semsim-fix_wildcard",
         skip_semsim=True,
         sub_pattern_configs={
