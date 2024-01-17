@@ -33,6 +33,7 @@ def evaluate_pattern(
         lemma_match.match.edge for lemma_match in dataset.all_lemma_matches
     ] if dataset else None
 
+    # that this is a list is result of legacy implementation, where multiple runs made sense
     eval_runs: list[PatternEvaluationRun] = [prepare_eval_run(pattern_config, dataset)]
     for eval_run in eval_runs:
         eval_run_description: str = f"eval run [{eval_run.run_idx + 1}/{len(eval_runs)}]: '{eval_run.id}'"

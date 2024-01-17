@@ -16,18 +16,6 @@ class ConflictsPatternEvaluationConfig(PatternEvaluationConfig):
     hypergraph: str = HG_NAME
     hg_sequence: str = SEQUENCE_NAME
     skip_semsim: bool = False
-    # sub_pattern_words: dict[str, list[str]] = SUB_PATTERN_WORDS
-    # semsim_configs: dict[SemSimType, SemSimConfig] = {
-    #     SemSimType.FIX: SemSimConfig(
-    #         model_name='word2vec-google-news-300',
-    #         similarity_threshold=0.0
-    #     ),
-    #     SemSimType.CTX: SemSimConfig(
-    #         model_name='intfloat/e5-large-v2',
-    #         similarity_threshold=0.0,
-    #         embedding_prefix="query:"
-    #     )
-    # }
 
 
 PATTERN_CONFIGS: list[ConflictsPatternEvaluationConfig] = [

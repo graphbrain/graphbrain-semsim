@@ -1,7 +1,7 @@
 import logging
 
 from graphbrain_semsim.case_studies.models import CompositionPattern, CompositionType
-from graphbrain_semsim.utils.pattern_making import make_any_fun_pattern, make_semsim_fun_pattern
+from graphbrain_semsim.case_studies.pattern_making import make_any_fun_pattern, make_semsim_fun_pattern
 
 logger = logging.getLogger(__name__)
 
