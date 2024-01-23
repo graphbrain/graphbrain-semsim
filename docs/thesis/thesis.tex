@@ -53,9 +53,10 @@
   within = none
 ]{hedge}
 
-\crefname{pattern}{Pattern}{Pattern}
-\crefname{hedge}{Hyperedge}{Hyperedges}
-
+\Crefname{pattern}{Pattern}{Patterns}
+\crefname{pattern}{pattern}{patterns}
+\Crefname{hedge}{Hyperedge}{Hyperedges}
+\crefname{hedge}{hyperedge}{hyperedges}
 
 
 \usepackage{lipsum}  % produces dummy text
@@ -144,22 +145,34 @@ The aim of the SH framework is to provide a \textit{open} and \textit{adaptive} 
 
 \subsection{Structure}
 
+synonymes: SH, hypergraph, graph.
+
 Edge
 
 Edge Content
 
 Root edge / Sequencen (i use the term "sequence root edge")
 
-\subsection{Syntax}
+\subsection{Syntax / Pattern Matching}
 
 wildcard operator
 
 Variables
 
-Square bracket notation 
+Square bracket notation --> word lists
+
+functional patterns -> lemma
+
+> operator for innermost atom
+
+
+---
 
 Differences between the formal notation and the notation sued in the implementation
 (or should this be contained in the implementation chapter?)
+
+
+
 
 
 \section{Semantic Similarity}
@@ -283,23 +296,29 @@ pattern works only for atoms
 
 
 \section{Fixed Word Embedding-based Matching}
+(FNESS)
+ 
 word2vec via gensim
 
 discussion about using transformer models for single word embeddings?
 
-single-word and multi-word reference
+
+reference words: single-word and multi-word reference
 
 \label{sec:semsim-multi-word}
 Square bracket notation 
 
 \section{Contextual Embedding-based Matching}
-\textit{Contextual Neural Embedding-based Semantic Similarity} (CNESS)
+\textit{Contextual Neural Embedding-based Semantic Similarity} 
+(CNESS)
 
 
 i generally like your idea of contrasting the discrete and continous space as it allows to point out that there cant be one single point, also for a set of words which represents the meaning, but rather some subspace depending on the specific context
 Regarding the point of the semantic entities in continuous space being either word- or phrase based, the important difference is, that in case of semsim with context we do not compare the embedding representation of the phrases themselves. rather the sententences/phrases influence the embedding representations of the word (or maybe phrases)
  I tend to see this a bit like a blurring algo. The meaning of each token starts bleeding into its neighbours.
 
+
+reference edges
 
 \subsection{Context References}
 \subsection{Token Mapping}
@@ -333,8 +352,16 @@ Transformers
 SpaCy
 
 \section{Modules newly added to the SH Framework}
+Semsim instances
+
+reference edge sample modification parameter
+
+
 \section{Modifications of the SH Pattern Matching}
+skip semsim
+
 \section{Modifications to the Hypergraph database}
+is this really necessary? tok pos etc, but not actually specific to semsim
 
 
 %\section{SH Notation}
@@ -384,62 +411,180 @@ SpaCy
 
 
 % ========== 
-\chapter{Evaluation and Results}
-In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the NESS-SHPM system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. In this case study quantitative results as well as qualitative examinations of the behaviour of NESS-SHPM are conducted. The quantitative results display the systems performance using metrics which are established for retrieval and classification tasks. The qualitative results exemplary showcase detailed aspects of the systems behaviour in the given use case.
+\chapter{Evaluation}
+In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the NESS-SHPM system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. In this case study quantitative results as well as qualitative examinations of the behaviour of NESS-SHPM are conducted. The quantitative results reflect the systems performance using metrics which are established for retrieval and classification tasks. The qualitative results exemplary showcase detailed aspects of the systems behaviour in the given use case.
 \todo{refer to the RQs more specifically?}
 
 \section{Case Study: Conflicts}
-The conflicts case study follows the approach presented in \cite[p.~22]{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a given SH using a single pattern. In their work they build upon the information extracted by the pattern (e.g. the two conflict parties) to conduct further analysis, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently the task is to to retrieve exactly all those edges whose content is an expression of conflict.
+The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a given SH using a single SH pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently the task is to to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different SH patterns by matching them against a labelled dataset.
 
 \todo[inline]{should I explain why specifically the conflicts and not some other case study (i.e. dataset) --> because there was none... but then I need to show why there was none and what are the criteria for a case study to be suitable to evaluate the system}
 
-\subsection{Reddit Worldnews Corpus}
-The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}, which is described as: “A place for major news from around the world, excluding US-internal news.”\footnote{\url{http://reddit.com/r/worldnews}} This corpus contains 479,384 news headers and is in the following referred to as the \textit{Worldnews-Corpus}.
-
-Each of these headers is comprised of a single sentence and is represented as a sequence root edge in the SH constructed from it. In the following this SH is referred to as the \textit{Worldnews-SH}. Parsing errors that may potentially occur during this constructed and can obstruct a correct retrieval of a wrongly parsed edge i.e. wrongly represented sentence. These errors are out of scope of this work. All edges in the Worldnews-SH are assumed to be correctly parsed.
-\todo{refer to examples}
-
-\subsection{Original Conflict Pattern}
-
-Pattern \ref{pat:original-conflict} is used in \cite[p.~22]{menezesSemanticHypergraphs2021} to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}.
-
-\begin{pattern}
-  \normalfont\sffamily
-  \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
-  ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
-  \caption{Original conflict pattern}
-  \label{pat:original-conflict}
-\end{pattern}
-
-%Matching this pattern against the Worldnews-SH yields XYZ matches. \todo{add examples}
-
-
-\subsection{SemSim Conflict Patterns}
-The part of \cref{pat:original-conflict} that mostly defines its retrieval performance is the list of predicates. This list has been manually constructed by \cite{menezesSemanticHypergraphs2021} by investigating the Worldnews-Corpus. \todo{add proof / restructure this} To evaluate the NESS-SHPH, this pattern will be modified to include the semsim functional pattern instead of the lemma functional pattern and the fixed word list. The general form of of such a pattern is shown by \cref{pat:semsim-conflict}. This means only the matching of the predicate will be subject NESS, which allows to isolate the effects of the integration of NESS in the pattern matching process. 
-
-\begin{pattern}
-  \normalfont\sffamily
-  \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
-  ( semsim/J PRED/P .../P )
-  \caption{General SemSim pattern}
-  \label{pat:semsim-conflict}
-\end{pattern}
-
-
-\subsection{Edge predicate lemmas}
-Every matching edge in the full dataset contains a predicate sub-edge, which will be assigned to the \textsf{PRED} variable. Everyone of those sub-edges has an innermost atom which is a verb that has a lemma. In the following this will be called the \textit{predicate lemma} of an edge. Each of the edges of \cref{pat:original-conflict} or a pattern in the form of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
-
-\subsection{Conflict Dataset}
-To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an statement of conflict or not. Since such a dataset did not exists it needs to be constructed. In the following the characteristics and the construction process of the dataset which was used for the evaluation in this case study will be shown.
-
-\subsubsection{Definition of Conflict}
+\subsection{Expressions of Conflict}
+\label{sec:conflict-definition}
 An expression of conflict in the context of this case study is defined as a sentence which fulfils the following properties:
 
 \begin{displayquote}
 There is a conflict between two explicitly named actors, wherever these actors are mentioned in the sentence; whereby a conflict is defined as antagonizing desired outcomes.
 \end{displayquote}
+
+\subsection{Reddit Worldnews Corpus}
+The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}, which is described as: “A place for major news from around the world, excluding US-internal news.”\footnote{\url{http://reddit.com/r/worldnews}} This corpus contains 479,384 news headers and is in the following referred to as the \textit{Worldnews-Corpus}.
+
+Each of these headers is comprised of a single sentence and is represented as a sequence root edge in the SH constructed from it. In the following this SH is referred to as the \textit{Worldnews-SH}. Parsing errors that may potentially occur during this constructed and can obstruct a correct retrieval of a wrongly parsed edge i.e. wrongly represented sentence. These errors are out of scope of this work. All edges in the Worldnews-SH are assumed to be correctly parsed.
+
+%These are some randomly selected examples from the Worldnews-Corpus:
+%\begin{itemize}
+%	\item Example
+%	\item Example
+%	\item Example
+%\end{itemize}
+%
+%\todo{add examples}
+
+
+\subsection{Semantic Hypergraph Patterns}
+\label{sec:sh-patterns}
+The SH patterns that are used in this evaluation all have the same general form to isolate the effect of replacing a purely symbolic matching against a specific word or list of words with NESS-SHMP. In this section the general form of these pattern will be described, which entails consequences for the creation of the labelled dataset described in \cref{sec:conflict-dataset}. 
+
+%The retrieval performance of the original purely symbolic pattern defined by \citef{menezesSemanticHypergraphs2021} is compared against the retrieval performance of patterns containing some form of the semsim functional pattern. \todo{remove?}
+
+
+\subsubsection{Original Conflict Pattern}
+\Cref{pat:original-conflict} is originally defined in \citef[p.~22]{menezesSemanticHypergraphs2021} and is therefore referred to as the \textit{original conflict pattern}. It is used to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}. As mentioned before, the assignment of these variables is irrelevant for this case study.
+
+The original conflict patterns contains two sub-patterns which utilize word lists. These sub-patterns match the trigger sub-edge and predicate sub-edge of a candidate edge respectively and are in following referred to as \textit{trigger sub-pattern} and \textit{predicate sub-pattern}. If not stated otherwise these terms will refer to \cref{pat:original-conflict}. 
+
+\begin{itemize}
+	\item \textbf{\textsf{Trigger sub-pattern:}} \textsf{[against,for,of,over]/T}
+	\item \textbf{\textsf{Predicate sub-pattern:}}
+		\textsf{( PRED/P.{so,x} ) \(\wedge\) \\ ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )}
+\end{itemize}
+
+In the trigger sub-pattern the content of the candidate trigger sub-edge is directly matched against a list of prepositions, which are in the following referred to as the \textit{conflict prepositions}. In case of the predicate sub-pattern, the word list is matched against the lemma of the innermost atom of the candidate predicate sub-edge, which is always a verb. The list of verbs used here will in the following be referred to as the \textit{conflict verbs}.
+
+\begin{itemize}
+	\item \textbf{\textsf{Conflict prepositions:}} against, for, of, over
+	\item \textbf{\textsf{Conflict verbs:}} accuse, arrest, clash, condemn, kill, slam, warn
+\end{itemize}
+
+
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\
+  ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
+  \caption{Original conflict pattern}
+  \label{pat:original-conflict}
+\end{pattern}
+
+
+\subsubsection{Wildcard Conflict Patterns}
+\label{sec:wildcard-conflict-patterns}
+Replacing either the trigger sub-pattern, the predicate sub-pattern or both of them with a semsim function are the options for utilizing NESS-SHPM in a modified version of \cref{pat:original-conflict} without modifying the general structure of the pattern. To evaluate which of these options are best suited to evaluate the retrieval performance of NESS-SHPM, three \textit{wildcard conflict patterns} are constructed. In these patterns the predicate sub-pattern (\cref{pat:wildcard-pred}) or the trigger sub-pattern (\cref{pat:wildcard-prep}) are replaced by the wildcard operator. 
+%or both (\cref{pat:wildcard-pred-prep})
+
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ ( PRED/P */P )
+  \caption{Predicate wildcard pattern}
+  \label{pat:wildcard-pred}
+\end{pattern}
+
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C */T TOPIC/[RS] ) \(\wedge\) \\  ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
+  \caption{Trigger wildcard pattern}
+  \label{pat:wildcard-prep}
+\end{pattern}
+
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  ( */P.{so,x} SOURCE/C TARGET/C */T TOPIC/[RS] )
+%  \caption{Predicate and trigger wildcard pattern}
+%  \label{pat:wildcard-pred-prep}
+%\end{pattern}
+
+\paragraph{Preliminary Evaluation}
+The three wildcard conflict patterns are matched against the Worldnews-SH and the number of matches is recorded. Comparing the number of matches of these patterns shows which of the sub-patterns is most influential for the retrieval performance of \cref{pat:original-conflict}. \Cref{tab:wildcard-pattern-evaluation} shows the results of these preliminary evaluations as well as the number of matches that result from matching \cref{pat:original-conflict} against the Worldnes-SH. It can be seen that the choice of conflict verbs is much more influential on the number of matches than the choice of conflict prepositions when compared to the number of matches resulting from the original conflict pattern. While replacing the predicate sub-pattern with a wildcard operator yields an increase with a factor of \(12,45\), replacing the trigger sub-pattern with a wildcard operator only yields and increase with a factor of \(1,07\). 
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\multicolumn{1}{l}{Pattern name}				& \multicolumn{1}{l}{Number of matches} \\
+\midrule
+Original conflict pattern					& 5766	\\
+Predicate wildcard pattern					& 71804 \\
+Trigger wildcard pattern						& 6154	\\
+%Predicate and trigger wildcard pattern		& 79431	\\
+\bottomrule
+\end{tabular}
+\caption{Results of matching the wildcard patterns against the Worldnews-SH}
+\label{tab:wildcard-pattern-evaluation}
+\end{table}
+
+
+
+\subsubsection{SemSim Conflict Patterns}
+Based on the result of the preliminary evaluation in \cref{sec:wildcard-conflict-patterns}, the predicate sub-pattern of \cref{pat:original-conflict} is replaced by different forms of semsim functional patterns to construct different \textit{semsim conflict patterns}. These patterns are then used to evaluate the effects of utilizing NESS-SHPM. The trigger sub-pattern is not modified to better isolate these effects in comparison to purely symbolic SHPM.
+
+\Cref{pat:semsim-conflict} describes the general form of a semsim conflict pattern. The \texttt{<SEMSIM-FUNCTION>} placeholder is replaced with one of the three implemented semsim functions to construct the \textit{semsim-fix conflict pattern} (\cref{pat:semsim-fix-conflict}), \textit{semsim-fix-lemma conflict pattern} (\cref{pat:semsim-fix-lemma-conflict}) and the \textit{semsim-ctx conflict pattern} (\cref{pat:semsim-ctx-conflict}). As \texttt{<SEMSIM-ARGUMENT>} the conflict verb list is used as similarity reference words in \cref{pat:semsim-fix-conflict} and \cref{pat:semsim-fix-lemma-conflict}, which utilize FNESS. In the semsim-ctx conflict pattern, the wildcard operator is used as \texttt{<SEMSIM-ARGUMENT>} since the necessary reference edges can only be provided via an external parameter and not inside the pattern.
+
+
+\begin{pattern}[H]
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( \texttt{<SEMSIM-FUNCTION>}/J PRED/P \texttt{<SEMSIM-ARGUMENT>}/P )
+  \caption{General SemSim conflict pattern}
+  \label{pat:semsim-conflict}
+\end{pattern}
+
+\begin{pattern}[H]
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( semsim/J PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]//P )
+  \caption{semsim-fix conflict pattern}
+  \label{pat:semsim-fix-conflict}
+\end{pattern}
+
+\begin{pattern}[H]
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( semsim-fix-lemma/J PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]//P )
+  \caption{semsim-fix-lemma conflict pattern}
+  \label{pat:semsim-fix-lemma-conflict}
+\end{pattern}
+
+\begin{pattern}[H]
+  \normalfont\sffamily
+  \centering
+  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
+  ( semsim-ctx/J PRED/P */P )
+  \caption{semsim-ctx conflict pattern}
+  \label{pat:semsim-ctx-conflict}
+\end{pattern}
+
+
+
+\subsection{Conflict Dataset}
+\label{sec:conflict-dataset}
+To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an expression of conflict or not. Since such a dataset does not exists it needs to be constructed. In the following the construction process of this \textit{conflict dataset} (CD), which is used for the evaluation in this case study, and the datasets characteristics are discussed.
+
+
+\subsubsection{Base Edge Set}
+The set of edges that can be retrieved by a conflict pattern, i.e. the original conflict pattern or a semsim conflict pattern is restricted the general form of these patterns. This entails that, given the same SH, every set of matching edges of a pattern of this form will be a subset of the matching edges of the predicate wildcard pattern (\cref{pat:wildcard-pred}). The set of edges resulting form matching this pattern against the Worldnews-SH are therefore used as the \textit{base edge set} (BES) from which the conflict dataset is constructed, instead of the entirety of all the hypergraphs sequence root edges.
+
+Every edge in the BES has a predicate sub-edge that has an innermost atom, which is a verb that has a lemma. In the following this is called the \textit{predicate lemma} of an edge. Each of the edges matching \cref{pat:original-conflict} or a pattern in the form of of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
+
+%Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in \(n_{f} = 69 380\) matching edges. In the following the set of those edges will be referred to as the \textit{full dataset} (FD).\todo{add examples}
 
 \subsubsection{Desired Characteristics}
 \label{sec:dataset-characteristics}
@@ -453,20 +598,15 @@ To effectively evaluate the effectiveness of the application of NESS by matching
 On the one hand it is desired to have as many different unique predicate lemmas as possible in the dataset to be able to evaluate whether NESS can differentiate if a predicate lemma indicates an expression of conflict or not. On the other hand it is desired to have as many different edges per unique lemma as possible in the dataset to be able to evaluate whether CNESS is able to differentiate if edges represent an expression of conflict or not, given that they correspond to the same predicate lemma.
 
 \subsubsection{Construction Process}
-The set of edges that can be retrieved by a pattern following the form of \cref{pat:semsim-conflict} is restricted the general structure of this pattern.
-That means every set of matching edges for a pattern of this form will be a subset of the matching edges of the pattern which uses a wildcard operator to match the predicate (see \cref{pat:wildcard-pred}). The results of matching this pattern against the Worldnews-SH are therefore used as the basis set of edges from which the conflict dataset is constructed, instead of the entirety of all its sequence root edges.
+To create the labelled CD, the edges of the dataset need to be manually labelled by human annotators, which is labor-intensive. The BSE contains \(n_b=71804\) edges. Due to the time constrains of this work and the limited availability of three annotators, the BSE needs to be subsampled to create the CD. Since the desired characteristics described above relate the the distribution of predicate lemmas, it is relevant to verify that is possible to determine the predicate lemma for all edges in the edge set from which the CD is sampled.
 
-\begin{pattern}
-  \normalfont\sffamily
-  \centering
-  ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ ( PRED/P */P )
-  \caption{Wildcard predicate pattern}
-  \label{pat:wildcard-pred}
-\end{pattern}
+\paragraph{Filtering}
+Every edge in the BES theoretically corresponds to a predicate lemma, as stated above. Still it can occur that it is not possible to determine the predicate lemma of a given edge to to implementation issues, which out of scope of this work. In these cases an edge is filtered from the BSE, which results in the \textit{filtered base edge set} (FBES). The FBES contains \(n_{f} = 69 380\) edges. 
 
-Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in \(n_{f} = 69 380\) matching edges. In the following the set of those edges will be referred to as the \textit{full} dataset.
 
-\paragraph{Sampling} Due to the excessive time required for labelling \(n_f\) edges and the limited availability of just three annotators, the full dataset needs to be subsampled to create the labelled dataset. The edges in the full dataset correspond to \(n_{l} = 1800\)\todo{exact number} unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every  predicate lemma contained in the full dataset is statistically represented multiple times in the subsampled dataset.
+\paragraph{Sampling} 
+The edges in the full dataset correspond to \(n_{l} = 2195\) unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every predicate lemma contained in the full dataset is statistically represented multiple times in the subsampled dataset.
+\todo{add lemma distribution plot}
 
 A dataset size of \(n_{s}=2000\) was chosen, wich means \(m_{l} < 2\) and  \(n_s << n_f\). This entails that a trade-off between the desired dataset characteristics has to be made. To account for this, a sampling method is applied that offers more control over the distribution of predicate lemmas in the subsampled dataset than uniform random sampling does. This sampling method is based on the idea of \textit{Stratified Sampling} \cite{parsonsStratifiedSampling2017} \todo{is this correct?} and is described in detail in \cref{algo:dataset-sampling}. 
 
@@ -483,61 +623,124 @@ The procedure splits the full dataset into multiple bins after the edges are sor
 		\item \(n_o >= n_p\) if \(t_i = (l_o, e_i)\) and \(t_j = (l_p, e_j)\)
 	\end{itemize}			
 	\item Split the list \(L_{sort}\) into \(n_{b}\) bins.
-	\item Uniformly sample \(n_{sb}\) items from each bin.
+	\item Uniformly sample \(n_{sb}\) tuples from each bin.
 	\item Build a set of all edges \(e\) contained in the sampled tuples.
 \end{enumerate}
 \caption{Dataset sampling algorithm}
 \label{algo:dataset-sampling}
 \end{algorithm}
 
-The resulting dataset size is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the dataset that is labelled.
+The subsampled dataset size resulting from this sampling method is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the CD.
 
 
 \paragraph{Labelling}
-The labelling task is shared between the three annotators. A given edge will be either labeled as \textit{conflict} or \textit{no conflict} by an annotator following the definition given above. Because of the aforementioned time constraints, every edge is only labeled by one annotator. To nonetheless ensure a consistent labelling among all annotators, a set of 50 edge is labelled by all three annotators. Every edge for which a disagreement in labelling occurs between at least two of the annotators, is inspected to reach an agreement on the label. Utilizing this process, the annotators understanding of what constitutes an expression of conflict is refined. Following this preliminary step, the \(n_s\) edge of the dataset are equally distributed among the three annotators and individually labelled by them.
+The labelling task is shared between the three annotators. A given edge will be either labeled as \textit{conflict} or \textit{no conflict} by an annotator following the definition given in \cref{sec:conflict-definition}. Because of the aforementioned time constraints, every edge is only labeled by one annotator. To nonetheless ensure a consistent labelling among all annotators, a set of 50 edge is labelled by all three annotators. Every edge for which a disagreement in labelling occurs between at least two of the annotators, is inspected to reach an agreement on the label. Utilizing this process, the annotators understanding of what constitutes an expression of conflict is refined. Following this preliminary step, the \(n_s\) edges of the dataset are equally distributed among the three annotators and individually labelled by them.
 
 % It was confirmed that the percentage of edges that represent an expression of conflict in relation to all edges in the subset given to an annotator did not vary more than ... among all three annotators.
 
-\subsubsection{Dataset Description}
+\subsubsection{Edge Set Comparison}
+The CD is the result of the filtering, sampling and labelling described above. The size of the Worldnews-SH, FD and SD are listed in \cref{tab:dataset-descriptions} for comparison, along with the number and percentage of edges which are labelled as an expression of conflict and of those which are not.\todo{add examples}
 
 
 \begin{table}
+\centering
 \begin{tabular}{lrrr}
 \toprule
-\multicolumn{1}{l}{Dataset name}		& \multicolumn{1}{l}{Number of} 		& \multicolumn{1}{l}{Number of} 		& \multicolumn{1}{l}{Number of} \\
-\multicolumn{1}{l}{} 				& \multicolumn{1}{l}{all edges} 		& \multicolumn{1}{l}{conflict edges} 	& \multicolumn{1}{l}{no conflict edges} \\
-\multicolumn{1}{l}{} 				& \multicolumn{1}{l}{} 				& \multicolumn{1}{l}{(\% of all edges)} & \multicolumn{1}{l}{(\% of all edges)} \\
+\multicolumn{1}{l}{Edge set name}	& \multicolumn{1}{c}{Number of} 		& \multicolumn{1}{c}{Number of} 		& \multicolumn{1}{c}{Number of} \\
+\multicolumn{1}{l}{} 				& \multicolumn{1}{c}{all edges} 		& \multicolumn{1}{c}{conflict edges} 	& \multicolumn{1}{c}{no conflict edges} \\
+\multicolumn{1}{l}{} 				& \multicolumn{1}{c}{} 				& \multicolumn{1}{c}{(\% of all edges)} & \multicolumn{1}{c}{(\% of all edges)} \\
 \midrule
-Worldnews-SH						& 479384		& -/-				& -/- \\
-pred\_wildcard\_full				& 69380 		& -/- 				& -/- \\
-pred\_wildcard\_subsample-2000		& 2000 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
+Worldnews-SH						& 479384		& -					& - \\
+Base Edge Set (BES)					& 71804		& -					& - \\
+Filtered BES (FBES)					& 69380 		& - 					& - \\
+Conflict Dataset (CD)				& 2000 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
 \bottomrule
 \end{tabular}
-\caption{Dataset descriptions}
+\caption{Number of edges and proportion of labels for the different edge sets}
 \label{tab:dataset-descriptions}
 \end{table}
 
 
 \subsection{Evaluation Process}
+The evaluation process consists of multiple \textit{evaluation runs}. An evaluation run is described by an \textit{evaluation configuration} consisting of a dataset (which is always the CD in this case study) and an SH pattern which is matched against the dataset. For the semsim conflict patterns the evaluation run is further described by an \textit{NESS configuration}. These configurations specify the properties of the NESS matching. That means the \textit{NESS model} and in the case of CNESS it is also specified which set of reference edges is used and if the \textit{all-tokens} version of the matching is used. \todo{add references to chapter 2}
 
+For each evaluation run the \textit{evaluation metrics} are computed. If the evaluation run corresponds to a semsim conflict pattern, this is done for every similarity threshold \(t_s \in r_t\), where \(r_t\) is the range of similarity thresholds. For all evaluation that are conducted in this case study \( r_t= \{0, 0.01, ...,  0.99, 1\}\) is chosen.
 
-\subsubsection{Evaluation Patterns}
+%In the case of the patterns including a form of the semsim functional pattern, the semsim processing is skipped during the actual matching phase and the semsim instances are recorded. This way the semsim matching can be repeated for multiple parameters, i.e. references and similarity thresholds, without the need to repeat the entire matching process. 
+
+\paragraph{Conflict Patterns}
+\Cref{sec:sh-patterns} describes the four conflict patterns used in this evaluation in detail and derives why they are chosen. A structured overview of the properties of these patterns can be seen in \cref{tab:evaluation-patterns}.
+
+\paragraph{Reference Edge Sets}
+The reference edges are randomly sampled from the set of edges in the CD, which are labelled as "conflict". To account for the effect of different reference edge sets, multiple different samples are drawn. There are five sets of reference edges used in this evaluation, which are listed in the appendix. \todo{create appendix and add reference to it}
+
+\paragraph{Evaluation Configurations}
+\Cref{tab:evaluation-run-configs} describes the configurations for all evaluation runs that are conducted in this case study.
+
+\subsubsection{Evaluation Metrics}
+Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{accuracy}, \textit{precision}, \textit{recall} and \textit{F1 score} are computed.
+\todo{leave out accuracy?}
 
 \begin{table}
+\centering
 \begin{tabular}{lcccc}
 \toprule
-\multicolumn{1}{l}{Pattern name}		& \multicolumn{1}{c}{Lemma}		& \multicolumn{1}{c}{SemSim}	& \multicolumn{1}{c}{Requires}		& \multicolumn{1}{c}{Requires} \\
+\multicolumn{1}{l}{Pattern name}		& \multicolumn{1}{c}{Lemma}		& \multicolumn{1}{c}{SemSim}	& \multicolumn{1}{c}{Includes}		& \multicolumn{1}{c}{Requires} \\
 \multicolumn{1}{l}{} 				& \multicolumn{1}{c}{based} 		& \multicolumn{1}{c}{type} 		& \multicolumn{1}{c}{ref. words} 	& \multicolumn{1}{c}{ref. edges} \\
 \midrule
-Original conflict pattern			& Yes 		& -/- 		& -/-		& -/- \\
-pred\_semsim-fix\_wildcard			& No			& FIXED		& Yes		& No \\
-pred\_semsim-fix-lemma\_wildcard 	& Yes 		& FIXED		& Yes		& No \\
-pred\_semsim-ctx\_wildcard			& No			& CONTEXT	& No			& Yes \\
+Original conflict (\cref{pat:original-conflict})					& Yes 		& - 		& -			& - \\
+semsim-fix conflict (\cref{pat:semsim-fix-conflict})				& No		& FIXED		& Yes		& No \\
+semsim-fix-lemma conflict (\cref{pat:semsim-fix-conflict}) 		& Yes 		& FIXED		& Yes		& No \\
+semsim-ctx conflict (\cref{pat:semsim-fix-conflict})				& No		& CONTEXT	& No		& Yes \\
 \bottomrule
 \end{tabular}
-\caption{Evaluation patterns}
+\caption{Properties of the conflict patterns used in the evaluation}
 \label{tab:evaluation-patterns}
 \end{table}
+
+
+\begin{table}
+\centering
+\begin{tabular}{llccc}
+\toprule
+\multicolumn{1}{l}{Evaluation} & \multicolumn{1}{l}{Conflict} & \multicolumn{3}{c}{NESS Configuration} \\
+\cmidrule{3-5}
+\multicolumn{1}{l}{Run Name}   & \multicolumn{1}{l}{Pattern}  & \multicolumn{1}{c}{Model}    & \multicolumn{1}{c}{Ref. Edges Sets}	& \multicolumn{1}{c}{Use \textit{all-tokens}} \\
+\midrule
+original                       	& original                    & -                            & -                                   	& -    \\
+semsim-fix w2v                 	& semsim-fix                  & word2vec                     & -                                   	& -    \\
+semsim-fix cnb					& semsim-fix                 & cn-nb							& -                                   	& -    \\
+semsim-fix-lemma w2v           & semsim-fix-lemma            & word2vec                     & -                                   	& -    \\
+semsim-fix-lemma cnb            & semsim-fix-lemma            & cn-nb					& -                                   	& -    \\
+semsim-ctx e5                  & semsim-ctx                  & e5                           & -                                   	& No   \\
+semsim-ctx gte                 & semsim-ctx                  & gte                          & -                               		& No   \\
+semsim-ctx e5 at			& semsim-ctx                  & e5                           & -                                  	& Yes  \\
+semsim-ctx gte at			& semsim-ctx                  & gte                          & -                                 	& Yes  \\
+\bottomrule
+\end{tabular}
+\caption{Evaluation Run Configurations}
+\label{tab:evaluation-run-configs}
+\end{table}
+
+
+\subsection{Evaluation Results}
+
+\subsubsection{Quantitative Results}
+Table XYZ shows results for all evaluation runs. 
+best precision, recall and f1 score
+for all evaluation runs using NESS, the best score it the score achieved with 
+
+
+
+
+
+
+
+\subsubsection{Qualitative Results}
+
+
+table with evaluation runs, their 
+
 
 
 
