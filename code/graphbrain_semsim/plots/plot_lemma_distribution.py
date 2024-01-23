@@ -7,9 +7,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 from graphbrain_semsim import logger, PLOT_DIR
-from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY, HG_NAME
-from graphbrain_semsim.eval_tools.datasets.make_dataset import get_full_dataset, get_lemma_distribution
-from graphbrain_semsim.eval_tools.datasets.dataset_models import LemmaDataset
+from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
+from graphbrain_semsim.datasets.make_dataset import get_full_dataset, get_lemma_distribution
+from graphbrain_semsim.datasets.models import LemmaDataset
 from graphbrain_semsim.plots import plot_base_config
 
 plot_base_config()
@@ -22,6 +22,7 @@ def plot_lemma_distribution(
         var_name: str,
 ):
     dataset: LemmaDataset = get_full_dataset(case_study, scenario_name, hg_name=hg_name, var_name=var_name)
+    logger.info(f"Dataset '{dataset.id}' contains {len(dataset.lemma_matches.keys())} lemmas.")
 
     # Plot
     plot_name: str = f"lemma_distribution_{dataset.id}"
@@ -43,4 +44,4 @@ def plot_lemma_distribution(
 
 
 if __name__ == "__main__":
-    plot_lemma_distribution(CASE_STUDY, "1-1_wildcard_preds", HG_NAME, "PRED")
+    plot_lemma_distribution(CASE_STUDY, "1-2_pred_wildcard", HG_NAME, "PRED")

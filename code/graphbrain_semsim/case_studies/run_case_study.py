@@ -34,6 +34,3 @@ if __name__ == "__main__":
     )
     main_args = parser.parse_args()
     main(main_args)
-
-
---override --log-matches --patern-configs

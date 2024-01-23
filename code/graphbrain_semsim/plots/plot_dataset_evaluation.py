@@ -200,33 +200,33 @@ if __name__ == "__main__":
     # ----- SemSim FIX - W2V -----
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-1_preds_semsim-fix_wildcard_w2v",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
         ],
         eval_metrics=["precision", "recall"],
         plot_name_suffix="original_vs_semsim-fix_w2v"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-1_preds_semsim-fix_wildcard_w2v",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_w2v"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-1_preds_semsim-fix_wildcard_w2v",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
         ],
         eval_metrics=["accuracy"],
         plot_name_suffix="original_vs_semsim-fix_w2v"
@@ -234,13 +234,13 @@ if __name__ == "__main__":
     # ----- SemSim FIX - CN -----
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-1_preds_semsim-fix_wildcard_w2v",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-1_preds_semsim-fix_wildcard_cn",
-            "2-2_preds_semsim-fix-lemma_wildcard_cn",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-1_pred_semsim-fix_wildcard_cn",
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_w2v_cn"
@@ -248,64 +248,64 @@ if __name__ == "__main__":
     # ----- SemSim CTX - E5 -----
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
         eval_metrics=["precision", "recall"],
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-ctx_nref-10_e5"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-ctx_nref-10_e5"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
         eval_metrics=["accuracy"],
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-ctx_nref-10_e5"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-1"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-1"
         ],
         eval_metrics=["precision", "recall"],
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-ctx_nref-1_e5"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-1"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-1"
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-ctx_nref-1_e5"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10"
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
         eval_metrics=["precision", "recall", "f1"],
         plot_name_suffix="semsim-ctx_nref-10_e5"
@@ -313,21 +313,21 @@ if __name__ == "__main__":
     # ----- SemSim CTX - E5-AT -----
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_e5-at_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10"
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_vs_semsim-ctx_nref-10_e5_e5-at"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
-            "2-3_preds_semsim-ctx_wildcard_e5-at_nref-10"
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10"
         ],
         eval_metrics=["precision", "recall", "f1"],
         plot_name_suffix="semsim-ctx_nref-10_e5-at"
@@ -335,46 +335,46 @@ if __name__ == "__main__":
     # ----- SemSim CTX - GTE -----
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
-            "2-3_preds_semsim-ctx_wildcard_gte_nref-10"
+            "2-3_pred_semsim-ctx_wildcard_gte_nref-10"
         ],
         eval_metrics=["precision", "recall", "f1"],
         plot_name_suffix="semsim-ctx_nref-10_gte"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
-            "2-3_preds_semsim-ctx_wildcard_gte-at_nref-10"
+            "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
         ],
         eval_metrics=["precision", "recall", "f1"],
         plot_name_suffix="semsim-ctx_nref-10_gte-at"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_w2v",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_e5-at_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_gte_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_gte-at_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_w2v",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_vs_semsim-ctx_nref-10_e5_e5-at_gte_gte-at"
     )
     plot(
         case_study=CASE_STUDY,
-        dataset_name="1-1_wildcard_preds_subsample-2000",
+        dataset_name="1-2_pred_wildcard_subsample-2000",
         dataset_eval_names=[
             "1-1_original-pattern",
-            "2-2_preds_semsim-fix-lemma_wildcard_cn",
-            "2-3_preds_semsim-ctx_wildcard_e5_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_e5-at_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_gte_nref-10",
-            "2-3_preds_semsim-ctx_wildcard_gte-at_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
         ],
         eval_metrics=["f1"],
         plot_name_suffix="original_vs_semsim-fix_cn_vs_semsim-ctx_nref-10_e5_e5-at_gte_gte-at"

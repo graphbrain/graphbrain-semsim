@@ -60,8 +60,8 @@ def prepare_eval_run(
         run_idx: int = 0,
 ) -> PatternEvaluationRun | None:
     pattern = make_conflict_pattern(
-        preds=pattern_config.sub_pattern_configs["preds"],
-        preps=pattern_config.sub_pattern_configs["preps"],
+        pred=pattern_config.sub_pattern_configs["pred"],
+        prep=pattern_config.sub_pattern_configs["prep"],
         countries=pattern_config.sub_pattern_configs.get("countries"),
     )
 

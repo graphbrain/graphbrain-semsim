@@ -7,8 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 def make_conflict_pattern(
-        preds: CompositionPattern,
-        preps: CompositionPattern,
+        pred: CompositionPattern,
+        prep: CompositionPattern,
         countries: CompositionPattern = None,
 ):
     topic_pattern: str = make_any_fun_pattern(["TOPIC"], arg_roles=["R", "S"])
@@ -18,41 +18,41 @@ def make_conflict_pattern(
     preds_arg_roles: str = "P.{so,x}"
     preps_arg_roles: str = "T"
 
-    match preds.type:
+    match pred.type:
         case CompositionType.WILDCARD:
             pred_pattern = f"*/{preds_arg_roles}"
         case CompositionType.ANY:
             pred_pattern = make_any_fun_pattern(
-                preds.components, inner_funcs=["atoms", "lemma"], arg_roles=[preds_arg_roles]
+                pred.components, inner_funcs=["atoms", "lemma"], arg_roles=[preds_arg_roles]
             )
         case CompositionType.SEMSIM:
             pred_pattern = make_semsim_fun_pattern(
-                preds.semsim_type,
-                preds.components,
-                preds.threshold,
+                pred.semsim_type,
+                pred.components,
+                pred.threshold,
                 arg_roles=preds_arg_roles,
-                outer_funs=preds.outer_funs,
-                semsim_fix_lemma=preds.semsim_fix_lemma
+                outer_funs=pred.outer_funs,
+                semsim_fix_lemma=pred.semsim_fix_lemma
             )
 
         case _:
-            raise ValueError(f"Invalid preds composition type: {preds.type}")
+            raise ValueError(f"Invalid preds composition type: {pred.type}")
 
-    match preps.type:
+    match prep.type:
         case CompositionType.WILDCARD:
             prep_pattern = f"*/{preps_arg_roles}"
         case CompositionType.ANY:
-            prep_pattern = make_any_fun_pattern(preps.components, arg_roles=[preps_arg_roles])
+            prep_pattern = make_any_fun_pattern(prep.components, arg_roles=[preps_arg_roles])
         case CompositionType.SEMSIM:
             prep_pattern = make_semsim_fun_pattern(
-                preps.semsim_type,
-                preps.components,
-                preps.threshold,
+                prep.semsim_type,
+                prep.components,
+                prep.threshold,
                 arg_roles=preps_arg_roles,
-                semsim_fix_lemma=preps.semsim_fix_lemma
+                semsim_fix_lemma=prep.semsim_fix_lemma
             )
         case _:
-            raise ValueError(f"Invalid preps composition type: {preps.type}")
+            raise ValueError(f"Invalid preps composition type: {prep.type}")
 
     if countries:
         match countries.type:

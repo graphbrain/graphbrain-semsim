@@ -7,7 +7,7 @@ from graphbrain_semsim import PLOT_DIR, logger
 from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY, HG_NAME, ConflictsSubPattern, SUB_PATTERN_WORDS
 
 from graphbrain_semsim.plots import plot_base_config
-from graphbrain_semsim.plots.embedding_utils import WordLemmaEmbeddingInfo, get_embedding_infos
+from graphbrain_semsim.eval_tools.utils.embedding_utils import WordLemmaEmbeddingInfo, get_embedding_infos
 from graphbrain_semsim.utils.file_handling import save_to_pickle, load_from_pickle
 
 plot_base_config()
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # )
     plot(
         case_study=CASE_STUDY,
-        scenario_name="1-1_wildcard_preds",
+        scenario_name="1-2_pred_wildcard",
         variable_name="PRED",
         sim_range=(0.0, 1.0),
         ref_sim_measure="max",
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     )
     plot(
         case_study=CASE_STUDY,
-        scenario_name="1-1_wildcard_preds",
+        scenario_name="1-2_pred_wildcard",
         variable_name="PRED",
         sim_range=(0.0, 1.0),
         ref_sim_measure="max",
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     )
     # plot(
     #     case_study=CASE_STUDY,
-    #     scenario_name="1-1_wildcard_preds",
+    #     scenario_name="1-2_pred_wildcard",
     #     variable_name="PRED",
     #     sim_range=(0.0, 1.0),
     #     ref_sim_measure="max",

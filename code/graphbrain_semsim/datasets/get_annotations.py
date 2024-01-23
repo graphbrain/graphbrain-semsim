@@ -127,8 +127,8 @@ def update_labels(dataset: LemmaDataset, idx_to_label: dict[int, int]):
 
 if __name__ == "__main__":
     recreate_dataset_from_table(
-        "dataset_conflicts_1-1_wildcard_preds_subsample-2000",
-        "dataset_conflicts_1-1_wildcard_preds_full"
+        "dataset_conflicts_1-2_pred_wildcard_subsample-2000",
+        "dataset_conflicts_1-2_pred_wildcard_full"
     )
 
-    # update_annotation_labels_from_table("dataset_conflicts_1-1_wildcard_preds_subsample-2000")
+    # update_annotation_labels_from_table("dataset_conflicts_1-2_pred_wildcard_subsample-2000")

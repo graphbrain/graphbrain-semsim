@@ -22,86 +22,97 @@ PATTERN_CONFIGS: list[ConflictsPatternEvaluationConfig] = [
     ConflictsPatternEvaluationConfig(
         name="1-1_original-pattern",
         sub_pattern_configs={
-            "preds": CompositionPattern(
+            "pred": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS]
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREPS]
             )
         }
     ),
     ConflictsPatternEvaluationConfig(
-        name="1-2_preds_wildcard",
+        name="1-2_pred_wildcard",
         sub_pattern_configs={
-            "preds": CompositionPattern(
+            "pred": CompositionPattern(
                 type=CompositionType.WILDCARD,
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREPS]
             )
         }
     ),
     ConflictsPatternEvaluationConfig(
-        name="1-2_preds_wildcard_preps_wildcard",
+        name="1-3_prep_wildcard",
         sub_pattern_configs={
-            "preds": CompositionPattern(
-                type=CompositionType.WILDCARD,
+            "pred": CompositionPattern(
+                type=CompositionType.ANY,
+                components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS]
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.WILDCARD,
             )
         }
     ),
     ConflictsPatternEvaluationConfig(
-        name="2-1_preds_semsim-fix_wildcard",
+        name="1-4_pred_wildcard_prep_wildcard",
+        sub_pattern_configs={
+            "pred": CompositionPattern(
+                type=CompositionType.WILDCARD,
+            ),
+            "prep": CompositionPattern(
+                type=CompositionType.WILDCARD,
+            )
+        }
+    ),
+    ConflictsPatternEvaluationConfig(
+        name="2-1_pred_semsim-fix_wildcard",
         skip_semsim=True,
         sub_pattern_configs={
-            "preds": CompositionPattern(
+            "pred": CompositionPattern(
                 type=CompositionType.SEMSIM,
                 semsim_type=SemSimType.FIX,
                 outer_funs=["atoms"]
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREPS]
             )
         }
     ),
     ConflictsPatternEvaluationConfig(
-        name="2-2_preds_semsim-fix-lemma_wildcard",
+        name="2-2_pred_semsim-fix-lemma_wildcard",
         skip_semsim=True,
         sub_pattern_configs={
-            "preds": CompositionPattern(
+            "pred": CompositionPattern(
                 type=CompositionType.SEMSIM,
                 semsim_type=SemSimType.FIX,
                 semsim_fix_lemma=True,
                 outer_funs=["atoms"]
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREPS]
             )
         }
     ),
     ConflictsPatternEvaluationConfig(
-        name="2-3_preds_semsim-ctx_wildcard",
+        name="2-3_pred_semsim-ctx_wildcard",
         skip_semsim=True,
         sub_pattern_configs={
-            "preds": CompositionPattern(
+            "pred": CompositionPattern(
                 type=CompositionType.SEMSIM,
                 semsim_type=SemSimType.CTX,
             ),
-            "preps": CompositionPattern(
+            "prep": CompositionPattern(
                 type=CompositionType.ANY,
                 components=SUB_PATTERN_WORDS[ConflictsSubPattern.PREPS]
             )
         }
     ),
 ]
-
 
 
 

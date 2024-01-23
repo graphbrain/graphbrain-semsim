@@ -173,7 +173,7 @@ def plot_n_results_vs_fix_threshold(
 #         "1_original-pattern",
 #         "2-1_semsim-fix_preds",
 #         "2-2_semsim-fix_preps",
-#         "2-3_semsim-fix_preds_semsim-fix_preps"
+#         "2-3_semsim-fix_pred_semsim-fix_preps"
 #     ]
 # )
 #

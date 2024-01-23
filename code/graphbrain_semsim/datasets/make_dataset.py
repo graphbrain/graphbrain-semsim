@@ -169,25 +169,25 @@ def split_to_bins(lst: list, n_bins: int):
 
 
 if __name__ == "__main__":
-    # get_full_dataset(
-    #     case_study=CASE_STUDY,
-    #     pattern_eval_config_name="1-1_wildcard_preds",
-    #     hg_name=HG_NAME,
-    #     var_name="PRED"
-    # )
-
-    make_dataset(
+    get_full_dataset(
         case_study=CASE_STUDY,
-        pattern_eval_config_name="1-1_wildcard_preds",
+        pattern_eval_config_name="1-2_pred_wildcard",
         hg_name=HG_NAME,
-        var_name="PRED",
-        n_subsamples=2000,
-        annotators=["Camille", "Telmo", "Max"],
-        divided_for_annotators=True,
+        var_name="PRED"
     )
+
     # make_dataset(
     #     case_study=CASE_STUDY,
-    #     pattern_eval_config_name="1-1_wildcard_preds",
+    #     pattern_eval_config_name="1-2_pred_wildcard",
+    #     hg_name=HG_NAME,
+    #     var_name="PRED",
+    #     n_subsamples=2000,
+    #     annotators=["Camille", "Telmo", "Max"],
+    #     divided_for_annotators=True,
+    # )
+    # make_dataset(
+    #     case_study=CASE_STUDY,
+    #     pattern_eval_config_name="1-2_pred_wildcard",
     #     hg_name=HG_NAME,
     #     var_name="PRED",
     #     n_subsamples=50,

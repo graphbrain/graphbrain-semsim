@@ -34,10 +34,11 @@ def get_pattern_eval_runs(pattern_config_id: str, dataset_name: str = None) -> l
 
     eval_runs: list[PatternEvaluationRun] = []
     for file_path in results_dir_path.iterdir():
-        try:
-            eval_runs.append(load_json(file_path, PatternEvaluationRun))
-        except (json.decoder.JSONDecodeError, ValidationError) as e:
-            logger.error(f"Invalid evaluation run file: {file_path}. Error: {e}")
+        if file_path.is_file() and file_path.suffix == ".json":
+            try:
+                eval_runs.append(load_json(file_path, PatternEvaluationRun))
+            except (json.decoder.JSONDecodeError, ValidationError) as e:
+                logger.error(f"Invalid evaluation run file: {file_path}. Error: {e}")
 
     if not eval_runs:
         logger.warning(f"No evaluation runs found for pattern config '{pattern_config_id}'")

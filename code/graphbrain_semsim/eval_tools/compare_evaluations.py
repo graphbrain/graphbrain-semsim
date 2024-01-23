@@ -278,11 +278,11 @@ def get_best_result_and_threshold(
 
 
 compare_dataset_evaluations(
-    dataset_name="1-1_wildcard_preds_subsample-2000",
+    dataset_name="1-2_pred_wildcard_subsample-2000",
     dataset_recreated=True,
     dataset_eval_names=[
-            "2-2_preds_semsim-fix-lemma_wildcard",
-            "2-3_preds_semsim-ctx_wildcard_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard",
+            "2-3_pred_semsim-ctx_wildcard_nref-10"
         ],
     eval_metric="f1",
 )
