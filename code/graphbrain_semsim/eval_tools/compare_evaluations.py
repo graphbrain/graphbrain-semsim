@@ -14,11 +14,11 @@ from pathlib import Path
 from graphbrain.hypergraph import Hypergraph, Hyperedge
 from graphbrain_semsim import get_hgraph
 from graphbrain_semsim.datasets.config import DATASET_DIR, CONFLICTS_ANNOTATION_LABELS
-from graphbrain_semsim.datasets.get_evaluations import get_dataset_evaluations
 from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult, LemmaDataset
 
 from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
-from graphbrain_semsim.eval_tools.result_data.dataset_evals import get_best_evaluations_and_results_and_thresholds
+from graphbrain_semsim.eval_tools.result_data.dataset_evals import get_best_evaluations_and_results_and_thresholds, \
+    get_dataset_evaluations
 from graphbrain_semsim.utils.file_handling import load_json
 
 logger = logging.getLogger(__name__)

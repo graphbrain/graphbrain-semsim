@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.datasets.evaluate_dataset import DatasetEvaluation, EVALUATION_FILE_SUFFIX
-from graphbrain_semsim.datasets.get_evaluations import get_dataset_evaluations
+from graphbrain_semsim.eval_tools.result_data.dataset_evals import get_dataset_evaluations
 from graphbrain_semsim.datasets.models import EvaluationResult
 from graphbrain_semsim.plots import plot_base_config
 from graphbrain_semsim.utils.general import all_equal
