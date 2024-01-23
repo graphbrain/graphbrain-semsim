@@ -13,12 +13,12 @@ from graphbrain_semsim.case_studies.models import PatternEvaluationConfig, Patte
 from graphbrain_semsim.case_studies.evaluate_pattern import evaluate_pattern
 from graphbrain_semsim.datasets.config import DATA_LABELS, DATASET_DIR, DATASET_EVAL_DIR
 from graphbrain_semsim.datasets.models import LemmaDataset, EvaluationResult, DatasetEvaluation, LemmaMatch
-from graphbrain_semsim.eval_tools.utils.result_data import get_pattern_eval_config, get_pattern_eval_run
+from graphbrain_semsim.eval_tools.result_data import get_pattern_eval_config, get_pattern_eval_run
 from graphbrain_semsim.utils.general import frange
 from graphbrain_semsim.utils.file_handling import save_json, load_json
 
 from graphbrain_semsim.case_studies.conflicts.pattern_configs import (
-    PATTERN_CONFIGS, SUB_PATTERN_WORDS, ConflictsSubPattern
+    PATTERN_CONFIGS
 )
 
 random.seed(RNG_SEED)

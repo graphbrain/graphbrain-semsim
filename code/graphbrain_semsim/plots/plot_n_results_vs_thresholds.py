@@ -6,7 +6,7 @@ from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.conflicts_case_study.models import EvaluationRun, EvaluationScenario, RefEdgesConfig
 from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS
 from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY
-from graphbrain_semsim.eval_tools.utils.result_data import (
+from graphbrain_semsim.eval_tools.result_data import (
     get_eval_scenario, get_pattern_eval_runs, get_variable_threshold_sub_pattern
 )
 from graphbrain_semsim.plots import plot_base_config

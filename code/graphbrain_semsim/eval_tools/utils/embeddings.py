@@ -11,7 +11,7 @@ from graphbrain_semsim import logger, get_hgraph
 from graphbrain_semsim.conflicts_case_study.models import EvaluationScenario, EvaluationRun
 from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS
 
-from graphbrain_semsim.eval_tools.utils.result_data import (
+from graphbrain_semsim.eval_tools.result_data import (
     get_eval_scenario, get_pattern_eval_runs, get_variable_threshold_sub_pattern
 )
 from graphbrain_semsim.eval_tools.utils.lemmas import get_words_and_lemmas_from_matches

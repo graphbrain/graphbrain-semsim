@@ -1,5 +1,5 @@
 from graphbrain_semsim.case_studies.models import PatternEvaluationRun
-from graphbrain_semsim.eval_tools.utils.result_data import get_pattern_eval_run
+from graphbrain_semsim.eval_tools.result_data import get_pattern_eval_run
 
 from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY
 
