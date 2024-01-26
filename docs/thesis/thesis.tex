@@ -416,7 +416,7 @@ In this chapter the conceived concept (see \cref{cha:solution-approach}) and spe
 \todo{refer to the RQs more specifically?}
 
 \section{Case Study: Conflicts}
-The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021} where expressions of conflict are extracted from a given SH using a single SH pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently the task is to to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different SH patterns by matching them against a labelled dataset.
+The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021}, where expressions of conflict are extracted from a given SH using a single SH pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently, the task is to to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different SH patterns by matching them against a labelled dataset of hyperedges.
 
 \todo[inline]{should I explain why specifically the conflicts and not some other case study (i.e. dataset) --> because there was none... but then I need to show why there was none and what are the criteria for a case study to be suitable to evaluate the system}
 
@@ -672,10 +672,10 @@ For each evaluation run the \textit{evaluation metrics} are computed. If the eva
 \Cref{sec:sh-patterns} describes the four conflict patterns used in this evaluation in detail and derives why they are chosen. A structured overview of the properties of these patterns can be seen in \cref{tab:evaluation-patterns}.
 
 \paragraph{Reference Edge Sets}
-The reference edges are randomly sampled from the set of edges in the CD, which are labelled as "conflict". To account for the effect of different reference edge sets, multiple different samples are drawn. There are five sets of reference edges used in this evaluation, which are listed in the appendix. \todo{create appendix and add reference to it}
+The reference edges are randomly sampled from the set of edges in the CD, which are labelled as "conflict". To account for the effect of different reference edge sets, multiple different samples are drawn. To compare the effect of different sample sizes five sets with one reference edge in each and five sets with ten reference edges in each are sampled. In the evaluation run name, the set of reference edges used is denoted by the last part of the form "r-N-X", with where \(N \in \{1, 10\}\) is the number of reference edges and \(X \in \{1, ..., 5\}\) is the the ID of the set of references edges. The specific sets of references edges, which have been sampled can be seen in \todo{add table to the appendix}
 
 \paragraph{Evaluation Configurations}
-\Cref{tab:evaluation-run-configs} describes the configurations for all evaluation runs that are conducted in this case study.
+\Cref{tab:evaluation-run-configs} describes the configurations for all evaluation runs that are conducted in this case study. For evaluation runs based on the semsim-ctx conflict pattern, the ID of the reference edge sets has been omitted in this table. All five reference edges sets for both sample sizes have been used for the evaluation runs.
 
 \subsubsection{Evaluation Metrics}
 Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{accuracy}, \textit{precision}, \textit{recall} and \textit{F1 score} are computed.
@@ -705,17 +705,21 @@ semsim-ctx conflict (\cref{pat:semsim-fix-conflict})				& No		& CONTEXT	& No		& 
 \toprule
 \multicolumn{1}{l}{Evaluation} & \multicolumn{1}{l}{Conflict} & \multicolumn{3}{c}{NESS Configuration} \\
 \cmidrule{3-5}
-\multicolumn{1}{l}{Run Name}   & \multicolumn{1}{l}{Pattern}  & \multicolumn{1}{c}{Model}    & \multicolumn{1}{c}{Ref. Edges Sets}	& \multicolumn{1}{c}{Use \textit{all-tokens}} \\
+\multicolumn{1}{l}{Run Name}   & \multicolumn{1}{l}{Pattern}  & \multicolumn{1}{c}{Model}	& \multicolumn{1}{c}{Use \textit{all-tokens}} & \multicolumn{1}{c}{Num. Ref. Edges} \\
 \midrule
-original                       	& original                    & -                            & -                                   	& -    \\
-semsim-fix w2v                 	& semsim-fix                  & word2vec                     & -                                   	& -    \\
-semsim-fix cnb					& semsim-fix                 & cn-nb							& -                                   	& -    \\
-semsim-fix-lemma w2v           & semsim-fix-lemma            & word2vec                     & -                                   	& -    \\
-semsim-fix-lemma cnb            & semsim-fix-lemma            & cn-nb					& -                                   	& -    \\
-semsim-ctx e5                  & semsim-ctx                  & e5                           & -                                   	& No   \\
-semsim-ctx gte                 & semsim-ctx                  & gte                          & -                               		& No   \\
-semsim-ctx e5 at			& semsim-ctx                  & e5                           & -                                  	& Yes  \\
-semsim-ctx gte at			& semsim-ctx                  & gte                          & -                                 	& Yes  \\
+original                       & original                     & -                          & -                                         & - \\
+semsim-fix w2v                 & semsim-fix                   & word2vec                   & -                                         & - \\
+semsim-fix cn                 & semsim-fix                   & cn-nb                      & -                                         & - \\
+semsim-fix-lemma w2v           & semsim-fix-lemma             & word2vec                   & -                                         & - \\
+semsim-fix-lemma cn           & semsim-fix-lemma             & cn-nb                      & -                                         & - \\
+semsim-ctx e5 r-1                & semsim-ctx                   & e5                         & No                                        & 1 \\
+semsim-ctx gte r-1               & semsim-ctx                   & gte                        & No                                        & 1 \\
+semsim-ctx e5-at r-1             & semsim-ctx                   & e5                         & Yes                                       & 1 \\
+semsim-ctx gte-at r-1            & semsim-ctx                   & gte                        & Yes                                       & 1 \\
+semsim-ctx e5 r-10               & semsim-ctx                   & e5                         & No                                        & 10 \\
+semsim-ctx gte r-10              & semsim-ctx                   & gte                        & No                                        & 10 \\
+semsim-ctx e5-at r-10            & semsim-ctx                   & e5                         & Yes                                       & 10 \\
+semsim-ctx gte-at r-10           & semsim-ctx                   & gte                        & Yes                                       & 10 \\
 \bottomrule
 \end{tabular}
 \caption{Evaluation Run Configurations}
@@ -723,18 +727,115 @@ semsim-ctx gte at			& semsim-ctx                  & gte                         
 \end{table}
 
 
+
 \subsection{Evaluation Results}
 
 \subsubsection{Quantitative Results}
-Table XYZ shows results for all evaluation runs. 
-best precision, recall and f1 score
-for all evaluation runs using NESS, the best score it the score achieved with 
+Table \cref{tab:quant-results} shows results for all evaluation runs conducted in this case study. For every evaluation run, the best score for all three evaluation metric is given. In case of the evaluation runs based on semsim conflict patterns, the corresponding similarity threshold is noted in parenthesis behind the score. For all evaluation runs based on the semsim-ctx conflict pattern, there is an additional entry that shows the score of the \textit{mean evaluation run} for all reference edge sets of a specific size. In this work mean evaluation run refers to the mean value for each evaluation metrics for a given similarity threshold.
+%, based on all evaluation runs with the same configuration, which only differ in the specific set of reference edges used, but not in the reference edge sets size.
+
+
+table redesign:
+--------
+
+run configuration table:
+* remove num ref edges column
 
 
 
 
+two tables:
+
+summary table 
+* with best f1 from each conflict pattern: 
+* original, semsim-ctx and  and semsim-ctx
 
 
+full results table:
+ * best f1 score (with threshold and corresponding precision and recall
+ * add f1 score variance for semsim-ctx evaluations
+ * check why mean value in table does not match plots
+ 
+ 
+
+
+
+\begin{table}
+\centering
+\begin{tabular}{lllrrrrr}
+\toprule
+\multicolumn{3}{l}{Evaluation Run Name}	& \multicolumn{1}{c}{ST} & \multicolumn{1}{c}{Precision} & \multicolumn{1}{c}{Recall} & \multicolumn{2}{c}{F1 Score}\\
+\midrule
+original &  &  & - & 0.706 & 0.209 & 0.322 & - \\
+\hline
+semsim-fix & cn &  & 0.25 & 0.479 & 0.524 & 0.500 & - \\
+semsim-fix & w2v &  & 0.27 & 0.483 & 0.533 & 0.507 & - \\
+semsim-fix-lemma & cn &  & 0.30 & 0.492 & 0.558 & 0.523 & - \\
+semsim-fix-lemma & w2v &  & 0.33 & 0.460 & 0.553 & 0.502 & - \\
+\hline
+
+
+%\midrule
+%original 			& - 			& -			& 0.71 (-) & 0.21 (-) & 0.32 (-) \\
+%\hline
+%semsim-fix 			& cn 		& -			& 0.76 (0.92) & 0.91 (0.00) & 0.50 (0.25) \\
+%semsim-fix 			& w2v 		& -			& 0.79 (0.61) & 0.99 (0.00) & \textbf{0.51} (0.27) \\
+%\hline
+%semsim-fix-lemma 	& cn 		& -			& 0.72 (0.64) & 1.00 (0.00) & \textbf{0.52} (0.30) \\
+%semsim-fix-lemma 	& w2v 		& -			& 0.71 (0.60) & 0.99 (0.00) & 0.50 (0.33) \\
+%\hline
+%semsim-ctx 			& e5 		& r-1-1 		& 1.00 (0.79) & 1.00 (0.00) & 0.51 (0.65) \\
+%semsim-ctx 			& e5 		& r-1-2 		& 1.00 (0.84) & 1.00 (0.00) & 0.50 (0.68) \\
+%semsim-ctx 			& e5 		& r-1-3 		& 1.00 (0.82) & 1.00 (0.00) & 0.50 (0.67) \\
+%semsim-ctx 			& e5 		& r-1-4 		& 1.00 (0.82) & 1.00 (0.00) & 0.52 (0.59) \\
+%semsim-ctx 			& e5 		& r-1-mean 	& 1.00 (0.81) & 1.00 (0.00) & \textbf{0.56} (0.67) \\
+%\hline
+%semsim-ctx 			& e5 		& r-10-1 	& 1.00 (0.86) & 1.00 (0.00) & 0.57 (0.72) \\
+%semsim-ctx 			& e5 		& r-10-2 	& 1.00 (0.87) & 1.00 (0.00) & 0.53 (0.71) \\
+%semsim-ctx 			& e5 		& r-10-3 	& 1.00 (0.89) & 1.00 (0.00) & 0.57 (0.72) \\
+%semsim-ctx 			& e5 		& r-10-4 	& 1.00 (0.85) & 1.00 (0.00) & 0.53 (0.72) \\
+%semsim-ctx 			& e5 		& r-10-mean & 1.00 (0.85) & 1.00 (0.00) & \textbf{0.56} (0.71) \\
+%\hline
+%semsim-ctx 			& e5-at		& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.49 (0.68) \\
+%semsim-ctx 			& e5-at		& r-1-2 		& 1.00 (0.84) & 1.00 (0.00) & 0.51 (0.71) \\
+%semsim-ctx 			& e5-at		& r-1-3 		& 1.00 (0.81) & 1.00 (0.00) & 0.50 (0.71) \\
+%semsim-ctx 			& e5-at		& r-1-4 		& 1.00 (0.83) & 1.00 (0.00) & 0.51 (0.66) \\
+%semsim-ctx 			& e5-at		& r-1-mean 	& 1.00 (0.82) & 1.00 (0.00) & \textbf{0.54} (0.71) \\
+%\hline
+%semsim-ctx 			& e5-at		& r-10-1 	& 1.00 (0.86) & 1.00 (0.00) & 0.55 (0.75) \\
+%semsim-ctx 			& e5-at		& r-10-2 	& 1.00 (0.90) & 1.00 (0.00) & 0.53 (0.75) \\
+%semsim-ctx 			& e5-at		& r-10-3 	& 1.00 (0.95) & 1.00 (0.00) & 0.51 (0.74) \\
+%semsim-ctx 			& e5-at		& r-10-4 	& 1.00 (0.87) & 1.00 (0.00) & 0.53 (0.74) \\
+%semsim-ctx 			& e5-at		& r-10-mean & 1.00 (0.87) & 1.00 (0.00) & \textbf{0.53} (0.74) \\
+%\hline
+%semsim-ctx 			& gte 		& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.46 (0.57) \\
+%semsim-ctx 			& gte 		& r-1-2 		& 1.00 (0.80) & 1.00 (0.00) & 0.52 (0.63) \\
+%semsim-ctx 			& gte 		& r-1-3 		& 1.00 (0.83) & 1.00 (0.00) & 0.48 (0.61) \\
+%semsim-ctx 			& gte 		& r-1-4 		& 1.00 (0.79) & 1.00 (0.00) & 0.46 (0.55) \\
+%semsim-ctx 			& gte 		& r-1-mean 	& 1.00 (0.76) & 1.00 (0.00) & \textbf{0.49} (0.60) \\
+%\hline
+%semsim-ctx 			& gte 		& r-10-1 	& 1.00 (0.85) & 1.00 (0.00) & 0.53 (0.67) \\
+%semsim-ctx 			& gte 		& r-10-2 	& 1.00 (0.88) & 1.00 (0.00) & 0.52 (0.69) \\
+%semsim-ctx 			& gte 		& r-10-3 	& 1.00 (0.85) & 1.00 (0.00) & 0.51 (0.68) \\
+%semsim-ctx 			& gte 		& r-10-4 	& 1.00 (0.88) & 1.00 (0.00) & 0.52 (0.67) \\
+%semsim-ctx 			& gte 		& r-10-mean & 1.00 (0.83) & 1.00 (0.00) & \textbf{0.53} (0.69) \\
+%\hline
+%semsim-ctx 			& gte-at 	& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.48 (0.65) \\
+%semsim-ctx 			& gte-at 	& r-1-2 		& 1.00 (0.81) & 1.00 (0.00) & 0.49 (0.66) \\
+%semsim-ctx 			& gte-at 	& r-1-3 		& 1.00 (0.82) & 1.00 (0.00) & 0.46 (0.63) \\
+%semsim-ctx 			& gte-at 	& r-1-4 		& 1.00 (0.82) & 1.00 (0.00) & 0.47 (0.66) \\
+%semsim-ctx 			& gte-at 	& r-1-mean 	& 1.00 (0.83) & 1.00 (0.00) & \textbf{0.52} (0.68) \\
+%\hline
+%semsim-ctx 			& gte-at 	& r-10-1 	& 1.00 (0.85) & 1.00 (0.00) & 0.50 (0.71) \\
+%semsim-ctx 			& gte-at 	& r-10-2 	& 1.00 (0.94) & 1.00 (0.00) & 0.48 (0.70) \\
+%semsim-ctx 			& gte-at 	& r-10-3 	& 1.00 (0.91) & 1.00 (0.00) & 0.50 (0.72) \\
+%semsim-ctx 			& gte-at 	& r-10-4 	& 1.00 (0.86) & 1.00 (0.00) & 0.51 (0.73) \\
+%semsim-ctx 			& gte-at 	& r-10-mean & 1.00 (0.88) & 1.00 (0.00) & \textbf{0.50} (0.72) \\
+\bottomrule
+\end{tabular}
+\caption{Best precision, recall and F1 scores for all evaluation runs}
+\label{tab:quant-results}
+\end{table}
 
 \subsubsection{Qualitative Results}
 
