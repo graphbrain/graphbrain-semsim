@@ -6,6 +6,8 @@ from typing import Type, Any, TypeVar
 
 from pydantic import BaseModel
 
+from graphbrain_semsim import config
+
 logger = logging.getLogger(__name__)
 
 BaseModelType = TypeVar('BaseModelType', bound=BaseModel)
@@ -17,7 +19,12 @@ def save_json(data: BaseModel, file_path: Path):
     logger.info(f"Saved to '{file_path}'")
 
 
-def load_json(file_path: Path, model: Type[BaseModelType], exit_on_error: bool = False) -> BaseModelType | None:
+def load_json(
+        file_path: Path,
+        model: Type[BaseModelType],
+        exit_on_error: bool = False,
+        skip_validation: bool = config.SKIP_VALIDATION
+) -> BaseModelType | None:
     if not file_path.exists():
         error_msg = f"File {file_path} does not exist"
         if exit_on_error:
@@ -26,6 +33,9 @@ def load_json(file_path: Path, model: Type[BaseModelType], exit_on_error: bool =
         return None
 
     try:
+        model_dict: dict = json.loads(file_path.read_text(encoding="utf-8"))
+        if skip_validation:
+            return model.model_construct(**model_dict)
         return model.model_validate(json.loads(file_path.read_text(encoding="utf-8")))
     except Exception as e:
         logger.error(f"Failed to load data from {file_path}. {e.__class__.__name__}: {e}")

@@ -17,12 +17,16 @@ from graphbrain_semsim.eval_tools.result_data.pattern_eval_runs import get_patte
 from graphbrain_semsim.utils.file_handling import save_json, load_json
 
 
+EVALUATION_FILE_SUFFIX: str = "evaluation"
+
+
 def evaluate_dataset_for_pattern(
         dataset_id: str,
         pattern_config_name: str,
         pattern_configs: list[PatternEvaluationConfig],
         semsim_threshold_range: list[float] = None,
         semsim_configs_name: str = None,
+        semsim_eval_configs: dict[str, dict[SemSimType, SemSimConfig]] = None,
         ref_words: list[str] = None,
         n_ref_edges: int = None,
         sample_mod: int = None,
@@ -42,7 +46,7 @@ def evaluate_dataset_for_pattern(
     )
 
     ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives, n_ref_edges, sample_mod)
-    semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(semsim_configs_name)
+    semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(semsim_configs_name, semsim_eval_configs)
 
     dataset_evaluation: DatasetEvaluation = DatasetEvaluation(
         dataset_id=dataset_id,
@@ -149,10 +153,13 @@ def get_ref_edges(
     return list(random.sample(dataset_positives, k=n_ref_edges))
 
 
-def get_semsim_configs(semsim_configs_name: str) -> dict[SemSimType, SemSimConfig] | None:
+def get_semsim_configs(
+        semsim_configs_name: str,
+        semsim_eval_configs: dict[str, dict[SemSimType, SemSimConfig]]
+) -> dict[SemSimType, SemSimConfig] | None:
     if semsim_configs_name:
-        assert semsim_configs_name in SEM_SIM_EVAL_CONFIGS, "Invalid SemSim configs name given"
-        return SEM_SIM_EVAL_CONFIGS[semsim_configs_name]
+        assert semsim_configs_name in semsim_eval_configs, "Invalid SemSim configs name given"
+        return semsim_eval_configs[semsim_configs_name]
     return None
 
 
