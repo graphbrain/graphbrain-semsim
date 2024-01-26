@@ -8,8 +8,11 @@ from pydantic import BaseModel, Field
 
 from graphbrain_semsim import logger, PLOT_DIR
 from graphbrain_semsim.datasets.evaluate_dataset import DatasetEvaluation, EVALUATION_FILE_SUFFIX
-from graphbrain_semsim.eval_tools.result_data.dataset_evals import get_dataset_evaluations
 from graphbrain_semsim.datasets.models import EvaluationResult
+from graphbrain_semsim.eval_tools.result_data.dataset_evals import (
+    get_dataset_evaluations,
+    get_mean_sem_sim_eval_results
+)
 from graphbrain_semsim.plots import plot_base_config
 from graphbrain_semsim.utils.general import all_equal
 
@@ -111,7 +114,7 @@ def get_dataset_eval_plot_infos(
 
         if len(dataset_sub_evals) > 1:
             dataset_eval_plot_infos += process_sub_evaluations(
-                dataset_sub_evals, dataset_eval_name, dataset_eval_id, dataset_eval_idx
+                dataset_sub_evals, dataset_eval_name, dataset_eval_id
             )
         else:
             dataset_eval_plot_infos.append(DatasetEvaluationPlotInfo(
@@ -128,22 +131,11 @@ def process_sub_evaluations(
         sub_evaluations: list[DatasetEvaluation],
         dataset_eval_name: str,
         dataset_eval_id: str,
-        dataset_eval_idx: int
 ) -> list[DatasetEvaluationPlotInfo]:
     assert all(sub_evaluation.semsim_eval_results for sub_evaluation in sub_evaluations)
     assert all_equal(sub_evaluation.semsim_eval_results.keys() for sub_evaluation in sub_evaluations)
 
-    # compute mean values for each threshold
-    mean_semsim_eval_scores: dict[float, EvaluationResult] = {
-        t: EvaluationResult(
-            accuracy=mean([sub_eval.semsim_eval_results[t].accuracy for sub_eval in sub_evaluations]),
-            precision=mean([sub_eval.semsim_eval_results[t].precision for sub_eval in sub_evaluations]),
-            recall=mean([sub_eval.semsim_eval_results[t].recall for sub_eval in sub_evaluations]),
-            f1=mean([sub_eval.semsim_eval_results[t].f1 for sub_eval in sub_evaluations]),
-        )
-        for t in sub_evaluations[0].semsim_eval_results.keys()
-    }
-
+    mean_semsim_eval_scores = get_mean_sem_sim_eval_results(sub_evaluations)
     mean_dataset_evaluation: DatasetEvaluation = sub_evaluations[0].model_copy(update={
         "semsim_eval_results": mean_semsim_eval_scores
     })

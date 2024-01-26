@@ -17,7 +17,7 @@ class PatternMatch(BaseModel):
     variables_text: list[dict[str, str]]
     semsim_instances: Optional[list[OriginalSemSimInstance | ModifiedSemSimInstance]] = None
 
-    model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True)
+    model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True)  # noqa: F821
 
 
 class CompositionType(StrEnum):
