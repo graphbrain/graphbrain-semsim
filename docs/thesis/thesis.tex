@@ -6,7 +6,10 @@
 % \usepackage[ngerman]{babel}
 
 \usepackage{graphicx}
-\graphicspath{ {../resources/imgs/} }
+\graphicspath{ 
+	{../resources/imgs/},
+	{../../data/plots/dataset_evaluation/}
+}
 
 %\usepackage[backend=biber, style=ieee]{biblatex}
 \usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
@@ -32,6 +35,7 @@
 \usepackage{csquotes}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage[export]{adjustbox}
 
 \usepackage{array}  % needed for '\newcolumntype' command
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
@@ -204,6 +208,8 @@ WordNet and alike (not the scope of this work)
 \subsection{Distance Measures}
 
 Mean reference vector vs. pairwise distance
+
+similarity threshold (ST)
 
 % ========== 
 \chapter{Problem Statement}
@@ -574,19 +580,19 @@ Based on the result of the preliminary evaluation in \cref{sec:wildcard-conflict
 
 
 
-\subsection{Conflict Dataset}
+\section{Conflict Dataset}
 \label{sec:conflict-dataset}
 To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an expression of conflict or not. Since such a dataset does not exists it needs to be constructed. In the following the construction process of this \textit{conflict dataset} (CD), which is used for the evaluation in this case study, and the datasets characteristics are discussed.
 
 
-\subsubsection{Base Edge Set}
+\subsection{Base Edge Set}
 The set of edges that can be retrieved by a conflict pattern, i.e. the original conflict pattern or a semsim conflict pattern is restricted the general form of these patterns. This entails that, given the same SH, every set of matching edges of a pattern of this form will be a subset of the matching edges of the predicate wildcard pattern (\cref{pat:wildcard-pred}). The set of edges resulting form matching this pattern against the Worldnews-SH are therefore used as the \textit{base edge set} (BES) from which the conflict dataset is constructed, instead of the entirety of all the hypergraphs sequence root edges.
 
 Every edge in the BES has a predicate sub-edge that has an innermost atom, which is a verb that has a lemma. In the following this is called the \textit{predicate lemma} of an edge. Each of the edges matching \cref{pat:original-conflict} or a pattern in the form of of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
 
 %Matching \cref{pat:wildcard-pred} against the Worldnews-SH results in \(n_{f} = 69 380\) matching edges. In the following the set of those edges will be referred to as the \textit{full dataset} (FD).\todo{add examples}
 
-\subsubsection{Desired Characteristics}
+\subsection{Desired Characteristics}
 \label{sec:dataset-characteristics}
 To effectively evaluate the effectiveness of the application of NESS by matching a pattern in the form of \cref{pat:semsim-conflict}, the dataset used for this should have the following characteristics:
 
@@ -597,14 +603,14 @@ To effectively evaluate the effectiveness of the application of NESS by matching
 
 On the one hand it is desired to have as many different unique predicate lemmas as possible in the dataset to be able to evaluate whether NESS can differentiate if a predicate lemma indicates an expression of conflict or not. On the other hand it is desired to have as many different edges per unique lemma as possible in the dataset to be able to evaluate whether CNESS is able to differentiate if edges represent an expression of conflict or not, given that they correspond to the same predicate lemma.
 
-\subsubsection{Construction Process}
+\subsection{Construction Process}
 To create the labelled CD, the edges of the dataset need to be manually labelled by human annotators, which is labor-intensive. The BSE contains \(n_b=71804\) edges. Due to the time constrains of this work and the limited availability of three annotators, the BSE needs to be subsampled to create the CD. Since the desired characteristics described above relate the the distribution of predicate lemmas, it is relevant to verify that is possible to determine the predicate lemma for all edges in the edge set from which the CD is sampled.
 
-\paragraph{Filtering}
+\subsubsection{Filtering}
 Every edge in the BES theoretically corresponds to a predicate lemma, as stated above. Still it can occur that it is not possible to determine the predicate lemma of a given edge to to implementation issues, which out of scope of this work. In these cases an edge is filtered from the BSE, which results in the \textit{filtered base edge set} (FBES). The FBES contains \(n_{f} = 69 380\) edges. 
 
 
-\paragraph{Sampling} 
+\subsubsection{Sampling} 
 The edges in the full dataset correspond to \(n_{l} = 2195\) unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every predicate lemma contained in the full dataset is statistically represented multiple times in the subsampled dataset.
 \todo{add lemma distribution plot}
 
@@ -633,12 +639,12 @@ The procedure splits the full dataset into multiple bins after the edges are sor
 The subsampled dataset size resulting from this sampling method is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the CD.
 
 
-\paragraph{Labelling}
+\subsubsection{Labelling}
 The labelling task is shared between the three annotators. A given edge will be either labeled as \textit{conflict} or \textit{no conflict} by an annotator following the definition given in \cref{sec:conflict-definition}. Because of the aforementioned time constraints, every edge is only labeled by one annotator. To nonetheless ensure a consistent labelling among all annotators, a set of 50 edge is labelled by all three annotators. Every edge for which a disagreement in labelling occurs between at least two of the annotators, is inspected to reach an agreement on the label. Utilizing this process, the annotators understanding of what constitutes an expression of conflict is refined. Following this preliminary step, the \(n_s\) edges of the dataset are equally distributed among the three annotators and individually labelled by them.
 
 % It was confirmed that the percentage of edges that represent an expression of conflict in relation to all edges in the subset given to an annotator did not vary more than ... among all three annotators.
 
-\subsubsection{Edge Set Comparison}
+\subsection{Edge Set Comparison}
 The CD is the result of the filtering, sampling and labelling described above. The size of the Worldnews-SH, FD and SD are listed in \cref{tab:dataset-descriptions} for comparison, along with the number and percentage of edges which are labelled as an expression of conflict and of those which are not.\todo{add examples}
 
 
@@ -661,25 +667,28 @@ Conflict Dataset (CD)				& 2000 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
 \end{table}
 
 
-\subsection{Evaluation Process}
-The evaluation process consists of multiple \textit{evaluation runs}. An evaluation run is described by an \textit{evaluation configuration} consisting of a dataset (which is always the CD in this case study) and an SH pattern which is matched against the dataset. For the semsim conflict patterns the evaluation run is further described by an \textit{NESS configuration}. These configurations specify the properties of the NESS matching. That means the \textit{NESS model} and in the case of CNESS it is also specified which set of reference edges is used and if the \textit{all-tokens} version of the matching is used. \todo{add references to chapter 2}
+\section{Evaluation Process}
+\todo[inline]{move some of the content from below up here}
+
+
+\subsection{Evaluation Runs}
+The evaluation process consists of multiple \textit{evaluation runs}. An evaluation run is described by an \textit{evaluation (run) configuration} consisting of a dataset (which is always the CD in this case study) and an SH pattern which is matched against the dataset. For the semsim conflict patterns the evaluation run is further described by an \textit{NESS configuration}. These configurations specify the properties of the NESS matching. That means the \textit{NESS model} and in the case of CNESS it is also specified which set of reference edges is used and if the \textit{all-tokens} version of the matching is used. \todo{add references to chapter 2}
 
 For each evaluation run the \textit{evaluation metrics} are computed. If the evaluation run corresponds to a semsim conflict pattern, this is done for every similarity threshold \(t_s \in r_t\), where \(r_t\) is the range of similarity thresholds. For all evaluation that are conducted in this case study \( r_t= \{0, 0.01, ...,  0.99, 1\}\) is chosen.
 
 %In the case of the patterns including a form of the semsim functional pattern, the semsim processing is skipped during the actual matching phase and the semsim instances are recorded. This way the semsim matching can be repeated for multiple parameters, i.e. references and similarity thresholds, without the need to repeat the entire matching process. 
 
-\paragraph{Conflict Patterns}
-\Cref{sec:sh-patterns} describes the four conflict patterns used in this evaluation in detail and derives why they are chosen. A structured overview of the properties of these patterns can be seen in \cref{tab:evaluation-patterns}.
+\subsubsection{Conflict Patterns}
+\Cref{sec:sh-patterns} describes the four conflict patterns used in this evaluation in detail and derives why they are chosen. A structured overview of the properties of these patterns can be seen in \cref{tab:evaluation-patterns}. \todo{explain which properties}
 
-\paragraph{Reference Edge Sets}
-The reference edges are randomly sampled from the set of edges in the CD, which are labelled as "conflict". To account for the effect of different reference edge sets, multiple different samples are drawn. To compare the effect of different sample sizes five sets with one reference edge in each and five sets with ten reference edges in each are sampled. In the evaluation run name, the set of reference edges used is denoted by the last part of the form "r-N-X", with where \(N \in \{1, 10\}\) is the number of reference edges and \(X \in \{1, ..., 5\}\) is the the ID of the set of references edges. The specific sets of references edges, which have been sampled can be seen in \todo{add table to the appendix}
+\subsubsection{Reference Edge Sets}
+The reference edges are randomly sampled from the set of edges in the CD, which are labelled as "conflict". These edges are then excluded from the dataset, to avoid introducing data from the test dataset to the system that is being evaluated. To account for the effect of different reference edge sets, multiple different samples are drawn. To compare the effect of different sample sizes five sets with one reference edge in each and five sets with ten reference edges in each are sampled. In the evaluation run name, the set of reference edges used is denoted by the last part of the form "r-N-X", with where \(N \in \{1, 3, 10\}\) is the number of reference edges and \(X \in \{1, ..., 5\}\) is the the ID of the set of references edges. The specific sets of references edges, which have been sampled can be seen in \todo{add table to the appendix}
 
-\paragraph{Evaluation Configurations}
+\subsubsection{Evaluation Configurations}
 \Cref{tab:evaluation-run-configs} describes the configurations for all evaluation runs that are conducted in this case study. For evaluation runs based on the semsim-ctx conflict pattern, the ID of the reference edge sets has been omitted in this table. All five reference edges sets for both sample sizes have been used for the evaluation runs.
 
-\subsubsection{Evaluation Metrics}
-Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{accuracy}, \textit{precision}, \textit{recall} and \textit{F1 score} are computed.
-\todo{leave out accuracy?}
+\subsection{Evaluation Metrics}
+Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed.
 
 \begin{table}
 \centering
@@ -703,19 +712,24 @@ semsim-ctx conflict (\cref{pat:semsim-fix-conflict})				& No		& CONTEXT	& No		& 
 \centering
 \begin{tabular}{llccc}
 \toprule
-\multicolumn{1}{l}{Evaluation} & \multicolumn{1}{l}{Conflict} & \multicolumn{3}{c}{NESS Configuration} \\
+\multicolumn{1}{l}{Evaluation Run Name} & \multicolumn{1}{l}{Conflict Pattern} & \multicolumn{3}{c}{NESS Configuration} \\
 \cmidrule{3-5}
-\multicolumn{1}{l}{Run Name}   & \multicolumn{1}{l}{Pattern}  & \multicolumn{1}{c}{Model}	& \multicolumn{1}{c}{Use \textit{all-tokens}} & \multicolumn{1}{c}{Num. Ref. Edges} \\
+\multicolumn{1}{l}{}   & \multicolumn{1}{l}{}  & \multicolumn{1}{c}{Model}	& \multicolumn{1}{c}{Use} & \multicolumn{1}{c}{Num. of} \\
+\multicolumn{3}{l}{}   & \multicolumn{1}{c}{\textit{all-tokens}}  & \multicolumn{1}{c}{Ref. Edges}\\
 \midrule
 original                       & original                     & -                          & -                                         & - \\
 semsim-fix w2v                 & semsim-fix                   & word2vec                   & -                                         & - \\
-semsim-fix cn                 & semsim-fix                   & cn-nb                      & -                                         & - \\
+semsim-fix cn                 & semsim-fix                   & conceptnet-numb.                      & -                                         & - \\
 semsim-fix-lemma w2v           & semsim-fix-lemma             & word2vec                   & -                                         & - \\
-semsim-fix-lemma cn           & semsim-fix-lemma             & cn-nb                      & -                                         & - \\
+semsim-fix-lemma cn           & semsim-fix-lemma             & conceptnet-numb.                      & -                                         & - \\
 semsim-ctx e5 r-1                & semsim-ctx                   & e5                         & No                                        & 1 \\
 semsim-ctx gte r-1               & semsim-ctx                   & gte                        & No                                        & 1 \\
 semsim-ctx e5-at r-1             & semsim-ctx                   & e5                         & Yes                                       & 1 \\
 semsim-ctx gte-at r-1            & semsim-ctx                   & gte                        & Yes                                       & 1 \\
+semsim-ctx e5 r-3                & semsim-ctx                   & e5                         & No                                        & 3 \\
+semsim-ctx gte r-3               & semsim-ctx                   & gte                        & No                                        & 3 \\
+semsim-ctx e5-at r-3             & semsim-ctx                   & e5                         & Yes                                       & 3 \\
+semsim-ctx gte-at r-3            & semsim-ctx                   & gte                        & Yes                                       & 3 \\
 semsim-ctx e5 r-10               & semsim-ctx                   & e5                         & No                                        & 10 \\
 semsim-ctx gte r-10              & semsim-ctx                   & gte                        & No                                        & 10 \\
 semsim-ctx e5-at r-10            & semsim-ctx                   & e5                         & Yes                                       & 10 \\
@@ -728,225 +742,208 @@ semsim-ctx gte-at r-10           & semsim-ctx                   & gte           
 
 
 
-\subsection{Evaluation Results}
+\section{Evaluation Results}
+\todo[inline]{add section introduction}
 
-\subsubsection{Quantitative Results}
-Table \cref{tab:quant-results} shows results for all evaluation runs conducted in this case study. For every evaluation run, the best score for all three evaluation metric is given. In case of the evaluation runs based on semsim conflict patterns, the corresponding similarity threshold is noted in parenthesis behind the score. For all evaluation runs based on the semsim-ctx conflict pattern, there is an additional entry that shows the score of the \textit{mean evaluation run} for all reference edge sets of a specific size. In this work mean evaluation run refers to the mean value for each evaluation metrics for a given similarity threshold.
-%, based on all evaluation runs with the same configuration, which only differ in the specific set of reference edges used, but not in the reference edge sets size.
+\subsection{Quantitative Results}
+\todo[inline]{add intro}
 
+\subsubsection{Result Tables}
+Table \cref{tab:quant-results} shows results for all evaluation runs conducted in this case study. For every evaluation run, the score for all three evaluation metric is given. In case of the evaluation runs based on semsim conflict patterns, the scores relate to the \textit{best F1 score}. This means among the results for all similarity threshold in the given threshold range for a given evaluation run, the ST that results in the highest F1-score is selected. The scores of the other evaluation metrics also correspond to this ST.
 
-table redesign:
---------
-
-run configuration table:
-* remove num ref edges column
-
-
-
-
-two tables:
-
-summary table 
-* with best f1 from each conflict pattern: 
-* original, semsim-ctx and  and semsim-ctx
-
-
-full results table:
- * best f1 score (with threshold and corresponding precision and recall
- * add f1 score variance for semsim-ctx evaluations
- * check why mean value in table does not match plots
+ For all evaluation runs based on the semsim-ctx conflict pattern, only the \textit{mean-best} evaluation score is listed for each evaluation run configuration. This is the mean of all evaluation scores corresponding to the best F1 score for one of the five different sets of reference edges of a specific size. For example \textit{semsim-ctx e5-at r-10-best-mean} refers to the mean of best F1 scores for all evaluation runs that use the semsim-ctx conflict pattern, the e5 model with all-tokens enabled and a reference edge set of size ten. 
  
- 
+ In \cref{tab:quant-results-semsim-ctx} and \cref{tab:quant-results-semsim-ctx-at} of \cref{app-sec:result-tables} the complete evaluation results for the semsim-ctx conflict pattern based evaluation runs can be seen. For each evaluation run configuration there are five entries for the different sets of reference edges, the discussed \textit{mean-best} entry and an additional \textit{mean} entry. The mean evaluation runs are constructed from the mean value for all evaluation scores across all reference edge sets for a given evaluation run configuration, i.e. for every ST the mean of the corresponding evaluation scores of all reference edge sets is computed. These mean evaluation runs are primarily relevant for visualisation in the result plots (see \cref{sec:result-plots}).
 
-
+For the mean-best and the mean entries there is an additional column listed in \cref{tab:quant-results}, \cref{tab:quant-results-semsim-ctx} and \cref{tab:quant-results-semsim-ctx-at}, which shows the standard deviation of the F1 score for this entry. For the mean evaluation run, the standard deviation is computed across all reference edge sets for a specific evaluation run configuration. This results in a value for the standard deviation for each ST, whose mean is then computed. For the mean-best evaluation runs this is the standard deviation of the best F1 scores across all reference edge sets for a for a specific evaluation run configuration.
 
 \begin{table}
 \centering
-\begin{tabular}{lllrrrrr}
+\begin{tabular}{lllrrrrrr}
 \toprule
-\multicolumn{3}{l}{Evaluation Run Name}	& \multicolumn{1}{c}{ST} & \multicolumn{1}{c}{Precision} & \multicolumn{1}{c}{Recall} & \multicolumn{2}{c}{F1 Score}\\
+\multicolumn{3}{l}{Evaluation Run Name}	& \multicolumn{1}{c}{ST} & \multicolumn{1}{c}{Prec.} & \multicolumn{1}{c}{Rec.} & \multicolumn{2}{c}{(Best) F1-Score}\\
+\cmidrule{7-8}
+\multicolumn{7}{l}{} & \multicolumn{1}{c}{Std. Dev.} \\
 \midrule
-original &  &  & - & 0.706 & 0.209 & 0.322 & - \\
+original &  &  & - & 0.706 & 0.209 & \textbf{0.322} & - \\
 \hline
 semsim-fix & cn &  & 0.25 & 0.479 & 0.524 & 0.500 & - \\
-semsim-fix & w2v &  & 0.27 & 0.483 & 0.533 & 0.507 & - \\
-semsim-fix-lemma & cn &  & 0.30 & 0.492 & 0.558 & 0.523 & - \\
-semsim-fix-lemma & w2v &  & 0.33 & 0.460 & 0.553 & 0.502 & - \\
+semsim-fix & w2v &  & 0.27 & 0.483 & 0.533 & \textbf{0.507} & - \\
 \hline
+semsim-fix-l. & cn &  & 0.30 & 0.492 & 0.558 & \textbf{0.523} & - \\
+semsim-fix-l. & w2v &  & 0.33 & 0.460 & 0.553 & 0.502 & - \\
+\hline
+semsim-ctx & e5 & r-1-mean-best & 0.65 & 0.392 & 0.772 & 0.518 & +/- 0.025 \\
+semsim-ctx & gte & r-1-mean-best & 0.59 & 0.336 & 0.879 & 0.483 & +/- 0.025 \\
+semsim-ctx & e5 & r-3-mean-best & 0.68 & 0.399 & 0.818 & 0.536 & +/- 0.021 \\
+semsim-ctx & gte & r-3-mean-best & 0.65 & 0.365 & 0.799 & 0.499 & +/- 0.016 \\
+semsim-ctx & e5 & r-10-mean-best & 0.72 & 0.416 & 0.790 & \textbf{0.544} & +/- 0.020 \\
+semsim-ctx & gte & r-10-mean-best & 0.68 & 0.382 & 0.812 & 0.517 & +/- \textbf{0.010} \\
 
-
-%\midrule
-%original 			& - 			& -			& 0.71 (-) & 0.21 (-) & 0.32 (-) \\
-%\hline
-%semsim-fix 			& cn 		& -			& 0.76 (0.92) & 0.91 (0.00) & 0.50 (0.25) \\
-%semsim-fix 			& w2v 		& -			& 0.79 (0.61) & 0.99 (0.00) & \textbf{0.51} (0.27) \\
-%\hline
-%semsim-fix-lemma 	& cn 		& -			& 0.72 (0.64) & 1.00 (0.00) & \textbf{0.52} (0.30) \\
-%semsim-fix-lemma 	& w2v 		& -			& 0.71 (0.60) & 0.99 (0.00) & 0.50 (0.33) \\
-%\hline
-%semsim-ctx 			& e5 		& r-1-1 		& 1.00 (0.79) & 1.00 (0.00) & 0.51 (0.65) \\
-%semsim-ctx 			& e5 		& r-1-2 		& 1.00 (0.84) & 1.00 (0.00) & 0.50 (0.68) \\
-%semsim-ctx 			& e5 		& r-1-3 		& 1.00 (0.82) & 1.00 (0.00) & 0.50 (0.67) \\
-%semsim-ctx 			& e5 		& r-1-4 		& 1.00 (0.82) & 1.00 (0.00) & 0.52 (0.59) \\
-%semsim-ctx 			& e5 		& r-1-mean 	& 1.00 (0.81) & 1.00 (0.00) & \textbf{0.56} (0.67) \\
-%\hline
-%semsim-ctx 			& e5 		& r-10-1 	& 1.00 (0.86) & 1.00 (0.00) & 0.57 (0.72) \\
-%semsim-ctx 			& e5 		& r-10-2 	& 1.00 (0.87) & 1.00 (0.00) & 0.53 (0.71) \\
-%semsim-ctx 			& e5 		& r-10-3 	& 1.00 (0.89) & 1.00 (0.00) & 0.57 (0.72) \\
-%semsim-ctx 			& e5 		& r-10-4 	& 1.00 (0.85) & 1.00 (0.00) & 0.53 (0.72) \\
-%semsim-ctx 			& e5 		& r-10-mean & 1.00 (0.85) & 1.00 (0.00) & \textbf{0.56} (0.71) \\
-%\hline
-%semsim-ctx 			& e5-at		& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.49 (0.68) \\
-%semsim-ctx 			& e5-at		& r-1-2 		& 1.00 (0.84) & 1.00 (0.00) & 0.51 (0.71) \\
-%semsim-ctx 			& e5-at		& r-1-3 		& 1.00 (0.81) & 1.00 (0.00) & 0.50 (0.71) \\
-%semsim-ctx 			& e5-at		& r-1-4 		& 1.00 (0.83) & 1.00 (0.00) & 0.51 (0.66) \\
-%semsim-ctx 			& e5-at		& r-1-mean 	& 1.00 (0.82) & 1.00 (0.00) & \textbf{0.54} (0.71) \\
-%\hline
-%semsim-ctx 			& e5-at		& r-10-1 	& 1.00 (0.86) & 1.00 (0.00) & 0.55 (0.75) \\
-%semsim-ctx 			& e5-at		& r-10-2 	& 1.00 (0.90) & 1.00 (0.00) & 0.53 (0.75) \\
-%semsim-ctx 			& e5-at		& r-10-3 	& 1.00 (0.95) & 1.00 (0.00) & 0.51 (0.74) \\
-%semsim-ctx 			& e5-at		& r-10-4 	& 1.00 (0.87) & 1.00 (0.00) & 0.53 (0.74) \\
-%semsim-ctx 			& e5-at		& r-10-mean & 1.00 (0.87) & 1.00 (0.00) & \textbf{0.53} (0.74) \\
-%\hline
-%semsim-ctx 			& gte 		& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.46 (0.57) \\
-%semsim-ctx 			& gte 		& r-1-2 		& 1.00 (0.80) & 1.00 (0.00) & 0.52 (0.63) \\
-%semsim-ctx 			& gte 		& r-1-3 		& 1.00 (0.83) & 1.00 (0.00) & 0.48 (0.61) \\
-%semsim-ctx 			& gte 		& r-1-4 		& 1.00 (0.79) & 1.00 (0.00) & 0.46 (0.55) \\
-%semsim-ctx 			& gte 		& r-1-mean 	& 1.00 (0.76) & 1.00 (0.00) & \textbf{0.49} (0.60) \\
-%\hline
-%semsim-ctx 			& gte 		& r-10-1 	& 1.00 (0.85) & 1.00 (0.00) & 0.53 (0.67) \\
-%semsim-ctx 			& gte 		& r-10-2 	& 1.00 (0.88) & 1.00 (0.00) & 0.52 (0.69) \\
-%semsim-ctx 			& gte 		& r-10-3 	& 1.00 (0.85) & 1.00 (0.00) & 0.51 (0.68) \\
-%semsim-ctx 			& gte 		& r-10-4 	& 1.00 (0.88) & 1.00 (0.00) & 0.52 (0.67) \\
-%semsim-ctx 			& gte 		& r-10-mean & 1.00 (0.83) & 1.00 (0.00) & \textbf{0.53} (0.69) \\
-%\hline
-%semsim-ctx 			& gte-at 	& r-1-1 		& 1.00 (0.81) & 1.00 (0.00) & 0.48 (0.65) \\
-%semsim-ctx 			& gte-at 	& r-1-2 		& 1.00 (0.81) & 1.00 (0.00) & 0.49 (0.66) \\
-%semsim-ctx 			& gte-at 	& r-1-3 		& 1.00 (0.82) & 1.00 (0.00) & 0.46 (0.63) \\
-%semsim-ctx 			& gte-at 	& r-1-4 		& 1.00 (0.82) & 1.00 (0.00) & 0.47 (0.66) \\
-%semsim-ctx 			& gte-at 	& r-1-mean 	& 1.00 (0.83) & 1.00 (0.00) & \textbf{0.52} (0.68) \\
-%\hline
-%semsim-ctx 			& gte-at 	& r-10-1 	& 1.00 (0.85) & 1.00 (0.00) & 0.50 (0.71) \\
-%semsim-ctx 			& gte-at 	& r-10-2 	& 1.00 (0.94) & 1.00 (0.00) & 0.48 (0.70) \\
-%semsim-ctx 			& gte-at 	& r-10-3 	& 1.00 (0.91) & 1.00 (0.00) & 0.50 (0.72) \\
-%semsim-ctx 			& gte-at 	& r-10-4 	& 1.00 (0.86) & 1.00 (0.00) & 0.51 (0.73) \\
-%semsim-ctx 			& gte-at 	& r-10-mean & 1.00 (0.88) & 1.00 (0.00) & \textbf{0.50} (0.72) \\
+\hline
+semsim-ctx & e5-at & r-1-mean-best & 0.69 & 0.369 & 0.841 & 0.509 & +/- 0.016 \\
+semsim-ctx & gte-at & r-1-mean-best & 0.66 & 0.335 & 0.882 & 0.483 & +/- 0.021 \\
+semsim-ctx & e5-at & r-3-mean-best & 0.72 & 0.378 & 0.821 & 0.516 & +/- 0.011 \\
+semsim-ctx & gte-at & r-3-mean-best & 0.70 & 0.336 & 0.876 & 0.485 & +/- 0.017 \\
+semsim-ctx & e5-at & r-10-mean-best & 0.74 & 0.382 & 0.843 & \textbf{0.525} & +/- 0.012 \\
+semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- \textbf{0.008} \\
 \bottomrule
 \end{tabular}
 \caption{Best precision, recall and F1 scores for all evaluation runs}
 \label{tab:quant-results}
 \end{table}
 
-\subsubsection{Qualitative Results}
+\subsubsection{Result Plots}
+\label{sec:result-plots}
+
+\paragraph{Eval. Metrics vs. ST Plots}
+These plots visualise the resulting scores for the different evaluation metrics in relation to different value for the ST. 
+
+\Cref{fig:best-f1-per-pattern} shows the best performing evaluation runs for each pattern. That means for each conflict pattern, this shows the evaluation run with the configuration that resulted in the highest best F1-score. 
+
+\Cref{fig:p-r-f1-best-semsim} shows the evaluation runs for the best performing semsim-fix(-lemma) based evaluation configurations and the best performing semsim-ctx based evaluation configuration. For all evaluation runs the scores of all three evaluation metrics are shown.
+
+More plots of this kind can be found in the appendix.
+
+%This result in lines parallel to the x-axis for the original conflict pattern, since it does not depend on a ST. It can therefore be seen as a baseline. 
+
+ 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]
+{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5_f1}
+\caption{F1-score vs. ST of best performing evaluation run configurations for each conflict pattern}
+\label{fig:best-f1-per-pattern}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5_precision-recall-f1}
+\caption{Precision, recall and F1-score vs. ST for \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5 r-10}}
+\label{fig:p-r-f1-best-semsim}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_original_vs_semsim-fix_cn_vs_semsim-fix-lemma_cn_precision-recall}
+\caption{Precision and recall vs. ST for \texttt{semsim-fix cn} and \texttt{semsim-ctx e5 r-10}}
+\label{fig:p-r-f1-best-semsim}
+\end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-fix-lemma_w2v_cn_precision-recall-f1}
+%\caption{Caption for the figure}
+%\label{fig:unique-label-1}
+%\end{figure}
+%
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-ctx_e5_nref-1_vs_nref-3_vs_nref-10_f1}
+%\caption{Caption for this figure}
+%\label{fig:unique-label-2}
+%\end{figure}
+%
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-ctx_nref-10_e5_e5-at_gte_gte-at_f1}
+%\caption{Another caption}
+%\label{fig:unique-label-5}
+%\end{figure}
+%
+%
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-ctx_nref-10_e5-vs_e5-at_precision-recall-f1}
+%\caption{Another caption}
+%\label{fig:unique-label-3}
+%\end{figure}
+%
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_semsim-ctx_nref-10_e5_vs_gte_precision-recall-f1}
+%\caption{Another caption}
+%\label{fig:unique-label-4}
+%\end{figure}
+
+
+
+\subsection{Qualitative Results}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrr|lrr}
+\toprule
+\multicolumn{3}{c|}{\texttt{semsim-fix-lemma cn}} & \multicolumn{3}{c}{\texttt{semsim-ctx e5 r-10-X}} \\ 
+\midrule
+Lemma      & F1-score & Num. of Samples & Lemma      & F1-score & Num. of Samples \\
+\midrule
+arrest     & 1.00     & 11            & arrest     & 1.00     & 11            \\
+accuse     & 0.97     & 33            & file       & 1.00     & 5             \\
+warn       & 0.93     & 24            & attack     & 1.00     & 12            \\
+slam       & 0.92     & 7             & accuse     & 0.95     & 33            \\
+attack     & 0.91     & 12            & slam       & 0.92     & 7             \\
+criticize  & 0.91     & 6             & criticize  & 0.91     & 6             \\
+detain     & 0.89     & 5             & shoot      & 0.89     & 5             \\
+shoot      & 0.89     & 5             & order      & 0.88     & 14            \\
+condemn    & 0.84     & 25            & detain     & 0.86     & 5             \\
+dismiss    & 0.80     & 6             & launch     & 0.86     & 14            \\ 
+\bottomrule
+\end{tabular}
+\caption{Top ten lemmas regarding F1-score with number of samples per lemma \(n_s >= 5\) \\
+for the evaluation runs \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5 r-10-X}}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Lemma      & Abs. Prec. Diff. & F1 Eval. Run. A & F1 Eval. Run B & Num. of Samples \\
+\midrule
+capture    & 0.71	& 0.29	& 1.00	& 7 	\\
+accept     & 0.36	& 0.14	& 0.50	& 7 	\\
+detain     & 0.20	& 0.80	& 1.00	& 5 	\\
+attack     & 0.17	& 0.83	& 1.00	& 12	\\
+strike     & 0.17	& 0.67	& 0.50	& 9 	\\
+suggest    & 0.13	& 0.20	& 0.33	& 5 	\\
+deny       & 0.11	& 0.30	& 0.41	& 20 	\\
+claim      & 0.10	& 0.27	& 0.38	& 22	\\
+threaten   & 0.09	& 0.35	& 0.44	& 20	\\
+say		   & 0.08 	& 0.29 	& 0.38  & 31\\
+\bottomrule
+\end{tabular}
+\caption{Top ten lemmas regarding the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} (A) and \texttt{semsim-ctx e5 r-10-X} (B)}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Lemma      & Prec Difference & F1 Eval. Run A & F1 Eval. Run B & Num. of Samples \\
+\midrule
+shoot      & 0.00          & 0.80           & 0.80           & 5               \\
+criticize  & 0.00          & 0.83           & 0.83           & 6               \\
+dismiss    & 0.00          & 0.67           & 0.67           & 6               \\
+arrest     & 0.00          & 1.00           & 1.00           & 11              \\
+slam       & 0.00          & 0.86           & 0.86           & 7               \\
+seize      & 0.00          & 0.50           & 0.50           & 12              \\
+condemn    & 0.00          & 0.72           & 0.72           & 25              \\
+kill       & 0.01          & 0.49           & 0.49           & 77              \\
+urge       & 0.01          & 0.51           & 0.50           & 41              \\
+destroy    & 0.02          & 0.58           & 0.60           & 12              \\
+\bottomrule
+\end{tabular}
+\caption{Top ten lemmas regarding the lowest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} (A) and \texttt{semsim-ctx e5 r-10-X} (B)}
+\end{table}
+
 
 
 table with evaluation runs, their 
 
 
+\subsection{Result Discussion}
 
-
-
-
-%To investigate whether it is possible to capture the abstract concept of a country using the multi-word \texttt{semsim} pattern introduced in \ref{sec:semsim-multi-word}, a list of the worlds 20 most populous countries \footnote{Based on \url{https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population}, Accessed on XYZ} is used (listed in descending order by population size):
-%
-%
-%\textit{India, China, USA, Indonesia, Pakistan, Nigeria, Brazil, Bangladesh, Russia, Mexico, Japan, Philippines, Ethiopia, Egypt, Vietnam, Congo, Iran, Turkey, Germany, France}
-%
-%To avoid the repetition of that list in the following pattern, we introduce a variable:
-%
-%\begin{pattern}
-%  \normalfont\sffamily
-%  \centering
-%  COUNTRIES = [india,china,usa,indonesia,pakistan,nigeria,brazil,bangladesh,russia,mexico, ajapan,philippines,ethiopia,egypt,vietnam,congo,iran,turkey,germany,france]
-%  \caption{Countries variable}
-%  \label{pat:countries-var}
-%\end{pattern}
-%
-%Pattern \ref{pat:original-conflict-countries} shows the resulting pattern for conflicts between countries:
-%
-%\begin{pattern}
-%  \normalfont\sffamily
-%  \centering
-%  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
-%  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
-%  ( semsim/J >SOURCE/C COUNTRIES/C ) \(\wedge\) ( semsim/J >TARGET/C COUNTRIES/C )
-%  \caption{Country conflict pattern}
-%  \label{pat:original-conflict-countries}
-%\end{pattern}
-%
-%In pattern \ref{pat:original-conflict-countries-threshold-countries} a sub-pattern specific threshold \(t_{sim}^{countries}\) for the countries \texttt{semsim} sub-pattern is introduced.
-%
-%\begin{pattern}
-%  \normalfont\sffamily
-%  \centering
-%  ( PRED/P.{so,x} SOURCE/C TARGET/C semsim [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\ 
-%  ( semsim/J >/PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P ) \(\wedge\) \\
-%  ( semsim/J >SOURCE/C COUNTRIES/C \(t_{sim}^{countries}\) ) \(\wedge\) \\ 
-%  ( semsim/J >TARGET/C COUNTRIES/C \(t_{sim}^{countries}\) )
-%  \caption{Country conflict pattern}
-%  \label{pat:original-conflict-countries-threshold-countries}
-%\end{pattern}
-%
-
-%\subsection{Quantitative Results}
-
-
-%To asses the generalisation capabilities (recall?) of the introduced \texttt{semsim}-country-pattern,
-%
-%Pattern \ref{pat:original-conflict-countries} is matched against the described \textit{Reddit r/worldnews} hypergraph. The similarity threshold  \(t_{sim}\) for the \texttt{semsim} function (see \ref{sec:similarity-threshold}) is varied. \(t_{sim}\) is either varied for the entire pattern or for a specific \texttt{semsim} sub-pattern. 
-
-%for every matching operation which includes a \texttt{semsim} function or for
-
-%In \ref{fig:case-study-conflict-countries-1} the number of matches that result from using this pattern is plotted against the similarity threshold for the \texttt{semsim} pattern.
-
-
-%\begin{figure}
-%     \centering
-%     \begin{subfigure}[t]{0.9\textwidth}
-%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds.png}
-%         \caption{Similarity threshold variation for all \textsf{semsim} patterns}
-%         \label{fig:countries_20-most-popul_thresholds}
-%     \end{subfigure}
-%     \begin{subfigure}[t]{0.9\textwidth}
-%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries.png}
-%         \caption{Similarity threshold variation only for \textsf{SOURCE} and \textsf{TARGET} (country) \texttt{semsim} patterns}
-%         \label{fig:countries_20-most-popul_thresholds-countries}
-%     \end{subfigure}
-%\caption{Number of matches for conflict pattern in relation to similarity threshold}
-%\label{fig:case-study-conflict-countries-1}   
-%\end{figure}
-%
-%\begin{figure}
-%     \centering
-%     \begin{subfigure}[t]{0.9\textwidth}
-%         \includegraphics[width=\textwidth]{countries_20-most-popul_thresholds-countries_greater-0.4.png}
-%     \end{subfigure}
-%\caption{Number of matches for conflict pattern in relation to similarity threshold with threshold variation for \textsf{SOURCE} and \textsf{TARGET} (i.e. COUNTRIES) \texttt{semsim} patterns in the range \(0.4 >=\) threshold \(< 1.0\) (and y-axis limited to 2000 results)}
-%\label{fig:case-study-conflict-countries-2}   
-%\end{figure}
-
-%\subsection{Qualitative Results}
-%
-%
-%\begin{sidewaystable}
-%%    \centering
-%    \caption{hyper dyper table}
-%
-%\begin{tabular}{L{4cm}L{2cm}L{5cm}L{3cm}L{5cm}L{3cm}}
-%\toprule
-%Scenario Name & Pattern & Samples & Variable Threshold & Reference Edges & Ref. Edges Source \\
-%\midrule
-%1\_original-pattern & Pattern X & Erdogan slams ridicule of 'Muslims discovered Americas' claim\newline Iran forces 'kill Kurdish rebels on Iraq border\newline Ukraine Accuses Russia of Invasion & -/- & -/- & -/- \\
-%2-1\_semsim-fix\_preds & Pattern X & Pakistani police kill feared militant leader in mysterious pre-dawn shootout\newline Al-Shabaab militants claim responsibility for deadly attack on Garissa University College in Kenya\newline Casualties as Congo troops, UN forces fight rebels & 'preds': 0.19\newline Percentile: 50 & -/- & -/- \\
-%2-2\_semsim-fix\_preps & Pattern X & Iranian police have arrested merchants for selling clothing that featured the flags of the United States and Britain, two longtime foes of the Islamic republic\newline Syrian Air Force Strikes kill 38 ISIS fighters\newline Seven Libyan soldiers killed fighting off Islamists near Benghazi: source & 'preps': 0.54\newline Percentile: 50 & -/- & -/- \\
-%\bottomrule
-%\end{tabular}
-%
-%\end{sidewaystable}
-
-%\begin{table*}
-%\
-%\end{table*}
 
 % ========== 
 \chapter{Conclusion}
@@ -958,8 +955,9 @@ implemnt multiprocessing, i.e. server process for both hypergraph and semsim mat
 \section{Further Evaluations}
 
 
-
 \printbibliography
-
+\appendix
+\chapter{Appendix}
+\input{appendix}
 
 \end{document}
