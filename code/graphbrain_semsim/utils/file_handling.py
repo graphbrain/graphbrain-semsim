@@ -6,7 +6,7 @@ from typing import Type, Any, TypeVar
 
 from pydantic import BaseModel
 
-from graphbrain_semsim import config
+from graphbrain_semsim import parse_config
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ def load_json(
         file_path: Path,
         model: Type[BaseModelType],
         exit_on_error: bool = False,
-        skip_validation: bool = config.SKIP_VALIDATION
+        skip_validation: bool = parse_config.SKIP_VALIDATION
 ) -> BaseModelType | None:
     if not file_path.exists():
         error_msg = f"File {file_path} does not exist"

@@ -88,20 +88,21 @@ SEM_SIM_EVAL_CONFIGS: dict[str, dict[SemSimType, SemSimConfig]] = {
 #     ref_words=SUB_PATTERN_WORDS[ConflictsSubPattern.PREDS],
 # )
 
-# for sample_mod_ in range(1, 6):
-#     for n_ref_edges_ in [1, 10]:
-#         evaluate_dataset_for_pattern(
-#             dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
-#             pattern_config_name="2-3_pred_semsim-ctx_wildcard",
-#             pattern_configs=PATTERN_CONFIGS,
-#             semsim_configs_name="e5",
-#             semsim_threshold_range=frange(0.0, 1.0, 0.01),
-#             n_ref_edges=n_ref_edges_,
-#             sample_mod=sample_mod_,
-#         )
+for sample_mod_ in range(1, 6):
+    for n_ref_edges_ in [1, 3, 10]:
+        evaluate_dataset_for_pattern(
+            dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
+            pattern_config_name="2-3_pred_semsim-ctx_wildcard",
+            pattern_configs=PATTERN_CONFIGS,
+            semsim_configs_name="e5",
+            semsim_eval_configs=SEM_SIM_EVAL_CONFIGS,
+            semsim_threshold_range=frange(0.0, 1.0, 0.01),
+            n_ref_edges=n_ref_edges_,
+            sample_mod=sample_mod_,
+        )
 
 for sample_mod_ in range(1, 6):
-    for n_ref_edges_ in [1, 10]:
+    for n_ref_edges_ in [1, 3, 10]:
         evaluate_dataset_for_pattern(
             dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
             pattern_config_name="2-3_pred_semsim-ctx_wildcard",
@@ -113,28 +114,29 @@ for sample_mod_ in range(1, 6):
             sample_mod=sample_mod_,
         )
 
-#
-# for sample_mod_ in range(1, 6):
-#     for n_ref_edges_ in [1, 10]:
-#         evaluate_dataset_for_pattern(
-#             dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
-#             pattern_config_name="2-3_pred_semsim-ctx_wildcard",
-#             pattern_configs=PATTERN_CONFIGS,
-#             semsim_configs_name="gte",
-#             semsim_threshold_range=frange(0.0, 1.0, 0.01),
-#             n_ref_edges=n_ref_edges_,
-#             sample_mod=sample_mod_,
-#         )
-#
-# for sample_mod_ in range(1, 6):
-#     for n_ref_edges_ in [1, 10]:
-#         evaluate_dataset_for_pattern(
-#             dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
-#             pattern_config_name="2-3_pred_semsim-ctx_wildcard",
-#             pattern_configs=PATTERN_CONFIGS,
-#             semsim_configs_name="gte-at",
-#             semsim_threshold_range=frange(0.0, 1.0, 0.01),
-#             n_ref_edges=n_ref_edges_,
-#             sample_mod=sample_mod_,
-#         )
+for sample_mod_ in range(1, 6):
+    for n_ref_edges_ in [1, 3, 10]:
+        evaluate_dataset_for_pattern(
+            dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
+            pattern_config_name="2-3_pred_semsim-ctx_wildcard",
+            pattern_configs=PATTERN_CONFIGS,
+            semsim_configs_name="gte",
+            semsim_eval_configs=SEM_SIM_EVAL_CONFIGS,
+            semsim_threshold_range=frange(0.0, 1.0, 0.01),
+            n_ref_edges=n_ref_edges_,
+            sample_mod=sample_mod_,
+        )
+
+for sample_mod_ in range(1, 6):
+    for n_ref_edges_ in [1, 3, 10]:
+        evaluate_dataset_for_pattern(
+            dataset_id="dataset_conflicts_1-2_pred_wildcard_subsample-2000_recreated",
+            pattern_config_name="2-3_pred_semsim-ctx_wildcard",
+            pattern_configs=PATTERN_CONFIGS,
+            semsim_configs_name="gte-at",
+            semsim_eval_configs=SEM_SIM_EVAL_CONFIGS,
+            semsim_threshold_range=frange(0.0, 1.0, 0.01),
+            n_ref_edges=n_ref_edges_,
+            sample_mod=sample_mod_,
+        )
 

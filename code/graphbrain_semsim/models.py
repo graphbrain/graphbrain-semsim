@@ -9,7 +9,7 @@ from graphbrain import hedge
 from graphbrain.hypergraph import Hyperedge as OriginalHyperedge
 from graphbrain.semsim import SemSimType
 
-from graphbrain_semsim import config
+from graphbrain_semsim import parse_config
 
 """
 These class declarations exist to properly serialize and deserialize hyperedges 
@@ -24,7 +24,7 @@ def to_str(self) -> str:
 
 Hyperedge = Annotated[
     OriginalHyperedge, PlainValidator(hedge), PlainSerializer(to_str, when_used='json-unless-none')
-] if config.PARSE_HEDGES else Union[str, OriginalHyperedge]
+] if parse_config.PARSE_HEDGES else Union[str, OriginalHyperedge]
 
 
 @dataclass

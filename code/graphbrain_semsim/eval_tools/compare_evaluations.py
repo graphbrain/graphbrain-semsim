@@ -131,12 +131,12 @@ def compare_lemma_results_by_eval_metric_diff(
     ]
 
     logger.info(
-        f"Top 10 lemmas regarding highest difference in {lemma_compare_metric}\n"
+        f"Top 11 lemmas regarding highest difference in {lemma_compare_metric}\n"
         f"limited to lemmas with recall > 0 and n_samples >= {min_samples}\n"
         f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n" +
         "\n".join(
             f"{lemma}: {diff:.2f} ({score_1:.2f} - {score_2:.2f}) (n={len(dataset.lemma_matches[lemma])})"
-            for lemma, (score_1, score_2, diff) in lemma_results_scores_and_diffs_sorted_filtered[:10]
+            for lemma, (score_1, score_2, diff) in lemma_results_scores_and_diffs_sorted_filtered[:11]
         )
     )
     logger.info(
@@ -150,19 +150,29 @@ def compare_lemma_results_by_eval_metric_diff(
     )
 
     logger.info(
-        f"Edges for top 5 lemmas with highest difference in {lemma_compare_metric}\n"
+        f"Edges for top 11 lemmas with highest difference in {lemma_compare_metric}\n"
         f"limited to lemmas with recall > 0 and n_samples >= {min_samples}\n"
         f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n" +
+        # "\n".join(
+        #     f"{lemma}:\n" +
+        #     "\n".join(
+        #         f"  {hg.text(lemma_match.match.edge)} "
+        #         f"(ground_truth: {REVERSE_CONFLICTS_ANNOTATION_LABELS[lemma_match.label]}) "
+        #         f"(eval_1: {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_1, best_threshold_1)}) "
+        #         f"(eval_2: {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_2, best_threshold_2)})"
+        #         for lemma_match in dataset.lemma_matches[lemma]
+        #     )
+        #     for lemma, _ in lemma_results_scores_and_diffs_sorted_filtered[:11]
         "\n".join(
-            f"{lemma}:\n" +
+            f"{lemma} ({len(dataset.lemma_matches[lemma])}):\n" +
             "\n".join(
-                f"  {hg.text(lemma_match.match.edge)} "
-                f"(ground_truth: {REVERSE_CONFLICTS_ANNOTATION_LABELS[lemma_match.label]}) "
-                f"(eval_1: {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_1, best_threshold_1)}) "
-                f"(eval_2: {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_2, best_threshold_2)})"
+                f"& {hg.text(lemma_match.match.edge)} "
+                f"& {REVERSE_CONFLICTS_ANNOTATION_LABELS[lemma_match.label]}) "
+                f"& {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_1, best_threshold_1)}) "
+                f"& {get_eval_edge_label_name(lemma_match.match.edge, best_evaluation_2, best_threshold_2)}) \\\\"
                 for lemma_match in dataset.lemma_matches[lemma]
             )
-            for lemma, _ in lemma_results_scores_and_diffs_sorted_filtered[:5]
+            for lemma, _ in lemma_results_scores_and_diffs_sorted_filtered[:11]
         )
     )
                 
@@ -220,8 +230,8 @@ compare_dataset_evaluations(
     dataset_name="1-2_pred_wildcard_subsample-2000",
     dataset_recreated=True,
     dataset_eval_names=[
-            "2-2_pred_semsim-fix-lemma_wildcard",
-            "2-3_pred_semsim-ctx_wildcard_nref-10"
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
     eval_metric="f1",
 )

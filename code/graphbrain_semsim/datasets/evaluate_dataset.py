@@ -40,13 +40,17 @@ def evaluate_dataset_for_pattern(
     dataset_positives, dataset_negatives = get_positives_and_negatives(dataset.all_lemma_matches)
     log_dataset_statistics(dataset, dataset_positives, dataset_negatives)
 
-    # Get pattern evaluation config and run
+    # Get pattern evaluation parse_config and run
     pattern_eval_config, pattern_eval_run = get_pattern_eval(
         pattern_configs, pattern_config_name, dataset, override=override
     )
 
     ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives, n_ref_edges, sample_mod)
-    semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(semsim_configs_name, semsim_eval_configs)
+    dataset_positives = filter_dataset_positives(dataset_positives, ref_edges)
+
+    semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(
+        semsim_configs_name, semsim_eval_configs
+    )
 
     dataset_evaluation: DatasetEvaluation = DatasetEvaluation(
         dataset_id=dataset_id,
@@ -151,6 +155,10 @@ def get_ref_edges(
     if sample_mod:
         random.seed(RNG_SEED + sample_mod)
     return list(random.sample(dataset_positives, k=n_ref_edges))
+
+
+def filter_dataset_positives(dataset_positives: list[Hyperedge], ref_edges: list[Hyperedge]) -> list[Hyperedge]:
+    return [edge for edge in dataset_positives if edge not in ref_edges]
 
 
 def get_semsim_configs(

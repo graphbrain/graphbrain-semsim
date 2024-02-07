@@ -7,10 +7,12 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 from graphbrain_semsim import logger, PLOT_DIR
-from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
 from graphbrain_semsim.datasets.make_dataset import get_full_dataset, get_lemma_distribution
 from graphbrain_semsim.datasets.models import LemmaDataset
 from graphbrain_semsim.plots import plot_base_config
+
+from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
+
 
 plot_base_config()
 

@@ -60,6 +60,13 @@ class LemmaDataset(BaseModel):
         return f"{base_id}_subsample-{n_samples}"
 
 
+class StandardDeviation(BaseModel):
+    accuracy: float
+    precision: float
+    recall: float
+    f1: float
+
+
 class EvaluationResult(BaseModel):
     matches: Optional[list[Hyperedge]] = None
     correct: Optional[list[Hyperedge]] = None
@@ -67,6 +74,7 @@ class EvaluationResult(BaseModel):
     precision: float
     recall: float
     f1: float
+    std_dev: Optional[StandardDeviation] = None
 
 
 class DatasetEvaluation(BaseModel):

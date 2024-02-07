@@ -1,12 +1,12 @@
 from functools import lru_cache
 from pathlib import Path
-from statistics import mean
+from statistics import mean, stdev
 import logging
 
 from graphbrain.hypergraph import Hypergraph
 from graphbrain_semsim.datasets.config import DATASET_EVAL_DIR
 from graphbrain_semsim.datasets.evaluate_dataset import EVALUATION_FILE_SUFFIX
-from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult
+from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult, StandardDeviation
 from graphbrain_semsim.utils.file_handling import load_json
 
 
@@ -29,15 +29,17 @@ def get_best_evaluations_and_results_and_thresholds(
         logger.info(f"Best evaluation result for dataset evaluation {dataset_eval_name}:")
         logger.info(
             f"--> evaluation metrics ({eval_metric} used for ranking):\n"
-            f"accuracy={best_evaluation_result.accuracy:.2f}, "
-            f"precision={best_evaluation_result.precision:.2f}, "
-            f"recall={best_evaluation_result.recall:.2f}, "
-            f"f1={best_evaluation_result.f1:.2f}"
+            f"accuracy={best_evaluation_result.accuracy:.3f}, "
+            f"precision={best_evaluation_result.precision:.3f}, "
+            f"recall={best_evaluation_result.recall:.3f}, "
+            f"f1={best_evaluation_result.f1:.3f}"
         )
         if best_threshold is not None:
-            logger.info(f"--> best threshold: {best_threshold}")
+            logger.info(f"--> best threshold: {best_threshold:.2f}")
         if best_evaluation.ref_edges is not None:
-            logger.info("--> best ref. edges:\n" + '\n'.join([hg.text(edge) for edge in best_evaluation.ref_edges]))
+            logger.info(
+                f"--> best ref. edges (n={len(best_evaluation.ref_edges)}, sample mod={best_evaluation.sample_mod}):\n"
+                + '\n'.join([hg.text(edge) for edge in best_evaluation.ref_edges]))
 
     return best_evaluations_results_thresholds
 
@@ -46,12 +48,14 @@ def get_best_evaluation_and_result_and_threshold(
     dataset_evaluations: list[DatasetEvaluation],
     eval_metric: str,
 ) -> tuple[DatasetEvaluation, EvaluationResult, float | None]:
+    # dataset evaluation does not have sub-evaluations (semsim-fix)
     if len(dataset_evaluations) == 1:
         best_result, best_threshold = get_best_result_and_threshold_for_single_eval(
             dataset_evaluations[0].symbolic_eval_result, dataset_evaluations[0].semsim_eval_results, eval_metric
         )
         return dataset_evaluations[0], best_result, best_threshold
 
+    # dataset evaluation has sub-evaluations (semsim-ctx)
     results_and_thresholds: list[tuple[EvaluationResult, float]] = [
         get_best_result_and_threshold_for_single_eval(
             dataset_evaluation.symbolic_eval_result, dataset_evaluation.semsim_eval_results, eval_metric
@@ -68,39 +72,52 @@ def get_best_results_and_thresholds(
     dataset_evaluations: list[list[DatasetEvaluation]],
     dataset_eval_names: list[str],
     eval_metric: str,
-    append_mean_semsim_eval_results: bool = False
+    add_mean_eval_results: bool = False
 ) -> dict[str, tuple[EvaluationResult, float | None]]:
+    # dictionary mapping (sub) evaluation names to tuples of best results and thresholds
     best_results_and_thresholds: dict[str, tuple[EvaluationResult, float | None]] = {}
+
+    # iterating over all dataset evaluations, which may contain multiple sub-evaluations
     for dataset_eval_name, dataset_sub_evaluations in zip(dataset_eval_names, dataset_evaluations):
-        best_sub_results_and_thresholds: [tuple[EvaluationResult, float | None]] = (
+        best_sub_results_and_thresholds: list[tuple[EvaluationResult, float | None]] = (
             get_best_results_and_thresholds_for_multi_eval(
-                dataset_sub_evaluations, eval_metric, append_mean_semsim_eval_results
+                dataset_sub_evaluations, eval_metric, add_mean_eval_results
             )
         )
+        # if there are no sub-evaluations, add the best result and threshold to the dictionary
+        # by using the dataset evaluation name as the key
+        if len(best_sub_results_and_thresholds) == 1:
+            best_results_and_thresholds[dataset_eval_name] = best_sub_results_and_thresholds[0]
+            continue
+
+        # iterating over all sub-evaluations to generate sub-evaluation names
+        # (this is only relevant if there are multiple sub-evaluations)
         for sub_eval_idx, (best_result, best_threshold) in enumerate(best_sub_results_and_thresholds):
-            sub_eval_name_suffix: str | None = None
-            if len(best_sub_results_and_thresholds) > 1:
-                sub_eval_name_suffix: str = f"{sub_eval_idx + 1}"
+            # skip the last sub-evaluation if the flag is set, since it is the mean of all sub-evaluations
+            if add_mean_eval_results and sub_eval_idx == len(best_sub_results_and_thresholds) - 1:
+                break
 
-                # last sub-evaluation is the mean of all sub-evaluations
-                if append_mean_semsim_eval_results and sub_eval_idx == len(best_sub_results_and_thresholds):
-                    sub_eval_name_suffix = "mean"
-
-                    # log standard deviation of the metric for the sub-evaluations
-                    scores: list[float] = [
-                        getattr(sub_eval_result, eval_metric) for sub_eval_result, _
-                        in best_sub_results_and_thresholds
-                    ]
-                    mean_score: float = mean(scores)
-                    standard_deviation: float = mean([(score - mean_score) ** 2 for score in scores]) ** 0.5
-
-                    logger.info(
-                        f"Standard deviation of '{eval_metric}' for '{dataset_eval_name}' "
-                        f"sub-evaluations: {standard_deviation:.4f}"
-                    )
-
+            # TODO: this is a general way to name sub-evaluations, but maybe it should use the sample mod directly
+            sub_eval_name_suffix: str = f"{sub_eval_idx + 1}" if len(best_sub_results_and_thresholds) > 1 else None
             sub_eval_name: str = f"{dataset_eval_name}" + (f"_{sub_eval_name_suffix}" if sub_eval_name_suffix else "")
             best_results_and_thresholds[sub_eval_name] = best_result, best_threshold
+
+        if add_mean_eval_results:
+            # add the mean of all sub-evaluations to the dictionary using the "_mean" suffix for the name
+            mean_semsim_best_result, mean_semsim_best_threshold = best_sub_results_and_thresholds[-1]
+            mean_semsim_best_result.std_dev = compute_standard_deviation_for_threshold(
+                dataset_sub_evaluations[:-1], mean_semsim_best_threshold
+            )
+            best_results_and_thresholds[f"{dataset_eval_name}_mean"] = (
+                mean_semsim_best_result, mean_semsim_best_threshold
+            )
+
+            # add the mean of the best results of all sub-evaluations to the dictionary using the "_mean-best" suffix
+            best_sub_results: list[EvaluationResult] = [result for result, _ in best_sub_results_and_thresholds[:-1]]
+            mean_best_result: EvaluationResult = compute_mean_eval_result(best_sub_results)
+            mean_best_result.std_dev = compute_standard_deviation(best_sub_results)
+            mean_best_threshold: float = mean([threshold for _, threshold in best_sub_results_and_thresholds[:-1]])
+            best_results_and_thresholds[f"{dataset_eval_name}_mean-best"] = mean_best_result, mean_best_threshold
 
     return best_results_and_thresholds
 
@@ -117,8 +134,11 @@ def get_best_results_and_thresholds_for_multi_eval(
         for dataset_evaluation in dataset_evaluations
     ]
 
-    if append_mean_semsim_eval_results and all(data_eval.semsim_eval_results for data_eval in dataset_evaluations):
-        mean_semsim_eval_results: dict[float, EvaluationResult] = get_mean_sem_sim_eval_results(dataset_evaluations)
+    if len(dataset_evaluations) > 1 and append_mean_semsim_eval_results:
+        assert all(data_eval.semsim_eval_results for data_eval in dataset_evaluations), (
+            "All dataset evaluations in a multi eval must have semsim_eval_results"
+        )
+        mean_semsim_eval_results: dict[float, EvaluationResult] = compute_mean_semsim_eval_results(dataset_evaluations)
         best_results_and_thresholds.append(
             get_best_result_and_threshold_for_single_eval(
                 symbolic_eval_result=None, semsim_eval_results=mean_semsim_eval_results, eval_metric=eval_metric)
@@ -146,9 +166,12 @@ def get_best_result_and_threshold_for_single_eval(
         return best_result, best_threshold
 
 
-def get_mean_sem_sim_eval_results(sub_evaluations: list[DatasetEvaluation]) -> dict[float, EvaluationResult]:
-    # compute mean values for each threshold
-    mean_semsim_eval_results: dict[float, EvaluationResult] = {
+def compute_mean_semsim_eval_results(sub_evaluations: list[DatasetEvaluation]) -> dict[float, EvaluationResult]:
+    assert all(data_eval.semsim_eval_results for data_eval in sub_evaluations), (
+        "All dataset evaluations must have semsim_eval_results"
+    )
+    # compute mean values for each semsim threshold
+    return {
         t: EvaluationResult(
             accuracy=mean([sub_eval.semsim_eval_results[t].accuracy for sub_eval in sub_evaluations]),
             precision=mean([sub_eval.semsim_eval_results[t].precision for sub_eval in sub_evaluations]),
@@ -157,7 +180,38 @@ def get_mean_sem_sim_eval_results(sub_evaluations: list[DatasetEvaluation]) -> d
         )
         for t in sub_evaluations[0].semsim_eval_results.keys()
     }
-    return mean_semsim_eval_results
+
+
+def compute_standard_deviation_for_threshold(
+        sub_evaluations: list[DatasetEvaluation], threshold: float
+) -> StandardDeviation:
+    assert all(data_eval.semsim_eval_results for data_eval in sub_evaluations), (
+        "All dataset evaluations must have semsim_eval_results"
+    )
+    return StandardDeviation(
+        accuracy=stdev([sub_eval.semsim_eval_results[threshold].accuracy for sub_eval in sub_evaluations]),
+        precision=stdev([sub_eval.semsim_eval_results[threshold].precision for sub_eval in sub_evaluations]),
+        recall=stdev([sub_eval.semsim_eval_results[threshold].recall for sub_eval in sub_evaluations]),
+        f1=stdev([sub_eval.semsim_eval_results[threshold].f1 for sub_eval in sub_evaluations]),
+    )
+
+
+def compute_mean_eval_result(evaluation_results: list[EvaluationResult]) -> EvaluationResult:
+    return EvaluationResult(
+        accuracy=mean([evaluation_result.accuracy for evaluation_result in evaluation_results]),
+        precision=mean([evaluation_result.precision for evaluation_result in evaluation_results]),
+        recall=mean([evaluation_result.recall for evaluation_result in evaluation_results]),
+        f1=mean([evaluation_result.f1 for evaluation_result in evaluation_results]),
+    )
+
+
+def compute_standard_deviation(evaluation_results: list[EvaluationResult]) -> StandardDeviation:
+    return StandardDeviation(
+        accuracy=stdev([evaluation_result.accuracy for evaluation_result in evaluation_results]),
+        precision=stdev([evaluation_result.precision for evaluation_result in evaluation_results]),
+        recall=stdev([evaluation_result.recall for evaluation_result in evaluation_results]),
+        f1=stdev([evaluation_result.f1 for evaluation_result in evaluation_results]),
+    )
 
 
 def get_dataset_evaluations(
@@ -181,7 +235,7 @@ def get_dataset_evaluations(
     return dataset_evaluations
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=5)
 def get_dataset_evaluations_per_eval_name(
         dataset_eval_name: str,
         case_study: str,

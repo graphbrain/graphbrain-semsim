@@ -12,7 +12,7 @@
 #     get_eval_runs, get_eval_run_by_num_matches_percentile, get_eval_scenario, get_variable_threshold_sub_pattern
 # )
 # from graphbrain_semsim.conflicts_case_study.scenario_configs import EVAL_SCENARIOS
-# from graphbrain_semsim.conflicts_case_study.config import CASE_STUDY
+# from graphbrain_semsim.conflicts_case_study.parse_config import CASE_STUDY
 #
 # rng = default_rng(RNG_SEED)
 #

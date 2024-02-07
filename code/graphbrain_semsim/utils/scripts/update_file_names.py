@@ -16,7 +16,7 @@ def replace_in_names(root_directory, old_string, new_string):
 
 # Usage example
 root_directory = '/Users/max18768/Documents/MA/graphbrain-semsim/data'  # Replace with your directory path
-old_string = 'preps_wildcard'                # Replace with the substring you want to change
-new_string = 'prep_wildcard'                # Replace with the new substring
+old_string = '1-1_pred_wildcard'                # Replace with the substring you want to change
+new_string = '1-2_pred_wildcard'                # Replace with the new substring
 
 replace_in_names(root_directory, old_string, new_string)
