@@ -60,6 +60,8 @@ class LemmaDataset(BaseModel):
         return f"{base_id}_subsample-{n_samples}"
 
 
+# TODO: this should refactored into something like 'EvaluationScores'
+# but this would imply changing the evaluation code and regenerating the results
 class StandardDeviation(BaseModel):
     accuracy: float
     precision: float
@@ -92,4 +94,3 @@ class DatasetEvaluation(BaseModel):
     semsim_eval_results: Optional[dict[float, EvaluationResult]] = None
     lemma_symbolic_eval_results: Optional[dict[str, EvaluationResult]] = None
     lemma_semsim_eval_results: Optional[dict[str, dict[float, EvaluationResult]]] = None
-

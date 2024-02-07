@@ -48,11 +48,16 @@ def make_results_table(
             dataset_evaluations, [dataset_eval_name], "f1", add_mean_eval_results=True
         )
 
-        for eval_name, result_and_threshold in best_results_and_thresholds.items():
+        best_eval_names_sorted: list[str] = list(sorted(best_results_and_thresholds.keys()))
+
+        # for eval_name, result_and_threshold in best_results_and_thresholds.items():
+        for eval_name in best_eval_names_sorted:
             row = [insert_latex_column_breaks(prettify_eval_name(eval_name))]
 
-            result, threshold = result_and_threshold
+            result, threshold = best_results_and_thresholds[eval_name]
+
             row.append(f"{threshold:.2f}" if threshold is not None else "-")
+
             for metric in metrics:
                 row.append(f"{getattr(result, metric):.3f}")
 

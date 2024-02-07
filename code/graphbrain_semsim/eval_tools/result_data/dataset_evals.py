@@ -97,10 +97,9 @@ def get_best_results_and_thresholds(
             if add_mean_eval_results and sub_eval_idx == len(best_sub_results_and_thresholds) - 1:
                 break
 
-            # TODO: this is a general way to name sub-evaluations, but maybe it should use the sample mod directly
-            sub_eval_name_suffix: str = f"{sub_eval_idx + 1}" if len(best_sub_results_and_thresholds) > 1 else None
-            sub_eval_name: str = f"{dataset_eval_name}" + (f"_{sub_eval_name_suffix}" if sub_eval_name_suffix else "")
-            best_results_and_thresholds[sub_eval_name] = best_result, best_threshold
+            sub_eval: DatasetEvaluation = dataset_sub_evaluations[sub_eval_idx]
+            # us the sub-evaluation sample mod as a suffix for the sub-evaluation name
+            best_results_and_thresholds[f"{dataset_eval_name}_{sub_eval.sample_mod}"] = best_result, best_threshold
 
         if add_mean_eval_results:
             # add the mean of all sub-evaluations to the dictionary using the "_mean" suffix for the name
