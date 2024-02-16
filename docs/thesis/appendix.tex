@@ -131,16 +131,16 @@
 \label{tab:ref-edge-sets-nref-10-part-3}
 \end{table}
 
-\section{Complete Result Tables}
+\section{Best F1-score based Eval. Run Comparison Tables}
 \label{app-sec:result-tables}
 
 \begin{table}[H]
 \centering
 \begin{tabular}{lllrrrrrr}
 \toprule
-\multicolumn{3}{l}{Evaluation Run Name}	& \multicolumn{1}{c}{ST} & \multicolumn{1}{c}{Prec.} & \multicolumn{1}{c}{Rec.} & \multicolumn{2}{c}{(Best) F1-Score}\\
-\cmidrule{7-8}
-\multicolumn{7}{l}{} & \multicolumn{1}{c}{Std. Dev.} \\
+\multicolumn{4}{l}{Evaluation Run Name} & \multicolumn{1}{c}{Prec.} & \multicolumn{1}{c}{Rec.} & \multicolumn{2}{c}{(Best) F1-Score}\\
+\cmidrule{1-4}\cmidrule{7-8}
+\multicolumn{1}{l}{CP} & \multicolumn{1}{l}{NM} & \multicolumn{1}{l}{RES} & \multicolumn{1}{c}{\(t_s\)} & \multicolumn{3}{l}{} & \multicolumn{1}{c}{Std. Dev.} \\
 \midrule
 semsim-ctx & e5 & r-1-1 & 0.65 & 0.386 & 0.768 & 0.514 & - \\
 semsim-ctx & e5 & r-1-2 & 0.67 & 0.442 & 0.769 & 0.562 & - \\
@@ -150,49 +150,49 @@ semsim-ctx & e5 & r-1-5 & 0.68 & 0.397 & 0.681 & 0.502 & - \\
 semsim-ctx & e5 & r-1-mean & 0.64 & 0.356 & 0.823 & 0.477 & +/- 0.046 \\
 semsim-ctx & e5 & r-1-mean-best & 0.65 & 0.392 & 0.772 & 0.518 & +/- 0.025 \\
 \hline
-semsim-ctx & e5 & r-3-1 & 0.69 & 0.392 & 0.846 & 0.536 & - \\
-semsim-ctx & e5 & r-3-2 & 0.68 & 0.361 & 0.814 & 0.500 & - \\
-semsim-ctx & e5 & r-3-3 & 0.68 & 0.435 & 0.752 & 0.551 & - \\
-semsim-ctx & e5 & r-3-4 & 0.69 & 0.410 & 0.846 & 0.553 & - \\
-semsim-ctx & e5 & r-3-5 & 0.68 & 0.398 & 0.836 & 0.539 & - \\
+semsim-ctx & e5 & r-3-1 & 0.68 & 0.398 & 0.836 & 0.539 & - \\
+semsim-ctx & e5 & r-3-2 & 0.68 & 0.435 & 0.752 & 0.551 & - \\
+semsim-ctx & e5 & r-3-3 & 0.69 & 0.410 & 0.846 & 0.553 & - \\
+semsim-ctx & e5 & r-3-4 & 0.69 & 0.392 & 0.846 & 0.536 & - \\
+semsim-ctx & e5 & r-3-5 & 0.68 & 0.361 & 0.814 & 0.500 & - \\
 semsim-ctx & e5 & r-3-mean & 0.69 & 0.417 & 0.753 & 0.534 & +/- 0.024 \\
 semsim-ctx & e5 & r-3-mean-best & 0.68 & 0.399 & 0.818 & 0.536 & +/- 0.021 \\
 \hline
 semsim-ctx & e5 & r-10-1 & 0.71 & 0.415 & 0.817 & 0.550 & - \\
-semsim-ctx & e5 & r-10-2 & 0.72 & 0.400 & 0.771 & 0.527 & - \\
-semsim-ctx & e5 & r-10-3 & 0.72 & 0.435 & 0.793 & 0.562 & - \\
-semsim-ctx & e5 & r-10-4 & 0.71 & 0.378 & 0.835 & 0.520 & - \\
-semsim-ctx & e5 & r-10-5 & 0.72 & 0.454 & 0.735 & 0.562 & - \\
+semsim-ctx & e5 & r-10-2 & 0.72 & 0.435 & 0.793 & 0.562 & - \\
+semsim-ctx & e5 & r-10-3 & 0.72 & 0.400 & 0.771 & 0.527 & - \\
+semsim-ctx & e5 & r-10-4 & 0.72 & 0.454 & 0.735 & 0.562 & - \\
+semsim-ctx & e5 & r-10-5 & 0.71 & 0.378 & 0.835 & 0.520 & - \\
 semsim-ctx & e5 & r-10-mean & 0.72 & 0.428 & 0.746 & 0.543 & +/- 0.021 \\
 semsim-ctx & e5 & r-10-mean-best & 0.72 & 0.416 & 0.790 & 0.544 & +/- 0.020 \\
 \hline
 semsim-ctx & gte & r-1-1 & 0.60 & 0.349 & 0.794 & 0.485 & - \\
-semsim-ctx & gte & r-1-2 & 0.55 & 0.300 & 1.000 & 0.461 & - \\
-semsim-ctx & gte & r-1-3 & 0.61 & 0.339 & 0.829 & 0.482 & - \\
-semsim-ctx & gte & r-1-4 & 0.63 & 0.388 & 0.799 & 0.522 & - \\
-semsim-ctx & gte & r-1-5 & 0.57 & 0.303 & 0.972 & 0.462 & - \\
+semsim-ctx & gte & r-1-2 & 0.63 & 0.388 & 0.799 & 0.522 & - \\
+semsim-ctx & gte & r-1-3 & 0.57 & 0.303 & 0.972 & 0.462 & - \\
+semsim-ctx & gte & r-1-4 & 0.55 & 0.300 & 1.000 & 0.461 & - \\
+semsim-ctx & gte & r-1-5 & 0.61 & 0.339 & 0.829 & 0.482 & - \\
 semsim-ctx & gte & r-1-mean & 0.60 & 0.327 & 0.870 & 0.474 & +/- 0.013 \\
 semsim-ctx & gte & r-1-mean-best & 0.59 & 0.336 & 0.879 & 0.483 & +/- 0.025 \\
 \hline
-semsim-ctx & gte & r-3-1 & 0.67 & 0.378 & 0.713 & 0.494 & - \\
-semsim-ctx & gte & r-3-2 & 0.67 & 0.385 & 0.740 & 0.506 & - \\
-semsim-ctx & gte & r-3-3 & 0.66 & 0.376 & 0.820 & 0.516 & - \\
-semsim-ctx & gte & r-3-4 & 0.62 & 0.322 & 0.896 & 0.474 & - \\
-semsim-ctx & gte & r-3-5 & 0.64 & 0.364 & 0.826 & 0.505 & - \\
+semsim-ctx & gte & r-3-1 & 0.64 & 0.364 & 0.826 & 0.505 & - \\
+semsim-ctx & gte & r-3-2 & 0.67 & 0.378 & 0.713 & 0.494 & - \\
+semsim-ctx & gte & r-3-3 & 0.67 & 0.385 & 0.740 & 0.506 & - \\
+semsim-ctx & gte & r-3-4 & 0.66 & 0.376 & 0.820 & 0.516 & - \\
+semsim-ctx & gte & r-3-5 & 0.62 & 0.322 & 0.896 & 0.474 & - \\
 semsim-ctx & gte & r-3-mean & 0.66 & 0.374 & 0.714 & 0.486 & +/- 0.040 \\
 semsim-ctx & gte & r-3-mean-best & 0.65 & 0.365 & 0.799 & 0.499 & +/- 0.016 \\
 \hline
 semsim-ctx & gte & r-10-1 & 0.67 & 0.377 & 0.869 & 0.526 & - \\
-semsim-ctx & gte & r-10-2 & 0.69 & 0.399 & 0.730 & 0.516 & - \\
-semsim-ctx & gte & r-10-3 & 0.68 & 0.388 & 0.708 & 0.501 & - \\
-semsim-ctx & gte & r-10-4 & 0.67 & 0.361 & 0.917 & 0.518 & - \\
-semsim-ctx & gte & r-10-5 & 0.69 & 0.382 & 0.834 & 0.524 & - \\
+semsim-ctx & gte & r-10-2 & 0.67 & 0.361 & 0.917 & 0.518 & - \\
+semsim-ctx & gte & r-10-3 & 0.69 & 0.382 & 0.834 & 0.524 & - \\
+semsim-ctx & gte & r-10-4 & 0.69 & 0.399 & 0.730 & 0.516 & - \\
+semsim-ctx & gte & r-10-5 & 0.68 & 0.388 & 0.708 & 0.501 & - \\
 semsim-ctx & gte & r-10-mean & 0.68 & 0.378 & 0.803 & 0.513 & +/- 0.009 \\
 semsim-ctx & gte & r-10-mean-best & 0.68 & 0.382 & 0.812 & 0.517 & +/- 0.010 \\
 \bottomrule
 \end{tabular}
-\caption{Best F1-score results for all semsim-ctx conflict pattern based evaluation runs not using all-tokens}
-\label{tab:quant-results-semsim-ctx}
+\caption{Best F1-score evaluation runs for all ERS of the form \texttt{semsim-ctx NM r-N-X} (CNESS with AT option disabled)}
+\label{tab:best-f1-score-mean-best-semsim-ctx}
 \end{table}
 
 
@@ -200,15 +200,15 @@ semsim-ctx & gte & r-10-mean-best & 0.68 & 0.382 & 0.812 & 0.517 & +/- 0.010 \\
 \centering
 \begin{tabular}{lllrrrrrr}
 \toprule
-\multicolumn{3}{l}{Evaluation Run Name}	& \multicolumn{1}{c}{ST} & \multicolumn{1}{c}{Prec.} & \multicolumn{1}{c}{Rec.} & \multicolumn{2}{c}{(Best) F1-Score}\\
-\cmidrule{7-8}
-\multicolumn{7}{l}{} & \multicolumn{1}{c}{Std. Dev.} \\
+\multicolumn{4}{l}{Evaluation Run Name} & \multicolumn{1}{c}{Prec.} & \multicolumn{1}{c}{Rec.} & \multicolumn{2}{c}{(Best) F1-Score}\\
+\cmidrule{1-4}\cmidrule{7-8}
+\multicolumn{1}{l}{CP} & \multicolumn{1}{l}{NM} & \multicolumn{1}{l}{RES} & \multicolumn{1}{c}{\(t_s\)} & \multicolumn{3}{l}{} & \multicolumn{1}{c}{Std. Dev.} \\
 \midrule
-semsim-ctx & e5-at & r-1-1 & 0.71 & 0.365 & 0.798 & 0.501 & - \\
-semsim-ctx & e5-at & r-1-2 & 0.71 & 0.351 & 0.908 & 0.507 & - \\
-semsim-ctx & e5-at & r-1-3 & 0.71 & 0.434 & 0.701 & 0.536 & - \\
-semsim-ctx & e5-at & r-1-4 & 0.66 & 0.356 & 0.885 & 0.508 & - \\
-semsim-ctx & e5-at & r-1-5 & 0.68 & 0.338 & 0.915 & 0.494 & - \\
+semsim-ctx & e5-at & r-1-1 & 0.68 & 0.338 & 0.915 & 0.494 & - \\
+semsim-ctx & e5-at & r-1-2 & 0.71 & 0.434 & 0.701 & 0.536 & - \\
+semsim-ctx & e5-at & r-1-3 & 0.66 & 0.356 & 0.885 & 0.508 & - \\
+semsim-ctx & e5-at & r-1-4 & 0.71 & 0.365 & 0.798 & 0.501 & - \\
+semsim-ctx & e5-at & r-1-5 & 0.71 & 0.351 & 0.908 & 0.507 & - \\
 semsim-ctx & e5-at & r-1-mean & 0.69 & 0.350 & 0.847 & 0.487 & +/- 0.021 \\
 semsim-ctx & e5-at & r-1-mean-best & 0.69 & 0.369 & 0.841 & 0.509 & +/- 0.016 \\
 \hline
@@ -221,26 +221,26 @@ semsim-ctx & e5-at & r-3-mean & 0.73 & 0.392 & 0.740 & 0.511 & +/- 0.016 \\
 semsim-ctx & e5-at & r-3-mean-best & 0.72 & 0.378 & 0.821 & 0.516 & +/- 0.011 \\
 \hline
 semsim-ctx & e5-at & r-10-1 & 0.74 & 0.382 & 0.849 & 0.527 & - \\
-semsim-ctx & e5-at & r-10-2 & 0.74 & 0.357 & 0.881 & 0.509 & - \\
-semsim-ctx & e5-at & r-10-3 & 0.74 & 0.371 & 0.890 & 0.523 & - \\
-semsim-ctx & e5-at & r-10-4 & 0.75 & 0.405 & 0.815 & 0.541 & - \\
-semsim-ctx & e5-at & r-10-5 & 0.75 & 0.395 & 0.781 & 0.525 & - \\
+semsim-ctx & e5-at & r-10-2 & 0.75 & 0.395 & 0.781 & 0.525 & - \\
+semsim-ctx & e5-at & r-10-3 & 0.75 & 0.405 & 0.815 & 0.541 & - \\
+semsim-ctx & e5-at & r-10-4 & 0.74 & 0.371 & 0.890 & 0.523 & - \\
+semsim-ctx & e5-at & r-10-5 & 0.74 & 0.357 & 0.881 & 0.509 & - \\
 semsim-ctx & e5-at & r-10-mean & 0.75 & 0.395 & 0.766 & 0.521 & +/- 0.016 \\
 semsim-ctx & e5-at & r-10-mean-best & 0.74 & 0.382 & 0.843 & 0.525 & +/- 0.012 \\
 \hline
-semsim-ctx & gte-at & r-1-1 & 0.66 & 0.311 & 0.945 & 0.468 & - \\
+semsim-ctx & gte-at & r-1-1 & 0.65 & 0.342 & 0.826 & 0.483 & - \\
 semsim-ctx & gte-at & r-1-2 & 0.68 & 0.386 & 0.774 & 0.515 & - \\
-semsim-ctx & gte-at & r-1-3 & 0.66 & 0.339 & 0.866 & 0.487 & - \\
+semsim-ctx & gte-at & r-1-3 & 0.66 & 0.311 & 0.945 & 0.468 & - \\
 semsim-ctx & gte-at & r-1-4 & 0.63 & 0.300 & 1.000 & 0.461 & - \\
-semsim-ctx & gte-at & r-1-5 & 0.65 & 0.342 & 0.826 & 0.483 & - \\
+semsim-ctx & gte-at & r-1-5 & 0.66 & 0.339 & 0.866 & 0.487 & - \\
 semsim-ctx & gte-at & r-1-mean & 0.66 & 0.328 & 0.882 & 0.476 & +/- 0.018 \\
 semsim-ctx & gte-at & r-1-mean-best & 0.66 & 0.335 & 0.882 & 0.483 & +/- 0.021 \\
 \hline
 semsim-ctx & gte-at & r-3-1 & 0.69 & 0.340 & 0.827 & 0.482 & - \\
-semsim-ctx & gte-at & r-3-2 & 0.67 & 0.317 & 0.930 & 0.473 & - \\
-semsim-ctx & gte-at & r-3-3 & 0.71 & 0.367 & 0.822 & 0.508 & - \\
-semsim-ctx & gte-at & r-3-4 & 0.72 & 0.348 & 0.852 & 0.494 & - \\
-semsim-ctx & gte-at & r-3-5 & 0.69 & 0.309 & 0.950 & 0.467 & - \\
+semsim-ctx & gte-at & r-3-2 & 0.69 & 0.309 & 0.950 & 0.467 & - \\
+semsim-ctx & gte-at & r-3-3 & 0.72 & 0.348 & 0.852 & 0.494 & - \\
+semsim-ctx & gte-at & r-3-4 & 0.71 & 0.367 & 0.822 & 0.508 & - \\
+semsim-ctx & gte-at & r-3-5 & 0.67 & 0.317 & 0.930 & 0.473 & - \\
 semsim-ctx & gte-at & r-3-mean & 0.69 & 0.324 & 0.883 & 0.472 & +/- 0.013 \\
 semsim-ctx & gte-at & r-3-mean-best & 0.70 & 0.336 & 0.876 & 0.485 & +/- 0.017 \\
 \hline
@@ -250,15 +250,14 @@ semsim-ctx & gte-at & r-10-3 & 0.73 & 0.349 & 0.891 & 0.501 & - \\
 semsim-ctx & gte-at & r-10-4 & 0.72 & 0.341 & 0.885 & 0.492 & - \\
 semsim-ctx & gte-at & r-10-5 & 0.70 & 0.322 & 0.934 & 0.478 & - \\
 semsim-ctx & gte-at & r-10-mean & 0.72 & 0.341 & 0.854 & 0.486 & +/- 0.002 \\
-semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 \\
-\bottomrule
+semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 \\\bottomrule
 \end{tabular}
-\caption{Best F1-score results for all semsim-ctx conflict pattern based evaluation runs using all-tokens}
-\label{tab:quant-results-semsim-ctx-at}
+\caption{Best F1-score evaluation runs for all ERS of the form \texttt{semsim-ctx NM-at r-N-X} (CNESS with AT option enabled)}
+\label{tab:best-f1-score-mean-best-semsim-ctx-at}
 \end{table}
 
 \newpage
-\section{Additional Eval. Metric vs. ST Plots}
+\section{Evaluation Metric Scores vs. Similarity Threshold Plots}
 \label{app-sec:eval-metric-vs-st-plots}
 
 \begin{figure}[H]
@@ -305,251 +304,251 @@ semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 
 
 
 
-\newpage
-\section{PLES Evaluation Labels}
-\label{app-sec:ples-eval-labels}
-
-\begin{sidewaystable}[htp]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-capture (7) & Video captures horror of Istanbul airport attack & no conflict & conflict & no conflict) \\
-& Syrian Troops Capture Village Near Northern City of Aleppo & no conflict & conflict & no conflict \\
-& Iraqi forces capture key parts of Mosul neighborhood & no conflict & conflict & no conflict \\
-& Iraqi forces capture west Mosul's main buildings in pre-dawn raid & no conflict & conflict & no conflict \\
-& The videos capture 10 seconds of movement, just enough to catch trucks’ license plates—the operation’s main objective & no conflict & conflict & no conflict \\
-& Security Service of Ukraine Captured Russian Spy & conflict & conflict & conflict \\
-& Syrian Army strikes back in Deir Ezzor: Tal Barouk captured (Report + Video & conflict & conflict & no conflict \\
-\hline
-accept (7)
-& Saudi blogger Badawi's wife accepts Sakharov Prize & no conflict & conflict & no conflict \\
-& UK accepts 1,500 asylum seekers from Syria & no conflict & conflict & no conflict \\
-& Syria rebel chief rejects US-Russia chemical arms deal — “We cannot accept any part of this initiative & conflict & conflict & conflict \\
-& Catholic hospitals accept birth control compromise & no conflict & conflict & conflict \\
-& Japan accepts less than 1\% of asylum applications & no conflict & conflict & no conflict \\
-& Nato accepts Afghan leader Karzai's air strikes decree & no conflict & conflict & no conflict \\
-& S. Korea accepts North's Sunday talks proposal, calls for Panmunjom meeting & no conflict & conflict & no conflict \\
-\hline
-detain (5)
-& Syrian rebels detain U.N. peacekeepers & conflict & conflict & no conflict \\
-& Russian police detain several gay activists & conflict & conflict & conflict \\
-& Mexico detains growing number of undocumented Cubans & conflict & conflict & conflict \\
-& India releases detained Iranian ship & no conflict & conflict & no conflict \\
-& Police in China have detained six executives of a meat supply company that supplied long-expired meat to foreign fast food chains McDonald’s and KFC-parent Yum Brands Inc, among many others & conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. one to five of top ten lemmas)}
-\label{tab:ples-labels-1}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-deny (20)
-& Syrian officials deny chemical weapon use & no conflict & conflict & conflict \\
-& Germany, EU deny report on European solidarity tax & no conflict & conflict & conflict \\
-& Tebus deny rumours about handing over the last base & no conflict & conflict & no conflict \\
-& Toronto mayor Rob Ford reportedly denied entry to US & conflict & conflict & conflict \\
-& Kenya to deny entry to Ebola states & conflict & conflict & conflict \\
-& The Vatican has categorically denied a report in an Italian newspaper that Pope Francis might have a small, yet curable brain tumor & no conflict & conflict & no conflict \\
-& Indian government denies renewal of passport opposition lawyer over minor traffic rule violation & conflict & conflict & no conflict \\
-& Mexican judge denies El Chapo's appeals against extradition & conflict & conflict & conflict \\
-& Syria denies use of any chemical weapons & no conflict & conflict & conflict \\
-& Toronto mayor denies existence of crack smoking video & no conflict & conflict & no conflict \\
-& North Korea denies responsibility for Sony cyberattack & conflict & conflict & conflict \\
-& Russia denies ground troop in Syria & no conflict & conflict & conflict \\
-& New Pro-Kremlin Crimean Prime Minister Aksyonov denies allegations of criminal past & no conflict & conflict & no conflict \\
-& Free Syrian Army denies responsibility & no conflict & conflict & conflict \\
-& UK defense minister denies report of divisions in PM May's team & no conflict & conflict & no conflict \\
-& Iran denies allegations of organizing spy cell in Nigeria & no conflict & conflict & no conflict \\
-& Russia denies knowledge of arrest ISIS leader Baghdadi & no conflict & conflict & conflict \\
-& Turkish FM denies investigation claims on German firms & no conflict & conflict & no conflict \\
-& Russia Denies Any Role in Deadly Convoy Attack Syria & no conflict & conflict & conflict \\
-& China denies Hong Kong visit request by U.S. carrier group: Pentagon & conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. four of top ten lemmas)}
-\label{tab:ples-labels-2}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-\hline
-attack (12)
-& Pussy Riot members attack bandmates for appearing at Amnesty concert & conflict & conflict & conflict \\
-& Israelis Attack Palestinian Farmers near Hebron & conflict & conflict & conflict \\
-& Yemeni forces attack sixth Saudi warship & conflict & conflict & conflict \\
-& Passengers attack Edinburgh taxi driver & conflict & conflict & conflict \\
-& Angry Palestinians Attack Hamas Official Over Gaza Destruction & conflict & conflict & conflict \\
-& Israeli Air Force attacks Assad army targets & conflict & conflict & conflict \\
-& They Beat Me’: Univision Reporter Attacked Outside Venezuelan Supreme Court & no conflict & conflict & no conflict \\
-& Locals attack police to foil casino raid & conflict & conflict & conflict \\
-& Afghans attack Indian consulate & conflict & conflict & conflict \\
-& Suspected PKK supporters attack Turkish building in Germany & conflict & conflict & conflict \\
-& Paris attacks a reaction to US actions in Syria, Iraq: Indian Minister & no conflict & conflict & no conflict \\
-& Muslim mob attacks Mosque in Pakistan & conflict & conflict & conflict \\
-\hline
-strike (9)
-& Ex-Muslim poet strikes fear in PC Denmark & conflict & conflict & no conflict \\
-& Double hotel bombing strikes Iraqi capital & no conflict & conflict & conflict \\
-& Magnitude 6.9 quake strikes Sichuan region of China & no conflict & conflict & conflict \\
-& Syrian Israel strikes Syrian targets & conflict & conflict & conflict \\
-& Israeli warplanes strike Syrian weapons facility & conflict & conflict & conflict \\
-& U.S. planes strike militants near Iraq's Amreli, airdrop aid & conflict & conflict & no conflict \\
-& Fake threats strike fear for Sochi Olympic Security & no conflict & conflict & conflict \\
-& UK strikes first ISIS targets & conflict & conflict & no conflict \\
-& Iraqi Army strikes 3 Islamic State strongholds & conflict & conflict & conflict \\
-\hline
-suggest (5)
-& Turkish state news agency suggests link between Boko Haram and Western interests in Nigerian oil & no conflict & conflict & conflict \\
-& New study suggests more and longer atmospheric stagnation events due to global warming & no conflict & conflict & no conflict \\
-& A prominent Iranian official recently suggested a new drug policy for the country that includes taking steps toward the legalization of cannabis and opium & no conflict & conflict & no conflict \\
-& U.N. aid chief suggests more intervention in humanitarian emergencies & no conflict & conflict & conflict \\
-& North Korea's behavior suggests a possible EMP strike against the U.S. & conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. five to seven of top ten lemmastop ten lemmas)}
-\label{tab:ples-labels-3}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-claim (22)
-& Chevron claims new proof of fraud in Ecuador pollution ruling & no conflict & conflict & no conflict \\
-& Iran claims new generation of 15-times-faster centrifuges & no conflict & conflict & no conflict \\
-& A prolonged drought in Brazil has already claimed about half of Jose Francisco Pereira’s coffee crop & no conflict & conflict & no conflict \\
-& ISIS backers claim responsibility for Paris-style terror attack in Jakarta & no conflict & conflict & conflict \\
-& Salafist group claims responsibility for bombing French center in Gaza & no conflict & conflict & conflict \\
-& Rockets fired on southern Israel from Sinai, ISIS claims responsibility & conflict & conflict & conflict \\
-& ISIS claim responsibility for Paris terror attacks in online statement & no conflict & conflict & conflict \\
-& Isis claims responsibility for Paris shooting attack that left one police officer dead & no conflict & conflict & conflict \\
-& Convicted Israeli trainer of Colombia paramilitaries claims CIA ties & no conflict & conflict & no conflict \\
-& Pakistan Taliban faction claims park attack on Lahore Christians & conflict & conflict & conflict \\
-& Burundi Rebels Claim Rwanda Military Training & no conflict & conflict & conflict \\
-& Isis claims responsibility for killing of Hindu priest in Bangladesh & conflict & conflict & conflict \\
-& PKK-linked TAK claims responsibility for Ankara attack & no conflict & conflict & conflict \\
-& Ansar Bayt al-Maqdis claims responsibility for opening fire on Israeli soldiers near Egyptian border & conflict & conflict & conflict \\
-& Sectarian war an aim of Gulf states, Israel and Turkey, claims Hezbollah & conflict & conflict & conflict \\
-& Iran Sunni group Jaish al-Adl claims border attack & no conflict & conflict & conflict \\
-& ISIS Claims Responsibility In Turkish Nightclub Attack; U.S. Man Among The Wounded & conflict & conflict & conflict \\
-& Bangkok police claim reward in Erawan Shrine bomber hunt & no conflict & conflict & no conflict \\
-& Taliban claim Kabul attack & no conflict & conflict & conflict \\
-& Denmark claims north pole & no conflict & conflict & no conflict \\
-& WikiLeaks' Julian Assange Claims Vindication in UN Ruling & no conflict & conflict & conflict \\
-& ISIS claims responsibility for Eilat rockets & no conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. eight of top ten lemma)}
-\label{tab:ples-labels-4}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-threaten (20)
-& North Korea Threatens To "Invade USA," Use Weapons "Unknown To The World & conflict & conflict & conflict \\
-& FATCA threatens Russia’s financial system – official & conflict & conflict & conflict \\
-& Wartime economic crisis threatens education of millions Yemeni children & no conflict & conflict & no conflict \\
-& Syria opposition threatens withdrawal from Geneva talks & no conflict & conflict & conflict \\
-& Al-Qaeda affiliates are threatening West Africa’s most peaceful cities & conflict & conflict & conflict \\
-& Video threatens Sochi Winter Olympics & no conflict & conflict & conflict \\
-& Ukraine crisis threatens Transnistria & no conflict & conflict & conflict \\
-& Giant comets may threaten Earth & no conflict & conflict & no conflict \\
-& Protests in Turkey Threaten Erdogans Political Future & conflict & conflict & conflict \\
-& Brazil Rejects Israel's Ambassador; Israel Threatens Relations Downgrade : NPR \& conflict & conflict & conflict \\
-& North Korea Threatens 'Merciless' Strike Against US-South Korea Drill & conflict & conflict & conflict \\
-& Kim Dotcom case threatens New Zealand Government & no conflict & conflict & conflict \\
-& Proposed German legislation threatens broad internet censorship & no conflict & conflict & conflict \\
-& Abe government threatens NHKs credibility & no conflict & conflict & conflict \\
-& British ISIS fighter 'Al-Britani' threatens executions in Trafalgar Square & no conflict & conflict & conflict \\
-& How one racy condom ad may threaten gains female sex education in Pakistan & no conflict & conflict & no conflict \\
-& Police Use of Drones May Threaten Human Rights: UN Expert \& no conflict & conflict & conflict \\
-& North Korea threatens pre-emptive nuke strike against U.S. \& S. Korea & conflict & conflict & conflict \\
-& Asylum seekers threaten hunger strike & no conflict & conflict & conflict \\
-& Withdrawal of foreign troops from Afghanistan threatens rollback of women's gains & no conflict & conflict & no conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. nine of top ten lemma)}
-\label{tab:ples-labels-5}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-say (16 of 31)
-& Iran says no snap inspections of nuclear sites & no conflict & conflict & no conflict \\
-& Child abuse image investigation leads to 660 arrests: UK National Crime Agency said the 660 arrested included doctors, teachers, scout leaders, care workers and former police officers & no conflict & conflict & no conflict \\
-& Former Cuba Leader Fidel Castro Says 'Israel and US Fathered Isis & no conflict & conflict & conflict \\
-& Malaysian court to Christians: You can't say 'Allah & conflict & conflict & conflict \\
-& U.S. State Dept. says "confident" Russian gov & no conflict & conflict & conflict \\
-& State Border Service says Russian troops still near Ukraine's border & no conflict & conflict & no conflict \\
-& France military says Mali town Konna 'not recaptured' from Islamists denying an earlier claim by the Malian army & conflict & conflict & no conflict \\
-& Thai PM says occupation of state buildings threat to stability & no conflict & conflict & conflict \\
-& Australia says Chinese spy ship near war games & no conflict & conflict & no conflict \\
-& Denmark Says Microsoft Owes  £660 Million in Tax & conflict & conflict & no conflict \\
-& Japan Says Armed Chinese Ship Infiltrates Its Territorial Waters & conflict & conflict & conflict \\
-& EU report says LGBT face discrimination & no conflict & conflict & conflict \\
-& Group says boycott Qatar Airways, cites poor rights record & conflict & conflict & conflict \\
-& WHO incapable of reacting to crises such as Ebola, says report & no conflict & conflict & no conflict \\
-& Migrant ship off Greece says armed people on board & no conflict & conflict & conflict \\
-& Turkey says attacks on Aleppo a crime against humanity & no conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. ten of top ten lemma)}
-\label{tab:ples-labels-6}
-\end{sidewaystable}
-
-
-\begin{sidewaystable}[ht]
-\centering
-\begin{tabular}{l p{13cm} ccc}
-\toprule
-Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
-\midrule
-say (15 of 31)
-& Mystery man in Bangkok bomb probe 'never said a word & no conflict & conflict & no conflict \\
-& I Recant Says Author of Infamous Seventies Newsweek Global Cooling Article & no conflict & conflict & no conflict \\
-& Sister says don't make missing Flight 370 pilot the fall guy & no conflict & conflict & no conflict \\
-& VW works council says talks over strategy pact broken off without results & no conflict & conflict & no conflict \\
-& Head of Russia's Rosneft says U.S., not OPEC, Rules Oil Markets & no conflict & conflict & no conflict \\
-& Indian textbook says "Japan Nuked US & no conflict & conflict & no conflict \\
-& North Korea says US sanctions on leader "a declaration of war & conflict & conflict & conflict \\
-& President of Gambia says homosexuality one of three greatest threats to humanity & conflict & conflict & conflict \\
-& China Says Its Working with Latin America for a New World Order & no conflict & conflict & conflict \\
-& Myanmar Parliament Chairman Says Nominees for Country's Next President, 2 Vice Presidents Will Be Revealed March 17 & no conflict & conflict & no conflict \\
-& G7 says no sanctions on Russia over Syria & no conflict & conflict & conflict \\
-& South Korea's Lotte Duty Free says China cyber attacks crashed website & conflict & conflict & no conflict \\
-& Kuwait says stateless to be offered Comoros citizenship & no conflict & conflict & conflict \\
-& Syria Says Israel Attacked Military Airport & conflict & conflict & conflict \\
-& Bainimarama says NZ easing of sanctions 'insincere & no conflict & conflict & conflict \\
-\bottomrule
-\end{tabular}
-\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn} at \(t_s = 0.30\) (A) and \texttt{semsim-ctx e5 r-10-2} at \(t_s = 0.72\) (B)  (Num. ten of top ten lemma)}
-\label{tab:ples-labels-7}
-\end{sidewaystable}
+%\newpage
+%\section{PLES Evaluation Label Comparison Tables}
+%\label{app-sec:ples-eval-labels}
+%
+%\begin{sidewaystable}[htp]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%capture (7) & Video captures horror of Istanbul airport attack & no conflict & conflict & no conflict) \\
+%& Syrian Troops Capture Village Near Northern City of Aleppo & no conflict & conflict & no conflict \\
+%& Iraqi forces capture key parts of Mosul neighborhood & no conflict & conflict & no conflict \\
+%& Iraqi forces capture west Mosul's main buildings in pre-dawn raid & no conflict & conflict & no conflict \\
+%& The videos capture 10 seconds of movement, just enough to catch trucks’ license plates—the operation’s main objective & no conflict & conflict & no conflict \\
+%& Security Service of Ukraine Captured Russian Spy & conflict & conflict & conflict \\
+%& Syrian Army strikes back in Deir Ezzor: Tal Barouk captured (Report + Video & conflict & conflict & no conflict \\
+%\hline
+%accept (7)
+%& Saudi blogger Badawi's wife accepts Sakharov Prize & no conflict & conflict & no conflict \\
+%& UK accepts 1,500 asylum seekers from Syria & no conflict & conflict & no conflict \\
+%& Syria rebel chief rejects US-Russia chemical arms deal — “We cannot accept any part of this initiative & conflict & conflict & conflict \\
+%& Catholic hospitals accept birth control compromise & no conflict & conflict & conflict \\
+%& Japan accepts less than 1\% of asylum applications & no conflict & conflict & no conflict \\
+%& Nato accepts Afghan leader Karzai's air strikes decree & no conflict & conflict & no conflict \\
+%& S. Korea accepts North's Sunday talks proposal, calls for Panmunjom meeting & no conflict & conflict & no conflict \\
+%\hline
+%detain (5)
+%& Syrian rebels detain U.N. peacekeepers & conflict & conflict & no conflict \\
+%& Russian police detain several gay activists & conflict & conflict & conflict \\
+%& Mexico detains growing number of undocumented Cubans & conflict & conflict & conflict \\
+%& India releases detained Iranian ship & no conflict & conflict & no conflict \\
+%& Police in China have detained six executives of a meat supply company that supplied long-expired meat to foreign fast food chains McDonald’s and KFC-parent Yum Brands Inc, among many others & conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. one to five of top ten lemmas)}
+%\label{tab:ples-labels-1}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%deny (20)
+%& Syrian officials deny chemical weapon use & no conflict & conflict & conflict \\
+%& Germany, EU deny report on European solidarity tax & no conflict & conflict & conflict \\
+%& Tebus deny rumours about handing over the last base & no conflict & conflict & no conflict \\
+%& Toronto mayor Rob Ford reportedly denied entry to US & conflict & conflict & conflict \\
+%& Kenya to deny entry to Ebola states & conflict & conflict & conflict \\
+%& The Vatican has categorically denied a report in an Italian newspaper that Pope Francis might have a small, yet curable brain tumor & no conflict & conflict & no conflict \\
+%& Indian government denies renewal of passport opposition lawyer over minor traffic rule violation & conflict & conflict & no conflict \\
+%& Mexican judge denies El Chapo's appeals against extradition & conflict & conflict & conflict \\
+%& Syria denies use of any chemical weapons & no conflict & conflict & conflict \\
+%& Toronto mayor denies existence of crack smoking video & no conflict & conflict & no conflict \\
+%& North Korea denies responsibility for Sony cyberattack & conflict & conflict & conflict \\
+%& Russia denies ground troop in Syria & no conflict & conflict & conflict \\
+%& New Pro-Kremlin Crimean Prime Minister Aksyonov denies allegations of criminal past & no conflict & conflict & no conflict \\
+%& Free Syrian Army denies responsibility & no conflict & conflict & conflict \\
+%& UK defense minister denies report of divisions in PM May's team & no conflict & conflict & no conflict \\
+%& Iran denies allegations of organizing spy cell in Nigeria & no conflict & conflict & no conflict \\
+%& Russia denies knowledge of arrest ISIS leader Baghdadi & no conflict & conflict & conflict \\
+%& Turkish FM denies investigation claims on German firms & no conflict & conflict & no conflict \\
+%& Russia Denies Any Role in Deadly Convoy Attack Syria & no conflict & conflict & conflict \\
+%& China denies Hong Kong visit request by U.S. carrier group: Pentagon & conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. four of top ten lemmas)}
+%\label{tab:ples-labels-2}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%\hline
+%attack (12)
+%& Pussy Riot members attack bandmates for appearing at Amnesty concert & conflict & conflict & conflict \\
+%& Israelis Attack Palestinian Farmers near Hebron & conflict & conflict & conflict \\
+%& Yemeni forces attack sixth Saudi warship & conflict & conflict & conflict \\
+%& Passengers attack Edinburgh taxi driver & conflict & conflict & conflict \\
+%& Angry Palestinians Attack Hamas Official Over Gaza Destruction & conflict & conflict & conflict \\
+%& Israeli Air Force attacks Assad army targets & conflict & conflict & conflict \\
+%& They Beat Me’: Univision Reporter Attacked Outside Venezuelan Supreme Court & no conflict & conflict & no conflict \\
+%& Locals attack police to foil casino raid & conflict & conflict & conflict \\
+%& Afghans attack Indian consulate & conflict & conflict & conflict \\
+%& Suspected PKK supporters attack Turkish building in Germany & conflict & conflict & conflict \\
+%& Paris attacks a reaction to US actions in Syria, Iraq: Indian Minister & no conflict & conflict & no conflict \\
+%& Muslim mob attacks Mosque in Pakistan & conflict & conflict & conflict \\
+%\hline
+%strike (9)
+%& Ex-Muslim poet strikes fear in PC Denmark & conflict & conflict & no conflict \\
+%& Double hotel bombing strikes Iraqi capital & no conflict & conflict & conflict \\
+%& Magnitude 6.9 quake strikes Sichuan region of China & no conflict & conflict & conflict \\
+%& Syrian Israel strikes Syrian targets & conflict & conflict & conflict \\
+%& Israeli warplanes strike Syrian weapons facility & conflict & conflict & conflict \\
+%& U.S. planes strike militants near Iraq's Amreli, airdrop aid & conflict & conflict & no conflict \\
+%& Fake threats strike fear for Sochi Olympic Security & no conflict & conflict & conflict \\
+%& UK strikes first ISIS targets & conflict & conflict & no conflict \\
+%& Iraqi Army strikes 3 Islamic State strongholds & conflict & conflict & conflict \\
+%\hline
+%suggest (5)
+%& Turkish state news agency suggests link between Boko Haram and Western interests in Nigerian oil & no conflict & conflict & conflict \\
+%& New study suggests more and longer atmospheric stagnation events due to global warming & no conflict & conflict & no conflict \\
+%& A prominent Iranian official recently suggested a new drug policy for the country that includes taking steps toward the legalization of cannabis and opium & no conflict & conflict & no conflict \\
+%& U.N. aid chief suggests more intervention in humanitarian emergencies & no conflict & conflict & conflict \\
+%& North Korea's behavior suggests a possible EMP strike against the U.S. & conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. five to seven of top ten lemmastop ten lemmas)}
+%\label{tab:ples-labels-3}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%claim (22)
+%& Chevron claims new proof of fraud in Ecuador pollution ruling & no conflict & conflict & no conflict \\
+%& Iran claims new generation of 15-times-faster centrifuges & no conflict & conflict & no conflict \\
+%& A prolonged drought in Brazil has already claimed about half of Jose Francisco Pereira’s coffee crop & no conflict & conflict & no conflict \\
+%& ISIS backers claim responsibility for Paris-style terror attack in Jakarta & no conflict & conflict & conflict \\
+%& Salafist group claims responsibility for bombing French center in Gaza & no conflict & conflict & conflict \\
+%& Rockets fired on southern Israel from Sinai, ISIS claims responsibility & conflict & conflict & conflict \\
+%& ISIS claim responsibility for Paris terror attacks in online statement & no conflict & conflict & conflict \\
+%& Isis claims responsibility for Paris shooting attack that left one police officer dead & no conflict & conflict & conflict \\
+%& Convicted Israeli trainer of Colombia paramilitaries claims CIA ties & no conflict & conflict & no conflict \\
+%& Pakistan Taliban faction claims park attack on Lahore Christians & conflict & conflict & conflict \\
+%& Burundi Rebels Claim Rwanda Military Training & no conflict & conflict & conflict \\
+%& Isis claims responsibility for killing of Hindu priest in Bangladesh & conflict & conflict & conflict \\
+%& PKK-linked TAK claims responsibility for Ankara attack & no conflict & conflict & conflict \\
+%& Ansar Bayt al-Maqdis claims responsibility for opening fire on Israeli soldiers near Egyptian border & conflict & conflict & conflict \\
+%& Sectarian war an aim of Gulf states, Israel and Turkey, claims Hezbollah & conflict & conflict & conflict \\
+%& Iran Sunni group Jaish al-Adl claims border attack & no conflict & conflict & conflict \\
+%& ISIS Claims Responsibility In Turkish Nightclub Attack; U.S. Man Among The Wounded & conflict & conflict & conflict \\
+%& Bangkok police claim reward in Erawan Shrine bomber hunt & no conflict & conflict & no conflict \\
+%& Taliban claim Kabul attack & no conflict & conflict & conflict \\
+%& Denmark claims north pole & no conflict & conflict & no conflict \\
+%& WikiLeaks' Julian Assange Claims Vindication in UN Ruling & no conflict & conflict & conflict \\
+%& ISIS claims responsibility for Eilat rockets & no conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. eight of top ten lemma)}
+%\label{tab:ples-labels-4}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%threaten (20)
+%& North Korea Threatens To "Invade USA," Use Weapons "Unknown To The World & conflict & conflict & conflict \\
+%& FATCA threatens Russia’s financial system – official & conflict & conflict & conflict \\
+%& Wartime economic crisis threatens education of millions Yemeni children & no conflict & conflict & no conflict \\
+%& Syria opposition threatens withdrawal from Geneva talks & no conflict & conflict & conflict \\
+%& Al-Qaeda affiliates are threatening West Africa’s most peaceful cities & conflict & conflict & conflict \\
+%& Video threatens Sochi Winter Olympics & no conflict & conflict & conflict \\
+%& Ukraine crisis threatens Transnistria & no conflict & conflict & conflict \\
+%& Giant comets may threaten Earth & no conflict & conflict & no conflict \\
+%& Protests in Turkey Threaten Erdogans Political Future & conflict & conflict & conflict \\
+%& Brazil Rejects Israel's Ambassador; Israel Threatens Relations Downgrade : NPR \& conflict & conflict & conflict \\
+%& North Korea Threatens 'Merciless' Strike Against US-South Korea Drill & conflict & conflict & conflict \\
+%& Kim Dotcom case threatens New Zealand Government & no conflict & conflict & conflict \\
+%& Proposed German legislation threatens broad internet censorship & no conflict & conflict & conflict \\
+%& Abe government threatens NHKs credibility & no conflict & conflict & conflict \\
+%& British ISIS fighter 'Al-Britani' threatens executions in Trafalgar Square & no conflict & conflict & conflict \\
+%& How one racy condom ad may threaten gains female sex education in Pakistan & no conflict & conflict & no conflict \\
+%& Police Use of Drones May Threaten Human Rights: UN Expert \& no conflict & conflict & conflict \\
+%& North Korea threatens pre-emptive nuke strike against U.S. \& S. Korea & conflict & conflict & conflict \\
+%& Asylum seekers threaten hunger strike & no conflict & conflict & conflict \\
+%& Withdrawal of foreign troops from Afghanistan threatens rollback of women's gains & no conflict & conflict & no conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. nine of top ten lemma)}
+%\label{tab:ples-labels-5}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%say (16 of 31)
+%& Iran says no snap inspections of nuclear sites & no conflict & conflict & no conflict \\
+%& Child abuse image investigation leads to 660 arrests: UK National Crime Agency said the 660 arrested included doctors, teachers, scout leaders, care workers and former police officers & no conflict & conflict & no conflict \\
+%& Former Cuba Leader Fidel Castro Says 'Israel and US Fathered Isis & no conflict & conflict & conflict \\
+%& Malaysian court to Christians: You can't say 'Allah & conflict & conflict & conflict \\
+%& U.S. State Dept. says "confident" Russian gov & no conflict & conflict & conflict \\
+%& State Border Service says Russian troops still near Ukraine's border & no conflict & conflict & no conflict \\
+%& France military says Mali town Konna 'not recaptured' from Islamists denying an earlier claim by the Malian army & conflict & conflict & no conflict \\
+%& Thai PM says occupation of state buildings threat to stability & no conflict & conflict & conflict \\
+%& Australia says Chinese spy ship near war games & no conflict & conflict & no conflict \\
+%& Denmark Says Microsoft Owes  £660 Million in Tax & conflict & conflict & no conflict \\
+%& Japan Says Armed Chinese Ship Infiltrates Its Territorial Waters & conflict & conflict & conflict \\
+%& EU report says LGBT face discrimination & no conflict & conflict & conflict \\
+%& Group says boycott Qatar Airways, cites poor rights record & conflict & conflict & conflict \\
+%& WHO incapable of reacting to crises such as Ebola, says report & no conflict & conflict & no conflict \\
+%& Migrant ship off Greece says armed people on board & no conflict & conflict & conflict \\
+%& Turkey says attacks on Aleppo a crime against humanity & no conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. ten of top ten lemma)}
+%\label{tab:ples-labels-6}
+%\end{sidewaystable}
+%
+%
+%\begin{sidewaystable}[ht]
+%\centering
+%\begin{tabular}{l p{13cm} ccc}
+%\toprule
+%Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
+%\midrule
+%say (15 of 31)
+%& Mystery man in Bangkok bomb probe 'never said a word & no conflict & conflict & no conflict \\
+%& I Recant Says Author of Infamous Seventies Newsweek Global Cooling Article & no conflict & conflict & no conflict \\
+%& Sister says don't make missing Flight 370 pilot the fall guy & no conflict & conflict & no conflict \\
+%& VW works council says talks over strategy pact broken off without results & no conflict & conflict & no conflict \\
+%& Head of Russia's Rosneft says U.S., not OPEC, Rules Oil Markets & no conflict & conflict & no conflict \\
+%& Indian textbook says "Japan Nuked US & no conflict & conflict & no conflict \\
+%& North Korea says US sanctions on leader "a declaration of war & conflict & conflict & conflict \\
+%& President of Gambia says homosexuality one of three greatest threats to humanity & conflict & conflict & conflict \\
+%& China Says Its Working with Latin America for a New World Order & no conflict & conflict & conflict \\
+%& Myanmar Parliament Chairman Says Nominees for Country's Next President, 2 Vice Presidents Will Be Revealed March 17 & no conflict & conflict & no conflict \\
+%& G7 says no sanctions on Russia over Syria & no conflict & conflict & conflict \\
+%& South Korea's Lotte Duty Free says China cyber attacks crashed website & conflict & conflict & no conflict \\
+%& Kuwait says stateless to be offered Comoros citizenship & no conflict & conflict & conflict \\
+%& Syria Says Israel Attacked Military Airport & conflict & conflict & conflict \\
+%& Bainimarama says NZ easing of sanctions 'insincere & no conflict & conflict & conflict \\
+%\bottomrule
+%\end{tabular}
+%\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. ten of top ten lemma)}
+%\label{tab:ples-labels-7}
+%\end{sidewaystable}
 
 
