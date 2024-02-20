@@ -1123,37 +1123,39 @@ say        & 0.03      & 0.45           & 0.48           & 31              & 9/2
 \label{sec:result-discussion}
 In this section the previously presented evaluation results are discussed. Based on the observations made in \cref{sec:evaluation-results}, the major findings are summarised in the following:
 
-
-NESS-SHMP may provide a better retrieval performance than the original pattern dependent on the ST
-
-The value of the ST highly influences the retrieval performance of the NESS-SHPM
-
-CNESS-SHPM can provide the overall best retrieval performance
+when talking about retrieval performance, we mean F1 score
 
 
-Using lemma-based FNESS-SHMP instead of word-based FNESS-SHMP improves the retrieval performance 
+\begin{itemize}
 
-Using a generally better performing FNESS model improves the FNESS-SHMP retrieval peformance
+\item NESS-SHMP may provide a better retrieval performance than the original conflict pattern dependent on the ST
 
-CNESS-SHPM performance improves with the size of the reference edge set
+\item The ST highly influences the retrieval performance of NESS-SHPM
 
-CNESS-SHPM precision depends highly on the size and specific selection of the reference edge set
+\item The relation of ST and NESS-SHMP retrieval performance depends on NESS type, NESS model and other NESS parameters
 
-Using the sub-edge tokens embedding instead of the all tokens embedding improves retrieval performance
+\item CNESS-SHPM can provide the overall best retrieval performance (in comparison to FNESS-SHMP and the original conflict pattern)
 
-Using a generally better performing CNESS model does not improve the CNESS-SHMP retrieval performance
+\item Using lemma-based FNESS-SHMP instead of word-based FNESS-SHMP improves the retrieval performance 
 
+\item Using a generally better performing FNESS model improves the FNESS-SHMP retrieval performance
 
+\item CNESS-SHPM performance improves with the size of the reference edge set (see \cref{obs:more-refs-better})
 
+\item CNESS-SHPM precision depends highly on the size and specific selection of the reference edge set
 
+\item Using the sub-edge tokens embedding instead of the all tokens embedding improves retrieval performance
 
+\item Using a generally better performing CNESS model does not improve the CNESS-SHMP retrieval performance
 
+\item CNESS-SHMP can not reliably achieve a significantly higher precision than the original conflict pattern
 
+\item Accuracy is baaaaaad
 
-This means independent of CNESS model and usage of the AT option does a higher number of reference edges result in a higher mean RES best F1-score (see \cref{obs:more-refs-better})
+\end{itemize}
 
-
-
+should i add specific observations to every finding. 
+what about those that do not have any? e.g.: ST is highly influential on performance
 
 
 
