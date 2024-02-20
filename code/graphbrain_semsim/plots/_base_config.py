@@ -7,6 +7,13 @@ from pydantic import BaseModel
 from graphbrain_semsim.datasets.models import DatasetEvaluation
 
 
+EVAL_METRIC_LABELS: dict[str, str] = {
+    "precision": "Precision",
+    "recall": "Recall",
+    "f1": "F1-Score",
+    "accuracy": "Accuracy"
+}
+
 PLOT_LINE_COLORS: list[str] = [
     '#ebac23',  # yellow
     '#b80058',  # lipstick
@@ -34,7 +41,7 @@ PLOT_LINE_WEIGHTS: dict[str, dict[str, str | float]] = {
         'alpha': 1.0
     },
     'light': {
-        'linewidth': '1',
+        'linewidth': '1.5',
         'alpha': 0.5
     },
 }

@@ -9,11 +9,12 @@ Given two dataset evaluation names and an evaluation metric, compare the matches
 3. Get the matches of the two evaluation results and compare them.
 """
 import logging
+from math import log
 from pathlib import Path
 
 from graphbrain.hypergraph import Hypergraph, Hyperedge
 from graphbrain_semsim import get_hgraph
-from graphbrain_semsim.datasets.config import DATASET_DIR, CONFLICTS_ANNOTATION_LABELS
+from graphbrain_semsim.datasets.config import DATASET_DIR, CONFLICTS_ANNOTATION_LABELS, DATA_LABELS
 from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult, LemmaDataset
 
 from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY, HG_NAME
@@ -74,7 +75,9 @@ def compare_lemma_results_by_eval_metric_diff(
     rank_metric: str = "f1"
 
     min_samples: int = 5
-    lemma_compare_metric: str = "precision"
+    # lemma_compare_metric: str = "accuracy"
+    # lemma_compare_metric: str = "precision"
+    lemma_compare_metric: str = "f1"
 
     # get lemmas with the highest difference in evaluation score for the two dataset evaluations
     best_evaluation_1, _, best_threshold_1 = best_evaluations_results_thresholds[dataset_eval_names[0]]
@@ -104,12 +107,14 @@ def compare_lemma_results_by_eval_metric_diff(
             )
         )
 
+    # Filter lemmas with recall > 0 and calculate the difference of the compare metric scores
     lemma_results_scores_and_diffs: list[tuple[str, tuple[float, float, float]]] = []
     for lemma in dataset.lemma_matches.keys():
         best_lemma_result_1: EvaluationResult = best_lemma_results_1[lemma]
         best_lemma_result_2: EvaluationResult = best_lemma_results_2[lemma]
 
         if best_lemma_result_1.recall > 0 and best_lemma_result_2.recall > 0:
+        # if best_lemma_result_1.recall > 0 or best_lemma_result_2.recall > 0:
             best_lemma_result_score_1: float = getattr(best_lemma_result_1, lemma_compare_metric)
             best_lemma_result_score_2: float = getattr(best_lemma_result_2, lemma_compare_metric)
             lemma_results_scores_and_diffs.append((
@@ -120,34 +125,59 @@ def compare_lemma_results_by_eval_metric_diff(
                 )
             ))
 
-    lemma_results_scores_and_diffs_sorted: list[tuple[str, tuple[float, float, float]]] = list(sorted(
-        lemma_results_scores_and_diffs, key=lambda t: t[1][2], reverse=True
-    ))
+    # Step 1: Sort by the second element in ascending order
+    # This sort is stable, so it keeps the relative order of elements that compare equal.
+    lemma_results_scores_and_diffs_sorted = sorted(lemma_results_scores_and_diffs, key=lambda t: t[1][1])
 
-    # lemmas with at least n samples in the dataset
+    # Step 2: Then sort by the third and first element in descending order, preserving previous order
+    lemma_results_scores_and_diffs_sorted = sorted(lemma_results_scores_and_diffs_sorted,
+                                                   key=lambda t: (t[1][2], t[1][0]), reverse=True)
+
+    # lemmas with at least min_samples samples in the dataset
     lemma_results_scores_and_diffs_sorted_filtered: list[tuple[str, tuple[float, float, float]]] = [
         (lemma, scores_and_diff) for lemma, scores_and_diff in lemma_results_scores_and_diffs_sorted
         if len(dataset.lemma_matches[lemma]) >= min_samples
     ]
 
-    logger.info(
-        f"Top 11 lemmas regarding highest difference in {lemma_compare_metric}\n"
-        f"limited to lemmas with recall > 0 and n_samples >= {min_samples}\n"
-        f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n" +
-        "\n".join(
-            f"{lemma}: {diff:.2f} ({score_1:.2f} - {score_2:.2f}) (n={len(dataset.lemma_matches[lemma])})"
-            for lemma, (score_1, score_2, diff) in lemma_results_scores_and_diffs_sorted_filtered[:11]
-        )
+    # --------------------- #
+
+    num_top_lemmas: int = 11
+    top_lemma_results_scores_and_diffs: list[tuple[str, tuple[float, float, float]]] = (
+        lemma_results_scores_and_diffs_sorted_filtered[:num_top_lemmas]
+    )
+
+    top_lemma_strings, top_label_balance_ratios, top_label_entropies = (
+        compute_label_information_measures_and_construct_lemma_strings(dataset, top_lemma_results_scores_and_diffs)
     )
     logger.info(
-        f"Top 10 lemmas regarding lowest difference in {lemma_compare_metric}\n"
+        f"Top {num_top_lemmas} lemmas regarding highest difference in {lemma_compare_metric}\n"
         f"limited to lemmas with recall > 0 and n_samples >= {min_samples}\n"
-        f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n" +
-        "\n".join(
-            f"{lemma}: {diff:.2f} ({score_1:.2f} - {score_2:.2f}) (n={len(dataset.lemma_matches[lemma])})"
-            for lemma, (score_1, score_2, diff) in reversed(lemma_results_scores_and_diffs_sorted_filtered[-10:])
-        )
+        f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n"
+        + "\n".join(top_lemma_strings)
     )
+    logger.info(f"Mean top LBR: {sum(top_label_balance_ratios) / len(top_label_balance_ratios):.2f}")
+    logger.info(f"Mean top entropy: {sum(top_label_entropies) / len(top_label_entropies):.2f}")
+
+    # --------------------- #
+
+    num_flop_lemmas: int = 10
+    flop_lemma_results_scores_and_diffs: list[tuple[str, tuple[float, float, float]]] = (
+        list(reversed(lemma_results_scores_and_diffs_sorted_filtered[-num_flop_lemmas:]))
+    )
+
+    flop_lemma_strings, flop_label_balance_ratios, flop_label_entropies = (
+        compute_label_information_measures_and_construct_lemma_strings(dataset, flop_lemma_results_scores_and_diffs)
+    )
+
+    logger.info(
+        f"Top {num_flop_lemmas} lemmas regarding lowest difference in {lemma_compare_metric}\n"
+        f"limited to lemmas with recall > 0 and n_samples >= {min_samples}\n"
+        f"for {dataset_eval_names[0]} and {dataset_eval_names[1]}:\n"
+        + "\n".join(flop_lemma_strings)
+    )
+    logger.info(f"Mean flop LBR: {sum(flop_label_balance_ratios) / len(flop_label_balance_ratios):.2f}")
+    logger.info(f"Mean flop entropy: {sum(flop_label_entropies) / len(flop_label_entropies):.2f}")
+    # --------------------- #
 
     logger.info(
         f"Edges for top 11 lemmas with highest difference in {lemma_compare_metric}\n"
@@ -175,7 +205,57 @@ def compare_lemma_results_by_eval_metric_diff(
             for lemma, _ in lemma_results_scores_and_diffs_sorted_filtered[:11]
         )
     )
-                
+
+
+def compute_label_information_measures_and_construct_lemma_strings(
+        dataset: LemmaDataset, lemma_results_scores_and_diffs: list[tuple[str, tuple[float, float, float]]]
+) -> tuple[list[str], list[float], list[float]]:
+    lemma_strings: list[str] = []
+
+    label_balance_ratios: list[float] = []
+    label_entropies: list[float] = []
+
+    for lemma, (score_1, score_2, diff) in lemma_results_scores_and_diffs:
+        num_positives, num_negatives = get_lemma_num_positives_negatives(lemma, dataset)
+        label_balance_ratio: float = get_label_balance_ratio(num_positives, num_negatives)
+        label_entropy: float = get_label_entropy(num_positives, num_negatives)
+        label_balance_ratios.append(label_balance_ratio)
+        label_entropies.append(label_entropy)
+
+        lemma_strings.append(
+            f"{lemma}: {diff:.2f} ({score_1:.2f} - {score_2:.2f}), n={len(dataset.lemma_matches[lemma])}, "
+            f"n_pos/n_neg={num_positives}/{num_negatives}, LBR={label_balance_ratio:.2f}, H={label_entropy:.2f})"
+        )
+
+    return lemma_strings, label_balance_ratios, label_entropies
+
+
+def get_label_entropy(num_positives: int, num_negatives: int) -> float:
+    total: int = num_positives + num_negatives
+    if total == 0:
+        return 0.0  # Returns 0 entropy if there are no samples
+
+    p_positive: float = num_positives / total if num_positives > 0 else 0
+    p_negative: float = num_negatives / total if num_negatives > 0 else 0
+
+    positive_part = -p_positive * log(p_positive, 2) if p_positive > 0 else 0
+    negative_part = -p_negative * log(p_negative, 2) if p_negative > 0 else 0
+
+    return positive_part + negative_part
+
+
+def get_label_balance_ratio(num_positives: int, num_negatives: int) -> float:
+    return 1 - (abs(num_positives - num_negatives) / (num_positives + num_negatives))
+
+
+def get_lemma_num_positives_negatives(lemma: str, dataset: LemmaDataset) -> tuple[int, int]:
+    return (
+        len([lemma_match for lemma_match in dataset.lemma_matches[lemma]
+             if lemma_match.label == DATA_LABELS['positive']]),
+        len([lemma_match for lemma_match in dataset.lemma_matches[lemma]
+             if lemma_match.label == DATA_LABELS['negative']])
+    )
+
 
 def get_eval_edge_label_name(edge: Hyperedge, dataset_evaluation: DatasetEvaluation, semsim_threshold: float) -> str:
     evaluation_matches_edges: list[Hyperedge] = (

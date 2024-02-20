@@ -8,7 +8,7 @@ from graphbrain_semsim.datasets.config import DATASET_DIR
 from graphbrain_semsim.datasets.dataset_table import make_dataset_table
 from graphbrain_semsim.datasets.models import LemmaDataset, LemmaMatch
 from graphbrain_semsim.case_studies.models import PatternEvaluationConfig, PatternEvaluationRun
-from graphbrain_semsim.eval_tools.result_data import get_pattern_eval_run
+from graphbrain_semsim.eval_tools.result_data.pattern_eval_runs import get_pattern_eval_run
 from graphbrain_semsim.eval_tools.utils.lemmas import get_lemma_to_matches_mapping
 from graphbrain_semsim.utils.file_handling import save_json, load_json
 

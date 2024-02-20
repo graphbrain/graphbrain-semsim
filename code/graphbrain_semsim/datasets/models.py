@@ -44,6 +44,7 @@ class LemmaDataset(BaseModel):
             pattern_eval_config_id: str = None,
             full_dataset: bool = False,
             n_samples: int = None,
+            recreated: bool = False,
     ) -> str:
         assert (pattern_eval_config_id or (case_study and pattern_eval_config_name)) and (full_dataset or n_samples), (
             "Either pattern_eval_config_id or (case_study and pattern_eval_config_name) must be provided, "
@@ -57,7 +58,11 @@ class LemmaDataset(BaseModel):
         base_id: str = f"dataset_{pattern_eval_config_id}"
         if full_dataset:
             return f"{base_id}_full"
-        return f"{base_id}_subsample-{n_samples}"
+
+        subsample_suffix: str = f"subsample-{n_samples}"
+        if recreated:
+            subsample_suffix += "_recreated"
+        return f"{base_id}_{subsample_suffix}"
 
 
 # TODO: this should refactored into something like 'EvaluationScores'
