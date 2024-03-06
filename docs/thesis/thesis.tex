@@ -35,14 +35,19 @@
 \usepackage{pdfpages}
 \usepackage{csquotes}
 \usepackage{algorithm}
+\usepackage{newfloat}
+\usepackage{enumitem}
 \usepackage{algpseudocode}
 \usepackage[export]{adjustbox}
 
-\usepackage{array}  % needed for '\newcolumntype' command
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
+%\usepackage{array}  % needed for '\newcolumntype' command
+%\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
+%% Define a new counter for tracking the list number
 
+% Counter for observation lists
+\newcounter{listcounter}
+\setcounter{listcounter}{0}
 
-\usepackage{newfloat}
 \DeclareFloatingEnvironment[
   listname = {List of Patterns} ,
   name = Pattern,
@@ -50,7 +55,6 @@
   within = none
 ]{pattern}
 
-\usepackage{newfloat}
 \DeclareFloatingEnvironment[
   listname = {List of Hyperedges} ,
   name = Hyperedge,
@@ -136,11 +140,19 @@
 
 Human life in times of widespread use of the internet and smartphones is most certainly more than ever interspersed with text-based communication...
 
+Great progress has been made in the made in NLP, IR and IE in the past decade. This advancement of the state-of-the-art can primarily be attributed \textit{Deep Learning} based methods, often also referred to as \textit{Neural Networks}. \cite{youngRecentTrendsDeep2018, minRecentAdvancesNatural2023, hirschbergAdvancesNaturalLanguage2015}
 
-A Semantic Hypergraphd \cite{menezes_semantic_2021} is a form of representation for Natural Language (NL) and therefore knowledge. \textit{NL} sentences can be modelled as a recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing \textit{SH}.
+\section{References from the Future}
+open-opaque / strict-adaptive categorisation dimensions
 
-The aim of the SH framework is to provide a \textit{open} and \textit{adaptive} framework to analyse text corpora, especially in the domain of computational social science (CSS) \cite{lazer2009computational}. The framework is \textit{open} in the sense that it's representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is based on adaptive subsystems (ML-based) and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness (???).
+\section{Expose intro}
 
+A significant part of the social world is nowadays being represented by digitally manifested text. Examples for this range from instant messaging, social media and any form of collective web activity to encyclopaedic websites, digitized libraries and government intelligence. The amount and richness of available social text makes it a valuable data source for social science research while simultaneously creating an interest in automatic systems to analyze these texts on a large scale \cite{evansMachineTranslationMining2016}. Such research can be understood as part of the domain of \textit{Computational Social Science} (CSS) \cite{lazerComputationalSocialScience2009}.
+
+Systems based on techniques from the field of \textit{ Natural Language Processing} (NLP), as well well as the interlinked fields of \textit{Information Retrieval} (IR) and \textit{Information Extraction} (IE), have demonstrated great success in a variety of task related to text analysis. This success is largly attributed to the advancements of applying of \textit{Machine Learning} (ML) and especially \textit{Deep Learning} (DL) methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, ML- and specifically DL-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their prediction or decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
+%DL models 
+
+The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing Natural Language (NL). \textit{NL} sentences can be modelled as an ordered, recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing SH. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of CSS. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness.
 
 
 
@@ -215,12 +227,19 @@ similarity threshold (ST)
 % ========== 
 \chapter{Problem Statement}
 \label{cha:problem-statement}
-CSS researches may typically be interested in retrieving statements of specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. One approach for performing the retrieval would be to use a system which allows to specify some form of pattern which abstractly represents the statements they are trying to capture. This requires the definition of some form of formal pattern language\footnote{The \textit{Google Search} query language can be seen as a simple example of such a pattern language, albeit with a different use case focus: \url{https://support.google.com/websearch/answer/2466433?hl=en}} and possibly the prior transformation of the text corpus into some form of structured format to match against. Another approach is to use a system, which accepts example statements concretely representing the statements that are desired to be retrieved. Those systems may require a large number of positive and negative examples to be able to perform the retrieval. The two types of retrieval systems described here are in tendency situated in the realms of symbolic IR/IE and probabilistic ML/DL respectively.
+CSS researches may typically be interested in extracting statements of a specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. Two sensible ways to frame this task are as \textit{text classification} \cite{kowsariTextClassificationAlgorithms2019} or \textit{text retrieval} \cite{manningIntroductionInformationRetrieval2008}. It can be addressed with a wide range of system, which will be generally referred to as  \textit{automatic text analysis} systems in the following. These systems are mostly based on techniques from the field of Natural Language Processing (NLP), as well well as the interlinked fields of Information Retrieval (IR) and Information Extraction (IE) \cite{chowdharyNaturalLanguageProcessing2020}.
 
-The SH framework is more situated in the former symbolic realm. In SH text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+A relevant perspective of categorising text analysis systems, especially from the point of view of CSS researchers, are the dimensions \textit{open}-\textit{opaque} and \textit{adaptive}-\textit{strict} \cite{menezesSemanticHypergraphs2021}. Here openness refers to the systems users ability to inspect and understand the processing, which we can also bee describes as transparency and explainability. These properties are of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}. An adaptive text analysis system does not (only) operate on strict rules, but is able to learn and modify its behaviour in some way. It is therefore in principle able to handle unforeseen variations in the text it processes. While both of these two properties are desirable for users are often found to be a trade-off. Current successful adaptive systems are most often bases on neural networks \cite{hirschbergAdvancesNaturalLanguage2015}, which are opaque in the way how they represent and process text \cite{rudinStopExplainingBlack2019}. 
 
-Users of the SH framework (e.g. CSS researchers) can define patterns in the SH formalism to match against a text corpus (e.g. a collection of news articles) that has previously been parsed as an SH. These patterns may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). Additionally the actual words that should match need to be specified i.e. the content to match against, if the structure of an edge matches the pattern. 
-There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every atomic edge edge of a specific type and therefore discard content.
+The Semantic Hypergraph (SH) framework aims to fulfil both the open as well as the adaptive property of a text analysis system. It offers an inspectable and understandable representation of text that is constructed by a parser based on machine learning components. The SH representation and its construction can be therefore considered to fulfil the open-adaptive properties. The SH pattern matching language can be used to define patterns that match a specific subset of hyperedges in a given hypergraph. The matching process is purely symbolic and follows a set of fixed rules. It can therefore be considered to be open-strict. In the context of the SH framework the CSS research task described above is better framed as text retrieval. The SH pattern acts  as a \textit{query} for which the most relevant items are retrieved. While the SH frameworks capabilities are not restricted to text retrieval, the work is focused on this application.
+
+The SH pattern defined by a user may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). The SH pattern language allows it to describe different levels of generalisations for the structural matching. Additionally the actual words that should match need to be specified i.e. the edge content to match against, if the edge matches the pattern structurally. These words need to be given explicitly and the only way of generalising is via the lemma functional pattern. This lack of generalisation capability entails that a bias is introduced into the matching process by the manual selection of words by the SH frameworks user, who defines the pattern.
+
+%One approach for performing the retrieval would be to use a system which allows to specify some form of pattern which abstractly represents the statements they are trying to capture. This requires the definition of some form of formal pattern language\footnote{The \textit{Google Search} query language can be seen as a simple example of such a pattern language, albeit with a different use case focus: \url{https://support.google.com/websearch/answer/2466433?hl=en}} and possibly the prior transformation of the text corpus into some form of structured format to match against. Another approach is to use a system, which accepts example statements concretely representing the statements that are desired to be retrieved. Those systems may require a large number of positive and negative examples to be able to perform the retrieval. The two types of retrieval systems described here are in tendency situated in the realms of symbolic IR/IE and probabilistic ML/DL respectively.
+
+%The SH framework is more situated in the former symbolic realm. In SH text is represented in the form of \textit{hyperedges} (in the following also referred to as \textit{edges} only). These edges are either atomic or they consist of edges themselves, which essentially accounts for the recursive character of the SH. Each edge has a specific \textit{type} from a set of eight different types of which the most trivial two types are probably \textit{concept} (\textsf{C}) and \textit{predicate} (\textsf{P}). 
+
+%There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every atomic edge of a specific type and therefore discard content.
 
 To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-likes-apples} demonstrate how NL sentences are parsed to SH based on this simplified introduction the the SH representation.
 
@@ -260,11 +279,18 @@ Referring to the example above this means using the SH framework it is not direc
   \label{pat:ann-likes-apples-and-bananas}
 \end{pattern}
 
-Utilizing some form of SR/SS regarding to edge content for the matching step would allow users to define more generalising patterns. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the explicitness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as \textit{Neural Embedding-based Semantic Similarity} (NESS) measures in the following. 
+Utilizing some form of SR/SS regarding to edge content in the SH matching process would allow users to define patterns, which describe generalisations of edge content. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (NESS) measures.
 
 Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
 
-As illustrated earlier, NESS measures principally do not provide the explicitness that is inherent to the pattern matching process of the SH framework. In the sense of the adaptive-open classification described above an integration of NESS would mean a shift from openness to adaptivity in this regard. While the SH framework generally can be situated in the realm of symbolic approaches, this integration would build a bridge between it and the realm of probabilistic approaches.
+\todo[inline]{
+This has to be adapted based on chapter 2 \\
+-> add reference to FNESS/CNESS and derive relevancy of both for this work -> modify RQs \\
+-> derive in more detail why embedding based SS is chosen \\
+-> add discussing about effiency?
+}
+
+Integrating NESS measures into the pattern matching process would allow for edge content generalisation and therefore would make the process more adaptive. As illustrated earlier, NESS measures principally do not provide the openness that is inherent to the pattern matching process of the SH framework. In the sense of the open-opaque / strict-adaptive classification described above this integration would mean a shift from openness to opaqueness and from strictness to adaptivity. To counteract the opaqueness introduced by an NESS integration into the SH pattern matching, allowing user control over generalisation levels can maintain some openness while still benefiting from increased adaptivity.
 
 % ========== 
 \section{Research Questions}
@@ -272,14 +298,18 @@ As illustrated earlier, NESS measures principally do not provide the explicitnes
 Based on the problem statement outlined above, we pose the following research questions:
 
 \subsection{Primary Question}
-\textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the adaptiveness and therefore loss of explicitness in the matching process?
+\textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the generalisation and therefore maintaining some openness of the pattern matching process?
 
 \subsection{Secondary Questions}
-\textbf{R.1} What neural embeddings model would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
+\textbf{R.1} What neural embeddings model would be the most suitable for accuratly assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
 
-\textbf{R.2} To what extent does incorporating neural embedding-based semantic similarity improve the generalization performance (recall) and how does it impact precision when matching a pattern against a set of known desired matching results?
+\textbf{R.2} How can neural embedding based semantic similarity effectively (and efficiently?) be integrated into the Semantic Hypergraph pattern matching?
 
-\textbf{R.3} How can adaptiveness and explicitness of the matching process be effectively and transparently balanced and controlled?
+\textbf{R.3} Does integration neural embedding-based semantic similarity improve the retrieval performance of the Semantic Hypergraph framework and how does it impact recall and precision when matching a pattern against a set of known desired matching results?
+
+\textbf{R.4} How can the level of edge content related generalisation in the pattern matching process be effectively and transparently controlled?
+
+
 
 
 % ========== 
@@ -294,6 +324,7 @@ The system is described here will in the following be referred to as \textit{Neu
 
 
 
+The recall of NESS-SHMP in relation to ST \(r(t_s\) is strictly monotonically decreasing, since the set of points in embedding space that is inside of the similarity boundary consistently gets smaller with increasing ST.
 
 \section{Integration into the Pattern Matching Process}
 \subsection{SemSim Functional Pattern}
@@ -321,7 +352,7 @@ Square bracket notation
 \textit{Contextual Neural Embedding-based Semantic Similarity} 
 (CNESS)
 
-all tokens option (AT)
+all tokens option (AT) vs sub tokens
 
 
 i generally like your idea of contrasting the discrete and continous space as it allows to point out that there cant be one single point, also for a set of words which represents the meaning, but rather some subspace depending on the specific context
@@ -726,7 +757,13 @@ The configurations for all evaluation runs that are conducted in this case study
 
 
 \subsection{Evaluation Metrics}
-Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed. \todo{derive why these metrics were chosen?}
+\label{sec:evaluation-metrics}
+Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed. \todo{show how this metrics are computed?}
+
+\todo[inline]{derive why these metrics were chosen: \\
+accuracy is not interesting since the dataset is unbalanced, precision and recall both of interest, but are expected to be a trade-off (where recall should decline with rising ST). F1-score is an established metric that closely relates to precision and recall and represents this trade-off and therefore retrieval performance as a whole. MCC is arguably a better metric because it is symmetrical and incorporates true negatives. also the F1-score of the original pattern is worse than random, which indicates a metric mismatch. then again the close relation and equal value range of precision, recall and F1-score are a plus (for plotting especially).
+}
+
 
 \begin{table}
 \centering
@@ -809,19 +846,19 @@ In \cref{tab:best-f1-score-mean-best-semsim-ctx} and \cref{tab:best-f1-score-mea
 
 
 \subsubsection{Significant Observations}
-\begin{enumerate}
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
 %	\item The random evaluation run achieves a higher F1-score than the original conflict pattern evaluation run
-	\item All evaluation runs utilizing NESS achieve a best F1-score that is higher than the F1-score of the random evaluation run and the original evaluation run
-	\item CNESS achieves achieves a higher F1-score than FNESS by 4.0\%, when comparing the highest F1-scores achieved among all FNESS utilizing evaluation runs and the highest mean RES best F1 score achieved among all CNESS utilizing evaluation runs (\texttt{semsim-fix-lemma cn t-0.30} and \texttt{semxim-ctx e5 r-10-mean-best} 
-	\item Lemma based FNESS achieves a higher F1-score than non-lemma FNESS by 3.2\%, when comparing the highest F1-scores achieved by evaluation runs utilizing one of the two variants (\texttt{semsim-fix w2v t-0.27} and \texttt{semsim-fix-lemma cn t-0.30})
-
-	\item For lemma based FNESS, the conceptnet-numberbatch model achieves a higher best F1-score than the word2vec model by 4.2\% \\ (\texttt{semsim-fix-lemma cn t-0.30} vs \texttt{semsim-fix-lemma w2v t-0.33})
-	\item For not lemma based FNESS, the word2vec model achieves a higher best F1-score than the conceptnet-numberbatch model by 1.4\% \\ (\texttt{semsim-fix w2v t-0.27} vs \texttt{semsim-fix cn t-0.25})
-	\item CNESS with the AT option disabled achieves a higher or equal mean RES best F1-score than CNESS with AT option enabled in 6/6 (100\%) direct comparisons \\(\texttt{semsim-ctx NM r-N-mean-best} vs \texttt{semsim-ctx NM-at r-N-mean-best})
-	\item CNESS with the e5 model achieves a higher or equal mean RES best F1-score than CNESS with the gte model in 6/6 (100\%) direct comparisons \\ (\texttt{semsim-ctx e5-* r-N-mean-best} vs \texttt{semsim-ctx gte-* r-N-mean-best})
-	\item CNESS with the AT option enabled has a lower standard deviation of best F1-score than CNESS with the AT option disabled in 5/6 (83\%) direct comparisons \\ (\texttt{semsim-ctx NM-at r-N-mean-best} vs \texttt{semsim-ctx NM r-N-mean-best})
-	\item CNESS with the gte model has a lower standard deviation of best F1-score than CNESS with the e5 model in 4/6 (67\%) direct comparisons \\ (\texttt{semsim-ctx gte-* r-N-mean-best} vs \texttt{semsim-ctx e-* r-N-mean-best})
-	\item For CNESS with the AT option disabled, the gte model has a lower standard deviation of best F1-score than the e5 model in 3/3 (100\%) direct comparisons \\ (\texttt{semsim-ctx gte r-N-mean-best} vs \texttt{semsim-ctx e5 r-N-mean-best})
+	\item All evaluation runs utilizing NESS achieve a best F1-score that is higher than the F1-score of the random evaluation run and the original evaluation run \label{obs-itm:NESS-higher-best-f1}
+	\item CNESS achieves achieves a higher F1-score than FNESS by 4.0\%, when comparing the highest F1-scores achieved among all FNESS utilizing evaluation runs and the highest mean RES best F1 score achieved among all CNESS utilizing evaluation runs (\texttt{semsim-fix-lemma cn t-0.30} and \texttt{semxim-ctx e5 r-10-mean-best} \label{obs-itm:CNESS-higher-best-f1-than-FNESS}
+	\item Lemma based FNESS achieves a higher F1-score than non-lemma FNESS by 3.2\%, when comparing the highest F1-scores achieved by evaluation runs utilizing one of the two variants (\texttt{semsim-fix w2v t-0.27} and \texttt{semsim-fix-lemma cn t-0.30}) \label{obs-itm:lemma-based-FNESS-higher-best-f1}
+	\item For lemma based FNESS, the conceptnet-numberbatch model achieves a higher best F1-score than the word2vec model by 4.2\% \\ (\texttt{semsim-fix-lemma cn t-0.30} vs \texttt{semsim-fix-lemma w2v t-0.33}) \label{obs-itm:lemma-FNESS-cn-better-than-w2v}
+	\item For not lemma based FNESS, the word2vec model achieves a higher best F1-score than the conceptnet-numberbatch model by 1.4\% \\ (\texttt{semsim-fix w2v t-0.27} vs \texttt{semsim-fix cn t-0.25}) \label{obs-itm:word-FNESS-w2v-better-than-cn}
+	\item CNESS with the AT option disabled achieves a higher or equal mean RES best F1-score than CNESS with AT option enabled in 6/6 (100\%) direct comparisons \\(\texttt{semsim-ctx NM r-N-mean-best} vs \texttt{semsim-ctx NM-at r-N-mean-best}) \label{obs-itm:CNESS-better-without-AT}
+	\item CNESS with the e5 model achieves a higher or equal mean RES best F1-score than CNESS with the gte model in 6/6 (100\%) direct comparisons \\ (\texttt{semsim-ctx e5-* r-N-mean-best} vs \texttt{semsim-ctx gte-* r-N-mean-best}) \label{obs-itm:CNESS-e5-better-than-gte}
+	\item CNESS with the AT option enabled has a lower standard deviation of best F1-score than CNESS with the AT option disabled in 5/6 (83\%) direct comparisons \\ (\texttt{semsim-ctx NM-at r-N-mean-best} vs \texttt{semsim-ctx NM r-N-mean-best}) \label{obs-itm:CNESS-lower-variation-with-AT}
+%	\item CNESS with the gte model has a lower standard deviation of best F1-score than CNESS with the e5 model in 4/6 (67\%) direct comparisons \\ (\texttt{semsim-ctx gte-* r-N-mean-best} vs \texttt{semsim-ctx e-* r-N-mean-best})
+%	\item For CNESS with the AT option disabled, the gte model has a lower standard deviation of best F1-score than the e5 model in 3/3 (100\%) direct comparisons \\ (\texttt{semsim-ctx gte r-N-mean-best} vs \texttt{semsim-ctx e5 r-N-mean-best})
 \end{enumerate}
 
 
@@ -887,14 +924,28 @@ To facilitate the description of observation for this perspective on the result 
 
 
 \subsubsection{Significant Observations}
-\begin{enumerate}
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
 %	\item The best F1-score of the synthetic evaluation runs \texttt{semsim-ctx e5 r-10-mean} is higher than the highest F1 score in achieved by any of the evaluation runs in \texttt{semsim-fix-*}.
-	\item The evaluation runs in the ERS \texttt{semsim-fix-lemma cn} achieve a higher F1 value than the evaluation run in the ERS \texttt{semsim-fix w2v} for nearly all values of \(t_s\)
-	\item The ASTR of \texttt{semsim-fix-lemma cn} (all ESRs of the form \texttt{semsim-fix-* NM}) is higher (\(0.0 < t_s < 1.0\)) than the ASTR of \texttt{semsim-ctx e5} (ca. \(0.625 < t_s < 0.875\))
-	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic ESR \texttt{semsim-ctx e5 r-10-mean} (\(p_{max}\)) and the precision of the original evaluation run \(p_o\) are nearly equal (\(p_{max} \approx p_o\))
-	\item The precision achieved by evaluation runs in ERSs of the form \texttt{semsim-ctx e5 r-10-* t-TS} has a higher variation for ca. \(t_s > 0.75\) than for ca. \(t_s < 0.75\)
-	\item Precision (\(p\)) and recall (\(r\)) have the same value (\(p \approx r \approx 0.5\)) at specific similarity thresholds \(t_1\) and \(t_2\) for the two ERSs \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5}
-	\item The evaluation metric scores of \texttt{semsim-fix-lemma * t-1.00} are lower than those of the \texttt{original} evaluation run
+	\item The ASTR of \texttt{semsim-fix-lemma cn} is larger (\(0.0 < t_s < 1.0\)) than the ASTR of \texttt{semsim-ctx e5} (ca. \(0.625 < t_s < 0.875\)) \label{obs-itm:ASTR-lemma-FNESS-cn-higher-than-CNESS-e5}
+	\item Generally the ASTR of ERSs of the form \texttt{semsim-fix-* NM} is larger than the the ASTR of ERSs of the form \texttt{semsim-ctx} (confer also \cref{fig:prec-rec-f1-semsim-fix-lemma}, \cref{fig:prec-rec-f1-semsim-fix-lemma-model} \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:prec-rec-f1-semsim-ctx-at}) \label{obs-itm:ASTR-FNESS-higher-than-CNESS}
+	\item The ASTRs are nearly equal for ERSs of the form \texttt{semsim-fix-* NM} \label{obs-itm:ASTR-equal-FNESS} (confer \cref{fig:prec-rec-f1-semsim-fix-lemma} and \cref{fig:prec-rec-f1-semsim-fix-lemma-model}) \label{obs-itm:ASTR-FNESS-equal}
+	\item The ASTR of ERSs of the form \texttt{semsim-ctx gte-AT} begin at a lower value than for ERSs of the form \texttt{semsim-ctx e5-AT} (confer \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-CNESS-gte-starts-earlier}
+	\item The ASTR of ERSs of the form \texttt{semsim-ctx NM} begin at a lower value than for ERSs of the form \texttt{semsim-ctx NM-at} (confer \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-CNESS-at-starts-earlier}
+	\item The ASTRs end at nearly the same value for ERSs of the form \texttt{semsim-ctx NM-AT} \label{obs-itm:ASTR-equal-FNESS} (confer \cref{fig:prec-rec-f1-semsim-ctx-model}, \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-CNESS-end-equal}
+
+	\item The evaluation runs in the ERS \texttt{semsim-fix-lemma cn} achieve a higher F1 value than the evaluation run in the ERS \texttt{semsim-fix w2v} for nearly all values of \(t_s\) \label{obs-itm:lemma-FNESS-higher-f1-nearly-always}
+
+	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic ESR \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:CNESS-highest-precision-equal-original} 	
+	\item The precision of evaluation run \texttt{semsim-fix-lemma cn}  correlates with the ST until it reaches the value achieved by the \texttt{original} evaluation run, where it plateaus \label{obs-itm:FNESS-ST-precision-correlates}
+	\item The precision of the evaluation runs in ERS \texttt{semsim-ctx e5} correlate with the ST until precision (\(p\)) and recall (\(r\)) reach approximately the same value (\(p \approx r \approx 0.5\)), after which it fluctuates (the specific fluctuation varies with the specific RES) \label{obs-itm:CNESS-ST-precision-correlates-until-crosspoint}
+
+	\item The precision achieved by evaluation runs in ERSs of the form \texttt{semsim-ctx e5 r-10-* t-TS} has a higher variation for \(t_s \geq 0.75\) than for \(t_s < 0.75\) \label{obs-itm:CNESS-precision-variation-higher-ASTR}
+	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic ESR \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:CNESS-highest-precision-equal-original} 	
+	\item The evaluation metric scores of \texttt{semsim-fix-lemma cn t-1.00} are lower than those of the \texttt{original} evaluation run \label{obs-itm:FNESS-ST-limit}
+
+%	\item Precision (\(p\)) and recall (\(r\)) have the same value (\(p \approx r \approx 0.5\)) at specific similarity thresholds \(t_1\) and \(t_2\) for the two ERSs \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5}
+
 \end{enumerate}
  
  
@@ -959,9 +1010,10 @@ To facilitate the description of observation for this perspective on the result 
 \end{figure}
 
 \subsubsection{Significant Observations}
-\begin{enumerate}
-	\item The mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is higher than the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\) \label{obs:more-refs-better}
-	\item The standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is lower than the standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\), except for \texttt{semsim-ctx et-at r-3-*} (\(sd_1 = 0.11\)) and \texttt{semsim-ctx et-at r-10-*} (\(sd_2 = 0.12\))
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
+	\item The mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is higher than the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\) \label{obs-itm:CNESS-more-refs-higher-mean-best-f1}
+	\item The standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is lower than the standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\), except for \texttt{semsim-ctx et-at r-3-*} (\(sd_1 = 0.11\)) and \texttt{semsim-ctx et-at r-10-*} (\(sd_2 = 0.12\)) \label{obs-itm:CNESS-more-refs-lower-stddev-best-f1}
 %	\item , where \(sd_2 > sd_2\)
 \end{enumerate}
 
@@ -1108,54 +1160,98 @@ say        & 0.03      & 0.45           & 0.48           & 31              & 9/2
 \end{table}
 
 \subsubsection{Significant Observations}
-\begin{enumerate}
-	\item The CNESS utilizing evaluation run achieves a higher F1-score than the FNESS utilizing evaluation run for every PLES of the the top ten PLES regarding highest difference in F1-score between the two evaluation runs (independently of the recall condition)
-	\item The mean LBR and mean entropy of the top ten PLESs regarding the highest difference in F1-score between the two evaluation runs are higher than the mean LBR and mean entropy of the top ten PLESs regarding the lowest difference in F1-score between the two evaluation runs (independently of the recall condition)
-	\item The lemmas corresponding to the the top ten PLES regarding highest difference in F1-score between the two evaluation runs are all not included in the conflict verbs: "accuse", "arrest", "clash", "condemn", "kill", "slam" 
-	\item Of the lemmas corresponding to  the top ten PLES regarding lowest difference in F1-score between the two evaluation runs, five of six are included in the conflict verbs: "arrest", "condemn", "kill", "slam" ("clash" is not included) 
-	\item Of the lemmas corresponding the to the the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A + r_B > 0\), most are intuitively not considered to clearly relate to the definition of conflict
-	\item Of the lemmas corresponding the to  the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A \cdot r_B > 0\) and of the lemmas corresponding the to the top ten PLES regarding lowest difference in F1-score, most are intuitively considered to clearly relate to the definition of conflict
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
+	\item The CNESS utilizing evaluation run achieves a higher F1-score than the FNESS utilizing evaluation run for every PLES of the the top ten PLES regarding highest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:CNESS-higher-f1-for-highest-f1-difference}
+	\item The mean LBR and mean entropy of the top ten PLESs regarding the highest difference in F1-score between the two evaluation runs are higher than the mean LBR and mean entropy of the top ten PLESs regarding the lowest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:PLES-more-diverse-for-highest-f1-difference}
+	\item The differences in F1-score achieved by the two evaluation runs is higher for the recall condition \(r_A + r_B > 0\) than for \(r_A \cdot r_B > 0\), because for the first condition the F1-score of the FNESS evaluation run is zero for all PLESs \label{obs-itm:FNESS-zero-recall-highest-f1-difference}
+	\item The lemmas corresponding to the the top ten PLES regarding highest difference in F1-score between the two evaluation runs are all not included in the conflict verbs: "accuse", "arrest", "clash", "condemn", "kill", "slam" \label{obs-itm:conflict-verbs-not-in-highest-f1-difference}
+	\item Of the lemmas corresponding to  the top ten PLES regarding lowest difference in F1-score between the two evaluation runs, five of six are included in the conflict verbs: "arrest", "condemn", "kill", "slam" ("clash" is not included) \label{obs-itm:conflict-verbs-in-lowest-f1-difference}
+%	\item Of the lemmas corresponding the to the the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A + r_B > 0\), most are intuitively not considered to clearly relate to the definition of conflict
+%	\item Of the lemmas corresponding the to  the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A \cdot r_B > 0\) and of the lemmas corresponding the to the top ten PLES regarding lowest difference in F1-score, most are intuitively considered to clearly relate to the definition of conflict
+
 
 \end{enumerate}
 
 
 \section{Result Discussion}
 \label{sec:result-discussion}
-In this section the previously presented evaluation results are discussed. Based on the observations made in \cref{sec:evaluation-results}, the major findings are summarised in the following:
+In this section the previously presented evaluation results are discussed. It synthesizes the major insights derived from the observations of the different result data perspectives. The discussion is organized into categories and sub-categories, which relate to the research questions outlined in \cref{sec:research-questions}. Here retrieval performance generally refers to joined measure of precision and recall and therefore means F1-score, as stated above in \cref{sec:evaluation-metrics}. 
 
-when talking about retrieval performance, we mean F1 score
 
+\subsection{Retrieval Performance Improvement}
 
 \begin{itemize}
 
-\item NESS-SHMP may provide a better retrieval performance than the original conflict pattern dependent on the ST
+\item NESS-SHMP can achieve a better retrieval performance than the original conflict pattern, independent of NESS type and configuration (depending on the ST) \\
+\textbf{Supporting Observations:} \Cref{obs-itm:NESS-higher-best-f1}
 
-\item The ST highly influences the retrieval performance of NESS-SHPM
+\item CNESS-SHPM using the sub tokens embedding can achieve the overall best retrieval performance (in comparison to FNESS-SHMP and the original conflict pattern) \\
+\textbf{Supporting Observations:} \Cref{obs-itm:NESS-higher-best-f1}, \Cref{obs-itm:CNESS-higher-best-f1-than-FNESS}
 
-\item The relation of ST and NESS-SHMP retrieval performance depends on NESS type, NESS model and other NESS parameters
-
-\item CNESS-SHPM can provide the overall best retrieval performance (in comparison to FNESS-SHMP and the original conflict pattern)
-
-\item Using lemma-based FNESS-SHMP instead of word-based FNESS-SHMP improves the retrieval performance 
-
-\item Using a generally better performing FNESS model improves the FNESS-SHMP retrieval performance
-
-\item CNESS-SHPM performance improves with the size of the reference edge set (see \cref{obs:more-refs-better})
-
-\item CNESS-SHPM precision depends highly on the size and specific selection of the reference edge set
-
-\item Using the sub-edge tokens embedding instead of the all tokens embedding improves retrieval performance
-
-\item Using a generally better performing CNESS model does not improve the CNESS-SHMP retrieval performance
-
-\item CNESS-SHMP can not reliably achieve a significantly higher precision than the original conflict pattern
-
-\item Accuracy is baaaaaad
+\item Using lemma-based FNESS-SHMP instead of word-based FNESS-SHMP can achieve a better retrieval performance \\
+\textbf{Supporting Observations:} \Cref{obs-itm:lemma-based-FNESS-higher-best-f1}, \Cref{obs-itm:lemma-FNESS-higher-f1-nearly-always}
 
 \end{itemize}
 
-should i add specific observations to every finding. 
-what about those that do not have any? e.g.: ST is highly influential on performance
+
+\subsubsection{Similarity Threshold Impact}
+
+\begin{itemize}
+
+\item The relation of ST and NESS-SHMP retrieval performance and therefore the relevant ST range depends primarily on the NESS type \\
+\textbf{Supporting Observations:} \Cref{obs-itm:ASTR-lemma-FNESS-cn-higher-than-CNESS-e5} \Cref{obs-itm:ASTR-FNESS-higher-than-CNESS} \Cref{obs-itm:ASTR-FNESS-equal}
+
+\item The relation of ST and CNESS-SHMP retrieval performance depends secondarily on the NESS model and the usage of the all tokens option \\
+\textbf{Supporting Observations:} \Cref{obs-itm:ASTR-CNESS-gte-starts-earlier} \Cref{obs-itm:ASTR-CNESS-at-starts-earlier} \Cref{obs-itm:ASTR-CNESS-end-equal}
+
+\end{itemize}
+
+
+\subsubsection{NESS Configuration Impact}
+
+\begin{itemize}
+
+\item Using a generally better performing NESS model (regarding established benchmarks) does not generally improve the NESS-SHMP retrieval performance \\
+\textbf{Supporting Observations:} \Cref{obs-itm:lemma-FNESS-cn-better-than-w2v}, \Cref{obs-itm:word-FNESS-w2v-better-than-cn}, \Cref{obs-itm:CNESS-e5-better-than-gte}
+
+\item Using the sub tokens embedding instead of the all tokens embedding improves retrieval performance, but using the all tokens embedding makes it less sensible to the selection of the reference edges
+\\ \textbf{Supporting Observations:} \Cref{obs-itm:CNESS-better-without-AT}, \Cref{obs-itm:CNESS-lower-variation-with-AT}
+
+\item CNESS-SHPM retrieval performance improves with a higher number of reference edges and is less sensible to the specific selection of reference edges
+\\ \textbf{Supporting Observations:} \Cref{obs-itm:CNESS-more-refs-higher-mean-best-f1}, \Cref{obs-itm:CNESS-more-refs-lower-stddev-best-f1}
+
+\end{itemize}
+
+
+\subsection{Retrieval Precision Behaviour}
+
+\begin{itemize}
+	\item The precision of NESS-SHMPM correlates with the ST until a specific value of the ST, which itself is specific to the NESS type, NESS model (and other CNESS parameters, especially the selection of reference edges)
+\\ \textbf{Supporting Observations:} \Cref{obs-itm:FNESS-ST-precision-correlates}, \Cref{obs-itm:CNESS-ST-precision-correlates-until-crosspoint}, \Cref{obs-itm:FNESS-ST-limit}
+
+\item CNESS-SHMP achieves on average the same precision as the original conflict pattern and lemma-based FNESS, although CNESS-SHMP can achieve a higher precision, it depends on the selection of the reference edges \\
+\textbf{Supporting Observations:} \Cref{obs-itm:CNESS-precision-variation-higher-ASTR}, \Cref{obs-itm:CNESS-highest-precision-equal-original}
+
+
+\end{itemize}
+
+\subsection{Contextual Differentiation Ability}
+
+\begin{itemize}
+	\item CNESS-SHPM is able differentiate when matching a set of edges where purely symbolic SHPM and FNESS-SHMPM cannot, i.e. cases where context is needed to determine the correct semantics of word \\
+	\textbf{Supporting Observations:} \Cref{obs-itm:CNESS-higher-f1-for-highest-f1-difference}, \Cref{obs-itm:PLES-more-diverse-for-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-not-in-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-in-lowest-f1-difference}
+	
+	\item While CNESS-SHPM achieves a highest difference in retrieval performance for sets of edges, where FNESS-SHMP does not match, it also achieves a better retrieval performance in cases where FNESS-SHPM does match \\
+	\textbf{Supporting Observations:} \Cref{obs-itm:CNESS-higher-f1-for-highest-f1-difference} \Cref{obs-itm:FNESS-zero-recall-highest-f1-difference}
+		
+\end{itemize}
+
+\todo[inline]{Add or integrate more direct answer to the research questions}
+
+
+
+
 
 
 
