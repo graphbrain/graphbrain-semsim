@@ -11,7 +11,8 @@ EVAL_METRIC_LABELS: dict[str, str] = {
     "precision": "Precision",
     "recall": "Recall",
     "f1": "F1-Score",
-    "accuracy": "Accuracy"
+    "accuracy": "Accuracy",
+    "mcc": "MCC"
 }
 
 PLOT_LINE_COLORS: list[str] = [
@@ -29,10 +30,11 @@ PLOT_LINE_COLORS: list[str] = [
     '#00a76c',  # jade
     '#bdbdbd'   # gray
 ]
-PLOT_LINE_STYLES: dict[str, str] = {
+PLOT_LINE_STYLES: dict[str, str | tuple[int, tuple[int, int]]] = {
     'precision': 'dotted',
     'recall': 'dashed',
     'f1': 'dashdot',
+    'mcc': 'solid',
     'accuracy': 'solid'
 }
 PLOT_LINE_WEIGHTS: dict[str, dict[str, str | float]] = {

@@ -6,7 +6,7 @@ import logging
 from graphbrain.hypergraph import Hypergraph
 from graphbrain_semsim.datasets.config import DATASET_EVAL_DIR
 from graphbrain_semsim.datasets.evaluate_dataset import EVALUATION_FILE_SUFFIX
-from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult, StandardDeviation
+from graphbrain_semsim.datasets.models import DatasetEvaluation, EvaluationResult, StandardDeviation, EvaluationMetrics
 from graphbrain_semsim.utils.file_handling import load_json
 
 
@@ -171,13 +171,10 @@ def compute_mean_semsim_eval_results(sub_evaluations: list[DatasetEvaluation]) -
     )
     # compute mean values for each semsim threshold
     return {
-        t: EvaluationResult(
-            accuracy=mean([sub_eval.semsim_eval_results[t].accuracy for sub_eval in sub_evaluations]),
-            precision=mean([sub_eval.semsim_eval_results[t].precision for sub_eval in sub_evaluations]),
-            recall=mean([sub_eval.semsim_eval_results[t].recall for sub_eval in sub_evaluations]),
-            f1=mean([sub_eval.semsim_eval_results[t].f1 for sub_eval in sub_evaluations]),
-        )
-        for t in sub_evaluations[0].semsim_eval_results.keys()
+        t: EvaluationResult(**{
+            eval_metric: mean([sub_eval.semsim_eval_results[t][eval_metric] for sub_eval in sub_evaluations])
+            for eval_metric in EvaluationMetrics
+        }) for t in sub_evaluations[0].semsim_eval_results.keys()
     }
 
 
@@ -187,30 +184,24 @@ def compute_standard_deviation_for_threshold(
     assert all(data_eval.semsim_eval_results for data_eval in sub_evaluations), (
         "All dataset evaluations must have semsim_eval_results"
     )
-    return StandardDeviation(
-        accuracy=stdev([sub_eval.semsim_eval_results[threshold].accuracy for sub_eval in sub_evaluations]),
-        precision=stdev([sub_eval.semsim_eval_results[threshold].precision for sub_eval in sub_evaluations]),
-        recall=stdev([sub_eval.semsim_eval_results[threshold].recall for sub_eval in sub_evaluations]),
-        f1=stdev([sub_eval.semsim_eval_results[threshold].f1 for sub_eval in sub_evaluations]),
-    )
+    return StandardDeviation(**{
+        eval_metric: stdev([sub_eval.semsim_eval_results[threshold][eval_metric] for sub_eval in sub_evaluations])
+        for eval_metric in EvaluationMetrics
+    })
 
 
 def compute_mean_eval_result(evaluation_results: list[EvaluationResult]) -> EvaluationResult:
-    return EvaluationResult(
-        accuracy=mean([evaluation_result.accuracy for evaluation_result in evaluation_results]),
-        precision=mean([evaluation_result.precision for evaluation_result in evaluation_results]),
-        recall=mean([evaluation_result.recall for evaluation_result in evaluation_results]),
-        f1=mean([evaluation_result.f1 for evaluation_result in evaluation_results]),
-    )
+    return EvaluationResult(**{
+        eval_metric: mean([evaluation_result[eval_metric] for evaluation_result in evaluation_results])
+        for eval_metric in EvaluationMetrics
+    })
 
 
 def compute_standard_deviation(evaluation_results: list[EvaluationResult]) -> StandardDeviation:
-    return StandardDeviation(
-        accuracy=stdev([evaluation_result.accuracy for evaluation_result in evaluation_results]),
-        precision=stdev([evaluation_result.precision for evaluation_result in evaluation_results]),
-        recall=stdev([evaluation_result.recall for evaluation_result in evaluation_results]),
-        f1=stdev([evaluation_result.f1 for evaluation_result in evaluation_results]),
-    )
+    return StandardDeviation(**{
+        eval_metric: stdev([evaluation_result[eval_metric] for evaluation_result in evaluation_results])
+        for eval_metric in EvaluationMetrics
+    })
 
 
 def get_dataset_evaluations(

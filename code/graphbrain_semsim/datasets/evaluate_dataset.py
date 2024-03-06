@@ -158,6 +158,8 @@ def get_ref_edges(
 
 
 def filter_dataset_positives(dataset_positives: list[Hyperedge], ref_edges: list[Hyperedge]) -> list[Hyperedge]:
+    if not ref_edges:
+        return dataset_positives
     return [edge for edge in dataset_positives if edge not in ref_edges]
 
 
@@ -346,6 +348,11 @@ def compute_eval_result(
     precision: float = t_p / (t_p + f_p) if t_p + f_p > 0 else 0.0
     recall: float = t_p / (t_p + f_n) if t_p + f_n > 0 else 0.0
     f1: float = 2 * precision * recall / (precision + recall) if precision + recall > 0 else 0.0
+    mcc: float = (
+        (t_p * t_n - f_p * f_n) / ((t_p + f_p) * (t_p + f_n) * (t_n + f_p) * (t_n + f_n)) ** 0.5 if (
+            (t_p + f_p) * (t_p + f_n) * (t_n + f_p) * (t_n + f_n)
+        ) ** 0.5 > 0 else 0.0
+    )
 
     return EvaluationResult(
         matches=eval_run_positives,
@@ -354,6 +361,7 @@ def compute_eval_result(
         precision=precision,
         recall=recall,
         f1=f1,
+        mcc=mcc
     )
 
 

@@ -107,7 +107,7 @@ def process_sub_evaluations(
     assert all(sub_evaluation.semsim_eval_results for sub_evaluation in sub_evaluations)
     assert all_equal(sub_evaluation.semsim_eval_results.keys() for sub_evaluation in sub_evaluations)
 
-    mean_semsim_eval_scores = compute_mean_semsim_eval_results(sub_evaluations)
+    mean_semsim_eval_scores: dict[float, EvaluationResult] = compute_mean_semsim_eval_results(sub_evaluations)
     mean_dataset_evaluation: DatasetEvaluation = sub_evaluations[0].model_copy(update={
         "semsim_eval_results": mean_semsim_eval_scores
     })
@@ -296,6 +296,19 @@ if __name__ == "__main__":
             "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
         ],
         eval_metrics=["accuracy"],
+        add_random_baseline=True,
+        plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "1-1_original-pattern",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["mcc"],
         add_random_baseline=True,
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
     )

@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
+from strenum import StrEnum
 
 from graphbrain_semsim.models import Hyperedge
 from graphbrain.semsim import SemSimType, SemSimConfig
@@ -65,6 +66,14 @@ class LemmaDataset(BaseModel):
         return f"{base_id}_{subsample_suffix}"
 
 
+class EvaluationMetrics(StrEnum):
+    accuracy = "accuracy"
+    precision = "precision"
+    recall = "recall"
+    f1 = "f1"
+    mcc = "mcc"
+
+
 # TODO: this should refactored into something like 'EvaluationScores'
 # but this would imply changing the evaluation code and regenerating the results
 class StandardDeviation(BaseModel):
@@ -72,6 +81,7 @@ class StandardDeviation(BaseModel):
     precision: float
     recall: float
     f1: float
+    mcc: float
 
 
 class EvaluationResult(BaseModel):
@@ -81,6 +91,7 @@ class EvaluationResult(BaseModel):
     precision: float
     recall: float
     f1: float
+    mcc: float
     std_dev: Optional[StandardDeviation] = None
 
 

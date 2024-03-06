@@ -64,6 +64,7 @@ def plot(
         axes.plot(
             n_refs, eval_metric_values,
             label=prettify_eval_name(eval_run_cat_name),
+            marker='o',
             color=plot_line_color,
             linestyle=PLOT_LINE_STYLES[comparison_eval_metric],
             # **PLOT_LINE_WEIGHTS[plot_line_weight]
