@@ -152,25 +152,41 @@ A significant part of the social world is nowadays being represented by digitall
 Systems based on techniques from the field of \textit{ Natural Language Processing} (NLP), as well well as the interlinked fields of \textit{Information Retrieval} (IR) and \textit{Information Extraction} (IE), have demonstrated great success in a variety of task related to text analysis. This success is largly attributed to the advancements of applying of \textit{Machine Learning} (ML) and especially \textit{Deep Learning} (DL) methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, ML- and specifically DL-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their prediction or decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
 %DL models 
 
-The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing Natural Language (NL). \textit{NL} sentences can be modelled as an ordered, recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing SH. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of CSS. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness.
+The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing \textit{Natural Language} (NL). NL sentences can be modelled as an ordered, recursive hypergraph which can be represented in a formal language. The framework allows to specify semantic patterns in this formal language which can be matched against an existing SH. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of CSS. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \textit{NL} to \textit{SH} in regards to grammatical and syntactical correctness.
 
 
 
 % ========== 
-\chapter{Fundamentals and Related Work}
-\section{Semantic Hypergraph}
+\chapter{Background}
+In this chapter the necessary background for this work is presented. This includes the Semantic Hypergraph framework and its Pattern Matching capabilities in particular. This also includes the concept of Semantic Relatedness and specifically Semantic Similarity with a focus on the variant of neural embedding based semantic similarity.
 
-\subsection{Structure}
+\section{Semantic Hypergraph Framework}
+
+The \textit{Semantic Hypergraph} (SH) framework, introduced in \citef{menezesSemanticHypergraphs2021}, offers a novel approach for the representation and analysis of \textit{Natural Language} (NL) text. At its core, the SH framework transforms text into a structured, symbolic format, thereby facilitating a sophisticated analysis of text collections. A pattern language intrinsic to the SH framework enables the definition of patterns that encapsulate generalisations of text in the SH format.
+
+Designed primarily for Computational Social Science (CSS) researchers, the SH framework emphasises a high degree of openness, encompassing transparency and explainability. This characteristic is particularly valuable in fields that demand clarity in the methodologies and interpretations of textual analysis. Additionally, the SH framework exhibits a level of adaptiveness, attributing to its reliance on Machine Learning (ML) components for the translation of NL text into the SH format. This adaptiveness reflects the framework's capability to evolve and accommodate the variable form of natural language.
+
+One of the objectives of the SH framework is to bridge the existing gap in open-adaptive Natural Language Processing (NLP) systems. By providing a mechanism for structured symbolic representation and pattern-based analysis of text, the SH framework proposes a solution that combines the benefits of machine learning adaptiveness with the requisites of open and explainable research in CSS and beyond.
+
+For a more comprehensive description of the Semantic Hypergraph framework, the original publication \cite{menezesSemanticHypergraphs2021} should be consulted.
+
+
+\subsection{Structure and Syntax}
 
 synonymes: SH, hypergraph, graph.
 
-Edge
+synonymes: edge, hyperedge
 
 Edge Content
 
 Root edge / Sequencen (i use the term "sequence root edge")
 
-\subsection{Syntax / Pattern Matching}
+
+
+\subsection{Pattern Matching}
+
+\subsubsection{Pattern Language}
+\label{sec:sh-pattern-language}
 
 wildcard operator
 
@@ -183,12 +199,18 @@ functional patterns -> lemma
 > operator for innermost atom
 
 
----
+\subsubsection{Matching Process}
+\label{sec:pattern-matching-process}
 
-Differences between the formal notation and the notation sued in the implementation
-(or should this be contained in the implementation chapter?)
+pattern is matched against hypergraph
+
+matching edges and corresponding variable assignments are returned
+
+possibly reference words in pattern and candidate words in edges to match
+-> pattern reference content / edge candidate content
 
 
+--> should this be covered or it it to technical? recursive implementation and such
 
 
 
@@ -213,8 +235,11 @@ WordNet and alike (not the scope of this work)
 \subsection{Embedding Types}
 
 \subsubsection{Fixed Word Embeddings}
+fixed neural embedding model
 
-\subsubsection{Contextual Ebeddings}
+
+\subsubsection{Contextual Embeddings}
+contextual neural embedding model
 
 %\subsubsection{Sentence embeddings}
 
@@ -267,7 +292,7 @@ Referring to the example above this means using the SH framework it is not direc
   \normalfont\sffamily
   \centering
   ( likes/P Ann/C */C )
-  \caption{"Ann-likes-something" pattern}
+  \caption{"Ann likes something" pattern}
   \label{pat:ann-likes-something}
 \end{pattern}
 
@@ -288,6 +313,7 @@ This has to be adapted based on chapter 2 \\
 -> add reference to FNESS/CNESS and derive relevancy of both for this work -> modify RQs \\
 -> derive in more detail why embedding based SS is chosen \\
 -> add discussing about effiency?
+-> refer to the similarity threshold specifically when talking about controlling?
 }
 
 Integrating NESS measures into the pattern matching process would allow for edge content generalisation and therefore would make the process more adaptive. As illustrated earlier, NESS measures principally do not provide the openness that is inherent to the pattern matching process of the SH framework. In the sense of the open-opaque / strict-adaptive classification described above this integration would mean a shift from openness to opaqueness and from strictness to adaptivity. To counteract the opaqueness introduced by an NESS integration into the SH pattern matching, allowing user control over generalisation levels can maintain some openness while still benefiting from increased adaptivity.
@@ -301,7 +327,7 @@ Based on the problem statement outlined above, we pose the following research qu
 \textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the generalisation and therefore maintaining some openness of the pattern matching process?
 
 \subsection{Secondary Questions}
-\textbf{R.1} What neural embeddings model would be the most suitable for accuratly assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
+\textbf{R.1} What neural embedding models would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
 
 \textbf{R.2} How can neural embedding based semantic similarity effectively (and efficiently?) be integrated into the Semantic Hypergraph pattern matching?
 
@@ -315,69 +341,172 @@ Based on the problem statement outlined above, we pose the following research qu
 % ========== 
 \chapter{Solution Approach}
 \label{cha:solution-approach}
-In this chapter we present the approach that was developed to answer the research questions (see \cref{sec:research-questions}). Therefore trying to provide a solution to the problem of extending the SH framework by Neural Embedding-based Semantic Similarity Matching, which is described in \cref{cha:problem-statement} where the relevancy of this problem for has also been derived.
+The proposed solution to the research questions posed in \cref{sec:research-questions} is to conceptualise and implement the integration of Neural Embedding based Semantic Similarity into the pattern matching of the Semantic Hypergraph framework, followed by a suitable evaluation of this integration. This chapter outlines the concept of the approach, while the implementation and evaluation are detailed in \cref{cha:implementation} and \cref{cha:evaluation} respectively.
 
-The system is described here will in the following be referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} or:
+The integration strategy involves pinpointing the most opportune point within the SH framework's pattern matching for the inclusion of NESS. This  allows to identify which parts of the SH framework require modifications to accommodate NESS integration, as well as recognising any components that are currently missing. To facilitate this, the following section elaborates on the approach's general concept, addressing its core challenges and design decisions. 
+
+The system that is conceived by integrating NESS into the Semantic Hypergraph pattern matching will be  referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} or {\textbf{NESS-SHPM}}
+
+\section{General Concept of NESS-SHMP}
+The pattern matching process is described in \cref{sec:pattern-matching-process}, where the concepts of edge candidate content and pattern reference content are introduced. At a certain point in the process, the candidate content is matched against the reference content. In the original form of the SH pattern matching, this is limited to exact string-based or lemma-based matching. The SH framework's functionality will be extended by neural embedding based semantic similarity measurement based matching regarding edge content.
+
+The NESS measurement employs a neural network model to generate embeddings for the candidate and reference content, which in the following are referred to as candidate embedding and reference embeddings. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic similarity threshold \(s_t\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
+
+Moreover, the integration of NESS-based content matching into the SH pattern matching process will take two forms: \textit{Fixed Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (FNESS-SHMP) and  \textit{Contextual Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (CNESS-SHMP). The particularities of these two system variants are elaborated in the following.
+
+\subsection{FNESS-SHPM}
+In the case of FNESS, embeddings are generated based on single words. Therefore the candidate content takes on the form of a \textit{candidate word} while the reference content may be one or multiple \textit{reference words}. It is considered potentially useful to leverage the generalisation capabilities that already exist in the SH pattern matching in the form of the lemma function. Hence a lemma based variant of FNESS extended SH pattern matching (LFNESS-SHMP) is also conceptualised. In the case of LFNESS, the candidate content takes on the form of the candidate words lemma.
+
+\subsection{CNESS-SHPM}
+In the case of CNESS, embeddings are generated based on context which can be phrases or complete sentences. In the SH framework those are represented in the form of hyperedges and therefore the candidate and content takes on the form of a \textit{candidate edge} and one or multiple \textit{reference edges}. 
+
+\section{Implementing NESS-SHMP within the Semantic Hypergraph Framework}
+
+The Semantic Hypergraph framework offers two primary avenues for enhancement: through the expansion of its pattern language or through the adaptation or refinement of the software interface utilised in the matching process. These approaches are not mutually exclusive and can be effectively combined.
+
+Leveraging the core principles of the SH framework, the most logical and straightforward method to enrich its pattern matching capabilities is by extending its pattern language. This strategy facilitates the concurrent application of NESS-based content matching alongside string- or lemma-based matching within the same matching process.
+
+Therefore, the incorporation of NESS-SHMP into the existing SH framework encompasses three principal components: the extension of the pattern language, the requisite modifications to the pattern language processing and the actual NESS measurement calculations.
+
+\todo[inline]{Here is probably the most suitable point to add a system/approach schema}
+
+
+\subsection{Extentions of the Pattern Language}
+For the inclusion of NESS-based content matching within the SH pattern language, the \textit{SemSim} functional pattern will be introduced. This addition is targeted at the functional pattern segment of the language, which is already predisposed to support flexible enhancements for SH pattern matching. This approach is consistent with the existing mechanism for integrating lemma-based matching capabilities into the framework.
+
+
+\subsubsection{SemSim Functional Pattern}
+When constructing a SH pattern that should be matched should be matched against a hypergraph, the SemSim functional pattern can be utilised at those points in the pattern, where content should be matched by NESS. The added SemSim functional pattern (also referred to as SemSim pattern) has the following syntactical structure:
+
+\todo[inline]{adapt this to include the usage of a variable}
+
 \begin{center}
-\textit{\textbf{NESS-SHPM}} aka \textit{\textbf{NESSeSHyPaM}}	
+%	\texttt{<semsim function> <reference content>/<hyperedge type>.<argument roles> <similarity threshold>}
+	\texttt{<SF> <RC>/<HT>.<AR> <ST>}\
 \end{center}
 
+It consists of different syntactical components, here represented by placeholders that are enclosed in brackets (\texttt{<>}). These components are explained in the following:
 
-
-The recall of NESS-SHMP in relation to ST \(r(t_s\) is strictly monotonically decreasing, since the set of points in embedding space that is inside of the similarity boundary consistently gets smaller with increasing ST.
-
-\section{Integration into the Pattern Matching Process}
-\subsection{SemSim Functional Pattern}
-\texttt{semsim} 
-
-pattern works only for atoms
-
-\subsection{Sub-pattern Similarity Thresholds}
-
-
-\section{Fixed Word Embedding-based Matching}
-(FNESS)
+%\subsubsection{SemSim Function (\texttt{SF})}
+\paragraph{SemSim Function (\texttt{SF})}
+ The semsim function can be one of the following: \texttt{semsim-fix}, \texttt{semsim-fix-lemma} and \texttt{semsim-ctx}. These functions correspond to FNESS-, LFNESS- and CNESS-SHPM.
  
-word2vec via gensim
 
-discussion about using transformer models for single word embeddings?
-
-
-reference words: single-word and multi-word reference
-
-\label{sec:semsim-multi-word}
-Square bracket notation 
-
-\section{Contextual Embedding-based Matching}
-\textit{Contextual Neural Embedding-based Semantic Similarity} 
-(CNESS)
-
-all tokens option (AT) vs sub tokens
+%\subsubsection{Reference Content (\texttt{RC})} 
+\paragraph{Reference Content (\texttt{RC})} 
+The reference content is used to specify the reference word(s) for the  FNESS variant. The square bracket notation which is already part of the SH pattern language is leveraged to pass multiple words as a list. The reference edges that are needed for the contextual NESS variant is not given via the semsim functional pattern itself, but as a software interface argument to the matching process due to practical considerations (see \cref{sec:pl-extension-limitations}).
+%(see \cref{sec:CNESS-reference-context}).
 
 
-i generally like your idea of contrasting the discrete and continous space as it allows to point out that there cant be one single point, also for a set of words which represents the meaning, but rather some subspace depending on the specific context
-Regarding the point of the semantic entities in continuous space being either word- or phrase based, the important difference is, that in case of semsim with context we do not compare the embedding representation of the phrases themselves. rather the sententences/phrases influence the embedding representations of the word (or maybe phrases)
- I tend to see this a bit like a blurring algo. The meaning of each token starts bleeding into its neighbours.
+%\subsubsection{Hyperedge Type (\texttt{HT}) and Argument Roles (\texttt{AR})}
+\paragraph{Hyperedge Type (\texttt{HT}) and Argument Roles (\texttt{AR})}
+yada yada see above \todo{extend when chapter 2 is ready}
 
 
-reference edges
+%\subsubsection{Similarity Threshold (\texttt{ST})}
+\paragraph{Similarity Threshold (\texttt{ST})}
+%The similarity threshold used to decide whether candidate and reference content matched, given that the NESS measurement has already been computed. This applies to the fixed as well as to the contextual variant of NESS. 
+The similarity threshold \(s_t\) can optionally be specified for a specific occurrence of the SemSim functional pattern, since it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
 
-\subsection{Context References}
-\subsection{Token Mapping}
+\subsubsection{Example Usages}
+
+To illustrate the usage of the SemSim functional pattern, some examples are given:
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P Ann/C (semsim-fix apples/C) )
+  \caption{"Ann likes something similar to apples" pattern}
+  \label{pat:ann-likes-semsim-aplles}
+\end{pattern}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C (semsim-fix [apples, bananas]/C) )
+  \caption{"Ann likes similar to apples or bananas" pattern}
+  \label{pat:ann-likes-apples-and-bananas}
+\end{pattern}
+
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P Ann/C (semsim-fix mangos/C 0.5) )
+  \caption{"Ann likes something similar to mangos" pattern with \(s_t = 0.5\)}
+  \label{pat:ann-likes-semsim-aplles}
+\end{pattern}
+
+
+\subsubsection{Limitations of the Pattern Language Extension}
+\label{sec:pl-extension-limitations}
+The utilisation of the fixed variant of NESS-SHMP is possible solely via the SemSim functional pattern. This means that all information that is required to apply FNESS-based content matching, specifically the reference content and the similarity threshold, can be given in a SH pattern. In contrast, it was found impractical to give the reference edges needed for the contextual NESS variant via a SH pattern. While the reference content argument could generally be used for that, this would result in very exhaustive patterns and impair their readability for humans. Therefore the conceptual design choice was made to pass the reference edges via the software interface of the SH pattern matching.
+
+
+\subsection{Modification of the Pattern Language Processing}
+This section outlines the integration of SemSim functional pattern processing with the current pattern language processing. The process is triggered when a pattern, incorporating a SemSim pattern, is matched against a specific hyperedge and the SemSim pattern is reached without any prior mismatches. At this point, the SemSim pattern captures a sub-edge for processing, which includes the symbolic matching of the hyperedge type and argument roles, as well as extracting the necessary information for NESS measurement computations.
+
+The operation of SemSim pattern processing changes based on the specific SemSim function applied. With FNESS-SHMP or LFNESS-SHMP, the process extracts the candidate word(s) or their lemma(s) from the identified sub-edge and the reference word(s) from the pattern. This extraction process requires the sub-edge to be atomic, which implies combination with the innermost atom operator to ensure functionality in all cases. For CNESS, it conducts a standard string-based matching of the reference content. Therefore  utilizing the wildcard operator as a reference content argument is sensible in most practical use cases. For any NESS-SHMP variant, the similarity threshold is extracted from the SemSim pattern, if given
+
+Existing components manage the symbolic matching of hyperedge type and argument roles, consistent with the standard pattern matching. The SemSim function, along with the similarity threshold (when provided), candidate words and reference words for (L)FNESS-SHMP, are passed to the newly designed NESS computation components.
+
+
+%\subsection{NESS Measurement Computations}
+%When the NESS-SHPM process arrives at this point, the candidate and reference contents have either been extracted by the pattern language processing (in case of FNESS-SHMPM) or passed down as software interface arguments (in the case of CNESS-SHPM). The similarity threshold has either also been extracted from the SemSim pattern or was given to the NESS-SHPM process as a global default parameter via the software interface. So now the candidate and reference content can be used go to obtain the respective embeddings used to perform the similarity measurement between them.
+%
+%\todo{How it the NESS model specified? talk about ness config?}
+%
+%\subsubsection{Fixed Neural Embeddings}
+%To generate the fixed neural embeddings, only the candidate word(s) and the reference word(s) are needed. Since every word corresponds to a fixed embedding, a simple lookup is performed using the specified fixed neural embedding model to generate the candidate and reference embeddings.
+%
+%\subsubsection{Contextual Neural Embeddings}
+%The construction of the contextual candidate and reference embeddings involves multiple steps. It is assumed that the embeddings should correspond to the sub-edge captured by the SemSim pattern and their counterparts in the reference edges. Thereby the reference edges need to structurally match (with no regard to edge content) the pattern which contains the SemSim functional pattern, so that these reference sub-edges can be identified. To enable verification of this assumption another version of the contextual neural embedding construction is conceptualised, which omits the sub-edge correspondence of the embeddings. For this version only the first two steps of the following construction process are relevant.
+%
+%\begin{enumerate}
+%	\item Reconstruction of the phrases or sentences (context items) from the candidate and reference edges.
+%	\item Generating the embeddings for the candidate and reference context items using the specified contextual neural embedding model.
+%	\item Identification of the sub-edge in the reference edges that corresponds to the sub-edge in the candidate edge, which was captured by the SemSim functional pattern.
+%	\item Mapping of the candidate and reference sub-edge to the relevant sub-embeddings of the candidate and reference context item embeddings.
+%	\item Generation of the actual candidate and reference embeddings based on these candidate and reference sub-embeddings.
+%\end{enumerate} 
+%
+%
+%\subsubsection{Embedding Similarity Measurement}
+%The cosine similarity between the candidate and reference embeddings is computed and compared to the given similarity threshold. If the computed similarity is greater than the threshold, the candidate and reference content are considered to match. 
+%
+%
 
 
 
-\section{Similarity Threshold Control}
 
-\subsection{Breakpoint Discovery}
-detect change points in number of matches \\ 
-see https://github.com/deepcharles/ruptures
+\subsection{NESS Measurement Computations}
+Upon reaching this phase, the NESS-SHPM process has already either extracted candidate and reference contents via pattern language processing (in FNESS-SHPM) or received them through software interface arguments (in CNESS-SHPM). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
 
-half-max point and quarter/three-quarter points (percentiles, not quantiles)
-fit function and search for infliction as well as maximum derivative points,
-problematic in cases with less continuous change in number of matches.
+\todo{How it the NESS model specified? talk about ness config?}
 
-how to approach this for practical applications?
+
+\subsubsection{Fixed Neural Embeddings}
+The creation of fixed neural embeddings necessitates only the candidate and reference words. Given that each word maps directly to a specific embedding, a straightforward lookup in the chosen fixed neural embedding model suffices to produce the necessary embeddings for both candidate and reference.
+
+\subsubsection{Contextual Neural Embeddings}
+The development of contextual embeddings for the candidate and reference involves a sequence of steps, premised on the assumption that these embeddings should mirror the specific sub-edge of the candidate edge captured by the SemSim pattern and its analogous sub-edge(s) in the reference edge(s). Thereby the reference edges need to structurally match (with disregard to edge content) the pattern which contains the SemSim functional pattern, so that these reference sub-edges can be identified. To allow for verification of this assumption an alternative approach to constructing contextual neural embeddings does not account for sub-edge matching and only consists of the initial two stages of the construction process outlined below:
+
+\begin{enumerate}
+	\item Reconstructing phrases or sentences from the candidate and reference edges (deemed context items).
+    \item Producing embeddings for these context items using the designated contextual neural embedding model.
+    \item Identifying the sub-edge within the reference that aligns with the candidate's sub-edge captured by the SemSim pattern.
+    \item Associating the identified candidate and reference sub-edges with their respective sub-embeddings derived from the context item embeddings.
+    \item Generating the final embeddings for both candidate and reference based on these sub-embeddings.
+\end{enumerate}
+    
+\subsubsection{Embedding Similarity Measurement}
+The procedure calculates the cosine similarity between the embeddings of candidate and reference content, comparing it to the pre-established similarity threshold. If the resultant similarity score surpasses this threshold, the candidate and reference contents are considered to match. Given multiple reference content items (and therefore multiple reference embeddings), the pairwise similarities between the candidate and the reference embedding is computed. The maximum of these similarities is then compared to the similarity threshold to asses wether the candidate and reference contents match.
+
+
+\todo{why cosine similarity? why max similarity?}
+
+
+
 
 
 % ========== 
@@ -387,8 +516,7 @@ how to approach this for practical applications?
 \section{Relevant external Software Libraries used}
 Here list libs and models to be referenced later.
 
-Word2Vec
-Gensim
+Word2Vec via Gensim
 SentenceTransformers
 Transformers
 SpaCy
@@ -402,12 +530,35 @@ reference edge sample modification parameter
 \section{Modifications of the SH Pattern Matching}
 skip semsim
 
+root edges
+
+\subsection{Token position passing}
+The matching process of the SH framework is extended by passing the tok pos down (this teferences implicitly the recursive implementagion of the pattern matching which might be too technical)
+
+
+\subsection{SH PL implementation differences}
+Differences between the formal notation and the notation used in the implementation
+--> innermost atoms operator, variable functional pattern etc.
+does this need to be included?
+
 \section{Modifications to the Hypergraph database}
 is this really necessary? tok pos etc, but not actually specific to semsim
 
 
-%\section{SH Notation}
-%Bracket notation for multi-word Semsim
+
+
+\paragraph{NESS configuration}
+\label{sec:ness-config}
+Additional parameters need to be given to the NESS-SHMP process, which includes the specific neural embedding model to use 
+ 
+\begin{itemize}
+	\item Default similarity threshold
+	\item Specific NESS model
+	\item CNESS embedding prefix
+	\item CNESS all tokens option
+\end{itemize}
+
+
 
 
 %\section{Similarity Threshold}
@@ -451,9 +602,31 @@ is this really necessary? tok pos etc, but not actually specific to semsim
 
 
 
+%-----------
+
+%For fixed NESS-based matching, the processing occurs in-line with symbolic pattern matching, seamlessly integrating as a component of the overall pattern matching process. However, due to the intricacies involved with contextual NESS-based matching, this processing is performed as a post-process.
+
+
+%
+%\subsubsection{In-Line- vs. Post-Processing}
+%While the processing of the SemSim functional pattern in the sense of pattern language processing always needs to happen in-line with the regular pattern matching, the actual NESS computations may happen as a post-processing step. When the pattern matching process arrives at a SemSim functional pattern, the symbolic part of the SemSim pattern -- i.e. the hyperedge type and the argument roles -- are always processed imeediatly, hence in-line. The result of this structural matching is then passed up to the calling procedure of the matching process. Whether its content is matched in-line, i.e. the NESS mesaurment compuations take place immediatly depends on the NESS type and the configuration of the pattern matching process. 
+%
+%In the case of the contextual variant, the CNESS compuations always occur as a post-process. This means that for given edge and a given pattern, which contains at least on ocurrence of a semsim-ctx sub-pattern, the entire edge and pattern are first matched in regards to everything that is not a semsim-ctx sub-pattern. This means that the information necessary for the CNESS computation gets only recorded at this point. The actual computations only take place afterward, if everything else has matched. This design choice is made, because it facilitated the realisation of the contextual NESS based matching. Firstly, the context information does not have to be passed down to the SemSim functional pattern matching step and secondly, the CNESS computations are computationally relatively expensive and should therefore be avoided if unnecessary
+%
+%
+%
+%\subsubsection{SemSim Skipping and SemSim Instances}
+%
+%%The FNESS computations may take place in-line, as the information required for them is already contained in the argument of the SemSim functional pattern, nonetheless the may also
+%
+%It is possible to configure the pattern matching process via the \textit{SemSim skipping} option of its software interface, so that the NESS computations are skipped entirely. In this case only the symbolical matching takes place when matching against a pattern that contains occurrences of the SemSim functional pattern. For each of these occcurence, a \textit{SemSim instance} will be recorded, that is added to the results of the symbolic matching. These instances can then be subjected to processing completely independent from the pattern language processing. This is especially useful if the NESS measurements shall be computed with a set of different NESS configuration parameters (e.g. different similarity thresholds), as is to be expected in an experimental evaluation. 
+%
+
+
 
 % ========== 
 \chapter{Evaluation}
+\label{cha:evaluation}
 In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the NESS-SHPM system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. 
 %In this case study...
 \todo[inline]{refer to the RQs more specifically? how are they going to be answered?}
@@ -521,6 +694,38 @@ In the trigger sub-pattern the content of the candidate trigger sub-edge is dire
   \label{pat:original-conflict}
 \end{pattern}
 
+\begin{pattern}
+  \normalfont\sffamily
+  \centering
+  ( (lemma PRED >[accuse,arrest,clash,condemn,kill,slam,warn]/P.\{so,x\}) \\
+  SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) 
+
+  \caption{Original conflict pattern (rewritten)}
+  \label{pat:original-conflict-rewritten}
+\end{pattern}
+
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  ( (lemma >PRED/P.\{so,x\} [accuse,arrest,clash,condemn,kill,slam,warn]) \\
+%  SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) 
+%  \caption{Original conflict pattern (rewritten)}
+%  \label{pat:original-conflict-rewritten}
+%\end{pattern}
+
+
+%\begin{pattern}
+%  \normalfont\sffamily
+%  \centering
+%  ( >(lemma PRED [accuse,arrest,clash,condemn,kill,slam,warn])/P.\{so,x\} \\
+%  SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) 
+%  \caption{Original conflict pattern (rewritten)}
+%  \label{pat:original-conflict-rewritten}
+%\end{pattern}
+
+
+
+
 
 \subsubsection{Wildcard Conflict Patterns}
 \label{sec:wildcard-conflict-patterns}
@@ -552,7 +757,7 @@ Replacing either the trigger sub-pattern, the predicate sub-pattern or both of t
 %\end{pattern}
 
 \paragraph{Preliminary Evaluation}
-The three wildcard conflict patterns are matched against the Worldnews-SH and the number of matches is recorded. Comparing the number of matches of these patterns shows which of the sub-patterns is most influential for the retrieval performance of \cref{pat:original-conflict}. \Cref{tab:wildcard-pattern-evaluation} shows the results of these preliminary evaluations as well as the number of matches that result from matching \cref{pat:original-conflict} against the Worldnes-SH. It can be seen that the choice of conflict verbs is much more influential on the number of matches than the choice of conflict prepositions when compared to the number of matches resulting from the original conflict pattern. While replacing the predicate sub-pattern with a wildcard operator yields an increase with a factor of \(12,45\), replacing the trigger sub-pattern with a wildcard operator only yields and increase with a factor of \(1,07\). 
+The three wildcard conflict patterns are matched against the Worldnews-SH and the number of matches is recorded. Comparing the number of matches of these patterns shows which of the sub-patterns is most influential for the retrieval performance of \cref{pat:original-conflict}. \Cref{tab:wildcard-pattern-evaluation} shows the results of these preliminary evaluations as well as the number of matches that result from matching \cref{pat:original-conflict} against the Worldnes-SH. It can be seen that the choice of conflict verbs is much more influential on the number of matches than the choice of conflict prepositions when compared to the number of matches resulting from the original conflict pattern. While replacing the predicate sub-pattern with a wildcard operator yields an increase with a factor of \(12,45\), replacing the trigger sub-pattern with a wildcard operator only yields an increase with a factor of \(1,07\). 
 
 
 \begin{table}[h]
@@ -760,6 +965,9 @@ The configurations for all evaluation runs that are conducted in this case study
 \label{sec:evaluation-metrics}
 Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed. \todo{show how this metrics are computed?}
 
+\paragraph{Relationship of Similarity Threshold and Recall}
+It can be generally stated that the recall (\(r\)) of NESS-SHMP in relation to the similarity threshold (\(r(t_s)\)) is strictly monotonically decreasing, since the set of points in embedding space that is inside of the similarity boundary consistently gets smaller with increasing threshold. \todo{maybe add ref. to earlier section}
+
 \todo[inline]{derive why these metrics were chosen: \\
 accuracy is not interesting since the dataset is unbalanced, precision and recall both of interest, but are expected to be a trade-off (where recall should decline with rising ST). F1-score is an established metric that closely relates to precision and recall and represents this trade-off and therefore retrieval performance as a whole. MCC is arguably a better metric because it is symmetrical and incorporates true negatives. also the F1-score of the original pattern is worse than random, which indicates a metric mismatch. then again the close relation and equal value range of precision, recall and F1-score are a plus (for plotting especially).
 }
@@ -804,8 +1012,6 @@ semsim-ctx gte-at r-N-X           & semsim-ctx                   & gte          
 \caption{Evaluation Run Configurations}
 \label{tab:evaluation-run-configs}
 \end{table}
-
-
 
 
 \section{Evaluation Results}
@@ -1176,8 +1382,10 @@ say        & 0.03      & 0.45           & 0.48           & 31              & 9/2
 
 \section{Result Discussion}
 \label{sec:result-discussion}
-In this section the previously presented evaluation results are discussed. It synthesizes the major insights derived from the observations of the different result data perspectives. The discussion is organized into categories and sub-categories, which relate to the research questions outlined in \cref{sec:research-questions}. Here retrieval performance generally refers to joined measure of precision and recall and therefore means F1-score, as stated above in \cref{sec:evaluation-metrics}. 
+In this section the previously presented evaluation results are discussed. It synthesises the major insights derived from the observations of the different result data perspectives. The discussion is organised into categories and sub-categories, which relate to the research questions outlined in \cref{sec:research-questions}. Here retrieval performance generally refers to joined measure of precision and recall and therefore means F1-score, as stated above in \cref{sec:evaluation-metrics}. 
 
+\todo[inline]{Add statement about limitations to specific dataset and unknown generalisability}
+\todo[inline]{Missing observations and findings regarding "no breakpoints" (in recall or general?)}
 
 \subsection{Retrieval Performance Improvement}
 
@@ -1251,14 +1459,13 @@ In this section the previously presented evaluation results are discussed. It sy
 
 
 
-
+% ========== 
+\chapter{Related Work}
 
 
 
 
 % ========== 
-\chapter{Conclusion}
-
 \chapter{Future Work}
 \section{Conceptual Improvements}
 Somehow extend the token span used for CNESS beyond the word tokens but not to all tokens. Use the tokens of the next best sub-edge e.g. although in the case of a predicate this is probably the entire sentence most of the time.
@@ -1269,6 +1476,12 @@ implemnt multiprocessing, i.e. server process for both hypergraph and semsim mat
 other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
 
 \section{Further Evaluations}
+
+
+% ========== 
+\chapter{Conclusion}
+
+
 
 
 \printbibliography
