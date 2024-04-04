@@ -1,6 +1,9 @@
 data/_old_results
 data/evaluations/*
 data/plots/_util_data/*
+docs/resources/
+!docs/resources/MA.bib
+
 
 .idea
 .DS_Store
