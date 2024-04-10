@@ -13,11 +13,31 @@
 }
 
 %\usepackage[backend=biber, style=ieee]{biblatex}
-\usepackage[backend=bibtex, style=authoryear-comp]{biblatex}
+\usepackage[backend=bibtex, style=authoryear-comp, url=false]{biblatex}
 %\newcommand{\citep}{\parencite}  % adds \citep alias for citing with parenthesis
 \let\citef\cite  % makes \citef an alias for \cite
 \let\cite\parencite  % makes \cite an alias for \parencite
 \addbibresource{../resources/MA.bib}
+\AtEveryBibitem{
+%\ifentrytype{article}{
+%    \clearfield{urlyear}
+%}{}
+%\ifentrytype{book}{
+%    \clearfield{urlyear}
+%}{}
+%\ifentrytype{collection}{
+%    \clearfield{urlyear}
+%}{}
+%\ifentrytype{incollection}{
+%    \clearfield{urlyear}
+%}{}
+%\ifentrytype{inproceedings}{
+%    \clearfield{urlyear}
+%}{}
+\ifentrytype{online}{
+    \clearfield{urlyear}
+}{}
+}
 
 \KOMAoptions{parskip=half}
 
@@ -69,6 +89,7 @@
 \crefname{pattern}{pattern}{patterns}
 \Crefname{hedge}{Hyperedge}{Hyperedges}
 \crefname{hedge}{hyperedge}{hyperedges}
+
 
 
 \usepackage{lipsum}  % produces dummy text
@@ -146,7 +167,13 @@ Human life in times of widespread use of the internet and smartphones is most ce
 Great progress has been made in the made in NLP, IR and IE in the past decade. This advancement of the state-of-the-art can primarily be attributed \textit{Deep Learning} based methods, often also referred to as \textit{Neural Networks}. \cite{youngRecentTrendsDeep2018, minRecentAdvancesNatural2023, hirschbergAdvancesNaturalLanguage2015}
 
 \section{References from the Future}
+\textit{Natural Language Processing} (NLP)
+\textit{Information Retrieval} (IR)
+\textit{Information Extraction} (IE)
+
 open-opaque / strict-adaptive categorisation dimensions
+
+
 
 \section{Expose intro}
 
@@ -161,11 +188,12 @@ The \textit{Semantic Hypergraph} (SH) \cite{menezesSemanticHypergraphs2021} is a
 
 % ========== 
 \chapter{Background}
-In this chapter the necessary background for this work is presented. This includes on the one hand the Semantic Hypergraph (SH) framework and its Pattern Matching capabilities in particular. On the other hand the concept of Semantic Relatedness and specifically Semantic Similarity is explained with a focus on its realisation in the of form neural embedding based semantic similarity (NESS).
+In this chapter the necessary background for this work is presented. This includes on the one hand the Semantic Hypergraph (SH) framework and its pattern matching capabilities in particular. On the other hand the concept of semantic relatedness and specifically semantic similarity is explained with a focus on its realisation in the form of neural embedding based semantic similarity (NESS).
 
 \section{Semantic Hypergraph Framework}
+\label{sec:semantic-hypergraph-framework}
 
-The Semantic Hypergraph framework, introduced in \citef{menezesSemanticHypergraphs2021}, offers a novel approach for the representation and analysis of natural language (NL) text. At its core, the SH framework transforms text into a structured, symbolic format, thereby facilitating a sophisticated analysis of text collections. A pattern language intrinsic to the SH framework enables the definition of patterns that encapsulate generalisations of text in the SH format.
+The Semantic Hypergraph framework, introduced in \citef{menezesSemanticHypergraphs2021}, offers a novel approach for the representation and analysis of natural language (NL) text. At its core, the SH framework transforms text into a structured, symbolic format, thereby the analysis of text collections. A pattern language intrinsic to the SH framework enables the definition of patterns that encapsulate generalisations of text in the SH format.
 
 Designed primarily for computational social science (CSS) researchers, the SH framework emphasises a high degree of openness, encompassing transparency and explainability. Additionally, the SH framework exhibits a level of adaptiveness, attributing to its reliance on Machine Learning (ML) components for the translation of NL text into the SH format. This adaptiveness reflects the framework's capability to evolve and accommodate the variable form of natural language.
 
@@ -261,8 +289,7 @@ The content of edges of the builder and conjunction type can also take on the fo
 
 
 \subsubsection{Argument Roles}
-To make the meaning of the relation of sub edges in a parent edge more explicit, builder and predicate edges can have argument roles. In parent edges that start with an edge of one of these two types, the roles of the other edges can be specified by adding argument roles to the builder or predicate edges. These are denoted as shown in \cref{sec:hyperedge-notation}. A list of all possible argument roles can be inspected in \cite[p. 8]{menezesSemanticHypergraphs2021}. \todo{add argument roles to make later pattern machings easier to understand?}
-
+To make the meaning of the relation of sub edges in a parent edge more explicit, builder and predicate edges can have argument roles. In parent edges that start with an edge of one of these two types, the roles of the other edges can be specified by adding argument roles to the builder or predicate edges. These are denoted as shown in \cref{sec:hyperedge-notation}. We only list the possible argument roles here to avoid confusing the reader, since they are used in some of the edges and patterns in the following, but they are not in the focus of this work. An explanation of the functionality of all argument roles can be inspected in \citef[p. 8]{menezesSemanticHypergraphs2021}.
 
 
 \subsection{Translation Process}
@@ -279,6 +306,7 @@ The edges that correspond to the sentences into which the original input text ha
 
 
 \subsection{Pattern Matching}
+\label{sec:sh-pattern-matching}
 Text represented in the SH framework can be analysed via \textit{Semantic Hypergraph Pattern Matching} (SHPM). Information can be extracted from texts represented as hypergraph by constructing patterns in the frameworks pattern language and matching these patterns against the graph. The extracted information can take on the form of e.g. specific kinds of expressions and parts of these expression that fulfil a certain role.
 
 
@@ -306,11 +334,11 @@ Argument role set & \textsf{\{\(\alpha\beta\gamma, \epsilon\)\}} & Allows for ar
 
 \subsubsection{Matching Process}
 \label{sec:pattern-matching-process}
-At its core, the matching process involves comparing a predefined pattern against either an entire hypergraph, a set of edges, or a single edge. Independent of the matching target, this comparison is conducted one edge at a time, determining whether this edge aligns with the pattern. If pattern and edge do not match the result of this process is only this binary information of \textit{No Match}. If pattern and edge do match, the result of the matching process depends on whether the pattern contains variables. I this case, the result is not only the binary information of \textit{Match}, but also the assignment of the variables contained in the pattern. It is possible for a single edge to yield multiple variable assignments, however this aspect will not be discussed further as variable assignments hold limited relevance for this work. 
+At its core, the matching process involves comparing a predefined pattern against either an entire hypergraph, a set of edges, or a single edge. Independent of the matching target, this comparison is conducted one edge at a time, determining whether this edge aligns with the pattern. If pattern and edge do not match the result of this process is only this binary information of \textit{No Match}. If pattern and edge do match, the result of the matching process depends on whether the pattern contains variables. I this case, the result is not only the binary information of \textit{Match}, but also the assignment of the variables contained in the pattern. It is possible for a single edge to yield multiple variable assignments, however this aspect will not be discussed further it holds limited relevance for this work. 
 
 The matching process works recursively, processing both the structure and content of the edge in relation to the pattern. A detailed discussion of this process is delegated to \cref{cha:implementation}\todo{maybe more specific ref}. If a generalising part of the pattern (sub pattern) structurally matches a sub edge of the candidate edge, this sub edge is considered to be \textit{captured} by this sub pattern. This is relevant for returning variable assignments and further processing as is the case with the innermost atom operator or any content generalisation functionality.
 
-Assuming the matching the marching process is examining a specific sub pattern and sub edge, the content defined in the sub pattern is referred to as the \textit{(pattern) reference content}. It is worth noting that a pattern may exclusively consist of structural elements, without specifying content. The content of the sub edge under comparison is termed as the \textit{(edge) candidate content}. The process of matching involves a comparison between the reference content and the candidate content, employing either a direct string-based comparison or leveraging a form of content generalisation. Specifically this could be comparing the candidate word against a list of reference words or comparing the candidate words lemma against the reference word (or a list of reference words).
+Assuming the matching the matching process is examining a specific sub pattern and sub edge, the content defined in the sub pattern is referred to as the \textit{(pattern) reference content}. It is worth noting that a pattern may exclusively consist of structural elements, without specifying content. The content of the sub edge under comparison is termed as the \textit{(edge) candidate content}. Apart of structural matching, the process also involves a comparison between the reference content and the candidate content, employing either a direct string-based comparison comparing the candidate words lemma against the reference word(s).
 
 Edge argument roles are ignored when matching, if they are not specified in a pattern. The matching of argument roles is not elaborated further, as it is of little relevance here.
 
@@ -381,31 +409,31 @@ functionalities of the differtent language elements, some example matchings of p
 \end{tabular}
 \caption{Example matchings of patterns against edges}
 \label{tab:shpl-example-matchings}
-%\vspace{3\baselineskip}
+\vspace{2\baselineskip}
 \end{table}
 
 
 
 \section{Semantic Similarity Measures}
-Determining the \textit{Semantic Relatedness} (SR) \textit{Semantic Similarity} (SS) of two text items is a central task in the field of natural language processing, information retrieval and information extraction. A text item can take on the form of a word, phrase, sentence paragraph or entire document. While SR and SS are often used synonymously, semantic relatedness can also be understood to entail a more nuanced description of the semantic relations of text items \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}.  In the context of this work semantic similarity is therefore used to refer to the task of measuring the closeness, distance or similarity in regard to the meanings conveyed by two text items. This has to be differentiated from lexical (i.e. string-based) similarity measures, which do not rely on the meaning of text items \cite{p.SurveySemanticSimilarity2019}.
+\label{sec:semantic-similarity}
+Determining the \textit{Semantic Relatedness} or (SR) \textit{Semantic Similarity} (SS) of two text items is a central task in the interlinked fields of natural language processing, information retrieval and information extraction. A text item can take on the form of a word, phrase, sentence paragraph or entire document. While SR and SS are often used synonymously, semantic relatedness can also be understood to entail a more nuanced description of the semantic relations of text items \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}.  In this work, the term \textit{semantic similarity} is therefore used to refer to the task of measuring the closeness, distance or similarity in regard to the meanings conveyed by two text items. This has to be differentiated from lexical (i.e. string-based) similarity measures, which in principle do not rely on the meaning of text items \cite{p.SurveySemanticSimilarity2019}. \todo{mention the STS task specifically (and refer to it later)?}
 
 There exists a great variety of approaches to measuring semantic similarity and their categorisation also takes on different forms in the literature.
 %A structure that is in line with most of the reviewed literature employs the following categories: \textit{Knowledge-based Semantic Similarity} (KBSS), \textit{Distributional} or \textit{Corpus-based Semantic Similarity} (CBSS), \textit{Deep Learning-} or \textit{Neural Network-based Semantic Similarity} (NNSS) and hybrid approaches which combine techniques from multiple categories 
 A structure that is in line with most of the reviewed literature employs the following categories: \textit{Knowledge-based Semantic Similarity} (KBSS), \textit{Corpus-based Semantic Similarity} (CBSS) and hybrid approaches which combine techniques from the former two categories
 \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}.
 
-Depending on the exact definition of the categories, NNSS can also be seen as a sub category of CBSS. It will be treated as an individual category here, as this differentiation is deemed valuable, since it is the most relevant type of semantic similarity measure for this work. More specifically, the focus lies on a specific type of neural network-based semantic similarity measures, which is referred to as \textit{Neural Embedding-based Semantic Similarity} (NESS). \todo{rewrite this!}
-
+The focus of this work in assessing the state-of-the-art of semantic similarity measures lies on CBSS -- specifically a subform of corpus-based measures that is denoted here as \textit{Neural Embedding-based Semantic Similarity} (NESS). These measures share some commonality with \textit{Deep Learning-based Semantic Similarity} (DLSS), which is sometimes differentiated as an independent category in the literature.
 
 
 \subsection{Knowledge-based Semantic Similarity}
 Knowledges-based semantic similarity measures rely on some form of underlying structured knowledge source to compute the similarity between two text items. These knowledge sources (referred to as knowledge systems in the following) may be ontologies, knowledge bases, knowledge graphs, semantic graphs, (lexical) databases and similar systems \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}. Examples of such structured knowledge systems are \textit{ConceptNet} \cite{speerConceptNetOpenMultilingual2017}, \textit{WordNet} \cite{millerWordNetLexicalDatabase1995}, the \textit{Paraphrase Database} (PPDB) \cite{ganitkevitchPPDBParaphraseDatabase2013}, \textit{Wikidata} \cite{vrandecicWikidataFreeCollaborative2014}, \textit{DBpedia} \cite{auerDBpediaNucleusWeb2007} and \textit{Yago} \cite{suchanekYagoCoreSemantic2007}.
 
 
-Depending on the specific structure of the knowledge system, different methods of computing the semantic similarity are possible. Given two text items, they first need to be mapped with knowledge items, often called \textit{concepts} in the system. Then the similarity of these concepts can be calculated. There exists a variety of methods to calculate the similarity of two concepts, which can be categorised as follows: \textit{structural or path-based}, \textit{feature-based} and \textit{information content (IC)-based}. Hybrid methods which combine multiple approaches also exists \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}. 
+Depending on the specific structure of the knowledge system, different methods of computing the semantic similarity are possible. Given two text items, they first need to be mapped to knowledge items -- often called \textit{concepts} -- in the system. Then the similarity of these concepts can be calculated. There exists a variety of methods to calculate the similarity of two concepts, which can be categorised as follows: \textit{structural or path-based}, \textit{feature-based} and \textit{information content (IC)-based}. Hybrid methods which combine multiple approaches also exists \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}. 
 
 
-Since most of the aforementioned knowledge systems have a graph-like structure, one type of measures is based on the spatial structure of the graph. The calculation of the similarity of two items is therefore mostly based on the length(s) of the path(s) between them. Another type of measure  utilises the features that the two concepts exhibit, where the specific set of features is dependent on the employed knowledge system. A comparison of the two items feature values is the basis for calculating their similarity. IC-based methods rely on the "information provided by the concept when appearing in a context" \cite{sanchezSemanticSimilarityMethod2013}. This is closely related to the specificity of words measured by such metrics as \textit{term frequency - inverse document frequency} (TF-IDF) \cite{aizawaInformationtheoreticPerspectiveTf2003}. Some of these methods determine the information content of concepts by using only information intrinsic to the knowledge system (or multiple knowledge systems). Other methods (additionally) utilize external information such as text corpora, so that the similarity measure could also be categorised as corpus-based. For a more in-depth exploration of knowledge-based similarity measures confer \citef{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015, zhuComputingSemanticSimilarity2017, mihalceaCorpusbasedKnowledgebasedMeasures2006}.
+Since most of the aforementioned knowledge systems generally have a graph-like structure, one type of measures is based on the spatial structure of the graph. The calculation of the similarity of two items is therefore mostly based on the length(s) of the path(s) between them. Another type of measure  utilises the features that the two concepts exhibit, where the specific set of features is dependent on the employed knowledge system. A comparison of the two items feature values is the basis for calculating their similarity. IC-based methods rely on the "information provided by the concept when appearing in a context" \cite{sanchezSemanticSimilarityMethod2013}. This is closely related to the specificity of words measured by such metrics as \textit{term frequency - inverse document frequency} (TF-IDF) \cite{aizawaInformationtheoreticPerspectiveTf2003}. Some of these methods determine the information content of concepts by using only information intrinsic to the knowledge system (or multiple knowledge systems). Other methods (additionally) utilize external information such as text corpora, so that the similarity measure could also be categorised as a hybrid of knowledge and corpus-based (see \cref{sec:corpus-based-semantic-similarity}. For a more in-depth exploration of knowledge-based similarity measures confer e.g. \citef{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015, zhuComputingSemanticSimilarity2017, mihalceaCorpusbasedKnowledgebasedMeasures2006}.
 
 
 
@@ -418,11 +446,11 @@ The Vector Space Model (VSM) \cite{turneyFrequencyMeaningVector2010} is the unde
 
 
 \subsubsection{Vector Similarity Measures}
-In assessing the similarity between two vectors within the VSM, a variety of measures can be utilised to quantify their relationship. Spatial similarity measures treat the VSM as a geometric construct and determine a spatial relation of the vectors. The most notable examples include the Manhattan distance (L1 norm), the Euclidean distance (L2 norm), and cosine similarity. Alternative measures are mostly motivated by an information theory or probabilistic perspective on the VSM. Relevant examples among these are the Kullback-Leibler divergence and the Jensen-Shannon divergence \cite{mohammadDistributionalMeasuresSemantic2012a, mohammadDistributionalMeasuresSemantic2012}. It shall be noted, that a probabilistic interpretation entails constraints for the characteristics of the VSM. The choice of a suitable vector similarity measure is generally dependent upon the specific construction of the vectors in use. Cosine similarity, in particular, has been highlighted for its effectiveness \cite{mohammadDistributionalMeasuresProxies2012, turneyFrequencyMeaningVector2010}. 
+In assessing the similarity between two vectors within the VSM, a variety of measures can be utilised to quantify their relationship. Spatial similarity measures treat the VSM as a geometric construct and determine a spatial relation of the vectors. The most notable examples include the Manhattan distance (L1 norm), the Euclidean distance (L2 norm), and cosine similarity. Alternative measures are mostly motivated by an information theory or probabilistic perspective on the VSM. Relevant examples among these are the Kullback-Leibler divergence and the Jensen-Shannon divergence \cite{mohammadDistributionalMeasuresSemantic2012}. It shall be noted, that a probabilistic interpretation entails constraints for the characteristics of the VSM. The choice of a suitable vector similarity measure is generally dependent upon the specific construction of the vectors in use. Cosine similarity, in particular, has been highlighted for its effectiveness \cite{mohammadDistributionalMeasuresProxies2012, turneyFrequencyMeaningVector2010}. 
 
 \subsubsection{Spatial VSM-based Semantic Similarity Measures}
 This work focusses on spatially interpreted VSMs and their associated similarity measures, since they can be seen as a precursor to the neural embedding-based similarity measures, which are outlined and further elaborated on in \cref{sec:neural-embedding-semantic-similarity}.
-In the following some distributional semantic similarity measures are presented, which were relevant for the development of the field. For each approach, the definition of the context for the word frequency matrix and the matrix' weighting and smoothing  (i.e. dimensionality reduction) procedure are noted. 
+In the following some distributional semantic similarity measures are presented, which were relevant for the development of the field. For each approach, we note the definition of the context for the word frequency matrix and the matrix' weighting and smoothing  (i.e. dimensionality reduction) procedure. 
 %All of the presented methods utilise a spatial measure to determine vector similarity in the constructed VSM.
 
 \textit{Latent Semantic Analysis} (LSA) \cite{deerwesterIndexingLatentSemantic1990, landauerSolutionPlatoProblem1997, landauerIntroductionLatentSemantic1998}: In LSA, the context for the frequency matrix is a paragraphs. The matrix undergoes dimensionality reduction through a variant of Singular Value Decomposition (SVD), which reduces columns but retains rows, aiming to preserve the similarity structure among words. The similarity between word vectors, represented by their row values, is calculated using cosine similarity.
@@ -434,94 +462,152 @@ In the following some distributional semantic similarity measures are presented,
 \textit{Explicit Semantic Analysis} (ESA) \cite{gabrilovich2007computing}: ESA's frequency matrix context are Wikipedia articles, also called concepts. Weighting of the word-concept matrix is performed using TF-IDF. Semantic similarity is measured using cosine similarity between weighted concept vectors. The reliance on Wikipedia structure arguably renders ESA a hybrid combination of corpus- and knowledge-based approaches.
 
 
-\subsection{Neural Embedding-based Semantic Similarity}
+\section{Neural Embedding-based Semantic Similarity}
 \label{sec:neural-embedding-semantic-similarity}
 In natural language processing, the term \textit{embedding} was first used in the context of Latent Semantic Analysis \cite{deerwesterIndexingLatentSemantic1990} to describe a vector representation of text. Since then, \textit{text embedding} has become widely used in NLP to describe a dense, fixed-length vector representations of text items, which can be interpreted spatially to measure semantic relations between them \cite{almeidaWordEmbeddingsSurvey2023}.
 
-Strictly speaking, \textit{neural embeddings} of text refer to representations that have been produced by a neural network model. The development of these approaches is deeply interlinked with the advent of \textit{Neural (Network) Language Modelling} (NNLM). The task of \textit{language modelling} traditionally is to predict the most probable next word given a sequence of previous words \cite{chenEmpiricalStudySmoothing1999}. While \citef{bengioNeuralProbabilisticLanguage2000} are commonly referred to as the first to use a neural network for language modelling, \citef{collobertUnifiedArchitectureNatural2008} are seen to be the first to build a NNLM with the focus on producing embeddings.
+Strictly speaking, \textit{neural embeddings} of text refer to representations that have been produced by a neural network model. The development of these approaches is deeply interlinked with the advent of \textit{Neural (Network) Language Modelling} (NNLM). The task of \textit{language modelling} traditionally is to predict the most probable next word given a sequence of previous words \cite{chenEmpiricalStudySmoothing1999}. While \citef{bengioNeuralProbabilisticLanguage2000} are commonly referred to as the first to use a neural network for language modelling, \citef{collobertUnifiedArchitectureNatural2008} are seen to be the first to build a NNLM with the focus on producing embeddings. 
+%Apart from the neural architecture, a key development in the field of NLP, contributing to state-of-the-art performance achieved by neural embeddings, was the increased scale of the training process and especially the amount of training data \cite{minaeeDeepLearningBased2021}.
 
-
-%While not all neural embedding approaches employ neural networks, they generally utilise some form of machine learning. 
-
-%One central commonality here is the scale of the training process -- i.e. the amount of data used for training -- that was enabled by technological advances at the time. 
-%This work adheres to this broader understanding of neural embeddings. 
-
-\textit{Neural Embedding-based Semantic Similarity Measures} (NESS) compute the semantic similarity of text items based on a spatial measurement between their respective neural embeddings. NESS measures can be considered as a subform of CBSS, since they also fundamentally rely on the distributional hypothesis and employ the same general approach of deriving distributional semantics from a text corpus. Here, neural embedding-based approaches are further differentiated into \textit{Fixed Word Embedding-based Semantic Similarity Measures} (FNESS) and \textit{Contextual Embedding-based Semantic Similarity Measures} (CNESS), which is elaborated in the following.
+\textit{Neural Embedding-based Semantic Similarity Measures} (NESS) in this work refer to methods that compute the semantic similarity of text items based on a spatial measurement between their respective neural embeddings. NESS measures can be considered as a subform of CBSS, since they also fundamentally rely on the distributional hypothesis and employ the same general approach of deriving distributional semantics from a text corpus. Here, neural embedding-based approaches are further differentiated into \textit{Fixed Word Embedding-based Semantic Similarity} (FNESS) measures and \textit{Contextual Embedding-based Semantic Similarity} (CNESS) measures, which is elaborated in the following. \todo{mention training data sets (and sizes?)}
 
 
 \subsubsection{Fixed Word Embeddings vs. Contextual Embeddings}
-In this work, \textit{(fixed) word embeddings} refer to neural text embeddings produced by models  that are limited to single words. For a or given word, such a model will always generate the same embedding, hence the specification \textit{fixed} (or \textit{static}) word embedding. A significant consequence of this limitation is, that these word embedding models are not able to differentiate \textit{homonyms}\footnote{\textit{homonym}: "A word that both sounds and is spelled the same as another word"\\(\url{https://en.wiktionary.org/wiki/homonym}} or more specifically \textit{homographs}\footnote{\textit{homograph}: "A word that is spelled the same as another word [...]"\\(\url{https://en.wiktionary.org/wiki/homograph})} \cite{liWordEmbeddingUnderstanding2018}. These differentiations are only possible by taking the context in which the word appears into consideration. The context may be a phrase, sentence, paragraph or any sequence of tokens. A token can be word, but also the result of another kind of segmentation of the input text. While a sequence of words is generally processable using a fixed word embedding model, this results in a sequence of independently generated word embeddings. In the case of \textit{contextual embedding} models, the generation of a token embedding depends on the other tokens in the sequence. This may result in different token embeddings for the same token, if it appears in different contexts. Therefore contextual embeddings are principally able to represent different meanings of homographs and may also differentiate more subtle variations of word meaning, that can be derived from context \cite{liuSurveyContextualEmbeddings2020}.
+\label{sec:fixed-word-vs-contextual-embeddings}
+In this work, \textit{(fixed) word embeddings} refer to neural text embeddings produced by models  that are limited to single words. For a or given word, such a model will always generate the same embedding, hence the specification \textit{fixed} (or \textit{static}) word embedding. A significant consequence of this limitation is, that these word embedding models are not able to differentiate \textit{homonyms}\footnote{\textit{homonym}: "A word that both sounds and is spelled the same as another word"\\(\url{https://en.wiktionary.org/wiki/homonym}} or more specifically \textit{homographs}\footnote{\textit{homograph}: "A word that is spelled the same as another word [...]"\\(\url{https://en.wiktionary.org/wiki/homograph})} \cite{liWordEmbeddingUnderstanding2018}. These differentiations are only possible by taking the context in which the word appears into consideration. The context may be a phrase, sentence, paragraph or any sequence of tokens. A token can be word, but also the result of another kind of segmentation of the input text. While a sequence of words is generally processable using a fixed word embedding model, this results in a sequence of independently generated word embeddings. In this work, \textit{contextual embedding} models are understood to incorporate the context. That means the generation of an embedding for a token contained in context is influenced by the other tokens in the sequence. This may result in different token embeddings for the same token given different contexts. Therefore contextual embeddings are principally able to represent different meanings of homographs and may also differentiate more subtle variations of word meaning, that can be derived from context \cite{liuSurveyContextualEmbeddings2020}.
+
 
 \subsubsection{Deep Learning-based Semantic Similarity}
-\todo{should this be moved?}
-\textit{Deep Learning-based Semantic Similarity Measures} (DLSS) are often treated as a distinct category in the literature, which this is not necessarily true for non-deep machine learning based approaches \cite{harispeSemanticSimilarityNatural2015, chandrasekaranEvolutionSemanticSimilarity2021, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}. In this work, we do not treat DLSS as a separate category, instead it is subsumed by the category of NESS. Deep learning-based approaches employ deep neural network models, which have multiple hidden layers, allowing them in principle to learn hierarchical of representations of the input data \cite{goodfellowDeepLearning2016}. Given a text item as input, the state of a specific hidden layer in the trained network after an inference pass is generally considered to be the embedding of the text item. From this perspective, all DLSS measures can be seen as neural embedding-based. However, there also exists a variety of deep learning-based approaches, which use models that directly predict the semantic similarity between two input text items in the output layer. These methods are not in the focus of this work, for such approaches confer e.g. \citef{taiImprovedSemanticRepresentations2015, hePairwiseWordInteraction2016, shaoHCTISemEval2017Task2017, tianECNUSemEval2017Task2017, wangSentenceSimilarityLearning2017, lopez-gazpioWordNgramAttention2019, tienSentenceModelingMultiple2019, tienSentenceModelingMultiple2019a, zhengDetectionMedicalText2019}.
+\label{sec:deep-learning-based-semantic-similarity}
+\textit{Deep Learning-based Semantic Similarity Measures} (DLSS) are often treated as a distinct category in the literature \cite{harispeSemanticSimilarityNatural2015, chandrasekaranEvolutionSemanticSimilarity2021, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}. In this work, DLSS is not seen as a separate category, instead it is subsumed by the category of NESS. Deep learning-based approaches employ \textit{Deep Neural Network} (DNN) models, which have multiple hidden layers, allowing them in principle to learn hierarchical of representations of the input data \cite{goodfellowDeepLearning2016}. Given a text item as input, the state of a specific hidden layer in the trained network after an inference pass is generally considered to be the embedding of the text item. From this perspective, all DLSS measures can be seen as neural embedding-based. 
 
-%\todo[inline]{Add not that distinctive feature is contextuality, Refer to bag of words}
+However, there also exists a variety of deep learning-based approaches, which use models that directly predict the semantic similarity between two input text items in the output layer. Here, the embeddings are only intermediate representations, but not explicitly used to measure spatial relations between them and they might not be suited for that. These methods are not in the focus of this work, for such approaches confer e.g. \citef{taiImprovedSemanticRepresentations2015, hePairwiseWordInteraction2016, shaoHCTISemEval2017Task2017, tianECNUSemEval2017Task2017, wangSentenceSimilarityLearning2017, lopez-gazpioWordNgramAttention2019, tienSentenceModelingMultiple2019, tienSentenceModelingMultiple2019a, zhengDetectionMedicalText2019}.
 
+Following the fixed word embeddings vs. contextual embedding distinction outlined above, DLSS approaches correlate strongly with the contextual embedding-based approaches, which is elaborated on in \cref{sec:contextual-embedding-semantic-similarity}.
 
 %The relevant distinction for this work is that DLSS generally allow for similarity measurements of text items larger than words, i.e. phrases, sentences, paragraphs or entire documents. The utilised neural networks are able to process and represent longer text items as sequences of tokens, which may be words, but can also be the result of a different form of text segmentation. Typically an embedding of each token exists at 
 %
-%
 %While there exist non-deep semantic similarity methods which allow for that, e.g. by comparing document (column) vectors instead of word vectors when utilising LSA, these methods most often treat the text as a \textit{bag of words} -- ignoring word order. Resolving this limitation is a core feature of most deep learning-based techniques, since the utilised neural networks are able to process and represent longer text items as sequences of words (or tokens). Differentiating by this distinctive feature, the field of neural embedding-based semantic similarity is further elaborated on in the following.
-%
 
-\subsubsection{Fixed Word Embedding-based Semantic Similarity}
-\textit{Fixed Word Embedding-based Semantic Similarity Measures} (FNESS) in this work denotes semantic similarity measures that employ fixed word embedding models. Here, the concept of \textit{neural embeddings} extends to encompass not only those embedding techniques directly derived from neural models, but also includes approaches that  incorporate elements of neural model methodologies to achieve outcomes that rival strictly neural embeddings. This broader interpretation aligns with perspectives found in existing literature \cite{zucconIntegratingEvaluatingNeural2015, sezererSurveyNeuralWord2021}. Fixed word embedding models are generally based on non-deep machine learning methods and can be further divided into \textit{prediction-based}, \textit{count-based} and \textit{hybrid} or \textit{meta} methods. In the following, some of the most relevant word embeddings models are presented. 
+\subsection{Fixed Word Embedding-based Semantic Similarity}
+\label{sec:fixed-word-embedding-semantic-similairity}
+\textit{Fixed Word Embedding-based Semantic Similarity} (FNESS) measures in this work denote semantic similarity measures that employ fixed word embedding models. Here, the concept of \textit{neural embeddings} extends to encompass not only those embeddings directly derived from neural models, but also includes embedding generation approaches that incorporate elements of neural model methodologies and thereby achieving performances that rival strictly neural embeddings. This broader interpretation aligns with perspectives found in existing literature \cite{zucconIntegratingEvaluatingNeural2015, sezererSurveyNeuralWord2021}. Fixed word embedding models are generally based on non-deep machine learning methods and can be further divided into \textit{prediction-based}, \textit{count-based} and \textit{hybrid} or \textit{meta} models. In the following, some of the most relevant word embeddings models are presented. 
 
-\paragraph{Prediction-based Methods} 
-These methods are based on the concept of language modelling and work with local context windows. They are trained on predicting a target word (or token) given a context window of words (or tokens) or the other way around.
+\subsubsection{Prediction-based Models} 
+These mdoels are based on the concept of language modelling and work with local context windows. They are trained on predicting a target word (or token) given a context window of words (or tokens) or the other way around.
 
-\textit{Word2Vec} \cite{mikolovDistributedRepresentationsWords2013, mikolovLinguisticRegularitiesContinuous2013, mikolovEfficientEstimationWord2013}: Word2Vec has two forms; the \textit{Continuous Bag of Words} (CBOW) model and the skip \textit{Skip-Gram} (SG) model. CBOW predicts the target word given a context and SG predicts each context word given a target word. Both models are log-(bi)linear models, which basically learn a logistic regression with one hidden layer, whose weights are then used as embeddings. The best performing variant of Word2Vec is \textit{Skip-Gram with Negative Sampling} (SGNS), which produced state-of-the-art results at the time.
+\textit{Word2Vec} \cite{mikolovDistributedRepresentationsWords2013, mikolovLinguisticRegularitiesContinuous2013, mikolovEfficientEstimationWord2013}: Word2Vec has two forms; the \textit{Continuous Bag of Words} (CBOW) model and the skip \textit{Skip-Gram} (SG) model. CBOW predicts the target word given a context and SG predicts each context word given a target word. Both models are log-(bi)linear models, which basically learn a logistic regression with one hidden layer, whose weights are then used as embeddings. The best performing variant of Word2Vec is \textit{Skip-Gram with Negative Sampling} (SGNS), which reportedly produced state-of-the-art results.
 
-\textit{fasttext} \cite{bojanowskiEnrichingWordVectors2017}: fasttext is a better performing extension of Word2Vec. The central modification is, that the model works on subword tokens, which helps it to generalise to word which are unknown from the training data.
+\textit{fasttext} \cite{bojanowskiEnrichingWordVectors2017}: fasttext an extension of Word2Vec, which is reported to outperform SGNS. The central modification is, that the model works on subword tokens, which helps it to generalise to word which are unknown from the training data.
 
-\paragraph{Count-based Methods}
-These methods are no neural embedding models in a strict sense, since they do not employ a neural network architecture. In terms of approach, the fall in line with spatially interpreted VSMs based on constructing a word-context frequency matrix with word counts \cite{almeidaWordEmbeddingsSurvey2023, turneyFrequencyMeaningVector2010}, which are discussed in \cref{sec:corpus-based-semantic-similarity}. In distinction to these approaches, the methods presented here also incorporate local context window information inspired by NNLM approaches and perform competitively when compared with neural embeddings.
+\subsubsection{Count-based Models}
+These models are no neural embedding models in a strict sense, since they do not employ a neural network architecture. In terms of approach, the fall in line with spatially interpreted VSMs based on constructing a word-context frequency matrix (and are therefore fundamentally based on word counts) \cite{almeidaWordEmbeddingsSurvey2023, turneyFrequencyMeaningVector2010}, which are discussed in \cref{sec:corpus-based-semantic-similarity}. In distinction to these approaches, the methods presented here also incorporate local context window information inspired by NNLM approaches and perform competitively when compared with strictly neural embeddings.
 
-\textit{GloVe} \cite{penningtonGloVeGlobalVectors2014} GloVe leverages corpus-wide, hence \textit{global}, word co-ocurrences represented as word-word frequency matrix populated with probability ratios. The word co-occurrence probability ratios are weighted based on the distance of the word pairs in the context window from which they are extracted. It outperforms SGNS, given the same training corpus, training time and context window size.
+\textit{GloVe} \cite{penningtonGloVeGlobalVectors2014} GloVe leverages corpus-wide, hence \textit{global}, word co-ocurrences represented as word-word frequency matrix populated with probability ratios. The word co-occurrence probability ratios are weighted based on the distance of the word pairs in the context window from which they are extracted. It reportedly outperforms SGNS, given the same training corpus, training time and context window size.
 
-\textit{LexVec} \cite{salleMatrixFactorizationUsing2016, salleEnhancingLexVecDistributed2016, salleIncorporatingSubwordInformation2018, salleWhyRoleNegative2019}: LexVec is based on the low-rank, weighted factorisation of the positive point-wise mutual information matrix via stochastic gradient descent. It incorporates local context window information by applying a weighting scheme to the matrix that has been shown to be implicitly performed by SGNS \cite{levyNeuralWordEmbedding2014}. There also exists a subword based variant of LexVec, which shows competitive performs compared to fasttext.
+\textit{LexVec} \cite{salleMatrixFactorizationUsing2016, salleEnhancingLexVecDistributed2016, salleWhyRoleNegative2019}: LexVec is based on the low-rank, weighted factorisation of the positive point-wise mutual information matrix via stochastic gradient descent. It incorporates local context window information by applying a weighting scheme to the matrix that has been shown to be implicitly performed by SGNS \cite{levyNeuralWordEmbedding2014}. There also exists a subword based variant of LexVec, which is reported to perform competitively compared to fasttext \cite{salleIncorporatingSubwordInformation2018}.
 
 
-\paragraph{Hybrid and Meta Methods}
-\textit{Hybrid word embedding} methods in this work refer to approaches which are not only trained on unstructured text corpora, but also incorporate some form of structured knowledge source. This is akin to the ESA method presented in \cref{sec:corpus-based-semantic-similarity}. \textit{Meta word embedding} methods combine the information of multiple existing word embeddings into a new embedding model \cite{bollegalaSurveyWordMetaEmbedding2022}. Both approaches are applicable simultaneously, resulting in a \textit{hybrid meta word embedding} model.
+\subsubsection{Hybrid and Meta Models}
+\textit{Hybrid word embedding} models in this work refer to approaches which are not only trained on unstructured text corpora, but also incorporate some form of structured knowledge source. This is akin to the ESA method presented in \cref{sec:corpus-based-semantic-similarity}. \textit{Meta word embedding} models merge the information of multiple existing word embedding models into a new embedding model \cite{bollegalaSurveyWordMetaEmbedding2022}. Both approaches are applicable simultaneously, resulting in a \textit{hybrid meta word embedding} model.
 
 %do not refer to combinations prediction-based and count-based approaches, considering that this property is arguably already fulfilled by the count-based methods presented above.
 
-\textit{Conceptnet Numberbatch} \cite{speerConceptNetOpenMultilingual2018, speerConceptNetOpenMultilingual2017}: Conceptnet Numberbatch is hybrid ensemble model that integrates structured knowledge from ConceptNet with existing word embedding models. First, ConceptNet-specific word embeddings are constructed by representing the knowledge graph structure as a matrix of term-term connections, with cell values reflecting the sum of connecting edge weights. Further processing (i.a. smoothing and dimensionality reduction) is applied to this matrix and the resulting word embeddings are merged with Word2Vec, GloVe and fasttext embeddings. The method produced state-of-the-art-result at the time, outperforming LexVec and all subsumed embedding models.
+\textit{Conceptnet Numberbatch} \cite{speerConceptNetOpenMultilingual2018, speerConceptNetOpenMultilingual2017}: Conceptnet Numberbatch is hybrid meta model that integrates structured knowledge from ConceptNet with existing word embedding models. First, ConceptNet-specific word embeddings are constructed by representing the knowledge graph's structure as a matrix of term-term connections, with cell values reflecting the sum of connecting edge weights. Further processing (i.a. smoothing and dimensionality reduction) is applied to this matrix and the resulting word embeddings are merged with Word2Vec, GloVe and fasttext embeddings. The method produced state-of-the-art-result, reportedly outperforming LexVec and all subsumed embedding models. A third-party comparative analysis of word embedding-based semantic similarity involving Word2Vec, fasttext, GloVe, LexVec and Conceptnet Numberbatch found, that the latter achieved best performance, when evaluating word similarity correlation with a ground truth \cite{toshevskaComparativeAnalysisWord2020}.
 
-\textit{MetaVec} \cite{garcia-ferreroBenchmarkingMetaembeddingsWhat2021}: MetaVec is in principle a pure meta word embedding model which integrates fasttext, ConceptNet Numberbatch, \textit{JOINTChyb} \cite{goikoetxeaBilingualEmbeddingsRandom2018a} and \textit{Paragram} \cite{wietingParaphraseDatabaseCompositional2015a}. However, JOINTChyb leverages data from WordNet, Paragram utilises the PPDB and Conceptnet Numberbatch relies on ConceptNet as described above. Consequently MetaVec is highly influenced by structured knowledge as well and can therefore also considered to be a hybrid meta word embedding model. It outperforms ConceptNet Numberbatch on a number of evaluations and is seen to be the state-of-the-art at this time. 
+\textit{MetaVec} \cite{garcia-ferreroBenchmarkingMetaembeddingsWhat2021}: MetaVec is in principle a pure meta word embedding model which integrates fasttext, ConceptNet Numberbatch, \textit{JOINTChyb} \cite{goikoetxeaBilingualEmbeddingsRandom2018a} and \textit{Paragram} \cite{wietingParaphraseDatabaseCompositional2015a}. However, JOINTChyb leverages data from WordNet, Paragram utilises the PPDB and Conceptnet Numberbatch relies on ConceptNet as described above. Consequently MetaVec is highly influenced by structured knowledge as well and can therefore also be considered to be a hybrid meta word embedding model. It is reported to outperform ConceptNet Numberbatch in multiple evaluations and in this work is seen to be the current state-of-the-art of fixed word embedding models for measuring semantic similarity.
 
 
 
 %---
 %all methods use 300-dimensional embeddings
 
-\subsubsection{Contextual Embedding-based Semantic Similarity Measures}
-\todo{already refer to massive text embedding benchmark at this point?}
+\subsection{Contextual Embedding-based Semantic Similarity Measures}
+\label{sec:contextual-embedding-semantic-similarity}
+\textit{Contextual Embedding based Semantic Similarity} (CNSS) measures in this work denote semantic similarity measures, which employ contextual embeddings models. These models need to be able to jointly process sequences of tokens and produce the token embeddings interdependently (see \cref{sec:fixed-word-vs-contextual-embeddings}). Contextual embedding models are generally based on deep neural networks, which employ different architectural approaches to capture patterns in processing compositional data structures such as a token sequences \cite{goodfellowDeepLearning2016}. A wide array of DNN architectures has been applied to natural language processing and the generation of contextual embeddings specifically. The evolution of the current state-of-the-art of contextual embedding models is delineated here by focussing on three of the most relevant architecture types: \textit{Convolutional Neural Networks} (CNN), \textit{Recursive Neural Networks} (RNN) and \textit{Transformer}-based models. Additionally some pivotal architecture-agnostic methodologies are introduced. Not all approaches presented here aim at producing embeddings in the spatially interpretable sense outlined above, but are still mentioned if they were highly influential on the development of the field. For a more comprehensive overview of deep learning based approaches to NLP, confer e.g. \citef{youngRecentTrendsDeep2018, minaeeDeepLearningBased2021, minRecentAdvancesNatural2023}
 
-text is tokenized and token ids are used as input features
+\paragraph{Transfer Learning and Pre-training} \textit{Transfer learning} involves leveraging the representations learned from a different yet related task to train a model for a specific task \cite{zhuangComprehensiveSurveyTransfer2021}. When these representations are derived from language modelling, the process is generally termed \textit{pre-training} in NLP, notably advanced by \citef{daiSemisupervisedSequenceLearning2015} for the generation of contextual embeddings.
 
+\paragraph{Encoder-Decoder Design}
+The \textit{encoder-decoder} configuration is model design that can be applied to multiple DNN architecture types. It consists of two major model blocks: an \textit{encoder} and a \textit{decoder}. The encoder first processes the input data (e.g., token sequence in the source language) to generate a  intermediate representation of fixed size, which is then passed to the decoder to generates the output data (e.g., translation in the target language). This model design has been proven very successful for sequence-to-sequence tasks such as machine translation and speech recognition, especially when the length of the input sequence and output sequence may differ \cite{choPropertiesNeuralMachine2014}.
 
-contextual neural embedding model
-
-generally based on deep neural network models, as stated above
-
-
-(SENTENCE-) BERT
-(SENTENCE-) T5
-E5 (V2)
-GTE
-(E5-MISTRAL)
+\paragraph{Attention mechanisms}
+Attention mechanisms are another important innovation in the processing of sequences, which help a model to focus on more relevant parts of the input sequence when producing an output sequence \cite{galassiAttentionNaturalLanguage2021}. In successfully applying an attention mechanism to a machine translation task, the work of \citef{bahdanauNeuralMachineTranslation2016}  is a significant contribution in demonstrating the efficacy of this technique mechanism for NLP.
 
 
+\subsubsection{CNN and RNN Models}
+Convolutional neural networks extract patterns from compositional data structures through their convolutional layers or filters, adept at identifying spatial patterns, rendering them particularly effective for tasks such as image processing, but also natural language processing \cite{albawiUnderstandingConvolutionalNeural2017}. Recurrent Neural Networks are tailored for sequential data processing, with an architecture that allows preceding input elements to influence the processing of subsequent ones. This principally positions them well for handling token sequences -- crucial in generating contextual embeddings \cite{yuReviewRecurrentNeural2019}.
+
+\citef{collobertUnifiedArchitectureNatural2008} are credited with being among the pioneers in employing CNNs for generating sentence embeddings. This approach has been further expanded by e.g.  \citef{kalchbrennerConvolutionalNeuralNetwork2014}. A significant contribution to the use of RNNs for language modelling was made by \citef{mikolovRecurrentNeuralNetwork2010}, demonstrating promising results a in speech recognition task.
+
+%\cite{collobertNaturalLanguageProcessing2011} (unified architecture?)
+%--> self supervised language modelling training objective
+
+\paragraph{LSTM Models}
+Within the spectrum of RNNs, \textit{Long-Short Term Memory} (LSTM) models are probably the most relevant variant. These models are engineered to overcome the limitations RNNs face with long-term dependencies in input sequences \cite{hochreiterLongShortTermMemory1997, yuReviewRecurrentNeural2019}. A notable development in the use of deep LSTM models for NLP was recorded in \citef{gravesSpeechRecognitionDeep2013}, where they reported state-of-the-art results in a speech recognition task.
 
 
+%\vspace{\baselineskip} 
+In the following, some of the most relevant methods of producing contextual embedding by employing
+%encoder-decoder
+LSTMs in combination with other aforementioned techniques are presented.
 
-%\subsection{Hybrid Measures of Semantic Similarity}
+\textit{context2vec} \cite{melamudContext2vecLearningGeneric2016}: This method employs a bidirectional LSTM model to generate contextual embeddings, outperforming methods that rely on average pooling of word embeddings.
+
+\textit{Context Vectors} (CoVe) \cite{mccannLearnedTranslationContextualized2018}: CoVe leverages a bidirectional LSTM in combination with a form of attention mechanism to generate context embeddings by training on a machine translations task, thereby applying transfer learning. A concatenation of the CoVe model output and GloVe word embeddings is used as input for evaluation tasks, reportedly producing state-of-the-art-results.
+
+\textit{Embeddings from Language Models} (ELMo) \cite{petersDeepContextualizedWord2018}: ELMo methods produces context-dependent embeddings based on pre-training a bidirectional language model implemented in form of a bidirectional LSTM. Similar to the CoVe, the ELMo embeddings are concatenated with word embeddings to form the input for downstream tasks, for which task-specific networks are augmented by convolutional or attention layers. This approach is reported to improve the state-of-the-art in six of the evaluation tasks.
+
+%\textit{ULMFiT} \cite{howardUniversalLanguageModel2018}
 
 
-%\subsubsection{Sentence embeddings}
+\subsubsection{Transformer-based Models}
+The \textit{Transformer} architecture was first presented by \cite{vaswaniAttentionAllYou2017}, which was reported to significantly improve the state-of-the-art for a  machine translation task. A key component is a specific form of the attention mechanism -- called \textit{self-attention} -- that is used to weigh the importance of elements for each other when processing a sequence. Based in its application for machine translation, the original Transformer model follows the encoder-decoder design. Unlike recurrent networks, which process sequences sequentially, transformer-based models handle entire sequences in parallel. This parallel processing capability facilitates pre-training these models on larger datasets and therefore effectively scaling them to larger model sizes, which is central to the performance gains on a multitude of NLP task, that are associated with their use \cite{minRecentAdvancesNatural2023}. In the following, some of the approaches most relevant for the evolution of Transformer-based contextual embeddings models are presented.
+
+\todo{add USE?}
+%\textit{Universal Sentence Encoder} (USE) \cite{cerUniversalSentenceEncoder2018}
+%transformer and deep averaging network (FFNN)
+
+\textit{Bidirectional Encoder Representations from Text} (BERT) \cite{devlinBERTPretrainingDeep2019}: BERT introduces a novel training objective in the form of masked language modelling. In this approach, certain tokens within an input sequence are obscured at random, with the goal of predicting these hidden tokens. Additionally, it is trained on a next-sentence prediction, which involves taking two separate sentences and determining whether the second sentence follows the first. Utilizing a Transformer encoder, BERT processes the input in a bi-directional manner during its pre-training phase. The method obtains new state-of-the-art results on eleven NLP tasks. Many variants of the approach have emerged, such as \textit{RoBERTa} \cite{liuRoBERTaRobustlyOptimized2019}, which offers substantial performance enhancements over BERT through modification of the pre-training regime.
+
+
+%\textit{Text-to-Text Transfer Transformer} (T5) \cite{raffelExploringLimitsTransfer2020}
+%(GPT)
+
+%\paragraph{Semantic Textual Similarity Task}
+%formalisation of determining the semantic similarity of texts
+%not transformer specific but hey
+
+%contrastive loss and NLI efficient for sentence embeddings: InferSent
+%\cite{conneauSupervisedLearningUniversal2017}
+
+
+\paragraph{Embedding-specific Models} While BERT and RoBERTa achieved new state-of-the-art performances on semantic similarity tasks, these models require that the input contains both sequences whose similarity should be determined. A similarity measurement is then produced by the output layer of the model, but the immediately generated embeddings are not well suited as input for spatial measures such as cosine similarity \cite{reimersSentenceBERTSentenceEmbeddings2019}. This is hypothesised to be a consequence of anisotropic embedding spaces resulting from the masked language modelling objective \cite{liSentenceEmbeddingsPretrained2020}. Some of the most relevant approaches in resolving this limitation are presented in the following.
+
+
+\textit{Sentence-BERT} (SBERT) \cite{reimersSentenceBERTSentenceEmbeddings2019}: SBERT utilises supervised fine-tuning on the foundational models BERT and RoBERTa through the use of siamese and triplet architectures. It leverages \textit{Natural Language Inference} (NLI) datasets, which consist of sentence pairs categorised into entailment, contradiction, or neutrality towards one another, as a basis for training with classification, regression, and triplet loss objectives. This approach has demonstrated superior performance over existing methods in generating sentence embeddings, regarding all evaluated benchmarks for semantic similarity. \todo{refer to USE, if added}
+
+\textit{Simple Contrastive Sentence Embedding} (SimCSE) \cite{gaoSimCSESimpleContrastive2021}:
+ SimCSE builds on BERT and RoBERTa models, employing supervised and unsupervised techniques for sentence embedding. Utilizing an unsupervised strategy, SimCSE trains on sentence duplication using dropout to introduce noise. Its supervised method incorporates NLI data alongside a contrastive loss function, thereby producing state-of-the art results, surpassing SBERT in all evaluated semantic similarity benchmarks. Contrastive learning aims to learn representations by contrasting positive examples (similar or related data points) against negative examples (dissimilar or unrelated data points). The contrastive loss approach is hypothesised to create a more isotropic space for embeddings.
+
+\paragraph{Massive Text Embedding Benchmark}
+Since the field of contextual embeddings is rapidly evolving, it is not trivial to asses the current state-of-the-art and pinpoint the best performing model available for semantic similarity measurements.
+The \textit{Massive Text Embedding Benchmark} (MTEB) \cite{muennighoffMTEBMassiveText2023} offers support for this task. It is comprised of eight evaluation task, involving 58 datasets and 112 languages, including ten datasets for the semantic similarity task. An online leaderboard showcases the performance of all models that have been benchmarked by \citef{muennighoffMTEBMassiveText2023} and of those that have been submitted by third-parties.\footnote{MTEB Leaderboard: \url{https://huggingface.co/spaces/mteb/leaderboard} (Accessed on Oct 9, 2023)}. In the following, two of the best performing models according to the online MTEB leaderboard at the time of access are presented.
+
+\textit{EmbEddings from bidirEctional Encoder rEpresentations} (E5) \cite{wangTextEmbeddingsWeaklySupervised2022}:
+E5 uses the same architecture as BERT and also initialises the model with the weights obtained from BERT's pre-training. This is followed by training using a contrastive learning approach with weak supervision signals derived from a large curated dataset of text pairs. The E5 model was developed in three variants: \textit{small}, \textit{base} and \textit{large}, whose reported performance increases with size. There also exists a second version of the model (E5-v2), wich was trained on a larger quantity and more diverse text pair datasets. \footnote{See \url{https://huggingface.co/intfloat/e5-base-v2/discussions/1}} E5-v2 models outperform the corresponding original models on most benchmarks, while performing on par in the semantic similarity task.
+
+\textit{General Text Embeddings} (GTE) \cite{liGeneralTextEmbeddings2023}: Falling in line with with SimCSE and E5 in terms of approach, GTE also uses the BERT architecture and initialisation followed by contrastive learning process. Here it consists of a first step of contrastive pre-training with unlabelled data and a second step of contrastive fine-tuning with labelled task-specific data. GTE is also developed in three different model sizes -- named \textit{small}, \textit{base} and \textit{large} -- which reportedly correlate with performance increases. Both, GTE and E5, construct the final sentence embedding by average pooling the produced token embeddings. Their publicly available implementation also share the same software interface. At the time of access, \textit{GTE-large} is the top performing model regarding the average of all benchmarks in the MTEB and the average of the semantic similarity benchmarks specifically. It is therefore seen in this work to be the current state-of-the-art regarding contextual embeddings models for measuring semantic similarity.
+
+%\subsubsection{Tokenization}
+%Input text must be first converted to tokens
+%Some models tokenise as words and use word embeddings as input features
+%different tokenizers -> wordpiece, sentencepiece, tiktoken
+%--> are these all BPE in the end? eegaaaal
+%
+
+%\section{Hybrid Measures of Semantic Similarity}
+
 
 %\subsubsection{Distance Measures}
 %Mean reference vector vs. pairwise distance
@@ -531,13 +617,133 @@ GTE
 % ========== 
 \chapter{Problem Statement}
 \label{cha:problem-statement}
-CSS researches may typically be interested in extracting statements of a specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. Two sensible ways to frame this task are as \textit{text classification} \cite{kowsariTextClassificationAlgorithms2019} or \textit{text retrieval} \cite{manningIntroductionInformationRetrieval2008}. It can be addressed with a wide range of system, which will be generally referred to as  \textit{automatic text analysis} systems in the following. These systems are mostly based on techniques from the field of Natural Language Processing (NLP), as well well as the interlinked fields of Information Retrieval (IR) and Information Extraction (IE) \cite{chowdharyNaturalLanguageProcessing2020}.
+Computational social science (CSS) researches may typically be interested in extracting statements of a specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. Two sensible ways to frame this task are as \textit{text classification} \cite{kowsariTextClassificationAlgorithms2019} or \textit{text retrieval} \cite{manningIntroductionInformationRetrieval2008}. It can be addressed with a wide range of system, which will be generally referred to as  \textit{automatic text analysis} systems in the following. These systems are mostly based on techniques from the field of natural language processing, as well as the interlinked fields of information retrieval and information extraction \cite{chowdharyNaturalLanguageProcessing2020}.
 
-A relevant perspective of categorising text analysis systems, especially from the point of view of CSS researchers, are the dimensions \textit{open}-\textit{opaque} and \textit{adaptive}-\textit{strict} \cite{menezesSemanticHypergraphs2021}. Here openness refers to the systems users ability to inspect and understand the processing, which we can also bee describes as transparency and explainability. These properties are of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}. An adaptive text analysis system does not (only) operate on strict rules, but is able to learn and modify its behaviour in some way. It is therefore in principle able to handle unforeseen variations in the text it processes. While both of these two properties are desirable for users are often found to be a trade-off. Current successful adaptive systems are most often bases on neural networks \cite{hirschbergAdvancesNaturalLanguage2015}, which are opaque in the way how they represent and process text \cite{rudinStopExplainingBlack2019}. 
+A relevant perspective of categorising text analysis systems, especially from the point of view of CSS researchers, are the dimensions \textit{open}-\textit{opaque} and \textit{adaptive}-\textit{strict} \cite{menezesSemanticHypergraphs2021}. Here openness refers to the systems users ability to inspect and understand the processing, which we can also bee describes as transparency and explainability. These properties are of high interest in CSS applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}. An adaptive text analysis system does not (only) operate on strict rules, but is able to learn and modify its behaviour in some way. It is therefore in principle able to handle unforeseen variations in the text it processes. While both of these two properties are desirable for users are often found to be a trade-off. Current successful adaptive systems are most often bases on neural networks \cite{hirschbergAdvancesNaturalLanguage2015}, which are opaque in the way how they represent and process text \cite{rudinStopExplainingBlack2019}.
 
-The Semantic Hypergraph (SH) framework aims to fulfil both the open as well as the adaptive property of a text analysis system. It offers an inspectable and understandable representation of text that is constructed by a parser based on machine learning components. The SH representation and its construction can be therefore considered to fulfil the open-adaptive properties. The SH pattern matching language can be used to define patterns that match a specific subset of hyperedges in a given hypergraph. The matching process is purely symbolic and follows a set of fixed rules. It can therefore be considered to be open-strict. In the context of the SH framework the CSS research task described above is better framed as text retrieval. The SH pattern acts  as a \textit{query} for which the most relevant items are retrieved. While the SH frameworks capabilities are not restricted to text retrieval, the work is focused on this application.
+The Semantic Hypergraph (SH) framework (see \cref{sec:semantic-hypergraph-framework}) aims to fulfil both the open as well as the adaptive property of a text analysis system. It offers an inspectable and understandable representation of text that is constructed by a parser based on machine learning components. The SH representation and its construction can be therefore considered to fulfil the open-adaptive properties. The SH pattern matching language can be used to define patterns that match a specific subset of hyperedges in a given hypergraph. The matching process (described in \cref{sec:pattern-matching-process}) is purely symbolic and follows a set of fixed rules. It can therefore be considered to be open-strict. In the context of the SH framework the CSS research task described above is better framed as text retrieval. The SH pattern acts  as a \textit{query} for which the most relevant items are retrieved. While the SH frameworks capabilities are not restricted to text retrieval, the work is focused on this application.
 
-The SH pattern defined by a user may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). The SH pattern language allows it to describe different levels of generalisations for the structural matching. Additionally the actual words that should match need to be specified i.e. the edge content to match against, if the edge matches the pattern structurally. These words need to be given explicitly and the only way of generalising is via the lemma functional pattern. This lack of generalisation capability entails that a bias is introduced into the matching process by the manual selection of words by the SH frameworks user, who defines the pattern.
+The SH pattern defined by a user may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). The SH pattern language allows it to describe different levels of generalisations for the structural matching. Additionally the actual words that should match need to be specified i.e. the reference content against which the edge content is matched, if the edge matches the pattern structurally. In the original form of the SH framework, the only way of generalising content matching is via the lemma functional pattern, but there is no possibility to define semantically more sophisticated generalisations.
+
+This limitation in content matching generalisation capability means that all acceptable variants of edge content -- i.e. specific words -- must be explicitly provided by the SH framework's user. This also entails that a bias is introduced into the matching process due to the manual selection of words by the user defining a pattern. To better illustrate the problem, we consider the following sentences represented as hyperedges:
+
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+  ( plays/P ann/C piano/C ) 
+  \caption{Represents the sentence "Ann plays piano"}
+  \label{hed:ann-plays-piano}
+\end{hedge}
+
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+  ( plays/P ann/C theatre/C ) 
+  \caption{Represents the sentence "Ann plays theatre"}
+  \label{hed:ann-plays-theatre}
+\end{hedge}
+  
+
+
+\Cref{hed:ann-plays-piano} and \cref{hed:ann-plays-theatre} both follow the same structure, but differ in the content of the last sub-edge. Both edges are hence matched by \cref{pat:ann-plays-something}, which does not restrict content for this sub-edge. The SH pattern language also allows to define a pattern that matches both edges via a list of words as in \cref{pat:ann-plays-piano-theatre}. 
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( play/P ann/C */C )
+  \caption{"Ann plays something" pattern}
+  \label{pat:ann-plays-something}
+\end{pattern}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( likes/P ann/C [piano, theatre]/C )
+  \caption{"Ann plays piano or theatre" pattern}
+  \label{pat:ann-plays-piano-theatre}
+\end{pattern}
+
+Assuming we want to retrieve hyperedges that represent sentences which express something along the lines of "Ann engages in an artistic activity", we would probably also want to match \cref{hed:ann-plays-theatre}. However, to do so we need to extend the list of words in \cref{pat:ann-plays-piano-theatre} by "ballad" or resort to the more general \cref{pat:ann-plays-something}. Although this pattern also matches \cref{hed:ann-plays-dead}, which is probably not what we aim for in meaning. 
+
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+  ( plays/P ann/C ( a/M ballad/C ) ) 
+  \caption{Represents the sentence "Ann plays a ballad"}
+  \label{hed:ann-plays-ballad}
+\end{hedge}
+
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+   ( plays/P ann/C dead/C ) )
+  \caption{Represents the sentence "Ann plays dead"}
+  \label{hed:ann-plays-dead}
+\end{hedge}
+
+%
+%However is not possible define a pattern that matches based on some form of semantic similarity regarding content.
+%Referring to the example above this means using the SH framework it is not directly possible to to retrieve every sentences that declares that "Ann likes \textit{some kind of fruit}" or that "Ann likes \textit{fruits similar to apples}". This former would require to provide a comprehensive list of every fruit while the latter would require the user to specify all fruits he deems similar to apples.
+
+Utilizing some form of semantic similarity in regard to edge content in the SH matching process would allow the SH framework's users to define patterns, which describe generalisations of edge content. In the example outlined above, an option to include words that are semantically similar to "piano" and "theatre", would remove the need for the user to include all acceptable words that describe artistic activities in the pattern. 
+
+There exists a great variety of approaches for determining the semantic similarity of text as outlined in \cref{sec:semantic-similarity}. Fixed neural embedding-based semantic similarity measures -- specifically hybrid models, which integrate structural knowledge in their principally corpus-based approach -- have been identified in this work as one of the best performing methods to determine the similarity of single words (see \cref{sec:fixed-word-embedding-semantic-similairity}).
+\todo{should i "prove" this more specifically?}
+An in integration of FNESS into the SH pattern matching could alleviate the problem of lacking content generalisation as we have characterised it so far.
+
+%which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (NESS) measures.
+
+
+To retrieve all sentences that convey the meaning we are interested in, we probably also want to the query pattern to match hyperedges that are more structurally diverse than those, which we have inspected above. \Cref{hed:ann-plays-drama} is such an example, which would be matched by the structurally more complex \cref{pat:ann-plays-something-complex}. However, this pattern would also match \cref{hed:ann-plays-company}, which again is probably not what we want to express. 
+
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+ ( plays/P ann/C ( the/M ( main/M character/C ) ) ( in/T ( a/M drama/C ) ) ) )
+  \caption{Represents the sentence "Ann plays the main character in a drama"}
+  \label{hed:ann-plays-drama}
+\end{hedge}
+
+\begin{pattern}[h!]
+  \normalfont\sffamily
+  \centering
+  ( plays/P ann/C */C */S)
+  \caption{Structurally more complex "Ann plays something" pattern}
+  \label{pat:ann-plays-something-complex}
+\end{pattern}
+  
+\begin{hedge}[h!]
+  \normalfont\sffamily
+  \centering
+( plays/P ann/C ( an/M ( important/M role/C ) ( for/T ( her/M company/C ) ) )
+  \caption{Represents the sentence "Ann plays an important role for her company"}
+  \label{hed:ann-plays-company}
+\end{hedge}
+
+Given more complex hyperedge structures, it becomes increasingly difficult to construct patterns that may match all of the desired edges, especially if this set of edges is strongly defined by edge content. In this example we are interested in an interpretation of "play" that somehow relates to artistic activity. Since word semantics generally depend on textual context, so does the semantic similarity between them \cite[Section 2.2.3]{harispeSemanticSimilarityNatural2015}. An option to leverage some form of context sensitive semantic similarity for edge content in the SH pattern matching, would allow the user to express this form of context-specific content generalisations. From a user perspective this would involve providing content references in the form of larger text items such as sentences. Considering our example, this could be realised by defining the sentences represented by \cref{hed:ann-plays-piano}, \cref{hed:ann-plays-theatre}, \cref{hed:ann-plays-ballad} and \cref{hed:ann-plays-drama} as reference content.
+
+%Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
+
+Contextual semantic similarity measures generally aim to determine the SS between larger text items such as phrases, sentences or paragraphs \cite{vermaSemanticSimilarityShort2020, zadSurveyDeepLearning2021}. However, the task of integrating contextual semantic similarity into the SH pattern matching is not solved by assessing the SS of entire sentences. Instead the content of specific sub-edges (the content of the predicate in our example) shall be semantically compared to the corresponding parts of the reference contents, thereby taking the context of of the sub-edge, i.e. the content of their root edge into account. Contextual neural embedding-based approaches allow this form of semantic similarity measurement since embeddings for parts of a larger text item can be constructed by combining the corresponding token embeddings. These sub-edge- or part-specific embeddings can then be used for SS measurement. Although deep learning-based approaches, which directly operate on sentence level, may show even better performance \cite{chandrasekaranEvolutionSemanticSimilarity2021}, CNESS methods have been identified in this work to be very performant as well (see \cref{sec:contextual-embedding-semantic-similarity}). \todo{is this too weak of a statement?} 
+
+Additionally, neural embedding-based models could also be integrated more efficiently into the SH framework's matching process than DLSS measures, which require the pairwise -- computationally expensive --  processing of text items to determine their similarity \cite{reimersSentenceBERTSentenceEmbeddings2019}. In contrast, the embeddings of text items principally only need to be computed once and can then be used to perform the computationally inexpensive spatial measurements to determine their corresponding semantic similarities.
+
+%
+%\todo[inline]{
+%arguments for NESS (instead of DLSS):
+%- create embeddings for sub-edges based on the embedding of the entire edge \\
+%- embeddings for atoms based on root edge embeddings may be saved and added to the hypergraph structure, making later use much more efficient \\
+%- (because it is in line for FNESS, wich shall also be tested) \\
+%}
+
+%\todo[inline]{
+%This has to be adapted based on chapter 2 \\
+%-> add reference to FNESS/CNESS and derive relevancy of both for this work -> modify RQs \\
+%-> refer to the similarity threshold specifically when talking about controlling?
+%}
+
+Integrating neural embedding-based semantic similarity measures into the pattern matching process would allow for edge content generalisation and therefore would make the process more adaptive. Since NESS measures are generally based on machine learning methods and CNESS measures specifically are mostly based on deep neural network, they principally do not provide the openness that is inherent to the purely symbolic pattern matching process of the SH framework. In the sense of the open-opaque / strict-adaptive classification described above, this integration would mean a shift from openness to opaqueness and from strictness to adaptivity. To counteract the opaqueness introduced by an NESS integration into the SH pattern matching, allowing user control over the generalisation level can maintain some openness while still benefiting from increased adaptivity.
+
 
 %One approach for performing the retrieval would be to use a system which allows to specify some form of pattern which abstractly represents the statements they are trying to capture. This requires the definition of some form of formal pattern language\footnote{The \textit{Google Search} query language can be seen as a simple example of such a pattern language, albeit with a different use case focus: \url{https://support.google.com/websearch/answer/2466433?hl=en}} and possibly the prior transformation of the text corpus into some form of structured format to match against. Another approach is to use a system, which accepts example statements concretely representing the statements that are desired to be retrieved. Those systems may require a large number of positive and negative examples to be able to perform the retrieval. The two types of retrieval systems described here are in tendency situated in the realms of symbolic IR/IE and probabilistic ML/DL respectively.
 
@@ -545,74 +751,42 @@ The SH pattern defined by a user may among other things specify the structure of
 
 %There are additional operators in the pattern language such as the wildcard operator \textsf{*}, which can be used e.g. to match every atomic edge of a specific type and therefore discard content.
 
-To better illustrate the problem \cref{hed:ann-likes-bananas} and \cref{hed:ann-likes-apples} demonstrate how NL sentences are parsed to SH based on this simplified introduction the the SH representation.
-
-\begin{hedge}
-  \normalfont\sffamily
-  \centering
-  ( likes/P ann/C apples/C ) 
-  \caption{SH representation for the sentence "Ann likes apples"}
-  \label{hed:ann-likes-apples}
-\end{hedge}
-
-\begin{hedge}
-  \normalfont\sffamily
-  \centering
-  ( likes/P ann/C bananas/C ) 
-  \caption{SH representation for the sentence "Ann likes bananas"}
-  \label{hed:ann-likes-bananas}
-\end{hedge}
-
-\cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} both follow the same structure, but differ in the content of the last sub-edge. Both edges are hence matched by \cref{pat:ann-likes-something}, which does not specify content for this sub-edge.
-The SH pattern language also allows to define a pattern that matches both \cref{hed:ann-likes-apples} and \cref{hed:ann-likes-bananas} via a list of words as in \cref{pat:ann-likes-apples-and-bananas}. However is not possible define a pattern that matches based on some form of \textit{Semantic Relatedness} (SR) or \textit{Semantic Similarity} (SS) \cite{harispeSemanticSimilarityNatural2015} regarding content.
-Referring to the example above this means using the SH framework it is not directly possible to to retrieve every sentences that declares that "Ann likes \textit{some kind of fruit}" or that "Ann likes \textit{fruits similar to apples}". This former would require to provide a comprehensive list of every fruit while the latter would require the user to specify all fruits he deems similar to apples.
-
-\begin{pattern}[h!]
-  \normalfont\sffamily
-  \centering
-  ( likes/P Ann/C */C )
-  \caption{"Ann likes something" pattern}
-  \label{pat:ann-likes-something}
-\end{pattern}
-
-\begin{pattern}[h!]
-  \normalfont\sffamily
-  \centering
-  ( likes/P ann/C [apples, bananas]/C )
-  \caption{"Ann likes apples or bananas" pattern}
-  \label{pat:ann-likes-apples-and-bananas}
-\end{pattern}
-
-Utilizing some form of SR/SS regarding to edge content in the SH matching process would allow users to define patterns, which describe generalisations of edge content. There exists a great variety of approaches for determining the SR/SS of text, which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by CSS researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (NESS) measures.
-
-Word semantics generally depend on textual context and hence does the SS between words \cite[Section~2.2.3]{harispeSemanticSimilarityNatural2015}. Incorporating contextuality when extending the SH pattern matching process by SS therefore poses a central challenge. Context-dependent SS would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
-
-\todo[inline]{
-This has to be adapted based on chapter 2 \\
--> add reference to FNESS/CNESS and derive relevancy of both for this work -> modify RQs \\
--> derive in more detail why embedding based SS is chosen \\
--> argue why embedding models (-> caching embeddings / add discussing about effiency?) \\
--> refer to the similarity threshold specifically when talking about controlling?
-}
-
-Integrating NESS measures into the pattern matching process would allow for edge content generalisation and therefore would make the process more adaptive. As illustrated earlier, NESS measures principally do not provide the openness that is inherent to the pattern matching process of the SH framework. In the sense of the open-opaque / strict-adaptive classification described above this integration would mean a shift from openness to opaqueness and from strictness to adaptivity. To counteract the opaqueness introduced by an NESS integration into the SH pattern matching, allowing user control over generalisation levels can maintain some openness while still benefiting from increased adaptivity.
-
 % ========== 
 \section{Research Questions}
 \label{sec:research-questions}
 Based on the problem statement outlined above, we pose the following research questions:
 
 \subsection{Primary Question}
-\textbf{R} Can neural embedding-based semantic similarity regarding edge content be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more generalising patterns while providing control over the generalisation and therefore maintaining some openness of the pattern matching process?
+\textbf{R} Can neural embedding-based semantic similarity measures be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more semantically generalising matching regarding edge content while providing some control over the level of generalisation and therefore maintaining some openness of the pattern matching process?
 
 \subsection{Secondary Questions}
-\textbf{R.1} What neural embedding models would be the most suitable for accurately assessing semantic similarity within the Semantic Hypergraph pattern matching process while effectively addressing the challenges posed by contextuality?
+\textbf{R.1} Which specific neural embedding models would be the most suitable for assessing semantic similarity within the Semantic Hypergraph pattern matching process while addressing the challenges posed by contextuality?
 
-\textbf{R.2} How can neural embedding based semantic similarity effectively (and efficiently?) be integrated into the Semantic Hypergraph pattern matching?
+\todo[inline]{answered by background chapter and implementation specific considerations}
 
-\textbf{R.3} Does integration neural embedding-based semantic similarity improve the retrieval performance of the Semantic Hypergraph framework and how does it impact recall and precision when matching a pattern against a set of known desired matching results?
+\textbf{R.2} How can neural embedding based semantic similarity effectively and efficiently be integrated into the Semantic Hypergraph pattern matching?
 
-\textbf{R.4} How can the level of edge content related generalisation in the pattern matching process be effectively and transparently controlled?
+\todo[inline]{answered by the solution approach design and its working implementation}
+
+\textbf{R.3} Does integrating neural embedding-based semantic similarity measurements into the SH pattern matching improve the systems retrieval performance and how does it impact recall and precision? 
+
+\todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
+
+\textbf{R.4} Does the utilisation of contextual NESS enable the SH pattern matching to differentiate between desired and undesired edges in cases, which cannot be differentiated when utilising fixed word NESS?
+
+\todo[inline]{answered by \cref{sec:result-contextual-differentiation-ability}}
+
+\textbf{R.5} How can the level of edge content related generalisation in the pattern matching process be effectively and transparently controlled and how does this impact precision, recall and general retrieval performance?
+
+\todo[inline]{answered by the implementation of the similarity threshold and by the results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
+
+\textbf{R.6} How does measuring contextual semantic similarity corresponding to sub-edge content influence retrieval performance in comparison to measuring the semantic similarity between the entire candidate and reference content context items?
+
+\todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> sub tokens is better but more variation regarding the selection of reference edges, more ref. edges means less variation and better results in general}
+
+\textbf{R.7} What impact does the the selection of a specific NESS model -- both fixed word and contextual -- have on SH pattern matching retrieval performance? 
+
+\todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> better model does not clearly mean better result, but only two models for each NESS type were compared}
 
 
 
@@ -620,72 +794,73 @@ Based on the problem statement outlined above, we pose the following research qu
 % ========== 
 \chapter{Solution Approach}
 \label{cha:solution-approach}
-The proposed solution to the research questions posed in \cref{sec:research-questions} is to conceptualise and implement the integration of Neural Embedding based Semantic Similarity into the pattern matching of the Semantic Hypergraph framework, followed by a suitable evaluation of this integration. This chapter outlines the concept of the approach, while the implementation and evaluation are detailed in \cref{cha:implementation} and \cref{cha:evaluation} respectively.
+The proposed solution to the research questions posed in \cref{sec:research-questions} is to conceptualise and implement the integration of neural embedding based Semantic Similarity into the pattern matching of the Semantic Hypergraph framework, followed by a suitable evaluation of this integration. This chapter outlines the concept of the approach, while the implementation and evaluation are detailed in \cref{cha:implementation} and \cref{cha:evaluation} respectively.
 
 The integration strategy involves pinpointing the most opportune point within the SH framework's pattern matching for the inclusion of NESS. This  allows to identify which parts of the SH framework require modifications to accommodate NESS integration, as well as recognising any components that are currently missing. To facilitate this, the following section elaborates on the approach's general concept, addressing its core challenges and design decisions. 
 
-The system that is conceived by integrating NESS into the Semantic Hypergraph pattern matching will be  referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} or {\textbf{NESS-SHPM}}
+The system that is conceived by integrating NESS into the Semantic Hypergraph pattern matching will be  referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (NESS-SHPM)
 
-\section{General Concept of NESS-SHMP}
+\section{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching}
 The pattern matching process is described in \cref{sec:pattern-matching-process}, where the concepts of edge candidate content and pattern reference content are introduced. At a certain point in the process, the candidate content is matched against the reference content. In the original form of the SH pattern matching, this is limited to exact string-based or lemma-based matching. The SH framework's functionality will be extended by neural embedding based semantic similarity measurement based matching regarding edge content.
 
-The NESS measurement employs a neural network model to generate embeddings for the candidate and reference content, which in the following are referred to as candidate embedding and reference embeddings. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic similarity threshold \(s_t\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
+The NESS measurement involves generatin embeddings for the candidate and reference content, which in the following are referred to as \textit{candidate embedding} and \textit{reference embeddings}. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic \textit{similarity threshold} \(s_t\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
 
 Moreover, the integration of NESS-based content matching into the SH pattern matching process will take two forms: \textit{Fixed Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (FNESS-SHMP) and  \textit{Contextual Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (CNESS-SHMP). The particularities of these two system variants are elaborated in the following.
 
-\subsection{FNESS-SHPM}
+%\subsection{FNESS-SHPM}
 In the case of FNESS, embeddings are generated based on single words. Therefore the candidate content takes on the form of a \textit{candidate word} while the reference content may be one or multiple \textit{reference words}. It is considered potentially useful to leverage the generalisation capabilities that already exist in the SH pattern matching in the form of the lemma function. Hence a lemma based variant of FNESS extended SH pattern matching (LFNESS-SHMP) is also conceptualised. In the case of LFNESS, the candidate content takes on the form of the candidate words lemma.
 
-\subsection{CNESS-SHPM}
-In the case of CNESS, embeddings are generated based on context which can be phrases or complete sentences. In the SH framework those are represented in the form of hyperedges and therefore the candidate and content takes on the form of a \textit{candidate edge} and one or multiple \textit{reference edges}. 
+%\subsection{CNESS-SHPM}
+In the case of CNESS, embeddings are generated based on context which can be phrases or entire sentences. In the SH framework those are represented in the form of hyperedges and therefore the candidate and reference content take on the form of a \textit{candidate edge} and one or multiple \textit{reference edges}. 
 
-\section{Implementing NESS-SHMP within the Semantic Hypergraph Framework}
+\section{Integration into the Semantic Hypergraph Framework}
 
 The Semantic Hypergraph framework offers two primary avenues for enhancement: through the expansion of its pattern language or through the adaptation or refinement of the software interface utilised in the matching process. These approaches are not mutually exclusive and can be effectively combined.
 
-Leveraging the core principles of the SH framework, the most logical and straightforward method to enrich its pattern matching capabilities is by extending its pattern language. This strategy facilitates the concurrent application of NESS-based content matching alongside string- or lemma-based matching within the same matching process.
+Leveraging the core principles of the SH framework, the most logical and straightforward method to enrich its pattern matching capabilities is by extending its pattern language. This strategy also facilitates the concurrent application of NESS-based content matching alongside string- or lemma-based content matching within the same matching process.
 
-Therefore, the incorporation of NESS-SHMP into the existing SH framework encompasses three principal components: the extension of the pattern language, the requisite modifications to the pattern language processing and the actual NESS measurement calculations.
+Therefore, the incorporation of NESS-SHMP into the existing SH framework encompasses three principal components: the extension of the pattern language, the requisite modifications to the pattern language processing and adding the components necessary for the actual NESS measurement calculations.
 
 \todo[inline]{Here is probably the most suitable point to add a system/approach schema}
-
+\newpage
 
 \subsection{Extentions of the Pattern Language}
-For the inclusion of NESS-based content matching within the SH pattern language, the \textit{SemSim} functional pattern will be introduced. This addition is targeted at the functional pattern segment of the language, which is already predisposed to support flexible enhancements for SH pattern matching. This approach is consistent with the existing mechanism for integrating lemma-based matching capabilities into the framework.
+For the inclusion of NESS-based content matching within the SH pattern language, the \textit{SemSim} functional pattern will be introduced. This addition is targeted at the functional pattern segment of the language, which is already predisposed to support flexible enhancements for SH pattern matching. This approach is consistent with the existing mechanism of realising lemma-based content matching capabilities in the framework.
 
 
 \subsubsection{SemSim Functional Pattern}
-When constructing a SH pattern that should be matched should be matched against a hypergraph, the SemSim functional pattern can be utilised at those points in the pattern, where content should be matched by NESS. The added SemSim functional pattern (also referred to as SemSim pattern) has the following syntactical structure:
-
-\todo[inline]{adapt this to include the usage of a variable}
+When constructing a SH pattern that should be matched against a hypergraph, the \textit{SemSim} functional pattern can be utilised at those points in the pattern, where content should be matched by NESS. The added SemSim functional pattern (also referred to as SemSim pattern) has one of the following syntactical structures:
 
 \begin{center}
 %	\texttt{<semsim function> <reference content>/<hyperedge type>.<argument roles> <similarity threshold>}
-	\texttt{<SF> <RC>/<HT>.<AR> <ST>}\
+	\texttt{<SF> <IA><RC>/<HT>.<AR> <ST>}\ or \\
+	\texttt{<SF> <IA><VA>/<HT>.<AR> <RC> <ST>}\
 \end{center}
 
 It consists of different syntactical components, here represented by placeholders that are enclosed in brackets (\texttt{<>}). These components are explained in the following:
 
 %\subsubsection{SemSim Function (\texttt{SF})}
 \paragraph{SemSim Function (\texttt{SF})}
- The semsim function can be one of the following: \texttt{semsim-fix}, \texttt{semsim-fix-lemma} and \texttt{semsim-ctx}. These functions correspond to FNESS-, LFNESS- and CNESS-SHPM.
- 
+ The semsim function can be one of the following: \texttt{semsim-fix}, \texttt{semsim-fix-lemma} and \texttt{semsim-ctx}. These functions correspond to fixed word neural embedding-based, lemma-based fixed word neural embedding-based and contextual neural embedding-based semantic similarity measurement.
 
 %\subsubsection{Reference Content (\texttt{RC})} 
 \paragraph{Reference Content (\texttt{RC})} 
-The reference content is used to specify the reference word(s) for the  FNESS variant. The square bracket notation which is already part of the SH pattern language is leveraged to pass multiple words as a list. The reference edges that are needed for the contextual NESS variant is not given via the semsim functional pattern itself, but as a software interface argument to the matching process due to practical considerations (see \cref{sec:pl-extension-limitations}).
-%(see \cref{sec:CNESS-reference-context}).
+The reference content is used to specify the reference word(s) for the FNESS variant. The square bracket notation which is already part of the SH pattern language is leveraged to pass multiple words as a list. The reference edge(s) that is needed for the contextual NESS variant is not given via the semsim functional pattern itself, but as a software interface argument to the matching process due to practical considerations (see \cref{sec:pl-extension-limitations}).
+
+
+\paragraph{Variable Declaration (\texttt{VA})} 
+If the content of the sub-edge captured by the SemSim sub-pattern should be captured in a variable, the second variant of the syntax applies. This notation is in line with the usage of the lemma functional pattern illustrated in \cref{sec:sh-pattern-matching}.
 
 
 %\subsubsection{Hyperedge Type (\texttt{HT}) and Argument Roles (\texttt{AR})}
-\paragraph{Hyperedge Type (\texttt{HT}) and Argument Roles (\texttt{AR})}
-yada yada see above \todo{extend when chapter 2 is ready}
+\paragraph{Hyperedge Type (\texttt{HT}),  Argument Roles (\texttt{AR}) and Innermost Atom Operator (\texttt{IA})} These pattern components can be utilised in the same way as illustrated above in \cref{sec:sh-pattern-matching} for the lemma functional pattern.
+Hyperedge type and argument roles are matched following the symbolic rules also described above. The innermost atom operator (\texttt{>}) can be placed in front of the reference content or the variable declaration if applicable.
 
 
 %\subsubsection{Similarity Threshold (\texttt{ST})}
 \paragraph{Similarity Threshold (\texttt{ST})}
 %The similarity threshold used to decide whether candidate and reference content matched, given that the NESS measurement has already been computed. This applies to the fixed as well as to the contextual variant of NESS. 
-The similarity threshold \(s_t\) can optionally be specified for a specific occurrence of the SemSim functional pattern, since it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
+The similarity threshold \(s_t\) can optionally be specified for a specific occurrence of the SemSim functional pattern, but it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
 
 \subsubsection{Example Usages}
 
@@ -719,15 +894,17 @@ To illustrate the usage of the SemSim functional pattern, some examples are give
 
 \subsubsection{Limitations of the Pattern Language Extension}
 \label{sec:pl-extension-limitations}
-The utilisation of the fixed variant of NESS-SHMP is possible solely via the SemSim functional pattern. This means that all information that is required to apply FNESS-based content matching, specifically the reference content and the similarity threshold, can be given in a SH pattern. In contrast, it was found impractical to give the reference edges needed for the contextual NESS variant via a SH pattern. While the reference content argument could generally be used for that, this would result in very exhaustive patterns and impair their readability for humans. Therefore the conceptual design choice was made to pass the reference edges via the software interface of the SH pattern matching.
+The utilisation of the fixed variant of NESS-SHMP is possible solely via the SemSim functional pattern. This means that all information that is required to apply FNESS-based content matching, specifically the reference content and the similarity threshold, can be included in a SH pattern. In contrast, it was found impractical to provide the reference edges needed for the contextual NESS variant via a SH pattern. While the reference content argument could generally be used for that, this would result in very exhaustive patterns and impair their readability for humans. Therefore the conceptual design choice was made to pass the reference edges via the software interface of the SH pattern matching.
 
 
 \subsection{Modification of the Pattern Language Processing}
-This section outlines the integration of SemSim functional pattern processing with the current pattern language processing. The process is triggered when a pattern, incorporating a SemSim pattern, is matched against a specific hyperedge and the SemSim pattern is reached without any prior mismatches. At this point, the SemSim pattern captures a sub-edge for processing, which includes the symbolic matching of the hyperedge type and argument roles, as well as extracting the necessary information for NESS measurement computations.
+This section outlines the integration of SemSim functional pattern processing with the current pattern language processing. The process is triggered when a pattern, incorporating a SemSim pattern, is matched against a specific hyperedge and the SemSim pattern is reached without any prior mismatches. At this point, the SemSim pattern captures a sub-edge for processing, which includes the symbolic structural matching. 
+%of the hyperedge type and possibly argument, as well as the application of the innermost atom operator, if specified. 
+Additionally the necessary information for NESS measurement computations is extracted.
 
 The operation of SemSim pattern processing changes based on the specific SemSim function applied. With FNESS-SHMP or LFNESS-SHMP, the process extracts the candidate word(s) or their lemma(s) from the identified sub-edge and the reference word(s) from the pattern. This extraction process requires the sub-edge to be atomic, which implies combination with the innermost atom operator to ensure functionality in all cases. For CNESS, it conducts a standard string-based matching of the reference content. Therefore  utilizing the wildcard operator as a reference content argument is sensible in most practical use cases. For any NESS-SHMP variant, the similarity threshold is extracted from the SemSim pattern, if given
 
-Existing components manage the symbolic matching of hyperedge type and argument roles, consistent with the standard pattern matching. The SemSim function, along with the similarity threshold (when provided), candidate words and reference words for (L)FNESS-SHMP, are passed to the newly designed NESS computation components.
+Existing components manage the symbolic matching of hyperedge type and argument roles, as well as the application of the innermost atom operator, consistent with the standard pattern matching. The SemSim function, along with the similarity threshold (when provided), candidate words and reference words for (L)FNESS-SHMP, are passed to the newly designed NESS computation components.
 
 
 %\subsection{NESS Measurement Computations}
@@ -752,14 +929,10 @@ Existing components manage the symbolic matching of hyperedge type and argument 
 %
 %\subsubsection{Embedding Similarity Measurement}
 %The cosine similarity between the candidate and reference embeddings is computed and compared to the given similarity threshold. If the computed similarity is greater than the threshold, the candidate and reference content are considered to match. 
-%
-%
 
 
-
-
-\subsection{NESS Measurement Computations}
-Upon reaching this phase, the NESS-SHPM process has already either extracted candidate and reference contents via pattern language processing (in FNESS-SHPM) or received them through software interface arguments (in CNESS-SHPM). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
+\subsection{Neural Embedding-based Semantic Similarity Measurement}
+Upon reaching this phase, the NESS-SHPM process has already either extracted candidate and reference contents via pattern language processing (in case of FNESS-SHPM) or received them through software interface arguments (in case ofCNESS-SHPM). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
 
 \todo{How it the NESS model specified? talk about ness config?}
 
@@ -768,7 +941,7 @@ Upon reaching this phase, the NESS-SHPM process has already either extracted can
 The creation of fixed neural embeddings necessitates only the candidate and reference words. Given that each word maps directly to a specific embedding, a straightforward lookup in the chosen fixed neural embedding model suffices to produce the necessary embeddings for both candidate and reference.
 
 \subsubsection{Contextual Neural Embeddings}
-The development of contextual embeddings for the candidate and reference involves a sequence of steps, premised on the assumption that these embeddings should mirror the specific sub-edge of the candidate edge captured by the SemSim pattern and its analogous sub-edge(s) in the reference edge(s). Thereby the reference edges need to structurally match (with disregard to edge content) the pattern which contains the SemSim functional pattern, so that these reference sub-edges can be identified. To allow for verification of this assumption an alternative approach to constructing contextual neural embeddings does not account for sub-edge matching and only consists of the initial two stages of the construction process outlined below:
+The development of contextual embeddings for the candidate and reference involves a sequence of steps, premised on the assumption that these embeddings should mirror the specific sub-edge of the candidate edge captured by the SemSim pattern and its analogous sub-edge(s) in the reference edge(s). Thereby the reference edges need to structurally match (with disregard to edge content) the pattern which contains the SemSim functional pattern, so that these reference sub-edges can be identified. An alternative approach to constructing contextual neural embeddings does not account for sub-edge matching and only consists of the initial two stages of the construction process outlined below:
 
 \begin{enumerate}
 	\item Reconstructing phrases or sentences from the candidate and reference edges (deemed context items).
@@ -783,8 +956,6 @@ The procedure calculates the cosine similarity between the embeddings of candida
 
 
 \todo{why cosine similarity? why max similarity?}
-
-
 
 
 
@@ -907,8 +1078,9 @@ Additional parameters need to be given to the NESS-SHMP process, which includes 
 \chapter{Evaluation}
 \label{cha:evaluation}
 In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the NESS-SHPM system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. 
-%In this case study...
+\todo{term differentiation: NESS-SHMP and (F/C)NESS}
 \todo[inline]{refer to the RQs more specifically? how are they going to be answered?}
+
 
 \section{Case Study: Conflicts}
 The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021}, where expressions of conflict are extracted from a given SH using a single SH pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the SH is an expression of conflict or not. Or framed differently, the task is to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different SH patterns and corresponding configuration of the NESS-SHMP system by matching them against a labelled dataset of hyperedges.
@@ -1667,6 +1839,7 @@ In this section the previously presented evaluation results are discussed. It sy
 \todo[inline]{Missing observations and findings regarding "no breakpoints" (in recall or general?)}
 
 \subsection{Retrieval Performance Improvement}
+\label{sec:result-retrieval-performance-improvement}
 
 \begin{itemize}
 
@@ -1702,7 +1875,7 @@ In this section the previously presented evaluation results are discussed. It sy
 \item Using a generally better performing NESS model (regarding established benchmarks) does not generally improve the NESS-SHMP retrieval performance \\
 \textbf{Supporting Observations:} \Cref{obs-itm:lemma-FNESS-cn-better-than-w2v}, \Cref{obs-itm:word-FNESS-w2v-better-than-cn}, \Cref{obs-itm:CNESS-e5-better-than-gte}
 
-\item Using the sub tokens embedding instead of the all tokens embedding improves retrieval performance, but using the all tokens embedding makes it less sensible to the selection of the reference edges
+\item Using the sub tokens embedding instead of the all tokens embedding improves CNESS-SHMPM retrieval performance, but using the all tokens embedding makes it less sensible to the selection of the reference edges
 \\ \textbf{Supporting Observations:} \Cref{obs-itm:CNESS-better-without-AT}, \Cref{obs-itm:CNESS-lower-variation-with-AT}
 
 \item CNESS-SHPM retrieval performance improves with a higher number of reference edges and is less sensible to the specific selection of reference edges
@@ -1712,21 +1885,23 @@ In this section the previously presented evaluation results are discussed. It sy
 
 
 \subsection{Retrieval Precision Behaviour}
+\label{sec:result-retrieval-precision-behaviour}
 
 \begin{itemize}
 	\item The precision of NESS-SHMPM correlates with the ST until a specific value of the ST, which itself is specific to the NESS type, NESS model (and other CNESS parameters, especially the selection of reference edges)
 \\ \textbf{Supporting Observations:} \Cref{obs-itm:FNESS-ST-precision-correlates}, \Cref{obs-itm:CNESS-ST-precision-correlates-until-crosspoint}, \Cref{obs-itm:FNESS-ST-limit}
 
-\item CNESS-SHMP achieves on average the same precision as the original conflict pattern and lemma-based FNESS, although CNESS-SHMP can achieve a higher precision, it depends on the selection of the reference edges \\
+\item CNESS-SHMP achieves on average the same precision as the original conflict pattern and lemma-based FNESS, although CNESS-SHMP can achieve a higher precision dependent on the selection of the reference edges \\
 \textbf{Supporting Observations:} \Cref{obs-itm:CNESS-precision-variation-higher-ASTR}, \Cref{obs-itm:CNESS-highest-precision-equal-original}
 
 
 \end{itemize}
 
 \subsection{Contextual Differentiation Ability}
+\label{sec:result-contextual-differentiation-ability}
 
 \begin{itemize}
-	\item CNESS-SHPM is able differentiate when matching a set of edges where purely symbolic SHPM and FNESS-SHMPM cannot, i.e. cases where context is needed to determine the correct semantics of word \\
+	\item CNESS-SHPM is able differentiate when matching against a set of edges where purely symbolic SHPM and FNESS-SHMPM cannot, i.e. in cases where context is needed to determine the correct semantics of a word \\
 	\textbf{Supporting Observations:} \Cref{obs-itm:CNESS-higher-f1-for-highest-f1-difference}, \Cref{obs-itm:PLES-more-diverse-for-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-not-in-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-in-lowest-f1-difference}
 	
 	\item While CNESS-SHPM achieves a highest difference in retrieval performance for sets of edges, where FNESS-SHMP does not match, it also achieves a better retrieval performance in cases where FNESS-SHPM does match \\
@@ -1749,6 +1924,7 @@ In this section the previously presented evaluation results are discussed. It sy
 \section{Conceptual Improvements}
 Somehow extend the token span used for CNESS beyond the word tokens but not to all tokens. Use the tokens of the next best sub-edge e.g. although in the case of a predicate this is probably the entire sentence most of the time.
 
+try using different levels of contexutalisation --> build the embeddings from different layers of the model
 
 different direction: employ knowledge based semantic similarity to maintain highest level of openness
 
@@ -1757,9 +1933,12 @@ implemnt multiprocessing, i.e. server process for both hypergraph and semsim mat
 
 other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
 
-for CNESS, pre-compute embeddings for all possible edges (is this feasible?)
+for CNESS, pre-compute embeddings for all possible edges (is this feasible?) and add it to the hypergraph
+--> instead of caching add edges to the hypergraph or build secondary structure that mirrors the hypergraph and hold different embeddings for different models
 
 \section{Further Evaluations}
+other datasets, other tasks
+--> mention the task the telmo wanted to try
 
 
 % ========== 
