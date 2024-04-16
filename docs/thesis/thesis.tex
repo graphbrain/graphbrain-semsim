@@ -58,10 +58,24 @@
 \usepackage{newfloat}
 \usepackage{enumitem}
 \usepackage{algpseudocode}
+\usepackage{verbatim}
+\usepackage{listings}
 \usepackage{amssymb}
 \usepackage{multirow}
 \usepackage{multicol}
+\usepackage{array}
 \usepackage[export]{adjustbox}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,  % Use small typewriter font
+  columns=flexible,            % Use flexible spacing between characters
+  captionpos=b,                % Place the caption below the listing
+  frame=tb,                    % Add top and bottom frames to the listing
+  keepspaces=true              % Preserve spaces in the code, useful for alignment
+}
+
+
 
 %\usepackage{array}  % needed for '\newcolumntype' command
 %\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
@@ -90,6 +104,17 @@
 \Crefname{hedge}{Hyperedge}{Hyperedges}
 \crefname{hedge}{hyperedge}{hyperedges}
 
+
+
+\DeclareFloatingEnvironment[
+  listname = {List of Pseudocodes} ,
+  name = Pseudocode,
+  placement = h,
+  within = none
+]{pseudo}
+
+\Crefname{pseudo}{Pseudocode}{Pseudocodes}
+\crefname{pseudo}{pseudocode}{pseudocodes}
 
 
 \usepackage{lipsum}  % produces dummy text
@@ -123,9 +148,14 @@
 \author{Max Reinhard \\ \small Matrikelnummer: 359417}
 
 \date{\today}
+
+\newcommand{\cmb}{\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)}}
+\newcommand{\fhfokus}{\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
+
 \publishers{Supervised by Prof. Dr. Manfred Hauswirth \\
-	Additional guidance by Prof. Dr. Camille Roth\thanks{Centre Marc Bloch (An-Institut der Humboldt-Universität zu Berlin)} \\ 
-	and Dipl.-Math. Thilo Ernst\thanks{Fraunhofer-Institut für offene Kommunikationssysteme}}
+	Additional guidance by Prof. Dr. Camille Roth\cmb, \\
+	Dr. Telmo Menezes\footnotemark[1] \ and Dipl.-Math. Thilo Ernst\fhfokus
+}
 	
 \maketitle
 
@@ -293,6 +323,7 @@ To make the meaning of the relation of sub edges in a parent edge more explicit,
 
 
 \subsection{Translation Process}
+\label{sec:sh-translation-process}
 For natural language text to be represented in the Semantic Hypergraph framework, it needs to be translated (or parsed). This aspect of the framework is mostly irrelevant for this work in is therefore only described briefly here. The translation is realised by machine learning based software components. This is a high-level description of the process: 
 
 \begin{enumerate}
@@ -592,7 +623,7 @@ The \textit{Transformer} architecture was first presented by \cite{vaswaniAttent
 
 \paragraph{Massive Text Embedding Benchmark}
 Since the field of contextual embeddings is rapidly evolving, it is not trivial to asses the current state-of-the-art and pinpoint the best performing model available for semantic similarity measurements.
-The \textit{Massive Text Embedding Benchmark} (MTEB) \cite{muennighoffMTEBMassiveText2023} offers support for this task. It is comprised of eight evaluation task, involving 58 datasets and 112 languages, including ten datasets for the semantic similarity task. An online leaderboard showcases the performance of all models that have been benchmarked by \citef{muennighoffMTEBMassiveText2023} and of those that have been submitted by third-parties.\footnote{MTEB Leaderboard: \url{https://huggingface.co/spaces/mteb/leaderboard} (Accessed on Oct 9, 2023)}. In the following, two of the best performing models according to the online MTEB leaderboard at the time of access are presented.
+The \textit{Massive Text Embedding Benchmark} (MTEB) \cite{muennighoffMTEBMassiveText2023} offers support for this task. It is comprised of eight evaluation task, involving 58 datasets and 112 languages, including ten datasets for the semantic similarity task. An online leaderboard showcases the performance of all models that have been benchmarked by \citef{muennighoffMTEBMassiveText2023} and of those that have been submitted by third-parties.\footnote{MTEB Leaderboard: \url{https://huggingface.co/spaces/mteb/leaderboard} (Accessed on Oct. 9, 2023)}. In the following, two of the best performing models according to the online MTEB leaderboard at the time of access are presented.
 
 \textit{EmbEddings from bidirEctional Encoder rEpresentations} (E5) \cite{wangTextEmbeddingsWeaklySupervised2022}:
 E5 uses the same architecture as BERT and also initialises the model with the weights obtained from BERT's pre-training. This is followed by training using a contrastive learning approach with weak supervision signals derived from a large curated dataset of text pairs. The E5 model was developed in three variants: \textit{small}, \textit{base} and \textit{large}, whose reported performance increases with size. There also exists a second version of the model (E5-v2), wich was trained on a larger quantity and more diverse text pair datasets. \footnote{See \url{https://huggingface.co/intfloat/e5-base-v2/discussions/1}} E5-v2 models outperform the corresponding original models on most benchmarks, while performing on par in the semantic similarity task.
@@ -800,7 +831,7 @@ The integration strategy involves pinpointing the most opportune point within th
 
 The system that is conceived by integrating NESS into the Semantic Hypergraph pattern matching will be  referred to as \textit{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching} (NESS-SHPM)
 
-\section{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching}
+\section{Neural Embedding-based Semantic Similarity extended SH Pattern Matching}{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching}
 The pattern matching process is described in \cref{sec:pattern-matching-process}, where the concepts of edge candidate content and pattern reference content are introduced. At a certain point in the process, the candidate content is matched against the reference content. In the original form of the SH pattern matching, this is limited to exact string-based or lemma-based matching. The SH framework's functionality will be extended by neural embedding based semantic similarity measurement based matching regarding edge content.
 
 The NESS measurement involves generatin embeddings for the candidate and reference content, which in the following are referred to as \textit{candidate embedding} and \textit{reference embeddings}. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic \textit{similarity threshold} \(s_t\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
@@ -824,7 +855,8 @@ Therefore, the incorporation of NESS-SHMP into the existing SH framework encompa
 \todo[inline]{Here is probably the most suitable point to add a system/approach schema}
 \newpage
 
-\subsection{Extentions of the Pattern Language}
+\subsection{Extention of the Pattern Language}
+\label{sec:extension-pattern-language}
 For the inclusion of NESS-based content matching within the SH pattern language, the \textit{SemSim} functional pattern will be introduced. This addition is targeted at the functional pattern segment of the language, which is already predisposed to support flexible enhancements for SH pattern matching. This approach is consistent with the existing mechanism of realising lemma-based content matching capabilities in the framework.
 
 
@@ -898,6 +930,7 @@ The utilisation of the fixed variant of NESS-SHMP is possible solely via the Sem
 
 
 \subsection{Modification of the Pattern Language Processing}
+\label{sec:modifications-pattern-language-processing}
 This section outlines the integration of SemSim functional pattern processing with the current pattern language processing. The process is triggered when a pattern, incorporating a SemSim pattern, is matched against a specific hyperedge and the SemSim pattern is reached without any prior mismatches. At this point, the SemSim pattern captures a sub-edge for processing, which includes the symbolic structural matching. 
 %of the hyperedge type and possibly argument, as well as the application of the innermost atom operator, if specified. 
 Additionally the necessary information for NESS measurement computations is extracted.
@@ -932,6 +965,7 @@ Existing components manage the symbolic matching of hyperedge type and argument 
 
 
 \subsection{Neural Embedding-based Semantic Similarity Measurement}
+\label{sec:neural-embedding-based-semantic-similarity-measurement}
 Upon reaching this phase, the NESS-SHPM process has already either extracted candidate and reference contents via pattern language processing (in case of FNESS-SHPM) or received them through software interface arguments (in case ofCNESS-SHPM). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
 
 \todo{How it the NESS model specified? talk about ness config?}
@@ -963,51 +997,573 @@ The procedure calculates the cosine similarity between the embeddings of candida
 \chapter{Implementation}
 \label{cha:implementation}
 
-\section{Relevant external Software Libraries used}
-Here list libs and models to be referenced later.
+In this chapter we will present and explain the implementation of the solution approach described above in \cref{cha:solution-approach}, i.e. the actual software realisation of NESS-SHMP.
 
-Word2Vec via Gensim
-SentenceTransformers
-Transformers
-SpaCy
-
-\section{Modules newly added to the SH Framework}
-Semsim instances
-
-reference edge sample modification parameter
-
-
-\section{Modifications of the SH Pattern Matching}
-skip semsim
-
-root edges
-
-\subsection{Token position passing}
-The matching process of the SH framework is extended by passing the tok pos down (this teferences implicitly the recursive implementagion of the pattern matching which might be too technical)
-
-
-\subsection{SH PL implementation differences}
-Differences between the formal notation and the notation used in the implementation
---> innermost atoms operator, variable functional pattern etc.
-does this need to be included?
-
-\section{Modifications to the Hypergraph database}
-is this really necessary? tok pos etc, but not actually specific to semsim
+Implementation details, which are considered not to contribute to the general understanding of the software system, are omitted here -- i.e. code listings are pseudocode. For better readability and improved clarity, the names of symbols -- such as variables, classes and functions -- may not fully adhere to how they actually appear in software.
 
 
 
+\section{Overview of \textit{graphbrain}}
+An implementation of the Semantic Hypergraph framework is provided as part of the publicly available Python package \textit{graphbrain}.\footnote{graphbrain: \url{https://graphbrain.net/index.html}} The package contains the \texttt{graphbrain} Pyhton module, which itself consists of multiple submodules. 
 
-\paragraph{NESS configuration}
-\label{sec:ness-config}
-Additional parameters need to be given to the NESS-SHMP process, which includes the specific neural embedding model to use 
+Here, we focus on two submodules: Firstly on the \texttt{graphbrain.patterns} submodule, which is primarily responsible for implementing the pattern matching process and therefore was the central object  of modifications and extension. Secondly, we focus on the newly created \texttt{graphbrain.semsim} submodule, in which the NESS measurement are implemented.
+
+Of secondary importance are the \texttt{graphbrain.hypergraph} and \texttt{graphbrain.hyperedge} submodules, which implement the hypergraph and hyyperedge structure themselves. 
+
+
+\subsubsection{Hypergraph Implementation}
+A specific hypergraph is implemented in form of a key-value storage, for which currently \textit{LevelDB}\footnote{LevelDB: \url{https://github.com/google/leveldb}} and \textit{SQLite}\footnote{SQLite: \url{https://www.sqlite.org/}} are support as database backends. Interfaces for the key-value storages are implemented in \texttt{graphbrain.memory}. However, details of this implementation are irrelevant for this work.
+
+
+\subsubsection{NL to SH Parser Implementation}
+\label{sec:nl-to-sh-parser-implementation}
+The translation process from natural language to the SH representations (see \cref{sec:sh-translation-process}), depends significantly on the established NLP library \textit{spaCy} \cite{honnibal2020spacy}. Although the translation itself holds limited relevance for this work, it is important to note that the atomic edges in a SH representation of a sentence are closely related to the tokens resulting from the tokenisation of this sentence by the spaCy lexical tokeniser.\footnote{spaCy Lexical Tokeniser: \url{https://spacy.io/usage/linguistic-features\#tokenization}}
+
+
+%Differences between SH Formalism and graphbrain
+%
+%Some features of the SH Pattern Language and therefore the SH Pattern Matching Process are implemented differently in graphbrain then they are defined in the pattern language.
+%Specifically variables, options list and the innermost atom operator are implemented in graphbrain in the form of functional patterns. These requires a slightly different syntax for patterns to be processable by graphbrain, than would be valid in the formal SH pattern language.
+%
+%--> is this actually relevant, if i only use formal patterns in the evaluation chapter?
+%--> does not hurt to mention it, but only relevant if it comes up later
+
+
+\section{Pattern Processing: \texttt{graphbrain.patterns}}
+The \texttt{patterns} module has been restructured from a monolithic design into multiple submodules to facilitate implementing the necessary modifications to the pattern language processing (see \cref{sec:modifications-pattern-language-processing}), which are required to support the extended pattern language (see \cref{sec:extension-pattern-language}). This includes the creation of the \texttt{patterns.semsim} submodule. Furthermore, some adjustments to the software architecture have been made to simplify the implementation of contextual NESS extended pattern matching (see \cref{sec:graphbrain.patterns.matcher}). Apart of the SemSim-specific submodule, the \texttt{patterns.entrypoints} and \texttt{patterns.matcher} submodules also hold relevance for this work.
+
+Some general intricacies of the implementation NESS extended Semantic Hypergraph pattern matching are discussed below, before the specific implementation in the aforementioned submodules is presented.
+
+
+\subsubsection{In-Line- vs. Post-Processing}
+While the processing of the SemSim functional pattern in the sense of pattern language processing always needs to happen in-line with the regular pattern matching, the actual NESS computations may happen as a post-processing step. When the pattern matching process arrives at a SemSim functional pattern, the symbolic part of the SemSim pattern -- i.e. the hyperedge type and the argument roles -- are always processed immediately, hence in-line. In the case of the contextual variant, the CNESS computations always occur as a post-process. This means that for a given edge and pattern, which contains at least one occurrence of a \texttt{semsim-ctx} sub-pattern, the entire edge and pattern are first matched in regards to everything else. The information necessary for the CNESS measurement gets only recorded at this point and the actual computations take place afterwards, if everything else has matched. This design choice has two advantages: Firstly, the context information does not have to be passed down to the SemSim functional pattern matching step and secondly, the computationally expensive CNESS measurements can be avoided, if unnecessary.
+
+\subsubsection{SemSim Instances and SemSim Skipping}
+The recording of the information necessary for NESS measurements takes on the form of \textit{SemSim Instances}, which can then processed mostly independent from the SH pattern matching.  
+It is possible to configure the pattern matching process via a \textit{SemSim Skipping} option of its software interface, so that the NESS computations are skipped entirely. This means -- also for \texttt{semsim-fix} sub-patterns -- only the symbolical matching takes place and the SemSim Instances are returned alongside the symbolic matching results. With skipping disabled, the \texttt{semsim-ctx} related instances are still post-processed as part of the pattern matching process. This is not the case with skipping enabled, which is is especially useful, if the NESS measurements shall be computed with a set of different NESS configuration parameters (e.g. different similarity thresholds), as is to be expected in an experimental evaluation.
+
+\subsubsection{Token Position Passing}
+To enable the contextual NESS measurement computations, the \textit{Token Position} has to be provided. In this work, this describes a data structure containing the positions of the tokens corresponding to atoms in a hyperedge. Position here refers to the index of a token in the token sequence, that resulted from the tokenisation of a sentence, when it was translated into a hyperedge (see \cref{sec:nl-to-sh-parser-implementation}). An example of a tokenised sentence with its corresponding hyperedge and token position is given in \cref{tab:example-token-position}. 
+The structure of a token position follows the same structure as the hyperedge, which means the token position can be seen as a hyperedge itself (and it is implemented this way). The hypergraph data structure was extended, so that every root edge has an attribute that stores its token position. For the CNESS measurements it is necessary to identify which tokens correspond to the sub-edge that is captured by \texttt{semsim-ctx} sub-pattern. Therefore, the token position is passed down alongside the recursive matching process, so that the corresponding sub token position and therefore the relevant token indices can be recorded. 
+
+
+\begin{table}
+\centering
+\begin{tabular}{lccccccc}
+
+\textbf{Tokenised Sentence} &	  & jerome & eats &  & an & apple & \\
+\textbf{Token Indices} &	  & 0	& 1 & & 2 & 3 & \\
+
+	  \midrule
+
+\textbf{Hyperedge} &	  ( & \textsf{eats/P} & \textsf{jerome/C} & ( & \textsf{an/M}  & \textsf{apple/C} & ) ) \\
+\textbf{Token Position} & 	  ( & 1 & 0 & ( & 2 & 3 & ) )
+\end{tabular}	
+\caption{Example of a token position}
+\label{tab:example-token-position}
+\end{table}
+
  
-\begin{itemize}
-	\item Default similarity threshold
-	\item Specific NESS model
-	\item CNESS embedding prefix
-	\item CNESS all tokens option
-\end{itemize}
+\subsection{Entry-Point and Pattern Matcher} 
+ 
+\subsubsection{\texttt{graphbrain.patterns.entrypoints}}
+\label{sec:graphbrain.patterns.entrypoints}
+This module contains all entry-points for pattern matching, primarily serving the hypergraph class. The central entry-point is the \texttt{match\_pattern} method (see \cref{psd:match-pattern-function}), which matches a pattern against an edge. This method incorporates a \texttt{skip\_semsim} argument to control SemSim skipping. A new \texttt{Matcher} object (see \cref{sec:graphbrain.patterns.matcher}) is constructed for every matching procedure (i.e pattern-edge pair). This object maintains the results of the symbolic pattern matching or FNESS extended pattern matching, as well as the SemSim instances that may have been recored due to CNESS extended pattern matching or enabled SemSim skipping. After successful symbolic matching, the \texttt{match\_semsim\_instances} function (see \cref{sec:graphbrain.patterns.semsim.processing}) is called from here, if skipping is disabled. 
 
+%when the pattern features a \texttt{semsim-fix} sub-pattern. Moreover, the \texttt{Matcher} object may record SemSim instances if the pattern encompasses a \texttt{semsim-ctx} sub-pattern. 
+%In case the \texttt{skip\_semsim} argument is activated, SemSim instances are always recored and returned, if the edge matches the pattern structurally and it involves any \texttt{semsim} sub-pattern.
+
+
+\begin{pseudo}
+\begin{lstlisting}
+def match_pattern(edge, pattern, ref_edges, skip_semsim, hypergraph):
+    matcher: Matcher = Matcher(
+        edge, pattern, skip_semsim, hypergraph
+    )
+
+    if skip_semsim:
+        return matcher.results, matcher.semsim_instances
+
+    if matcher.results and match_semsim_instances(
+            matcher.semsim_instances,
+            pattern,
+            edge,
+            ref_edges,
+            hypergraph
+    ):
+        return matcher.results
+
+    return []
+\end{lstlisting}
+\caption{\texttt{match\_pattern} function}
+\label{psd:match-pattern-function}
+\end{pseudo}
+
+
+
+\subsubsection{\texttt{graphbrain.patterns.matcher}}
+\label{sec:graphbrain.patterns.matcher}
+This module contains the newly created \texttt{Matcher} class (see \cref{psd:matcher-class}), designed to function as a stateful object, facilitating the implementation of CNESS extend pattern matching. This object records the symbolic matching results and SemSim instances in its \texttt{Matcher.results} and \texttt{Matcher.semsim\_instances} attributes respectively. It also has an \texttt{Matcher.skip\_semsim} and a \texttt{Matcher.hg} (hypergraph) attribute that store the passed argument values. The classes functionality is primarily realised in the \texttt{Matcher.match} method, which serves as the pattern matching recursion entry-point. From this method the \texttt{match\_semsim} function is called, if a \texttt{semsim} pattern is encountered.
+
+
+\begin{pseudo}
+\begin{lstlisting}
+class Matcher:
+    def __init__(self, edge pattern, skip_semsim, hypergraph):
+        self.hg = hypergraph
+        self.skip_semsim = skip_semsim
+
+        self.semsim_instances = []
+        self.results = self.match(
+            edge, pattern, current_results=[], tok_pos=get_tok_pos(edge)
+        )
+\end{lstlisting}
+\caption{Pattern \texttt{Matcher} class}
+\label{psd:matcher-class}
+\end{pseudo}
+
+
+\subsection{SemSim Pattern In-Line Processing}
+The processing of the \texttt{semsim} functional patterns that occurs in-line with the symbolic matching is implemented in the following submodules of the \texttt{patterns.semsim} module:
+
+
+\subsubsection{\texttt{graphbrain.patterns.semsim.matching}}
+This module contains the \texttt{match\_semsim} function (see \cref{psd:match-semsim-function}) which is called by a \texttt{Matcher} object. For FNESS extended pattern matching, the \texttt{match\_semsim\_fix} function (see \cref{sec:graphbrain.patterns.semsim.matchingfix}) is called -- also if SemSim skipping is enabled -- to extract the candidate word form the sub-edge and perform the matching with the structural part of the \texttt{semsim-fix} pattern. For CNESS extended pattern matching the pattern is only matched symbolically. If the applicable operation of these two returns a \textit{Match}, then a SemSim instance is recorded by the matcher in the case of CNESS extended pattern matching or enabled SemSim skipping.
+
+\begin{pseudo}
+\begin{lstlisting}
+def match_semsim(
+    matcher, semsim_function, pattern, edge, current_results, tok_pos
+):
+    semsim_type, semsim_fix_use_lemma = get_semsim_type(semsim_fun)
+    similarity_threshold = extract_similarity_threshold(pattern)
+
+    results = []
+    candidate_word = None   
+
+    if semsim_type == SemSimType.FIX:
+        semsim_fix_results, candidate_word = match_semsim_fix(
+            pattern,
+            edge,
+            current_results,
+            matcher.skip_semsim,
+            semsim_fix_use_lemma,
+            similarity_threshold,
+            hypergraph
+        )
+        if semsim_fix_results is not None:
+            results = semsim_fix_results
+
+    if semsim_type == SemSimType.CTX:
+        results = matcher.match(edge pattern, current_results, tok_pos)
+
+    if results and (matcher.skip_semsim or semsim_type == SemSimType.CTX):
+        add_semsim_instance(
+            matcher, 
+            semsim_type, 
+            edge, 
+            candidate_word, 
+            tok_pos, 
+            similarity_threshold
+        )
+
+    return results
+\end{lstlisting}
+\caption{\texttt{match\_semsim} function}
+\label{psd:match-semsim-function}
+\end{pseudo}
+
+
+\subsubsection{\texttt{graphbrain.patterns.semsim.matching\_fix}}
+\label{sec:graphbrain.patterns.semsim.matchingfix}
+This module contains the \texttt{match\_semsim\_fix} function (see \cref{psd:match-semsim-fix-function}) which is called by the \texttt{match\_semsim} function.
+The method first tries to extract the candidate word from the edge, which requires it to be an atom. If this succeeds, a modified version of the pattern is created, where the pattern content is replaced by the wildcard operator. This modified pattern is then matched against the atomic edge to check if matches structurally. If this is the case and SemSim skipping is disabled, the reference words are extracted from the pattern and the \texttt{semsim} function is called, which is the entry-point to the actual NESS measurement implementation.
+
+\begin{pseudo}
+\begin{lstlisting}
+def match_semsim_fix(
+    pattern, edge, current_results, skip_semsim, use_lemma, threshold, hg,
+):
+    candidate_word = get_candidate_word(edge, use_lemma, hg)
+    if not candidate_word:
+        return None, None
+
+    pattern_with_wildcard_content = replace_pattern_content(pattern, '*')
+    if not matches_atomic_pattern(edge, pattern_with_wildcard_content):
+        return [], None
+
+    if not skip_semsim:
+        reference_words = extract_reference_words(pattern)
+
+        if not semsim(
+            semsim_type=SemSimType.FIX,
+            threshold=threshold,
+            cand_word=candidate_word,
+            ref_words=reference_words,
+        ):
+            return [], candidate_word
+
+    return [current_results], candidate_word
+ 
+\end{lstlisting}
+\label{psd:match-semsim-fix-function}
+\caption{\texttt{match\_semsim\_fix} function}
+\end{pseudo}
+
+\subsection{SemSim Instance Post-Processing}
+The post-processing of SemSim instances is realised in the following submodules:
+
+\subsubsection{\texttt{graphbrain.patterns.semsim.instances}}
+
+This module primarily defines the \texttt{SemSimInstance} data class (see \cref{psd:simsim-instance-class}), which always specifies the SemSim type and the edge that was captured by the corresponding \texttt{semsim} pattern. Additionally, it contains the candidate word in case of FNESS and the token position in case of CNESS. The similarity threshold is stored here, if it was extracted from the pattern that this instance was generated from.
+
+\begin{pseudo}
+\begin{lstlisting}
+@dataclass
+class SemSimInstance:
+    type: SemSimType
+    edge: Hyperedge
+    word: Optional[str] = None
+    tok_pos: Optional[Hyperedge] = None
+    threshold: Optional[float] = None
+\end{lstlisting}
+\label{psd:simsim-instance-class}
+\caption{\texttt{SemSimInstance} class}
+\end{pseudo}
+
+\subsubsection{\texttt{graphbrain.patterns.semsim.references}}
+\label{sec:graphbrain.patterns.semsim.references}
+This module primarily implements the \texttt{get\_ref\_edges\_tok\_poses} function (see \cref{psd:get-ref-edges-tok-poses-function}), which is required to obtain the token positions of the sub-edges that are captured, when the pattern is matched against the reference edges. Since we do not want any potential \texttt{semsim-fix} sub-patterns to be processed in-line, but instead be recorded as SemSim instance, SemSim skipping is enabled for this process. The return values of this function are cached, so that the symbolic matching needs to occur only once per reference edge and pattern pair.
+
+
+\begin{pseudo}
+\begin{lstlisting}
+@cached
+def get_ref_edges_tok_poses(pattern, ref_edges, hypergraph):
+    ref_matchers = [
+        Matcher(ref_edge, pattern, skip_semsim=True, hypergraph)
+        for ref_edge in ref_edges
+    ]
+    return [instance.tok_pos for instance in matcher.semsim_instances]
+\end{lstlisting}
+\caption{\texttt{get\_ref\_edges\_tok\_poses} function}
+\label{psd:get-ref-edges-tok-poses-function}
+\end{pseudo}
+
+\subsubsection{\texttt{graphbrain.patterns.semsim.processing}}
+\label{sec:graphbrain.patterns.semsim.processing}
+This module includes the \texttt{match\_semsim\_instances} function (see \cref{psd:match-semsim-instancess-function}), which acts as the entry-point for post-processing SemSim instances. The function is invoked by the \texttt{match\_pattern} entry-point (see  \cref{sec:graphbrain.patterns.entrypoints}) of the pattern matching process, if symbolic matching is successful and SemSim skipping is disabled. Additionally, this function can be accessed by external third-party software that utilize the graphbrain framework leveraging SemSim post-processing.
+
+The function processes \textit{SemSim} instances assumed to be the result of matching the given pattern against the given edge. It retrieves the token positions for the reference edges (see \cref{sec:graphbrain.patterns.semsim.references}) and collects the necessary token positions to handle a specific \textit{SemSim} instance, which is necessary since the pattern may contain multiple SemSim  sub-patterns. For each instance, the \texttt{semsim} function is called to invoke the NESS measurement computations. If successful for each instance, the edge is considered to match the \textit{SemSim} instances (and therefore the pattern).
+ 
+\begin{pseudo}
+\begin{lstlisting}
+def match_semsim_instances(
+    semsim_instances, pattern, edge, threshold, ref_words, ref_edges, hypergraph
+):
+    ref_tok_poses_per_ref_edge = None
+    if ref_edges:
+        ref_tok_poses_per_ref_edge = get_ref_tok_poses
+            pattern, ref_edges, hypgergraph
+        ) 
+   
+    for instance_idx, instance in enumerate(semsim_instances):
+        threshold = threshold or instance.threshold
+
+        ref_tok_poses = None
+        if ref_tok_poses_per_ref_edge:
+            ref_tok_poses = [
+                ref_tok_poses[instance_idx]
+                for ref_tok_poses in ref_tok_poses_per_ref_edge
+            ]
+
+        if not semsim(
+            semsim_type=instance.type,
+            threshold=threshold,
+            cand_word=instance.word,
+            ref_words=ref_words,
+            cand_edge=edge,
+            cand_tok_pos=instance.tok_pos,
+            ref_edges=ref_edges,
+            ref_tok_poses=ref_tok_poses,
+            hypergraph=hypergraph
+        ):
+            return False
+
+    return True
+\end{lstlisting}
+\caption{\texttt{match\_semsim\_instances} function}
+\label{psd:match-semsim-instancess-function}
+\end{pseudo}
+
+ 
+%\newpage
+\section{NESS Measurements: \texttt{graphbrain.semsim}}
+The \texttt{graphbrain.semsim} module contains the required functionality for the NESS measurements. The entry-point for this is located in the \texttt{graphbrain.semsim.interface} module and the \texttt{graphbrain.semsim.matcher} module contains the SemSim matcher classes that perform the actual NESS measurement computations.
+
+
+\subsection{SemSim Matcher Interface}
+
+\subsubsection{\texttt{graphbrain.semsim.interface}}
+This module contains the \texttt{semsim} entry-point function, as well as an \texttt{init\_matcher} function. Additionally it includes the 
+%\texttt{SemSimType} and 
+\texttt{SemSimConfig} class definition. Core functionality of the module is to maintain different matcher objects that correspond to the different SemSim types, to avoid repeating the computationally expensive initialisation of these objects.
+
+The \texttt{semsim} function retrieves the matcher that corresponds to the given SemSim type and passes on the received keyword arguments to this matcher object (see \cref{psd:semsim-function}). A specific matcher object with a specific configuration for a SemSim type can be initialised via the \texttt{init\_matcher} function, which is publicly exposed. 
+%The \texttt{SemSimType} is an enum class with the members \texttt{SemSimType.FIX} and \texttt{SemSimType.CTX}, corresponding to FNESS and CNESS. 
+SemSim configurations can be provided via an instance of the \texttt{SemSimConfig} data class (see \cref{psd:semsimconfig-class}), which always contains the NESS model name and may also contain a default similarity threshold value. For CNESS specifically, the configuration may also specify an embedding prefix and the usage of the all-tokens option, which is further elaborated in \todo{ref!}.
+
+\begin{pseudo}
+\begin{lstlisting}
+def semsim(
+    semsim_type, **keyword_arguments
+):
+    matcher = get_matcher(matcher_type=semsim_type)
+    return matcher.similar(**keyword_arguments)
+\end{lstlisting}
+\caption{\texttt{semsim} function}
+\label{psd:semsim-function}
+\end{pseudo}
+
+\begin{pseudo}
+\begin{lstlisting}
+@dataclass
+class SemSimConfig:
+    model_name: str
+    similarity_threshold: Optional[float] = None
+    embedding_prefix: Optional[str] = None
+    use_all_tokens: Optional[bool] = None
+\end{lstlisting}
+\caption{\texttt{SemSimConfig} data class}
+\label{psd:semsimconfig-class}
+\end{pseudo}
+
+
+\subsubsection{\texttt{graphbrain.semsim.matcher.matcher}}
+The abstract \texttt{SemSimMatcher} class (see \cref{psd:semsimmatcher-class}) contained in this module, serves as a unifying interface for the specific matcher implementations that correspond to FNESS and CNESS respectively. It's \texttt{SemSimMatcher.similar} is called by the \texttt{semsmim} interface function (see \cref{psd:semsim-function}), calls the \texttt{similarities} method of the specific matcher subclass and compares the maximum of the returned similarity values with either the passed or the default similarity threshold.
+
+
+\begin{pseudo}
+\begin{lstlisting}
+@abstractclass
+class SemSimMatcher:
+    def __init__(self, config):
+        self.similarity_threshold = config.similarity_threshold
+
+    def similar(self, threshold, **keyword_arguments):
+        similarities = self.similarities(**keyword_arguments)
+        if not similarities:
+            return False
+
+        similarity_threshold = threshold or self.similarity_threshold
+        if max(similarities) < similarity_threshold:
+            return False
+
+        return True
+
+    @abstractmethod
+    def similarities(self, **keyword_arguments):
+        raise NotImplementedError
+\end{lstlisting}
+\caption{Abstract \texttt{SemSimMatcher} class}
+\label{psd:semsimmatcher-class}
+\end{pseudo}
+
+
+\subsection{Fixed Word Embedding Matcher}
+The \texttt{graphbrain.semsim.matcher.fixed} module implements the fixed word neural embedding based semantic similarity measurement in form of the \texttt{FixedEmbeddingMatcher} class (see \cref{psd:fixedmatcher-class}), which inherits from the \texttt{SemSimMatcher} class.
+
+Fixed word embedding models typically operate with a predefined vocabulary, necessitating an initial check to ensure that the candidate word and the reference words are included. As mentioned in \cref{sec:fixed-word-embedding-semantic-similairity}, certain models can handle unknown words by employing subword tokens, allowing them to generalise beyond their initial vocabulary. Should embeddings be available for all relevant words, the model can then calculate the pairwise similarity between the candidate word and the reference words.
+
+The established NLP library \textit{gensim} \cite{rehurek_lrec} is employed to utilise fixed word embedding models, providing a unifying interface for various different models. Cosine similarity between two words can be computed using the \texttt{model.similarity} method, assuming the \texttt{model} has been initialised through \textit{gensim}. Apart of subword-based models, a trained fixed neural word embedding model does not require computational operations to generate embeddings. Instead, it is fundamentally realised as a key-value storage of words and their corresponding embeddings.
+
+%self.model_key_prefix = get_model_key_prefix(config.model_name)
+%        if self.model_key_prefix:
+%            for word in [cand_word] + ref_words:
+%                word = self.model_key_prefix + word
+
+
+\begin{pseudo}
+\begin{lstlisting}
+class FixedEmbeddingMatcher(SemSimMatcher):    
+    def __init__(self, config):
+        self.model = load_model(config.model_name)
+
+    def similarities(self, cand_word, ref_words):
+        if not self.in_vocab([cand_word] + ref_words):
+            return None
+
+        return [
+            self.model.similarity(cand_word, ref_word) for ref_word ref_words
+        ]
+\end{lstlisting}
+\caption{\texttt{FixedEmbeddingMatcher} class}
+\label{psd:fixedmatcher-class}
+\end{pseudo}
+
+
+\subsubsection{Fixed Word Neural Embedding Models}
+Two specific fixed word neural embedding models have been selected from the models, which are available through gensim
+\footnote{gensim data repository: \url{https://github.com/piskvorky/gensim-data}} 
+to be utilised in this work. When referring to the simplified model names in the following chapters, we mean the specific gensim models corresponding to the identifiers stated below.
+
+\paragraph{\textit{word2vec}} The \texttt{word2vec-google-news-300} model is chosen as the baseline embedding model for fixed word NESS and by therefore for general NESS. This specific variant of the word2vec model was trained using the skip-gram negative-sampling strategy (see \cref{sec:fixed-word-embedding-semantic-similairity}) on a Google News corpus, encompassing approximately 100 billion words.
+
+\paragraph{\textit{conceptnet-numberbatch}} The \texttt{conceptnet-numberbatch-17-06-300} model is selected to represent the state-of-the-art of fixed word neural embedding models. Although the MetaVec model has been identified to outperform Conceptnet Numberbatch in our literature review (see \cref{sec:fixed-word-embedding-semantic-similairity}), this model is not available through gensim. Furthermore, it shall be noted that the selected model corresponds to version 17.06 of Conceptnet Numberbatch, while the most recent -- and reportedly better performing -- iteration of the model is version 19.08.\footnote{Conceptnet Numberbatch 19.08:\\\url{http://blog.conceptnet.io/posts/2019/conceptnet-numberbatch-19-08/}\\(Accessed on Oct. 9th, 2023)} We utilize the older version of the model, because the newer version is not available through gensim. 
+
+\vspace{\baselineskip}
+The aforementioned limitations in model performance are accepted in favour of implementation simplification. They are considered tolerable for this work, since our primary interest in the model selection is not to produce state-of-the-art results, but to compare the performance of different embedding models in the context of NESS-SHPM.
+
+% key prefix: "/c/en/"
+
+\subsection{Contextual Embedding Matcher}
+The \texttt{graphbrain.semsim.matcher.context} module realises the contextual neural embedding based semantic similarity measurement in form of the \texttt{ContextEmbeddingMatcher} class (see \cref{psd:contextualmatcher-class}), which inherits from the \texttt{SemSimMatcher} class. Computing the contextual neural embedding-based semantic similarity involves multiple steps as outlines in \cref{sec:neural-embedding-based-semantic-similarity-measurement}, which are in the following presented in there specific implementation.
+
+First, the tokens that correspond to the candidate and reference edges have to be retrieved, in the following referred to as \textit{candidate tokens} and \textit{reference tokens}. It shall be noted here, that the candidate edge is not the sub-edge that was captured by the SemSim pattern, that triggered this CNESS measurement. Instead, it is the edge against which the pattern is matched via the \texttt{match\_pattern} entry-point (see \cref{sec:graphbrain.patterns.entrypoints}). The candidate edge as well as the reference edges match the pattern structurally and are root edges.
+%(i.e. they represent entire sentences in the text corpus based on which the hypergraph was created) 
+In the hypergraph data structure, every root edge has an attribute containing its corresponding token sequence (see \cref{sec:nl-to-sh-parser-implementation}).
+
+Secondly, the token indices are extracted from the candidate token position and reference token positions, which correspond to the sub-edge that was captured by the SemSim pattern. The candidate token position was passed down to the \texttt{match\_semsim} function (see \cref{psd:match-semsim-function}) and was stored in the SemSim instance and the reference token position was retrieved via matching of the reference edges against the pattern (see \cref{psd:get-ref-edges-tok-poses-function}). The extracted token indices are in the following referred to as \textit{candidate lexical indices} and \textit{reference lexical indices}, since they correspond to the lexical tokenisation via spaCy.
+
+Given the tokens and the relevant indices, we have all information needed to compute the sub-edge specific (and therefore token-specifc) contextual embeddings. To elaborate on the computing procedure, we first have to introduce the specific contextual neural embedding models, that are utilised in this work.
+
+\begin{pseudo}[p!]
+\begin{lstlisting}
+class ContextEmbeddingMatcher(SemSimMatcher):
+    def __init__(self, config: SemSimConfig):
+        super().__init__(config=config)
+        self.use_all_tokens: bool = config.use_all_tokens
+        self.spacy_pipe: Language = create_spacy_pipeline(config.model_name)
+
+    def similarities(
+            self, cand_edge,cand_tok_pos, ref_edges, ref_tok_poses, hypergraph
+    ):
+        cand_tokens = get_edge_tokens(cand_edge, hg)
+        refs_tokens = [get_edge_tokens(ref_edge, hg) for ref_edge in ref_edges]
+
+        cand_tok_idxes = get_tok_idxes(
+            cand_tok_pos, len(cand_tokens), self.use_all_tokens
+        )
+        refs_tok_idxes = [
+            get_tok_idxes(ref_tok_pos, len(ref_tokens), self.use_all_tokens)
+            for ref_tok_pos, ref_tokens in zip(ref_tok_poses, refs_tokens)
+        ]
+        
+        cand_embedding = self.get_embedding(cand_tokens, cand_tok_idxes)
+        refs_embeddings = [
+            self.get_embedding(ref_tokens, ref_tok_idxes)
+            for ref_tokens, ref_tok_idxes in zip(refs_tokens, refs_tok_idxes)
+        ]
+        
+        return [
+            cosine_similarity(cand_embedding, ref_embedding)
+            for ref_embedding in refs_embeddings
+        ]
+
+    @cached
+    def get_embedding(self, tokens, tok_idxes):
+        trf_data = self.spacy_pipe(prefixed_tokens).trf_data
+        return get_trf_embedding_of_lex_tokens(trf_data, prefixed_tok_idxes)
+\end{lstlisting}
+\caption{\texttt{ContextEmbeddingMatcher} class}
+\label{psd:contextualmatcher-class}
+\end{pseudo}
+
+%self.embeddng_prefix_tokens = get_string_tokens(config.embedding_prefix)
+%        prefixed_tokens: self.embedding_prefix_tokens + tokens
+%        prefixed_tok_idxes: [
+%            tok_idx + len(self.embedding_prefix_tokens) for tok_idx in tok_idxes
+%        ]
+
+\begin{pseudo}[p!]
+\begin{lstlisting}
+def get_trf_embedding_of_lex_tokens(trf_data, lex_tok_idxes):
+    trf_tok_idxes = get_trf_tok_idxes(lex_tok_idxes, trf_data.alignment)
+    trf_embeddings = trf_data.model_output.last_hidden_state[trf_tok_idxes])
+    return average_pool(trf_embeddings, trf_data.attention_mask[trf_tok_idxes]))
+
+def average_pool(last_hidden_states, attention_mask):
+    last_hidden = last_hidden_states.masked_fill(attention_mask.bool(), 0.0)
+    return last_hidden.sum() / attention_mask.sum()
+\end{lstlisting}
+\caption{\texttt{get\_trf\_embedding\_of\_lex\_tokens} and \texttt{average\_pool} functions}
+\label{psd:get-mebedding-subfunction}
+\end{pseudo}
+
+
+
+\subsubsection{Contextual Neural Embedding Models}
+Two specific contextual neural embedding models have been selected to be utilised in this work. Both models are Transformer-based and can be instantiated via the established NLP library \textit{transformers} \cite{wolfTransformersStateoftheArtNatural2020}. When referring to the simplified model names in the following chapters, we mean the specific models presented below.
+
+\paragraph{\textit{GTE}} This model has been chosen because it was found to show stat-of-the-art performance in our literature review (see \cref{sec:contextual-embedding-semantic-similarity}). It is used in its \textit{GTE-large}\footnote{GTE-large: \url{https://huggingface.co/thenlper/gte-large}} variant, which is the largest and best performing variant available.
+
+\paragraph{\textit{E5}} This model has been selected because it was found to perform competitively compared to GTE (see \cref{sec:contextual-embedding-semantic-similarity}) and shares important implementation intricacies. It is utilised in its \textit{E5-large-v2}\footnote{E5-large-v2: \url{https://huggingface.co/intfloat/e5-large-v2}} variant, which is the largest variant of the second version of the model family and also the best performing variant of the model.
+
+\vspace{\baselineskip}
+Since both models are based on BERT, they also both make use of its tokenizer, the \textit{WordPiece} tokenizer \cite{devlinBERTPretrainingDeep2019}. Another commonality is the application of the same average pooling procedure to construct the final embedding from the token embeddings (see \cref{psd:get-mebedding-subfunction}).
+
+\subsubsection{Token Alignment}
+Central to the token-specific embedding computation is the creation of a modified \textit{spaCy transformer pipeline}. This means inserting a custom model in place of the default model of the Transformer-based spaCy pipeline, which itself is built upon the transformers library. We do not utilise the models via transformers directly, because the application through the spaCy pipeline provides us with necessary token alignment information.
+
+After passing the tokens through the spaCy transformer pipeline, we can retrieve the \textit{transformer data} containing the token embeddings and the token \textit{alignment data}, (see \cref{psd:get-mebedding-subfunction}), which itself consists of \textit{alignment indices} and \textit{alignment lengths}. We have to align the lexical token indices that have been obtained from the token position with the corresponding token indices of the WordPiece tokenisation. This is illustrated by an example in \cref{tab:token-alignment}.
+
+%\begin{enumerate}
+%	\item Reconstructing phrases or sentences from the candidate and reference edges (deemed context items).
+%    \item Producing embeddings for these context items using the designated contextual neural embedding model.
+%    \item Identifying the sub-edge within the reference that aligns with the candidate's sub-edge captured by the SemSim pattern.
+%    \item Associating the identified candidate and reference sub-edges with their respective sub-embeddings derived from the context item embeddings.
+%    \item Generating the final embeddings for both candidate and reference based on these sub-embeddings.
+%\end{enumerate}
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcccccccccccccc|r}
+\textbf{S:} & \multicolumn{14}{c|}{Don't go into the devil's H.Q.} & \textbf{Length}\\
+\midrule
+\textbf{LT:} & Do & \multicolumn{3}{c}{n't} & go & into & the & devil &  \multicolumn{2}{c}{'s} & \multicolumn{4}{c|}{H.Q.} & 8\\
+\textbf{WT} & \multicolumn{2}{c}{don} & ' & t & go & into & the & devil & '  & s & h & . & q & .  & 13\\
+\midrule
+\textbf{AI:} & 0 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 14 \\
+\textbf{AL:} & 1 & 3 &   &   & 1 & 1 & 1 & 1 & 2 &   &  4  &   &    &  & 8 \\
+\end{tabular}
+\caption{Example of token alignment: Sentence (\textbf{S}), Lexical Tokenisation (\textbf{LT}), WordPiece Tokenisation (\textbf{WT}), Alignment Indices (\textbf{AI}), Alignment Length (\textbf{AL})}
+\label{tab:token-alignment}
+\end{table}
+
+
+Alignment lengths (\(AL\)) is a list that specifies for every lexical token index, how many \textit{transformer indices} correspond to it. Alignment indices (\(AI\)) is a list that contains transformer indices. In the following an element at index \(i\) of a list \(L\) will be referred to as \(L_i\). To identify which transformer indices \(I_\text{trf}\) correspond to a lexical token index \(i_{\text{lex}}\), we have to take the alignment indices from index \(i_{\text{sum}}\) to index \(i_{\text{sum}} + AL_{i_{\text{lex}}}\), where \(i_{\text{sum}} = \sum_{j = 0}^{i_{\text{lex}} - 1} AL_j\) is the sum of all alignment lengths before \(AL_{i_\text{lex}}\). This results in following formula: 
+
+\[I_{\text{trf}}(i_\text{lex}) = \{AI_k, \  k \in [\sum_{j = 0}^{i_{\text{lex}} - 1} AL_j, \sum_{j = 0}^{i_{\text{lex}} - 1} AL_j + AL_{i_{\text{lex}}}]\}\]
+
+Based on this formula, the token alignment procedure is implemented (see \cref{psd:token-alignment-subfunctions}). Although, it should be noted, that a transformer index may occur multiple times in the alignment indices. That happens if a transformer tokens corresponds to multiple lexical tokens, as can be seen in the example above in \cref{tab:token-alignment}. Since we are not interested in the reverse mapping, we circumvent this problem by simply checking if a transformer index is already contained in \(I_\text{trf}\), while building the list iteratively.
+
+\begin{pseudo}[htp]
+\begin{lstlisting}
+def get_trf_tok_idxes(n_lex_tokens: int, lex_tok_idxes, alignment):
+    lex2trf_idx = get_lex2trf_tok_idx(len(lex_tok_idxes), alignment)
+    trf_tok_idxes = []
+    for lex_tok_idx in lex_tok_idxes:
+        for trf_idx in lex2trf_idx[lex_tok_idx]:
+            if trf_idx not in trf_tok_idxes:
+                trf_tok_idxes.append(trf_idx)
+    return trf_tok_idxes
+
+
+def get_lex2trf_tok_idx(n_lex_toks, alignment):
+    lex2trf_idx = {}
+    trf_idx = 0
+    for lex_idx in range(n_lex_toks):
+        trf_tok_len = alignment.lengths[lex_idx]
+        lex2trf_idx[lex_idx] = alignment.indices[trf_idx:trf_idx + trf_tok_len]
+        trf_idx += trf_tok_len
+    return lex2trf_idx
+\end{lstlisting}
+\caption{\texttt{get\_trf\_tok\_idxes} and \texttt{get\_lex2trf\_tok\_idx} functions}
+\label{psd:token-alignment-subfunctions}
+\end{pseudo}
+
+Given the transformer indices that correspond to the lexical indices retrieved from the token positions, we can now extract the token embeddings that correspond to the respective lexical tokens. The token embeddings are the states of the last hidden layers of the contextual neural embedding model. Average pooling these hidden states yields the final contextual embedding specific to the sub-edge that was originally captured by the SemSim pattern. These sub-edge specific embedding are computed for the candidate edge and reference edges and the pairwise cosine similarity is measured (see \cref{psd:get-mebedding-subfunction}).
 
 
 
@@ -1052,25 +1608,6 @@ Additional parameters need to be given to the NESS-SHMP process, which includes 
 
 
 
-%-----------
-
-%For fixed NESS-based matching, the processing occurs in-line with symbolic pattern matching, seamlessly integrating as a component of the overall pattern matching process. However, due to the intricacies involved with contextual NESS-based matching, this processing is performed as a post-process.
-
-
-%
-%\subsubsection{In-Line- vs. Post-Processing}
-%While the processing of the SemSim functional pattern in the sense of pattern language processing always needs to happen in-line with the regular pattern matching, the actual NESS computations may happen as a post-processing step. When the pattern matching process arrives at a SemSim functional pattern, the symbolic part of the SemSim pattern -- i.e. the hyperedge type and the argument roles -- are always processed imeediatly, hence in-line. The result of this structural matching is then passed up to the calling procedure of the matching process. Whether its content is matched in-line, i.e. the NESS mesaurment compuations take place immediatly depends on the NESS type and the configuration of the pattern matching process. 
-%
-%In the case of the contextual variant, the CNESS compuations always occur as a post-process. This means that for given edge and a given pattern, which contains at least on ocurrence of a semsim-ctx sub-pattern, the entire edge and pattern are first matched in regards to everything that is not a semsim-ctx sub-pattern. This means that the information necessary for the CNESS computation gets only recorded at this point. The actual computations only take place afterward, if everything else has matched. This design choice is made, because it facilitated the realisation of the contextual NESS based matching. Firstly, the context information does not have to be passed down to the SemSim functional pattern matching step and secondly, the CNESS computations are computationally relatively expensive and should therefore be avoided if unnecessary
-%
-%
-%
-%\subsubsection{SemSim Skipping and SemSim Instances}
-%
-%%The FNESS computations may take place in-line, as the information required for them is already contained in the argument of the SemSim functional pattern, nonetheless the may also
-%
-%It is possible to configure the pattern matching process via the \textit{SemSim skipping} option of its software interface, so that the NESS computations are skipped entirely. In this case only the symbolical matching takes place when matching against a pattern that contains occurrences of the SemSim functional pattern. For each of these occcurence, a \textit{SemSim instance} will be recorded, that is added to the results of the symbolic matching. These instances can then be subjected to processing completely independent from the pattern language processing. This is especially useful if the NESS measurements shall be computed with a set of different NESS configuration parameters (e.g. different similarity thresholds), as is to be expected in an experimental evaluation. 
-%
 
 
 
@@ -1277,6 +1814,8 @@ Based on the result of the preliminary evaluation in \cref{sec:wildcard-conflict
 \label{sec:conflict-dataset}
 To conduct an evaluation which assesses the retrieval performance of the NESS-SHPM system it is necessary to have a dataset of edges with labels that state whether an edge is an expression of conflict or not. Since such a dataset does not exists it needs to be constructed. In the following the construction process of this \textit{conflict dataset} (CD), which is used for the evaluation in this case study, and the datasets characteristics are discussed.
 
+\todo[inline]{dataset creation i separate Python package `graphbrain-semsim`}
+
 
 \subsection{Base Edge Set}
 \label{sec:base-edge-set}
@@ -1371,6 +1910,8 @@ Conflict Dataset (CD)				& 2000 		& 539 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
 \section{Evaluation Process}
 In this evaluation multiple \textit{evaluation runs} are conducted. Each evaluation run correspond to a SHPM process in which a pattern is matched against the CD. In the case of patterns utilizing NESS this requires that additional parameters in form of an \textit{NESS configuration} are given to the matching process. An evaluation run is described by an \textit{evaluation (run) configuration}. For each evaluation run the \textit{evaluation metrics} are computed. 
 
+\todo[inline]{evaluation process is also implemented in separate Python package `graphbrain-semsim`}
+
 \subsection{Evaluation Run Configurations}
 An evaluation configuration consists of the following parameters: \todo{add references to chapter 4}
 \begin{itemize}
@@ -1403,7 +1944,7 @@ An evaluation run name has the form: \texttt{CP NM-AT r-N-X t-TS}
 %\begin{center}
 %\texttt{<CP> <NM>-<AT> <r-N-X> <t-TS>}
 %\end{center}
-In a specific evaluation run name, the placeholders (capitalised letters) are replaced with actual values. Such a name always begins with the conflict pattern (CP) name in its shortened form: \textit{original}, \textit{semsim-fix}, \textit{semsim-fix-lemma} or \textit{semsim-ctx}. In case of a NESS utilizing conflict pattern, the NESS model (NM) name is added in its shortened form: word2vec as \textit{w2v} and conceptnet-numberbatch as \textit{cn}. If the NESS type is CNESS, the usage of the all-tokens (AT) option is indicated by adding \texttt{-at} to the model name. If the option is not used, it is not added. Also in case of CNESS, the reference edge set ID N-X is indicated by appending \texttt{r-N-X}. For all NESS utilizing evaluation runs, the similarity threshold \(t_s\) is indicated by appending \texttt{t-TS}, where \texttt{TS} is the value of \(t_s\).
+In a specific evaluation run name, the placeholders (capitalised letters) are replaced with actual values. Such a name always begins with the conflict pattern (CP) name in its shortened form: \textit{original}, \textit{semsim-fix}, \textit{semsim-fix-lemma} or \textit{semsim-ctx}. In case of a FNESS utilizing conflict pattern, the NESS model (NM) name is added in its shortened form: word2vec as \textit{w2v} and conceptnet-numberbatch as \textit{cn}. If the NESS type is CNESS, the usage of the all-tokens (AT) option is indicated by adding \texttt{-at} to the model name. Also in case of CNESS, the reference edge set ID N-X is indicated by appending \texttt{r-N-X}. For all NESS utilizing evaluation runs, the similarity threshold \(t_s\) is indicated by appending \texttt{t-TS}, where \texttt{TS} is the value of \(t_s\).
 
 
 
@@ -1921,6 +2462,15 @@ In this section the previously presented evaluation results are discussed. It sy
 
 % ========== 
 \chapter{Future Work}
+\section{Similarity Threshold / NESS Configuration}
+for practical applications, choosing a similarity threshold that corresponds to the desired semantic generalisation level is crucial.
+the similiarity threshold in the default configurations of the graphbrain implementaion for the two semsim matcher type has been set to the threshold value that corresponds to the best performance in the evaluation on the conflict dataset.
+
+additional ideas regarding this are discussed in...
+
+employing new state-of-the-art models, could improve performance although we have not seen a clear indication for that in the results.
+
+
 \section{Conceptual Improvements}
 Somehow extend the token span used for CNESS beyond the word tokens but not to all tokens. Use the tokens of the next best sub-edge e.g. although in the case of a predicate this is probably the entire sentence most of the time.
 
@@ -1929,16 +2479,20 @@ try using different levels of contexutalisation --> build the embeddings from di
 different direction: employ knowledge based semantic similarity to maintain highest level of openness
 
 \section{Implementation Improvements}
-implemnt multiprocessing, i.e. server process for both hypergraph and semsim matchers. 
-
-other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
+%implemnt multiprocessing, i.e. server process for both hypergraph and semsim matchers. 
+%other option would be to leverage python shared memory capabilities but is likely to be less stable and has less scaling potential
+%--> this is more graphbrain in general
 
 for CNESS, pre-compute embeddings for all possible edges (is this feasible?) and add it to the hypergraph
 --> instead of caching add edges to the hypergraph or build secondary structure that mirrors the hypergraph and hold different embeddings for different models
 
+allow for gridsearch regarding similarity threshold
+
 \section{Further Evaluations}
 other datasets, other tasks
 --> mention the task the telmo wanted to try
+
+confirm similarity threshold by evaluation on different datasets
 
 
 % ========== 
