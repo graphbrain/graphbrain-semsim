@@ -65,7 +65,7 @@
 \usepackage{multicol}
 \usepackage{array}
 \usepackage[export]{adjustbox}
-\usepackage[nopostdot,nonumberlist,acronym, toc]{glossaries}
+\usepackage[nonumberlist, nopostdot, acronym, toc]{glossaries}
 
 
 \lstset{
@@ -204,8 +204,58 @@
 % ========== 
 \chapter{Introduction}
 
+%\begin{itemize}
+%	\item Context: The big problem
+%	\item Problem statement: The small problem
+%	\item Methodology / Strategy
+%	\item Structure
+%\end{itemize}
+%
+%\textbf{Notes:}
+%\begin{itemize}
+%	\item Huge amounts of text, which can provide insight about stuff
+%	\item Automatic tools can provide assistance for humans to process all the text
+%	\item This generally means filtering the original text corpus or otherwise reducing amount of information the information that has to be processed by humans
+%	\item Filtering introduces a bias
+%	\item Especially for scientific purposes it is relevant to mitigate bias or at least understand what bias has been introduced (to make it transparent)
+%	\item Semantic Hypergraphs can be a valuable tool for that because...
+%\end{itemize}
+%
+%
+%Human life in times of widespread use of the internet and smartphones is most certainly more than ever interspersed with text-based communication...
+%
+%Great progress has been made in the made in NLP, IR and IE in the past decade. This advancement of the state-of-the-art can primarily be attributed \textit{Deep Learning} based methods, often also referred to as \textit{Neural Networks}. \cite{youngRecentTrendsDeep2018, minRecentAdvancesNatural2023, hirschbergAdvancesNaturalLanguage2015}
+%
+%open-opaque / strict-adaptive categorisation dimensions
+%
+%
+%
+%\section{Expose intro}
+%
+A significant part of the social world is nowadays being represented by digitally manifested text. Examples for this range from instant messaging, social media and any form of collective web activity to encyclopaedic websites, digitized libraries and government intelligence. The amount and richness of available social text makes it a valuable data source for social science research, while simultaneously creating an interest in automatic systems to analyze these texts on a large scale \cite{evansMachineTranslationMining2016}. Such research can be understood as part of the domain of \gls{css} \cite{lazerComputationalSocialScience2009}.
+
+Systems based on techniques from the field of \gls{nlp}, as well well as the interlinked fields of \gls{ir} and \gls{ie}, have demonstrated great success in a variety of task related to text analysis. This success is largly attributed to the advancements of applying of \gls{ml}  and especially \gls{dl} methods to text \cite{hirschbergAdvancesNaturalLanguage2015} \cite{qiuPretrainedModelsNatural2020}. While being very effective at predicting or decision making, \gls{ml}- and specifically \gls{dl}-based systems generally do not deliver an explanation for their judgement and can mostly be viewed as "black box models" that are not transparent in their prediction or decision making process \cite{rudinStopExplainingBlack2019}. Conversely this transparency and explainability is of high interest in \gls{css} applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}.
+
+The \gls{sh} \cite{menezesSemanticHypergraphs2021} is a framework for representing and analyzing \gls{nl}. NL sentences can be modelled as an ordered, recursive hypergraph of hyperedges, which can be represented in a formal language. Based on this, the framework allows to specify semantic patterns in a pattern language which can be matched against an existing \gls{sh}. It aims to provide an \textit{open} and \textit{adaptive} system to analyse text corpora, especially in the domain of \gls{css}. The framework is \textit{open} in the sense that its representation formalism is inspectable and intelligible by humans and that the pattern matching follows explicit rules. The framework is adaptive in the sense that the parsing is built from adaptive, ML-based subsystems and therefore allows for an error-tolerant parsing from \gls{nl} to \gls{sh} in regards to grammatical and syntactical correctness.
+
+While the \gls{sh} representation and its construction can be considered to fulfil the open-adaptive properties, the framework's pattern matching is purely symbolic and follows a set of fixed rules. It can therefore be considered to be \textit{open-strict}. The \gls{sh} pattern defined by a user may -- among other things -- specify the structure of the hyperedges that should match it and allows  to describe different levels of generalisations for the structural matching. In the \gls{sh} framework's original form, there is no possibility to define semantically sophisticated generalisations for the matching of hyperedge content, i.e. actual words that are contained within the text that is represented by an hyperedge.
+
+By extending the the \gls{sh} matching process with the capability to utilize some form of semantic similarity in regard to edge content, we allow the \gls{sh} framework's users to define patterns, which describe such semantically sophisticated generalisations of edge content.
+There exists a great variety of approaches for determining the semantic similarity of text \cite{harispeSemanticSimilarityNatural2015, chandrasekaranEvolutionSemanticSimilarity2021}. In this work, we identify \gls{ness} measures to be best suited for an integration into the \gls{sh} pattern matching. Since \gls{ness} measures are generally based on machine learning methods and sometimes based on deep neural network, they principally do not provide the openness that is inherent to the purely symbolic pattern matching process.
+
+ In the sense of the open-opaque / strict-adaptive classification, this integration means a shift from openness to opaqueness and from strictness to adaptivity. To counteract the opaqueness introduced by an \gls{ness} integration into the \gls{sh} pattern matching, we allow user control over the generalisation level via the configuration of a similarity threshold, the ability to choose between fixed word and contextual neural embedding-based semantic similarity, and the option to toggle sub-edge specificity of the contextual embeddings. Therefore mantaining some openness while still benefiting from increased adaptivity.
+
+In the context of this thesis, \gls{ness-shpm} is conceptualised and implemented by integrating it into the existing software package \textit{graphbrain}\footnote{graphbrain: \url{https://graphbrain.net/}}. Additionally it subjected to a comprehensive quantitative evaluation on a labeled dataset of conflict expressions.
+
+The rest of this thesis is structured as follows: \Cref{cha:background} introduces the necessary background in regards to the Semantic Hypergraph framework and discusses the state-of-the-art of semantic similarity measures. \Cref{cha:problem-statement} delves into the problem outlined earlier, detailing it and formulating the subsequent research questions. \Cref{cha:solution-approach} devises the concept of \gls{ness-shpm} as approach to solving the stated problem. \Cref{cha:implementation} describes the specific software implementation of the proposed solution. \Cref{cha:evaluation} provides a thorough quantitive evaluation of the implemented system and discusses the results. 
+\Cref{cha:conclusion} concludes this thesis by presenting the contributions made herein and suggesting possible avenues for further work.
+
 % ========== 
 \chapter{Background}
+\glsreset{sh}
+\glsreset{ness}
+
+\label{cha:background}
 In this chapter the necessary background for this work is presented. This includes on the one hand the \gls{sh} framework and its pattern matching capabilities in particular. On the other hand the concept of semantic relatedness and specifically semantic similarity is explained with a focus on its realisation in the form of \gls{ness}.
 
 \section{Semantic Hypergraph Framework}
@@ -435,14 +485,20 @@ functionalities of the differtent language elements, some example matchings of p
 
 \section{Semantic Similarity Measures}
 \label{sec:semantic-similarity}
-Determining the \textit{Semantic Relatedness} or (\gls{sr}) \textit{Semantic Similarity} (\gls{ss}) of two text items is a central task in the interlinked fields of natural language processing, information retrieval and information extraction. A text item can take on the form of a word, phrase, sentence paragraph or entire document. While \gls{sr} and \gls{ss} are often used synonymously, semantic relatedness can also be understood to entail a more nuanced description of the semantic relations of text items \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}.  In this work, the term \textit{semantic similarity} is therefore used to refer to the task of measuring the closeness, distance or similarity in regard to the meanings conveyed by two text items. This has to be differentiated from lexical (i.e. string-based) similarity measures, which in principle do not rely on the meaning of text items \cite{p.SurveySemanticSimilarity2019}. \todo{mention the \gls{st}S task specifically (and refer to it later)?}
+\glsreset{sr}
+\glsreset{ss}
+\glsreset{kbss}
+\glsreset{cbss}
+\glsreset{ness}
+
+Determining the \gls{sr} \gls{ss} of two text items is a central task in the interlinked fields of natural language processing, information retrieval and information extraction. A text item can take on the form of a word, phrase, sentence paragraph or entire document. While \gls{sr} and \gls{ss} are often used synonymously, semantic relatedness can also be understood to entail a more nuanced description of the semantic relations of text items \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015}.  In this work, the term \textit{Semantic Similarity} is therefore used to refer to the task of measuring the closeness, distance or similarity in regard to the meanings conveyed by two text items. This has to be differentiated from lexical (i.e. string-based) similarity measures, which in principle do not rely on the meaning of text items \cite{p.SurveySemanticSimilarity2019}. \todo{mention the STS task specifically (and refer to it later)?}
 
 There exists a great variety of approaches to measuring semantic similarity and their categorisation also takes on different forms in the literature.
-%A structure that is in line with most of the reviewed literature employs the following categories: \textit{Knowledge-based Semantic Similarity} (KB\gls{ss}), \textit{Distributional} or \textit{Corpus-based Semantic Similarity} (CB\gls{ss}), \textit{Deep Learning-} or \textit{Neural Network-based Semantic Similarity} (NN\gls{ss}) and hybrid approaches which combine techniques from multiple categories 
-A structure that is in line with most of the reviewed literature employs the following categories: \textit{Knowledge-based Semantic Similarity} (KB\gls{ss}), \textit{Corpus-based Semantic Similarity} (CB\gls{ss}) and hybrid approaches which combine techniques from the former two categories
+%A structure that is in line with most of the reviewed literature employs the following categories: \textit{Knowledge-based Semantic Similarity} (\gls{kbss}), \textit{Distributional} or \textit{Corpus-based Semantic Similarity} (\gls{cbss}), \textit{Deep Learning-} or \textit{Neural Network-based Semantic Similarity} (NN\gls{ss}) and hybrid approaches which combine techniques from multiple categories 
+A structure that is in line with most of the reviewed literature employs the following categories: \gls{kbss}, \gls{cbss} and hybrid approaches which combine techniques from the former two categories
 \cite{chandrasekaranEvolutionSemanticSimilarity2021, harispeSemanticSimilarityNatural2015, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}.
 
-The focus of this work in assessing the state-of-the-art of semantic similarity measures lies on CB\gls{ss} -- specifically a subform of corpus-based measures that is denoted here as \textit{Neural Embedding-based Semantic Similarity} (\gls{ness}). These measures share some commonality with \textit{Deep Learning-based Semantic Similarity} (DL\gls{ss}), which is sometimes differentiated as an independent category in the literature.
+The focus of this work in assessing the state-of-the-art of semantic similarity measures lies on \gls{cbss} -- specifically a subform of corpus-based measures that is denoted here as \gls{ness}. These measures share some commonality with \gls{dlss}, which is sometimes differentiated as an independent category in the literature.
 
 
 \subsection{Knowledge-based Semantic Similarity}
@@ -483,12 +539,16 @@ In the following some distributional semantic similarity measures are presented,
 
 \section{Neural Embedding-based Semantic Similarity}
 \label{sec:neural-embedding-semantic-similarity}
+\glsreset{ness}
+\glsreset{fness}
+\glsreset{cness}
+
 In natural language processing, the term \textit{embedding} was first used in the context of Latent Semantic Analysis \cite{deerwesterIndexingLatentSemantic1990} to describe a vector representation of text. Since then, \textit{text embedding} has become widely used in NLP to describe a dense, fixed-length vector representations of text items, which can be interpreted spatially to measure semantic relations between them \cite{almeidaWordEmbeddingsSurvey2023}.
 
-Strictly speaking, \textit{neural embeddings} of text refer to representations that have been produced by a neural network model. The development of these approaches is deeply interlinked with the advent of \textit{Neural (Network) Language Modelling} (NNLM). The task of \textit{language modelling} traditionally is to predict the most probable next word given a sequence of previous words \cite{chenEmpiricalStudySmoothing1999}. While \citef{bengioNeuralProbabilisticLanguage2000} are commonly referred to as the first to use a neural network for language modelling, \citef{collobertUnifiedArchitectureNatural2008} are seen to be the first to build a NNLM with the focus on producing embeddings. 
+Strictly speaking, \textit{neural embeddings} of text refer to representations that have been produced by a neural network model. The development of these approaches is deeply interlinked with the advent of \gls{nnlm}. The task of \textit{language modelling} traditionally is to predict the most probable next word given a sequence of previous words \cite{chenEmpiricalStudySmoothing1999}. While \citef{bengioNeuralProbabilisticLanguage2000} are commonly referred to as the first to use a neural network for language modelling, \citef{collobertUnifiedArchitectureNatural2008} are seen to be the first to build a \gls{nnlm} with the focus on producing embeddings. 
 %Apart from the neural architecture, a key development in the field of NLP, contributing to state-of-the-art performance achieved by neural embeddings, was the increased scale of the training process and especially the amount of training data \cite{minaeeDeepLearningBased2021}.
 
-\textit{Neural Embedding-based Semantic Similarity Measures} (\gls{ness}) in this work refer to methods that compute the semantic similarity of text items based on a spatial measurement between their respective neural embeddings. \gls{ness} measures can be considered as a subform of CB\gls{ss}, since they also fundamentally rely on the distributional hypothesis and employ the same general approach of deriving distributional semantics from a text corpus. Here, neural embedding-based approaches are further differentiated into \textit{Fixed Word Embedding-based Semantic Similarity} (\gls{fness}) measures and \textit{Contextual Embedding-based Semantic Similarity} (\gls{cness}) measures, which is elaborated in the following. \todo{mention training data sets (and sizes?)}
+\gls{ness} in this work refer to methods that compute the semantic similarity of text items based on a spatial measurement between their respective neural embeddings. \gls{ness} measures can be considered as a subform of \gls{cbss}, since they also fundamentally rely on the distributional hypothesis and employ the same general approach of deriving distributional semantics from a text corpus. Here, neural embedding-based approaches are further differentiated into \gls{fness} measures and \gls{cness} measures, which is elaborated in the following. \todo{mention training data sets (and sizes?)}
 
 
 \subsubsection{Fixed Word Embeddings vs. Contextual Embeddings}
@@ -498,19 +558,21 @@ In this work, \textit{(fixed) word embeddings} refer to neural text embeddings p
 
 \subsubsection{Deep Learning-based Semantic Similarity}
 \label{sec:deep-learning-based-semantic-similarity}
-\textit{Deep Learning-based Semantic Similarity Measures} (DL\gls{ss}) are often treated as a distinct category in the literature \cite{harispeSemanticSimilarityNatural2015, chandrasekaranEvolutionSemanticSimilarity2021, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}. In this work, DL\gls{ss} is not seen as a separate category, instead it is subsumed by the category of \gls{ness}. Deep learning-based approaches employ \textit{Deep Neural Network} (DNN) models, which have multiple hidden layers, allowing them in principle to learn hierarchical of representations of the input data \cite{goodfellowDeepLearning2016}. Given a text item as input, the state of a specific hidden layer in the trained network after an inference pass is generally considered to be the embedding of the text item. From this perspective, all DL\gls{ss} measures can be seen as neural embedding-based. 
+\glsreset{dlss}
+\gls{dlss} are often treated as a distinct category in the literature \cite{harispeSemanticSimilarityNatural2015, chandrasekaranEvolutionSemanticSimilarity2021, hanSurveyTechniquesApplications2021, zadSurveyDeepLearning2021}. In this work, \gls{dlss} is not seen as a separate category, instead it is subsumed by the category of \gls{ness}. Deep learning-based approaches employ \textit{Deep Neural Network} (DNN) models, which have multiple hidden layers, allowing them in principle to learn hierarchical of representations of the input data \cite{goodfellowDeepLearning2016}. Given a text item as input, the state of a specific hidden layer in the trained network after an inference pass is generally considered to be the embedding of the text item. From this perspective, all \gls{dlss} measures can be seen as neural embedding-based. 
 
 However, there also exists a variety of deep learning-based approaches, which use models that directly predict the semantic similarity between two input text items in the output layer. Here, the embeddings are only intermediate representations, but not explicitly used to measure spatial relations between them and they might not be suited for that. These methods are not in the focus of this work, for such approaches confer e.g. \citef{taiImprovedSemanticRepresentations2015, hePairwiseWordInteraction2016, shaoHCTISemEval2017Task2017, tianECNUSemEval2017Task2017, wangSentenceSimilarityLearning2017, lopez-gazpioWordNgramAttention2019, tienSentenceModelingMultiple2019, tienSentenceModelingMultiple2019a, zhengDetectionMedicalText2019}.
 
-Following the fixed word embeddings vs. contextual embedding distinction outlined above, DL\gls{ss} approaches correlate strongly with the contextual embedding-based approaches, which is elaborated on in \cref{sec:contextual-embedding-semantic-similarity}.
+Following the fixed word embeddings vs. contextual embedding distinction outlined above, \gls{dlss} approaches correlate strongly with the contextual embedding-based approaches, which is elaborated on in \cref{sec:contextual-embedding-semantic-similarity}.
 
-%The relevant distinction for this work is that DL\gls{ss} generally allow for similarity measurements of text items larger than words, i.e. phrases, sentences, paragraphs or entire documents. The utilised neural networks are able to process and represent longer text items as sequences of tokens, which may be words, but can also be the result of a different form of text segmentation. Typically an embedding of each token exists at 
+%The relevant distinction for this work is that \gls{dlss} generally allow for similarity measurements of text items larger than words, i.e. phrases, sentences, paragraphs or entire documents. The utilised neural networks are able to process and represent longer text items as sequences of tokens, which may be words, but can also be the result of a different form of text segmentation. Typically an embedding of each token exists at 
 %
 %While there exist non-deep semantic similarity methods which allow for that, e.g. by comparing document (column) vectors instead of word vectors when utilising LSA, these methods most often treat the text as a \textit{bag of words} -- ignoring word order. Resolving this limitation is a core feature of most deep learning-based techniques, since the utilised neural networks are able to process and represent longer text items as sequences of words (or tokens). Differentiating by this distinctive feature, the field of neural embedding-based semantic similarity is further elaborated on in the following.
 
 \subsection{Fixed Word Embedding-based Semantic Similarity}
 \label{sec:fixed-word-embedding-semantic-similairity}
-\textit{Fixed Word Embedding-based Semantic Similarity} (\gls{fness}) measures in this work denote semantic similarity measures that employ fixed word embedding models. Here, the concept of \textit{neural embeddings} extends to encompass not only those embeddings directly derived from neural models, but also includes embedding generation approaches that incorporate elements of neural model methodologies and thereby achieving performances that rival strictly neural embeddings. This broader interpretation aligns with perspectives found in existing literature \cite{zucconIntegratingEvaluatingNeural2015, sezererSurveyNeuralWord2021}. Fixed word embedding models are generally based on non-deep machine learning methods and can be further divided into \textit{prediction-based}, \textit{count-based} and \textit{hybrid} or \textit{meta} models. In the following, some of the most relevant word embeddings models are presented. 
+\glsreset{fness}
+\gls{fness} measures in this work denote semantic similarity measures that employ fixed word embedding models. Here, the concept of \textit{neural embeddings} extends to encompass not only those embeddings directly derived from neural models, but also includes embedding generation approaches that incorporate elements of neural model methodologies and thereby achieving performances that rival strictly neural embeddings. This broader interpretation aligns with perspectives found in existing literature \cite{zucconIntegratingEvaluatingNeural2015, sezererSurveyNeuralWord2021}. Fixed word embedding models are generally based on non-deep machine learning methods and can be further divided into \textit{prediction-based}, \textit{count-based} and \textit{hybrid} or \textit{meta} models. In the following, some of the most relevant word embeddings models are presented. 
 
 \subsubsection{Prediction-based Models} 
 These mdoels are based on the concept of language modelling and work with local context windows. They are trained on predicting a target word (or token) given a context window of words (or tokens) or the other way around.
@@ -520,7 +582,7 @@ These mdoels are based on the concept of language modelling and work with local 
 \textit{fasttext} \cite{bojanowskiEnrichingWordVectors2017}: fasttext an extension of Word2Vec, which is reported to outperform SGNS. The central modification is, that the model works on subword tokens, which helps it to generalise to word which are unknown from the training data.
 
 \subsubsection{Count-based Models}
-These models are no neural embedding models in a strict sense, since they do not employ a neural network architecture. In terms of approach, the fall in line with spatially interpreted VSMs based on constructing a word-context frequency matrix (and are therefore fundamentally based on word counts) \cite{almeidaWordEmbeddingsSurvey2023, turneyFrequencyMeaningVector2010}, which are discussed in \cref{sec:corpus-based-semantic-similarity}. In distinction to these approaches, the methods presented here also incorporate local context window information inspired by NNLM approaches and perform competitively when compared with strictly neural embeddings.
+These models are no neural embedding models in a strict sense, since they do not employ a neural network architecture. In terms of approach, the fall in line with spatially interpreted VSMs based on constructing a word-context frequency matrix (and are therefore fundamentally based on word counts) \cite{almeidaWordEmbeddingsSurvey2023, turneyFrequencyMeaningVector2010}, which are discussed in \cref{sec:corpus-based-semantic-similarity}. In distinction to these approaches, the methods presented here also incorporate local context window information inspired by \gls{nnlm} approaches and perform competitively when compared with strictly neural embeddings.
 
 \textit{GloVe} \cite{penningtonGloVeGlobalVectors2014} GloVe leverages corpus-wide, hence \textit{global}, word co-ocurrences represented as word-word frequency matrix populated with probability ratios. The word co-occurrence probability ratios are weighted based on the distance of the word pairs in the context window from which they are extracted. It reportedly outperforms SGNS, given the same training corpus, training time and context window size.
 
@@ -543,7 +605,8 @@ These models are no neural embedding models in a strict sense, since they do not
 
 \subsection{Contextual Embedding-based Semantic Similarity Measures}
 \label{sec:contextual-embedding-semantic-similarity}
-\textit{Contextual Embedding based Semantic Similarity} (CN\gls{ss}) measures in this work denote semantic similarity measures, which employ contextual embeddings models. These models need to be able to jointly process sequences of tokens and produce the token embeddings interdependently (see \cref{sec:fixed-word-vs-contextual-embeddings}). Contextual embedding models are generally based on deep neural networks, which employ different architectural approaches to capture patterns in processing compositional data structures such as a token sequences \cite{goodfellowDeepLearning2016}. A wide array of DNN architectures has been applied to natural language processing and the generation of contextual embeddings specifically. The evolution of the current state-of-the-art of contextual embedding models is delineated here by focussing on three of the most relevant architecture types: \textit{Convolutional Neural Networks} (CNN), \textit{Recursive Neural Networks} (RNN) and \textit{Transformer}-based models. Additionally some pivotal architecture-agnostic methodologies are introduced. Not all approaches presented here aim at producing embeddings in the spatially interpretable sense outlined above, but are still mentioned if they were highly influential on the development of the field. For a more comprehensive overview of deep learning based approaches to NLP, confer e.g. \citef{youngRecentTrendsDeep2018, minaeeDeepLearningBased2021, minRecentAdvancesNatural2023}
+\glsreset{cness}
+\gls{cness} measures in this work denote semantic similarity measures, which employ contextual embeddings models. These models need to be able to jointly process sequences of tokens and produce the token embeddings interdependently (see \cref{sec:fixed-word-vs-contextual-embeddings}). Contextual embedding models are generally based on deep neural networks, which employ different architectural approaches to capture patterns in processing compositional data structures such as a token sequences \cite{goodfellowDeepLearning2016}. A wide array of DNN architectures has been applied to natural language processing and the generation of contextual embeddings specifically. The evolution of the current state-of-the-art of contextual embedding models is delineated here by focussing on three of the most relevant architecture types: \textit{Convolutional Neural Networks} (CNN), \textit{Recursive Neural Networks} (RNN) and \textit{Transformer}-based models. Additionally some pivotal architecture-agnostic methodologies are introduced. Not all approaches presented here aim at producing embeddings in the spatially interpretable sense outlined above, but are still mentioned if they were highly influential on the development of the field. For a more comprehensive overview of deep learning based approaches to NLP, confer e.g. \citef{youngRecentTrendsDeep2018, minaeeDeepLearningBased2021, minRecentAdvancesNatural2023}
 
 \paragraph{Transfer Learning and Pre-training} \textit{Transfer learning} involves leveraging the representations learned from a different yet related task to train a model for a specific task \cite{zhuangComprehensiveSurveyTransfer2021}. When these representations are derived from language modelling, the process is generally termed \textit{pre-training} in NLP, notably advanced by \citef{daiSemisupervisedSequenceLearning2015} for the generation of contextual embeddings.
 
@@ -611,10 +674,10 @@ The \textit{Transformer} architecture was first presented by \cite{vaswaniAttent
 
 \paragraph{Massive Text Embedding Benchmark}
 Since the field of contextual embeddings is rapidly evolving, it is not trivial to asses the current state-of-the-art and pinpoint the best performing model available for semantic similarity measurements.
-The \textit{Massive Text Embedding Benchmark} (MTEB) \cite{muennighoffMTEBMassiveText2023} offers support for this task. It is comprised of eight evaluation task, involving 58 datasets and 112 languages, including ten datasets for the semantic similarity task. An online leaderboard showcases the performance of all models that have been benchmarked by \citef{muennighoffMTEBMassiveText2023} and of those that have been submitted by third-parties.\footnote{MTEB Leaderboard: \url{https://huggingface.co/spaces/mteb/leaderboard} (Accessed on Oct. 9, 2023)}. In the following, two of the best performing models according to the online MTEB leaderboard at the time of access are presented.
+The \textit{Massive Text Embedding Benchmark} (MTEB) \cite{muennighoffMTEBMassiveText2023} offers support for this task. It is comprised of eight evaluation task, involving 58 datasets and 112 languages, including ten datasets for the semantic similarity task. An online leaderboard showcases the performance of all models that have been benchmarked by \citef{muennighoffMTEBMassiveText2023} and of those that have been submitted by third-parties.\footnote{MTEB Leaderboard: \url{https://huggingface.co/spaces/mteb/leaderboard} (Accessed on Oct. 9, 2023)} In the following, two of the best performing models according to the online MTEB leaderboard at the time of access are presented.
 
 \textit{EmbEddings from bidirEctional Encoder rEpresentations} (E5) \cite{wangTextEmbeddingsWeaklySupervised2022}:
-E5 uses the same architecture as BERT and also initialises the model with the weights obtained from BERT's pre-training. This is followed by training using a contrastive learning approach with weak supervision signals derived from a large curated dataset of text pairs. The E5 model was developed in three variants: \textit{small}, \textit{base} and \textit{large}, whose reported performance increases with size. There also exists a second version of the model (E5-v2), wich was trained on a larger quantity and more diverse text pair datasets. \footnote{See \url{https://huggingface.co/intfloat/e5-base-v2/discussions/1}} E5-v2 models outperform the corresponding original models on most benchmarks, while performing on par in the semantic similarity task.
+E5 uses the same architecture as BERT and also initialises the model with the weights obtained from BERT's pre-training. This is followed by training using a contrastive learning approach with weak supervision signals derived from a large curated dataset of text pairs. The E5 model was developed in three variants: \textit{small}, \textit{base} and \textit{large}, whose reported performance increases with size. There also exists a second version of the model (E5-v2), which was trained on a larger quantity and more diverse text pair datasets. \footnote{See \url{https://huggingface.co/intfloat/e5-base-v2/discussions/1}} E5-v2 models outperform the corresponding original models on most benchmarks, while performing on par in the semantic similarity task.
 
 \textit{General Text Embeddings} (GTE) \cite{liGeneralTextEmbeddings2023}: Falling in line with with SimCSE and E5 in terms of approach, GTE also uses the BERT architecture and initialisation followed by contrastive learning process. Here it consists of a first step of contrastive pre-training with unlabelled data and a second step of contrastive fine-tuning with labelled task-specific data. GTE is also developed in three different model sizes -- named \textit{small}, \textit{base} and \textit{large} -- which reportedly correlate with performance increases. Both, GTE and E5, construct the final sentence embedding by average pooling the produced token embeddings. Their publicly available implementation also share the same software interface. At the time of access, \textit{GTE-large} is the top performing model regarding the average of all benchmarks in the MTEB and the average of the semantic similarity benchmarks specifically. It is therefore seen in this work to be the current state-of-the-art regarding contextual embeddings models for measuring semantic similarity.
 
@@ -636,11 +699,14 @@ E5 uses the same architecture as BERT and also initialises the model with the we
 % ========== 
 \chapter{Problem Statement}
 \label{cha:problem-statement}
-Computational social science (C\gls{ss}) researches may typically be interested in extracting statements of a specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. Two sensible ways to frame this task are as \textit{text classification} \cite{kowsariTextClassificationAlgorithms2019} or \textit{text retrieval} \cite{manningIntroductionInformationRetrieval2008}. It can be addressed with a wide range of system, which will be generally referred to as  \textit{automatic text analysis} systems in the following. These systems are mostly based on techniques from the field of natural language processing, as well as the interlinked fields of information retrieval and information extraction \cite{chowdharyNaturalLanguageProcessing2020}.
+\glsreset{css}
+\glsreset{sh}
 
-A relevant perspective of categorising text analysis systems, especially from the point of view of C\gls{ss} researchers, are the dimensions \textit{open}-\textit{opaque} and \textit{adaptive}-\textit{strict} \cite{menezesSemanticHypergraphs2021}. Here openness refers to the systems users ability to inspect and understand the processing, which we can also bee describes as transparency and explainability. These properties are of high interest in C\gls{ss} applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}. An adaptive text analysis system does not (only) operate on strict rules, but is able to learn and modify its behaviour in some way. It is therefore in principle able to handle unforeseen variations in the text it processes. While both of these two properties are desirable for users are often found to be a trade-off. Current successful adaptive systems are most often bases on neural networks \cite{hirschbergAdvancesNaturalLanguage2015}, which are opaque in the way how they represent and process text \cite{rudinStopExplainingBlack2019}.
+\gls{css} researches may typically be interested in extracting statements of a specific kind from a text corpus, such as expressions of sentiment of an actor towards some entity or expressions of conflicts between different actors. Two sensible ways to frame this task are as \textit{text classification} \cite{kowsariTextClassificationAlgorithms2019} or \textit{text retrieval} \cite{manningIntroductionInformationRetrieval2008}. It can be addressed with a wide range of \textit{automatic text analysis} systems. These systems are mostly based on techniques from the field of natural language processing, as well as the interlinked fields of information retrieval and information extraction \cite{chowdharyNaturalLanguageProcessing2020}.
 
-The Semantic Hypergraph (\gls{sh}) framework (see \cref{sec:semantic-hypergraph-framework}) aims to fulfil both the open as well as the adaptive property of a text analysis system. It offers an inspectable and understandable representation of text that is constructed by a parser based on machine learning components. The \gls{sh} representation and its construction can be therefore considered to fulfil the open-adaptive properties. The \gls{sh} pattern matching language can be used to define patterns that match a specific subset of hyperedges in a given hypergraph. The matching process (described in \cref{sec:pattern-matching-process}) is purely symbolic and follows a set of fixed rules. It can therefore be considered to be open-strict. In the context of the \gls{sh} framework the C\gls{ss} research task described above is better framed as text retrieval. The \gls{sh} pattern acts  as a \textit{query} for which the most relevant items are retrieved. While the \gls{sh} frameworks capabilities are not restricted to text retrieval, the work is focused on this application.
+A relevant perspective of categorising text analysis systems, especially from the point of view of \gls{css} researchers, are the dimensions \textit{open}-\textit{opaque} and \textit{adaptive}-\textit{strict} \cite{menezesSemanticHypergraphs2021}. Here openness refers to the systems users ability to inspect and understand the processing, which we can also bee describes as transparency and explainability. These properties are of high interest in \gls{css} applications such as predicting political opinion based on social media activity \cite{wilkersonLargeScaleComputerizedText2017}. An adaptive text analysis system does not (only) operate on strict rules, but is able to learn and modify its behaviour in some way. It is therefore in principle able to handle unforeseen variations in the text it processes. While both of these two properties are desirable for users are often found to be a trade-off. Current successful adaptive systems are most often bases on neural networks \cite{hirschbergAdvancesNaturalLanguage2015}, which are opaque in the way how they represent and process text \cite{rudinStopExplainingBlack2019}.
+
+The \gls{sh} framework (see \cref{sec:semantic-hypergraph-framework}) aims to fulfil both the open as well as the adaptive property of a text analysis system. It offers an inspectable and understandable representation of text that is constructed by a parser based on machine learning components. The \gls{sh} representation and its construction can be therefore considered to fulfil the open-adaptive properties. The \gls{sh} pattern matching language can be used to define patterns that match a specific subset of hyperedges in a given hypergraph. The matching process (described in \cref{sec:pattern-matching-process}) is purely symbolic and follows a set of fixed rules. It can therefore be considered to be open-strict. In the context of the \gls{sh} framework the \gls{css} research task described above is better framed as text retrieval. The \gls{sh} pattern acts  as a \textit{query} for which the most relevant items are retrieved. While the \gls{sh} frameworks capabilities are not restricted to text retrieval, the work is focused on this application.
 
 The \gls{sh} pattern defined by a user may among other things specify the structure of the edges that should match it as well as their type (and the types of possible sub-edges). The \gls{sh} pattern language allows it to describe different levels of generalisations for the structural matching. Additionally the actual words that should match need to be specified i.e. the reference content against which the edge content is matched, if the edge matches the pattern structurally. In the original form of the \gls{sh} framework, the only way of generalising content matching is via the lemma functional pattern, but there is no possibility to define semantically more sophisticated generalisations.
 
@@ -710,7 +776,7 @@ There exists a great variety of approaches for determining the semantic similari
 \todo{should i "prove" this more specifically?}
 An in integration of \gls{fness} into the \gls{sh} pattern matching could alleviate the problem of lacking content generalisation as we have characterised it so far.
 
-%which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by C\gls{ss} researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (\gls{ness}) measures.
+%which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by \gls{css} researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (\gls{ness}) measures.
 
 
 To retrieve all sentences that convey the meaning we are interested in, we probably also want to the query pattern to match hyperedges that are more structurally diverse than those, which we have inspected above. \Cref{hed:ann-plays-drama} is such an example, which would be matched by the structurally more complex \cref{pat:ann-plays-something-complex}. However, this pattern would also match \cref{hed:ann-plays-company}, which again is probably not what we want to express. 
@@ -743,13 +809,13 @@ Given more complex hyperedge structures, it becomes increasingly difficult to co
 
 %Incorporating contextuality when extending the \gls{sh} pattern matching process by \gls{ss} therefore poses a central challenge. Context-dependent \gls{ss} would allow to specify matching edge content beyond isolated word semantics, although this may not always be desirable or necessary as in the example above. 
 
-Contextual semantic similarity measures generally aim to determine the \gls{ss} between larger text items such as phrases, sentences or paragraphs \cite{vermaSemanticSimilarityShort2020, zadSurveyDeepLearning2021}. However, the task of integrating contextual semantic similarity into the \gls{sh} pattern matching is not solved by assessing the \gls{ss} of entire sentences. Instead the content of specific sub-edges (the content of the predicate in our example) shall be semantically compared to the corresponding parts of the reference contents, thereby taking the context of of the sub-edge, i.e. the content of their root edge into account. Contextual neural embedding-based approaches allow this form of semantic similarity measurement since embeddings for parts of a larger text item can be constructed by combining the corresponding token embeddings. These sub-edge- or part-specific embeddings can then be used for \gls{ss} measurement. Although deep learning-based approaches, which directly operate on sentence level, may show even better performance \cite{chandrasekaranEvolutionSemanticSimilarity2021}, \gls{cness} methods have been identified in this work to be very performant as well (see \cref{sec:contextual-embedding-semantic-similarity}). \todo{is this too weak of a statement?} 
+Contextual semantic similarity measures generally aim to determine the \gls{ss} between larger text items such as phrases, sentences or paragraphs \cite{vermaSemanticSimilarityShort2020, zadSurveyDeepLearning2021}. However, the task of integrating contextual semantic similarity into the \gls{sh} pattern matching is not solved by assessing the \gls{ss} of entire sentences. Instead the content of specific sub-edges (the content of the predicate in our example) shall be semantically compared to the corresponding parts of the reference contents, thereby taking the context of of the sub-edge, i.e. the content of their root edge into account. Contextual neural embedding-based approaches allow this form of semantic similarity measurement since embeddings for parts of a larger text item can be constructed by combining the corresponding token embeddings. These sub-edge- or part-specific embeddings can then be used for \gls{ss} measurement. Although \gls{dlss} measures directly operating on sentence level, may show better performance on established benchmarks \cite{chandrasekaranEvolutionSemanticSimilarity2021}, \gls{cness} methods have been identified in this work to  perform competitively in this regard (see \cref{sec:deep-learning-based-semantic-similarity} and \cref{sec:contextual-embedding-semantic-similarity}). \todo{is this too weak of a statement?} 
 
-Additionally, neural embedding-based models could also be integrated more efficiently into the \gls{sh} framework's matching process than DL\gls{ss} measures, which require the pairwise -- computationally expensive --  processing of text items to determine their similarity \cite{reimersSentenceBERTSentenceEmbeddings2019}. In contrast, the embeddings of text items principally only need to be computed once and can then be used to perform the computationally inexpensive spatial measurements to determine their corresponding semantic similarities.
+Additionally, neural embedding-based models could also be integrated more efficiently into the \gls{sh} framework's matching process than \gls{dlss} measures, which require the pairwise -- computationally expensive --  processing of text items to determine their similarity \cite{reimersSentenceBERTSentenceEmbeddings2019}. In contrast, the embeddings of text items principally only need to be computed once and can then be used to perform the computationally inexpensive spatial measurements to determine their corresponding semantic similarities.
 
 %
 %\todo[inline]{
-%arguments for \gls{ness} (instead of DL\gls{ss}):
+%arguments for \gls{ness} (instead of \gls{dlss}):
 %- create embeddings for sub-edges based on the embedding of the entire edge \\
 %- embeddings for atoms based on root edge embeddings may be saved and added to the hypergraph structure, making later use much more efficient \\
 %- (because it is in line for \gls{fness}, wich shall also be tested) \\
@@ -808,16 +874,21 @@ Based on the problem statement outlined above, we pose the following research qu
 % ========== 
 \chapter{Solution Approach}
 \label{cha:solution-approach}
+\glsreset{ness-shpm}
+\glsreset{fness-shpm}
+\glsreset{lfness-shpm}
+\glsreset{cness-shpm}
+
 The proposed solution to the research questions posed in \cref{sec:research-questions} is to conceptualise and implement the integration of neural embedding based Semantic Similarity into the pattern matching of the Semantic Hypergraph framework, followed by a suitable evaluation of this integration. This chapter outlines the concept of the approach, while the implementation and evaluation are detailed in \cref{cha:implementation} and \cref{cha:evaluation} respectively.
 
 The integration strategy involves pinpointing the most opportune point within the \gls{sh} framework's pattern matching for the inclusion of \gls{ness}. This  allows to identify which parts of the \gls{sh} framework require modifications to accommodate \gls{ness} integration, as well as recognising any components that are currently missing. To facilitate this, the following section elaborates on the approach's general concept, addressing its core challenges and design decisions. 
 
 The system that is conceived by integrating \gls{ness} into the Semantic Hypergraph pattern matching will be  referred to as \gls{ness-shpm}
 
-\section{Neural Embedding-based Semantic Similarity extended Pattern Matching}{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching}
-The pattern matching process is described in \cref{sec:pattern-matching-process}, where the concepts of edge candidate content and pattern reference content are introduced. At a certain point in the process, the candidate content is matched against the reference content. In the original form of the \gls{sh} pattern matching, this is limited to exact string-based or lemma-based matching. The \gls{sh} framework's functionality will be extended by neural embedding based semantic similarity measurement based matching regarding edge content.
+\section[Neural Embedding-based Semantic Similarity extended SH Pattern Matching]{Neural Embedding-based Semantic Similarity extended Semantic Hypergraph Pattern Matching}
+The pattern matching process is described in \cref{sec:pattern-matching-process}, where the concepts of \textit{edge candidate content} and \textit{pattern reference content} are introduced. At a certain point in the process, the candidate content is matched against the reference content. In the original form of the \gls{sh} pattern matching, this is limited to exact string-based or lemma-based matching. The \gls{sh} framework's functionality will be extended by neural embedding based semantic similarity measurement based matching regarding edge content.
 
-The \gls{ness} measurement involves generating embeddings for the candidate and reference content, which in the following are referred to as \textit{candidate embedding} and \textit{reference embeddings}. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic \textit{similarity threshold} \(s_t\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
+The \gls{ness} measurement involves generating embeddings for the candidate and reference content, which in the following are referred to as \textit{candidate embedding} and \textit{reference embeddings}. The distance between these embeddings is calculated using a suitable metric and then compared to a given semantic \textit{similarity threshold} \(t_s\). If the measured semantic similarity exceeds this threshold, the contents of the pattern and the edge are considered to match. This process requires that the candidate content, reference content, similarity threshold (plus possibly additional other relevant parameters) are specified and passed to the component responsible for this matching step.
 
 Moreover, the integration of \gls{ness}-based content matching into the \gls{sh} pattern matching process will take two forms: \gls{fness-shpm} and \gls{cness-shpm}. The particularities of these two system variants are elaborated in the following.
 
@@ -875,7 +946,7 @@ Hyperedge type and argument roles are matched following the symbolic rules also 
 %\subsubsection{Similarity Threshold (\texttt{\gls{st}})}
 \paragraph{Similarity Threshold (\texttt{\gls{st}})}
 %The similarity threshold used to decide whether candidate and reference content matched, given that the \gls{ness} measurement has already been computed. This applies to the fixed as well as to the contextual variant of \gls{ness}. 
-The similarity threshold \(s_t\) can optionally be specified for a specific occurrence of the SemSim functional pattern, but it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
+The similarity threshold \(t_s\) can optionally be specified for a specific occurrence of the SemSim functional pattern, but it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
 
 \subsubsection{Example Usages}
 
@@ -902,7 +973,7 @@ To illustrate the usage of the SemSim functional pattern, some examples are give
   \normalfont\sffamily
   \centering
   ( likes/P Ann/C (semsim-fix mangos/C 0.5) )
-  \caption{"Ann likes something similar to mangos" pattern with \(s_t = 0.5\)}
+  \caption{"Ann likes something similar to mangos" pattern with \(t_s = 0.5\)}
   \label{pat:ann-likes-semsim-aplles}
 \end{pattern}
 
@@ -949,7 +1020,7 @@ Existing components manage the symbolic matching of hyperedge type and argument 
 
 \subsection{Neural Embedding-based Semantic Similarity Measurement}
 \label{sec:neural-embedding-based-semantic-similarity-measurement}
-Upon reaching this phase, the \gls{ness-shpm} process has already either extracted candidate and reference contents via pattern language processing (in case of \gls{fness-shpm}) or received them through software interface arguments (in case of\gls{cness-shpm}). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
+Upon reaching this phase, the \gls{ness-shpm} process has already either extracted candidate and reference contents via pattern language processing (in case of \gls{fness-shpm}) or received them through software interface arguments (in case of \gls{cness-shpm}). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
 
 \todo{How it the \gls{ness} model specified? talk about ness config?}
 
@@ -1281,7 +1352,7 @@ def match_semsim_instances(
 
  
 %\newpage
-\section{\gls{ness} Measurements: \texttt{graphbrain.semsim}}
+\section{NESS Measurements: \texttt{graphbrain.semsim}}
 The \texttt{graphbrain.semsim} module contains the required functionality for the \gls{ness} measurements. The entry-point for this is located in the \texttt{graphbrain.semsim.interface} module and the \texttt{graphbrain.semsim.matcher} module contains the SemSim matcher classes that perform the actual \gls{ness} measurement computations.
 
 
@@ -1447,8 +1518,8 @@ class ContextEmbeddingMatcher(SemSimMatcher):
 
     @cached
     def get_embedding(self, tokens, tok_idxes):
-        trf_data = self.spacy_pipe(prefixed_tokens).trf_data
-        return get_trf_embedding_of_lex_tokens(trf_data, prefixed_tok_idxes)
+        trf_data = self.spacy_pipe(tokens).trf_data
+        return get_trf_embedding_of_lex_tokens(trf_data, tok_idxes)
 \end{lstlisting}
 \caption{\texttt{ContextEmbeddingMatcher} class}
 \label{psd:contextualmatcher-class}
@@ -1462,7 +1533,7 @@ class ContextEmbeddingMatcher(SemSimMatcher):
 
 \begin{pseudo}[p!]
 \begin{lstlisting}
-def get_trf_embedding_of_lex_tokens(trf_data, lex_tok_idxes):
+def get_trf_embedding_of_lex_tokens(trf_data, lex_tok_idxesn):
     trf_tok_idxes = get_trf_tok_idxes(lex_tok_idxes, trf_data.alignment)
     trf_embeddings = trf_data.model_output.last_hidden_state[trf_tok_idxes])
     return average_pool(trf_embeddings, trf_data.attention_mask[trf_tok_idxes]))
@@ -1525,8 +1596,8 @@ Based on this formula, the token alignment procedure is implemented (see \cref{p
 
 \begin{pseudo}[htp]
 \begin{lstlisting}
-def get_trf_tok_idxes(n_lex_tokens: int, lex_tok_idxes, alignment):
-    lex2trf_idx = get_lex2trf_tok_idx(len(lex_tok_idxes), alignment)
+def get_trf_tok_idxes(lex_tok_idxes, alignment):
+    lex2trf_idx = get_lex2trf_tok_idx(alignment)
     trf_tok_idxes = []
     for lex_tok_idx in lex_tok_idxes:
         for trf_idx in lex2trf_idx[lex_tok_idx]:
@@ -1535,11 +1606,10 @@ def get_trf_tok_idxes(n_lex_tokens: int, lex_tok_idxes, alignment):
     return trf_tok_idxes
 
 
-def get_lex2trf_tok_idx(n_lex_toks, alignment):
+def get_lex2trf_tok_idx(alignment):
     lex2trf_idx = {}
     trf_idx = 0
-    for lex_idx in range(n_lex_toks):
-        trf_tok_len = alignment.lengths[lex_idx]
+    for trf_tok_len in alignment.lengths:
         lex2trf_idx[lex_idx] = alignment.indices[trf_idx:trf_idx + trf_tok_len]
         trf_idx += trf_tok_len
     return lex2trf_idx
@@ -1604,15 +1674,11 @@ The model produces token embeddings, of which the subset that corresponds to the
 % ========== 
 \chapter{Evaluation}
 \label{cha:evaluation}
-In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the \gls{ness-shpm} system is being evaluated to answer the research question(s) posed in \cref{sec:research-questions}. Therefore a a case study is conducted to evaluate the system for a specific use case. 
-\todo{term differentiation: \gls{ness-shpm} and (F/C)\gls{ness}}
-\todo[inline]{refer to the RQs more specifically? how are they going to be answered?}
+In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the neural embedding-based semantic similarity extended Semantic Hypergraph pattern matching system is evaluated to answer research questions posed in \cref{sec:research-questions}.  Therefore a a case study is conducted to evaluate the system for a specific use case. 
 
 
 \section{Case Study: Conflicts}
 The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021}, where expressions of conflict are extracted from a given \gls{sh} using a single \gls{sh} pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the \gls{sh} is an expression of conflict or not. Or framed differently, the task is to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different \gls{sh} patterns and corresponding configuration of the \gls{ness-shpm} system by matching them against a labelled dataset of hyperedges.
-
-\todo[inline]{should I explain why specifically the conflicts and not some other case study (i.e. dataset) --> because there was none... but then I need to show why there was none and what are the criteria for a case study to be suitable to evaluate the system}
 
 \subsection{Expressions of Conflict}
 \label{sec:conflict-definition}
@@ -1625,7 +1691,7 @@ There is a conflict between two explicitly named actors, wherever these actors a
 \subsection{Reddit Worldnews Corpus}
 The corpus from which those expressions of conflict are retrieved consists of news titles that were shared on the social media platform \textit{Reddit}. Specifically all titles shared between January 1st, 2013 and August 1st, 2017 on \textit{r/worldnews}, which is described as: “A place for major news from around the world, excluding US-internal news.”\footnote{\url{http://reddit.com/r/worldnews}} This corpus contains 479,384 news headers and is in the following referred to as the \textit{Worldnews-Corpus}.
 
-Each of these headers is comprised of a single sentence and is forms a root edge in the \gls{sh} constructed from it. In the following this \gls{sh} is referred to as the \textit{Worldnews-\gls{sh}}. Parsing errors that may potentially occur during this constructed and can obstruct a correct retrieval of a wrongly parsed edge i.e. wrongly represented sentence. These errors are out of scope of this work. All edges in the Worldnews-\gls{sh} are assumed to be correctly parsed.
+Each of these headers is comprised of a single sentence and is forms a root edge in the \gls{sh} constructed from it, which is referred to as the \textit{Worldnews-\gls{sh}}. Parsing errors, which may potentially have occurred during this translation are out of scope of this work. All edges in the Worldnews-\gls{sh} are assumed to be correctly parsed.
 
 %These are some randomly selected examples from the Worldnews-Corpus:
 %\begin{itemize}
@@ -1639,13 +1705,13 @@ Each of these headers is comprised of a single sentence and is forms a root edge
 
 \subsection{Semantic Hypergraph Patterns}
 \label{sec:sh-patterns}
-The \gls{sh} patterns that are used in this evaluation all have the same general form to isolate the effect of replacing a purely symbolic matching against a specific word or list of words with \gls{ness-shpm}. In this section the general form of these pattern will be described, which entails consequences for the creation of the labelled dataset described in \cref{sec:conflict-dataset}. 
+The \gls{sh} patterns that are used in this evaluation all have the same general form, to isolate the effect of replacing a purely symbolic matching against a specific word or list of words with \gls{ness-shpm}. In this section the general form of these patterns will be described, which entails consequences for the creation of the labelled dataset described in \cref{sec:conflict-dataset}. 
 
 %The retrieval performance of the original purely symbolic pattern defined by \citef{menezesSemanticHypergraphs2021} is compared against the retrieval performance of patterns containing some form of the semsim functional pattern. \todo{remove?}
 
 
 \subsubsection{Original Conflict Pattern}
-\Cref{pat:original-conflict} is originally defined in \citef[p.~22]{menezesSemanticHypergraphs2021} and is therefore referred to as the \textit{original conflict pattern}. It is used to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}. As mentioned before, the assignment of these variables is irrelevant for this case study.
+\Cref{pat:original-conflict-realog} is originally defined in \citef[p.~22]{menezesSemanticHypergraphs2021}. We use a rewritten, but functionally identical form of it, which is shown in \cref{pat:original-conflict} and in the following referred to as the \textit{original conflict pattern}. It is used to extract conflicts between two parties \textsf{SOURCE} and \textsf{TARGET}, potentially regarding some \textsf{TOPIC}. As mentioned before, the assignment of these variables is irrelevant for this case study.
 
 The original conflict patterns contains two sub-patterns which utilize word lists. These sub-patterns match the trigger sub-edge and predicate sub-edge of a candidate edge respectively and are in following referred to as \textit{trigger sub-pattern} and \textit{predicate sub-pattern}. If not stated otherwise these terms will refer to \cref{pat:original-conflict}. 
 
@@ -1655,11 +1721,11 @@ The original conflict patterns contains two sub-patterns which utilize word list
 		\textsf{( PRED/P.{so,x} ) \(\wedge\) \\ ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )}
 \end{itemize}
 
-In the trigger sub-pattern the content of the candidate trigger sub-edge is directly matched against a list of prepositions, which are in the following referred to as the \textit{conflict prepositions}. In case of the predicate sub-pattern, the word list is matched against the lemma of the innermost atom of the candidate predicate sub-edge, which is always a verb. The list of verbs used here will in the following be referred to as the \textit{conflict verbs}.
+In the trigger sub-pattern the content of the candidate trigger sub-edge is directly matched against a list of prepositions, which are in the following referred to as the \textit{conflict triggers}. In case of the predicate sub-pattern, the word list is matched against the lemma of the innermost atom of the candidate predicate sub-edge, which is always a verb. The list of verbs used here will in the following be referred to as the \textit{conflict predicates}.
 
 \begin{itemize}
-	\item \textbf{\textsf{Conflict prepositions:}} against, for, of, over
-	\item \textbf{\textsf{Conflict verbs:}} accuse, arrest, clash, condemn, kill, slam, warn
+	\item \textbf{\textsf{Conflict triggers:}} against, for, of, over
+	\item \textbf{\textsf{Conflict predicates:}} accuse, arrest, clash, condemn, kill, slam, warn
 \end{itemize}
 
 
@@ -1669,7 +1735,7 @@ In the trigger sub-pattern the content of the candidate trigger sub-edge is dire
   ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\) \\
   ( lemma/J >PRED/P [accuse,arrest,clash,condemn,kill,slam,warn]/P )
   \caption{Original conflict pattern}
-  \label{pat:original-conflict}
+  \label{pat:original-conflict-realog}
 \end{pattern}
 
 \begin{pattern}
@@ -1679,7 +1745,7 @@ In the trigger sub-pattern the content of the candidate trigger sub-edge is dire
   SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) 
 
   \caption{Original conflict pattern (rewritten)}
-  \label{pat:original-conflict-rewritten}
+  \label{pat:original-conflict}
 \end{pattern}
 
 %\begin{pattern}
@@ -1735,7 +1801,7 @@ Replacing either the trigger sub-pattern, the predicate sub-pattern or both of t
 %\end{pattern}
 
 \paragraph{Preliminary Evaluation}
-The three wildcard conflict patterns are matched against the Worldnews-\gls{sh} and the number of matches is recorded. Comparing the number of matches of these patterns shows which of the sub-patterns is most influential for the retrieval performance of \cref{pat:original-conflict}. \Cref{tab:wildcard-pattern-evaluation} shows the results of these preliminary evaluations as well as the number of matches that result from matching \cref{pat:original-conflict} against the Worldnes-\gls{sh}. It can be seen that the choice of conflict verbs is much more influential on the number of matches than the choice of conflict prepositions when compared to the number of matches resulting from the original conflict pattern. While replacing the predicate sub-pattern with a wildcard operator yields an increase with a factor of \(12,45\), replacing the trigger sub-pattern with a wildcard operator only yields an increase with a factor of \(1,07\). 
+The three wildcard conflict patterns are matched against the Worldnews-\gls{sh} and the number of matches is recorded. Comparing the number of matches of these patterns shows which of the sub-patterns is most influential for the retrieval performance of \cref{pat:original-conflict}. \Cref{tab:wildcard-pattern-evaluation} shows the results of these preliminary evaluations as well as the number of matches that result from matching \cref{pat:original-conflict} against the Worldnes-\gls{sh}. It can be seen that the choice of conflict predicates is much more influential on the number of matches than the choice of conflict triggers when compared to the number of matches resulting from the original conflict pattern. While replacing the predicate sub-pattern with a wildcard operator yields an increase with a factor of \(12,45\), replacing the trigger sub-pattern with a wildcard operator only yields an increase with a factor of \(1,07\). 
 
 
 \begin{table}[h]
@@ -1759,14 +1825,14 @@ Trigger wildcard pattern						& 6154	\\
 \subsubsection{SemSim Conflict Patterns}
 Based on the result of the preliminary evaluation in \cref{sec:wildcard-conflict-patterns}, the predicate sub-pattern of \cref{pat:original-conflict} is replaced by different forms of semsim functional patterns to construct different \textit{semsim conflict patterns}. These patterns are then used to evaluate the effects of utilizing \gls{ness-shpm}. The trigger sub-pattern is not modified to better isolate these effects in comparison to purely symbolic \gls{shpm}.
 
-\Cref{pat:semsim-conflict} describes the general form of a semsim conflict pattern. The \texttt{<SEMSIM-FUNCTION>} placeholder is replaced with one of the three implemented semsim functions to construct the \textit{semsim-fix conflict pattern} (\cref{pat:semsim-fix-conflict}), \textit{semsim-fix-lemma conflict pattern} (\cref{pat:semsim-fix-lemma-conflict}) and the \textit{semsim-ctx conflict pattern} (\cref{pat:semsim-ctx-conflict}). As \texttt{<SEMSIM-ARGUMENT>} the conflict verb list is used as similarity reference words in \cref{pat:semsim-fix-conflict} and \cref{pat:semsim-fix-lemma-conflict}, which utilize \gls{fness}. In the semsim-ctx conflict pattern, the wildcard operator is used as \texttt{<SEMSIM-ARGUMENT>} since the necessary reference edges can only be provided via an external parameter and not inside the pattern.
+\Cref{pat:semsim-conflict} describes the general form of a semsim conflict pattern. The \texttt{<SEMSIM-FUNCTION>} placeholder is replaced with one of the three implemented semsim functions to construct the \textit{semsim-fix conflict pattern} (\cref{pat:semsim-fix-conflict}), \textit{semsim-fix-lemma conflict pattern} (\cref{pat:semsim-fix-lemma-conflict}) and the \textit{semsim-ctx conflict pattern} (\cref{pat:semsim-ctx-conflict}). The conflict predicate list is used as as \texttt{<REFERENCE-CONTENT>}, in \cref{pat:semsim-fix-conflict} and \cref{pat:semsim-fix-lemma-conflict}, which both utilize \gls{fness}. In the semsim-ctx conflict pattern, the wildcard operator is used as \texttt{<REFERENCE-CONTENT>}, since the necessary reference edges can only be provided via an external argument and not inside the pattern.
 
 
 \begin{pattern}[H]
   \normalfont\sffamily
   \centering
   ( PRED/P.{so,x} SOURCE/C TARGET/C [against,for,of,over]/T TOPIC/[RS] ) \(\wedge\)\\ 
-  ( \texttt{<SEMSIM-FUNCTION>}/J PRED/P \texttt{<SEMSIM-ARGUMENT>}/P )
+  ( \texttt{<SEMSIM-FUNCTION>}/J PRED/P \texttt{<REFERENCE-CONTENT>}/P )
   \caption{General SemSim conflict pattern}
   \label{pat:semsim-conflict}
 \end{pattern}
@@ -1802,16 +1868,13 @@ Based on the result of the preliminary evaluation in \cref{sec:wildcard-conflict
 
 \section{Conflict Dataset}
 \label{sec:conflict-dataset}
-To conduct an evaluation which assesses the retrieval performance of the \gls{ness-shpm} system it is necessary to have a dataset of edges with labels that state whether an edge is an expression of conflict or not. Since such a dataset does not exists it needs to be constructed. In the following the construction process of this \textit{conflict dataset} (CD), which is used for the evaluation in this case study, and the datasets characteristics are discussed.
-
-\todo[inline]{dataset creation i separate Python package `graphbrain-semsim`}
-
+To conduct an evaluation which assesses the retrieval performance of the \gls{ness-shpm} system, it is necessary to have a dataset of edges with labels that state whether an edge is an expression of conflict or not. Since such a dataset does not exist it needs to be constructed. In the following the construction process of this \gls{cd}, which is used for the evaluation in this case study, and the datasets characteristics are discussed.
 
 \subsection{Base Edge Set}
 \label{sec:base-edge-set}
-The set of edges that can be retrieved by a conflict pattern, i.e. the original conflict pattern or a semsim conflict pattern is restricted the general form of these patterns. This entails that, given the same \gls{sh}, every set of matching edges of a pattern of this form will be a subset of the matching edges of the predicate wildcard pattern (\cref{pat:wildcard-pred}). The set of edges resulting form matching this pattern against the Worldnews-\gls{sh} are therefore used as the \textit{base edge set} (BES) from which the conflict dataset is constructed, instead of the entirety of all the hypergraphs root edges.
+The set of edges that can be retrieved by a conflict pattern, i.e. the original conflict pattern or a semsim conflict pattern is restricted the general form of these patterns. This entails that, given the same \gls{sh}, every set of matching edges of a pattern of this form will be a subset of the matching edges of the predicate wildcard pattern (\cref{pat:wildcard-pred}). The set of edges resulting form matching this pattern against the Worldnews-\gls{sh} are therefore used as the \gls{bes} from which the conflict dataset is constructed, instead of the entirety of all the hypergraphs root edges.
 
-\paragraph{Predicate Lemma} Every edge in the BES has a predicate sub-edge that has an innermost atom, which is a verb that has a lemma. In the following this is called the \textit{predicate lemma} of an edge. Each of the edges matching \cref{pat:original-conflict} or a pattern in the form of of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
+\paragraph{Predicate Lemma} Every edge in the \gls{bes} has a predicate sub-edge that has an innermost atom, which is a verb that has a lemma. In the following this is called the \textit{predicate lemma} of an edge. Each of the edges matching \cref{pat:original-conflict} or a pattern in the form of of \cref{pat:semsim-conflict} therefore corresponds to a predicate lemma.
 
 %Matching \cref{pat:wildcard-pred} against the Worldnews-\gls{sh} results in \(n_{f} = 69 380\) matching edges. In the following the set of those edges will be referred to as the \textit{BSE} (FD).\todo{add examples}
 
@@ -1827,24 +1890,22 @@ To effectively evaluate the effectiveness of the application of \gls{ness} by ma
 On the one hand it is desired to have as many different unique predicate lemmas as possible in the dataset to be able to evaluate whether \gls{ness} can differentiate if a predicate lemma indicates an expression of conflict or not. On the other hand it is desired to have as many different edges per unique lemma as possible in the dataset to be able to evaluate whether \gls{cness} is able to differentiate if edges represent an expression of conflict or not, given that they correspond to the same predicate lemma.
 
 \subsection{Construction Process}
-To create the labelled CD, the edges of the dataset need to be manually labelled by human annotators, which is labor-intensive. The BES contains \(n_b=71804\) edges. Due to the time constrains of this work and the limited availability of three annotators, the BES needs to be subsampled to create the CD. 
+To create the labelled \gls{cd}, the edges of the dataset need to be manually labelled by human annotators, which is labor-intensive. The \gls{bes} contains \(n_b=71804\) edges. Due to the time constrains of this work and the limited availability of three annotators, the \gls{bes} needs to be subsampled to create the \gls{cd}. 
 
 \subsubsection{Filtering}
-Since the desired characteristics described above relate the the distribution of predicate lemmas, it is relevant to verify that is possible to determine the predicate lemma for all edges in the edge set from which the CD is sampled. In some cases it is not possible to determine the predicate lemma of a given edge due to to implementation issues, which out of scope of this work. In these cases an edge is filtered from the BES, which results in the \textit{filtered base edge set} (FBES). The FBES contains \(n_{f} = 69 380\) edges. 
+Since the desired characteristics described above relate the the distribution of predicate lemmas, it is relevant to verify that is possible to determine the predicate lemma for all edges in the edge set from which the \gls{cd} is sampled. In some cases it is not possible to determine the predicate lemma of a given edge due to to implementation issues, which out of scope of this work. In these cases an edge is filtered from the BES, which results in the \gls{fbes}. The \gls{fbes} contains \(n_{f} = 69 380\) edges. 
 
 
 \subsubsection{Sampling} 
-The edges in the FBES correspond to \(n_{l} = 2195\) unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every predicate lemma contained in the FBES is statistically represented multiple times in the subsampled dataset.
+The edges in the \gls{fbes} correspond to \(n_{l} = 2195\) unique predicate lemmas. Attaining to the desired dataset characteristics, the number of samples \(n_{s}\) in the subsampled dataset should ideally be a multiple \(m_{l} >= 2\) of \(n_{l}\), so that \(n_{s} = m_{l} \cdot  n_{l}\). This would mean that every predicate lemma contained in the \gls{fbes} is statistically represented multiple times in the subsampled dataset. A dataset size of \(n_{s}=2000\) was chosen, which means \(m_{l} < 2\) and  \(n_s << n_f\). This entails that a trade-off between the desired dataset characteristics has to be made. To account for this, a sampling method is applied that offers more control over the distribution of predicate lemmas in the subsampled dataset than uniform random sampling does. This sampling method is based on the idea of \textit{Stratified Sampling} \cite{parsonsStratifiedSampling2017} and is described in detail in \cref{algo:dataset-sampling}. 
 
-A dataset size of \(n_{s}=2000\) was chosen, wich means \(m_{l} < 2\) and  \(n_s << n_f\). This entails that a trade-off between the desired dataset characteristics has to be made. To account for this, a sampling method is applied that offers more control over the distribution of predicate lemmas in the subsampled dataset than uniform random sampling does. This sampling method is based on the idea of \textit{Stratified Sampling} \cite{parsonsStratifiedSampling2017} \todo{is this correct?} and is described in detail in \cref{algo:dataset-sampling}. 
-
-The procedure splits the FBES into multiple bins after the edges are sorted by number of occurrence of their predicate lemma and then uniformly randomly samples from each bin. This method guarantees that predicate lemmas which correspond to a relatively small number of edges in the FBES will be represented in the subsampled dataset. The distribution of uniques lemmas in the FBES and the CD is compared visually in \cref{fig:dataset-lemma-distribution}.
+The procedure splits the \gls{fbes} into multiple bins after the edges are sorted by number of occurrence of their predicate lemma and then uniformly randomly samples from each bin. This method guarantees that predicate lemmas which correspond to a relatively small number of edges in the \gls{fbes} will be represented in the subsampled dataset. The distribution of uniques lemmas in the \gls{fbes} and the \gls{cd} is compared visually in \cref{fig:dataset-lemma-distribution}.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]
 {dataset_lemma_distribution/lemma_distribution_dataset_conflicts_1-2_pred_wildcard_full_dataset_conflicts_1-2_pred_wildcard_subsample-2000.png}
-\caption{Distribution of unique lemmas in the FBES and CD}
+\caption{Distribution of unique lemmas in the \gls{fbes} and \gls{cd}}
 \label{fig:dataset-lemma-distribution}
 \end{figure}
 
@@ -1866,7 +1927,7 @@ The procedure splits the FBES into multiple bins after the edges are sorted by n
 \label{algo:dataset-sampling}
 \end{algorithm}
 
-The subsampled dataset size resulting from this sampling method is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the CD.
+The subsampled dataset size resulting from this sampling method is \(n_{s} = n_{b} * n_{sb}\). Given \(n_{s} = 2000\), the values \(n_b = 10\) and \(n_{sb} = 200\) were chosen for sampling the \gls{cd}.
 
 
 \subsubsection{Labelling}
@@ -1875,7 +1936,7 @@ The labelling task is shared between the three annotators. A given edge will be 
 % It was confirmed that the percentage of edges that represent an expression of conflict in relation to all edges in the subset given to an annotator did not vary more than ... among all three annotators.
 
 \subsection{Edge Set Comparison}
-The CD is the result of the filtering, sampling and labelling described above. The size of the Worldnews-\gls{sh}, BES, FBES and CD are listed in \cref{tab:dataset-descriptions} for comparison. If applicable the the number of unique lemmas as well as the number and percentage of edges which are labelled as an expression of conflict and of those which are not are also noted.\todo{add examples? (in appendix?)}
+The \gls{cd} is the result of the filtering, sampling and labelling described above. The size of the Worldnews-\gls{sh}, BES, \gls{fbes} and \gls{cd} are listed in \cref{tab:dataset-descriptions} for comparison. If applicable, the number of unique lemmas as well as the number and percentage of edges which are labelled as an expression of conflict and of those which are not are also noted.\todo{add examples? (in appendix?)}
 
 
 \begin{table}
@@ -1888,8 +1949,8 @@ The CD is the result of the filtering, sampling and labelling described above. T
 \midrule
 Worldnews-\gls{sh}						& 479384		& -			& -					& - \\
 Base Edge Set (BES)					& 71804		& -			& -					& - \\
-Filtered BES (FBES)					& 69380 		& 2195 		& - 					& - \\
-Conflict Dataset (CD)				& 2000 		& 539 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
+Filtered \gls{bes} (FBES)					& 69380 		& 2195 		& - 					& - \\
+Conflict Dataset (\gls{cd})				& 2000 		& 539 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
 \bottomrule
 \end{tabular}
 \caption{Number of edges, number of unique lemmas and proportion of labels for the different edge sets}
@@ -1898,9 +1959,7 @@ Conflict Dataset (CD)				& 2000 		& 539 		& 599 (29.95 \%) 	& 1401 (70.05 \%) \\
 
 
 \section{Evaluation Process}
-In this evaluation multiple \textit{evaluation runs} are conducted. Each evaluation run correspond to a \gls{shpm} process in which a pattern is matched against the CD. In the case of patterns utilizing \gls{ness} this requires that additional parameters in form of an \textit{\gls{ness} configuration} are given to the matching process. An evaluation run is described by an \textit{evaluation (run) configuration}. For each evaluation run the \textit{evaluation metrics} are computed. 
-
-\todo[inline]{evaluation process is also implemented in separate Python package `graphbrain-semsim`}
+In this evaluation multiple \textit{evaluation runs} are conducted. Each evaluation run correspond to a \gls{shpm} process in which a pattern is matched against the \gls{cd}. In the case of patterns utilizing \gls{ness} this requires that additional parameters in form of an \textit{\gls{ness} configuration} are given to the matching process. An evaluation run is described by an \textit{evaluation (run) configuration}. For each evaluation run the \textit{evaluation metrics} are computed. 
 
 \subsection{Evaluation Run Configurations}
 An evaluation configuration consists of the following parameters: \todo{add references to chapter 4}
@@ -1924,7 +1983,7 @@ In this evaluation the similarity threshold \(t_s\) is always selected from a ra
 
 
 \paragraph{Reference Edge Sets}
-Multiple \textit{reference edge sets} (RES)  are randomly sampled from the set of edges in the CD, which are labelled as "conflict". These edges are then excluded from the dataset, to avoid introducing data from the test dataset to the system that is being evaluated. To compare the effect of different sample sizes, differently sized sets are drawn. To compare the effect of different samples, different samples are drawn. A RES with ID \textit{N-X} has \(N \in \{1, 3, 10\}\) samples and is from sample draw \(X \in \{1, 2, 3, 4, 5\}\). This results in 15 different RES in total. The specific sets that have been sampled can be seen in \cref{app-sec:ref-edge-sets}.
+Multiple \gls{res}  are randomly sampled from the set of edges in the \gls{cd}, which are labelled as "conflict". These edges are then excluded from the dataset, to avoid introducing data from the test dataset to the system that is being evaluated. To compare the effect of different sample sizes, differently sized sets are drawn. To compare the effect of different samples, different samples are drawn. A \gls{res} with ID \textit{N-X} has \(N \in \{1, 3, 10\}\) samples and is from sample draw \(X \in \{1, 2, 3, 4, 5\}\). This results in 15 different \gls{res} in total. The specific sets that have been sampled can be seen in \cref{app-sec:ref-edge-sets}.
 
 
 \subsubsection{Evaluation Run Names}
@@ -1945,10 +2004,10 @@ The configurations for all evaluation runs that are conducted in this case study
 
 \subsection{Evaluation Metrics}
 \label{sec:evaluation-metrics}
-Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed. \todo{show how this metrics are computed?}
+Using the information provided by the dataset labels it is determined whether a match is correct or not. If an edge is matches in a given evaluation run and is labeled as "conflict" in the dataset, it is considered a \textit{true positive} (TP). If an edge matches but is labeled "no conflict", it is considered a \textit{false positive} (FP). The \textit{true negatives} (TN) and \textit{false negatives} (FN) are determined analogously  by examining the non-matching edges. Based on the TP, FP, TN and FN the metrics \textit{precision}, \textit{recall} and \textit{F1-score} are computed.
 
 \paragraph{Relationship of Similarity Threshold and Recall}
-It can be generally stated that the recall (\(r\)) of \gls{ness-shpm} in relation to the similarity threshold (\(r(t_s)\)) is strictly monotonically decreasing, since the set of points in embedding space that is inside of the similarity boundary consistently gets smaller with increasing threshold. \todo{maybe add ref. to earlier section}
+It can be generally stated that the recall (\(r\)) of \gls{ness-shpm} in relation to the similarity threshold (\(r(t_s)\)) is strictly monotonically decreasing, since the set of points in embedding space that is inside of the similarity boundary consistently gets smaller with increasing threshold.
 
 \todo[inline]{derive why these metrics were chosen: \\
 accuracy is not interesting since the dataset is unbalanced, precision and recall both of interest, but are expected to be a trade-off (where recall should decline with rising \gls{st}). F1-score is an established metric that closely relates to precision and recall and represents this trade-off and therefore retrieval performance as a whole. MCC is arguably a better metric because it is symmetrical and incorporates true negatives. also the F1-score of the original pattern is worse than random, which indicates a metric mismatch. then again the close relation and equal value range of precision, recall and F1-score are a plus (for plotting especially).
@@ -2004,53 +2063,35 @@ In this section the results of the evaluation runs which are defined by the eval
 To facilitate constructing insightful perspectives on the result data, some novel concepts for its description are introduced in the following.
 
 \paragraph{Evaluation Run Sets}
-Multiple evaluation runs can be grouped into an \textit{evaluation run set} (ERS) according to their shared configuration parameter values. The naming convention for an ERS follows the evaluation run naming convention described in \cref{sec:eval-run-names}. The parameters values that are not shared among the evaluation runs in the ERS are omitted from the name or replaced by the wildcard symbol \texttt{*}. The placeholders (capitalised letters) are used to refer to an E\gls{sr} of a generic form with fixed parameter values without specifying these values.  By surrounding a part of the ERS name with parentheses \texttt{(*)}, it is indicated that this part is omitted if unsuitable. 
+Multiple evaluation runs can be grouped into an \gls{ers} according to their shared configuration parameter values. The naming convention for an \gls{ers} follows the evaluation run naming convention described in \cref{sec:eval-run-names}. The parameters values that are not shared among the evaluation runs in the \gls{ers} are omitted from the name or replaced by the wildcard symbol \texttt{*}. The placeholders (capitalised letters) are used to refer to an E\gls{sr} of a generic form with fixed parameter values without specifying these values.  By surrounding a part of the \gls{ers} name with parentheses \texttt{(*)}, it is indicated that this part is omitted if unsuitable. 
 
 Examples are given to illustrate this:
 \begin{itemize}
-	\item An ERS of all evaluation runs utilizing \gls{ness} with \(t_s = 0.5\) is named: \\ \texttt{semsim-* t-0.5}
-	\item An ERS of all evaluation runs utilizing \gls{fness} with an unspecified but fixed \gls{ness} model has the form: \\ \texttt{semsim-fix(-*) NM} 
-	\item An ERS of all evaluation runs utilizing \gls{ness} with all parameters (that are applicable) fixed but unspecified, except for the specific value \(t_s = 0.5\), has the form: \\ \texttt{semsim-* NM(-AT) (r-N-X) t-0.5}
+	\item An \gls{ers} of all evaluation runs utilizing any form of \gls{ness} with \(t_s = 0.5\) is named: \\ \texttt{semsim-* t-0.5}
+	\item An \gls{ers} of all evaluation runs utilizing \gls{fness} with an unspecified but fixed \gls{ness} model has the form: \\ \texttt{semsim-fix(-*) NM} 
+	\item An \gls{ers} of all evaluation runs utilizing \gls{ness} with all parameters (that are applicable) fixed but unspecified, except for the specific value \(t_s = 0.5\), has the form: \\ \texttt{semsim-* NM(-AT) (r-N-X) t-0.5}
 \end{itemize}
 
-\paragraph{Best F1-Score Evaluation run} The \textit{best F1-Score evaluation run} refers to the evaluation run with the highest F1-Score in an ERS corresponding to a \gls{ness} utilizing evaluation configuration where every parameter except for \(t_s\) is fixed. Such an ERS is generally named \texttt{semsim-* NM(-AT) (r-N-X)}. The corresponding F1-score is also simply referred to as \textit{best F1-score}.
+\paragraph{Best F1-Score Evaluation run} The \textit{best F1-Score evaluation run} refers to the evaluation run with the highest F1-Score in an \gls{ers} corresponding to a \gls{ness} utilizing evaluation configuration where every parameter except for \(t_s\) is fixed. Such an \gls{ers} is generally named \texttt{semsim-* NM(-AT) (r-N-X)}. The corresponding F1-score is also simply referred to as \textit{best F1-score}.
 %This means among the results for all similarity threshold in the given threshold range for a given evaluation run, the \gls{st} that results in the highest F1-score is selected. The scores of the other evaluation metrics also correspond to this \gls{st}.
 
 \paragraph{Mean Reference Edge Set Evaluation Runs}
-A \textit{mean reference edge set evaluation run} is constructed from the mean value of all evaluation scores for the evaluation runs in an ERS of the form \texttt{semsim-ctx NM-AT r-N-* t-TS}. This means for every \(t_s\) the mean of the corresponding evaluation scores of all reference edge sets of the same size is computed. In the following these synthetical evaluation runs are referred to in this form: \texttt{semsim-ctx NM-AT r-N-mean}
+A \textit{mean reference edge set evaluation run} is constructed from the mean value of all evaluation scores for the evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM-AT r-N-* t-TS}. This means for every \(t_s\) the mean of the corresponding evaluation scores of all reference edge sets of the same size is computed. In the following these synthetical evaluation runs are referred to in this form: \texttt{semsim-ctx NM-AT r-N-mean}
 %These mean evaluation runs are primarily relevant for visualisation in the result plots (see \cref{sec:eval-metrics-vs-st}).
 
 \paragraph{Mean Reference Edge Set Best F1-Score Evaluation Metric Scores}
-The \textit{mean reference edge set (RES) best F1-Score evaluation metric scores} are the mean values of all evaluation scores corresponding to the best F1 score for all evaluation runs in an ERS of the form \texttt{semsim-ctx NM-AT r-N-*}. In the following these evaluation metric scores will be referred to in this form: \texttt{semsim-ctx NM-AT r-N-mean-best}
+The \textit{mean reference edge set (RES) best F1-Score evaluation metric scores} are the mean values of all evaluation scores corresponding to the best F1 score for all evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM-AT r-N-*}. In the following these evaluation metric scores will be referred to in this form: \texttt{semsim-ctx NM-AT r-N-mean-best}
 %For example \textit{semsim-ctx e5-at r-10-best-mean} refers to the mean of best F1 scores for all evaluation runs that use the semsim-ctx conflict pattern, the e5 model with all-tokens enabled and a reference edge set of size ten. 
 
 
 
 \subsection{Best F1-Score based Evaluation Run Comparison}
 \label{sec:best-f1-score-eval-run-comparison}
-\Cref{tab:best-f1-score-mean-best} shows the evaluation scores for all evaluation metrics of the best F1-score evaluation runs for the original conflict pattern evaluation run and all evaluation runs utilizing \gls{fness}. For the evaluation runs utilizing \gls{cness} only the mean RES best F1-score evaluation metric scores and the standard deviation of the best F1-scores for the corresponding ERSs are shown. The \(t_s\) value listed for the mean RES best F1 score evaluation metrics is the mean of all \(t_s\) values for the best F1-scores in the corresponding ERSs.
+\Cref{tab:best-f1-score-mean-best} shows the evaluation scores for all evaluation metrics of the best F1-score evaluation runs for the original conflict pattern evaluation run and all evaluation runs utilizing \gls{fness}. For the evaluation runs utilizing \gls{cness} only the mean \gls{res} best F1-score evaluation metric scores and the standard deviation of the best F1-scores for the corresponding \gls{ers}s are shown. The \(t_s\) value listed for the mean \gls{res} best F1 score evaluation metrics is the mean of all \(t_s\) values for the best F1-scores in the corresponding \gls{ers}s.
 
-In \cref{tab:best-f1-score-mean-best-semsim-ctx} and \cref{tab:best-f1-score-mean-best-semsim-ctx-at} of \cref{app-sec:result-tables} the best F1-score evaluation run results can be seen for evaluation runs utilizing \gls{cness} with all-tokens disabled and enabled respectively. These tables also list the hypothetical best F1-score evaluation for run the mean reference edge set evaluation runs. Additionally the mean standard deviation for these ERSs is shown, i.e. the mean of the standard deviations of the F1-score for every ERS of the form \texttt{semsim-ctx NM-AT r-N-* t-TS}.
+In \cref{tab:best-f1-score-mean-best-semsim-ctx} and \cref{tab:best-f1-score-mean-best-semsim-ctx-at} of \cref{app-sec:result-tables} the best F1-score evaluation run results can be seen for evaluation runs utilizing \gls{cness} with all-tokens disabled and enabled respectively. These tables also list the hypothetical best F1-score evaluation for run the mean reference edge set evaluation runs. Additionally the mean standard deviation for these \gls{ers}s is shown, i.e. the mean of the standard deviations of the F1-score for every \gls{ers} of the form \texttt{semsim-ctx NM-AT r-N-* t-TS}.
 
-
-\subsubsection{Significant Observations}
-\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
-\refstepcounter{listcounter}% Increment the list counter
-%	\item The random evaluation run achieves a higher F1-score than the original conflict pattern evaluation run
-	\item All evaluation runs utilizing \gls{ness} achieve a best F1-score that is higher than the F1-score of the random evaluation run and the original evaluation run \label{obs-itm:ness-higher-best-f1}
-	\item \gls{cness} achieves achieves a higher F1-score than \gls{fness} by 4.0\%, when comparing the highest F1-scores achieved among all \gls{fness} utilizing evaluation runs and the highest mean RES best F1 score achieved among all \gls{cness} utilizing evaluation runs (\texttt{semsim-fix-lemma cn t-0.30} and \texttt{semxim-ctx e5 r-10-mean-best} \label{obs-itm:cness-higher-best-f1-than-fness}
-	\item Lemma based \gls{fness} achieves a higher F1-score than non-lemma \gls{fness} by 3.2\%, when comparing the highest F1-scores achieved by evaluation runs utilizing one of the two variants (\texttt{semsim-fix w2v t-0.27} and \texttt{semsim-fix-lemma cn t-0.30}) \label{obs-itm:lemma-based-fness-higher-best-f1}
-	\item For lemma based \gls{fness}, the conceptnet-numberbatch model achieves a higher best F1-score than the word2vec model by 4.2\% \\ (\texttt{semsim-fix-lemma cn t-0.30} vs \texttt{semsim-fix-lemma w2v t-0.33}) \label{obs-itm:lemma-fness-cn-better-than-w2v}
-	\item For not lemma based \gls{fness}, the word2vec model achieves a higher best F1-score than the conceptnet-numberbatch model by 1.4\% \\ (\texttt{semsim-fix w2v t-0.27} vs \texttt{semsim-fix cn t-0.25}) \label{obs-itm:word-fness-w2v-better-than-cn}
-	\item \gls{cness} with the AT option disabled achieves a higher or equal mean RES best F1-score than \gls{cness} with AT option enabled in 6/6 (100\%) direct comparisons \\(\texttt{semsim-ctx NM r-N-mean-best} vs \texttt{semsim-ctx NM-at r-N-mean-best}) \label{obs-itm:cness-better-without-AT}
-	\item \gls{cness} with the e5 model achieves a higher or equal mean RES best F1-score than \gls{cness} with the gte model in 6/6 (100\%) direct comparisons \\ (\texttt{semsim-ctx e5-* r-N-mean-best} vs \texttt{semsim-ctx gte-* r-N-mean-best}) \label{obs-itm:cness-e5-better-than-gte}
-	\item \gls{cness} with the AT option enabled has a lower standard deviation of best F1-score than \gls{cness} with the AT option disabled in 5/6 (83\%) direct comparisons \\ (\texttt{semsim-ctx NM-at r-N-mean-best} vs \texttt{semsim-ctx NM r-N-mean-best}) \label{obs-itm:cness-lower-variation-with-AT}
-%	\item \gls{cness} with the gte model has a lower standard deviation of best F1-score than \gls{cness} with the e5 model in 4/6 (67\%) direct comparisons \\ (\texttt{semsim-ctx gte-* r-N-mean-best} vs \texttt{semsim-ctx e-* r-N-mean-best})
-%	\item For \gls{cness} with the AT option disabled, the gte model has a lower standard deviation of best F1-score than the e5 model in 3/3 (100\%) direct comparisons \\ (\texttt{semsim-ctx gte r-N-mean-best} vs \texttt{semsim-ctx e5 r-N-mean-best})
-\end{enumerate}
-
-
-\begin{table}
+\begin{table}[htp]
 \centering
 \begin{tabular}{lllrrrrrr}
 \toprule
@@ -2088,6 +2129,23 @@ semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- \textb
 \label{tab:best-f1-score-mean-best}
 \end{table}
 
+\subsubsection{Significant Observations}
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
+%	\item The random evaluation run achieves a higher F1-score than the original conflict pattern evaluation run
+	\item All evaluation runs utilizing \gls{ness} achieve a best F1-score that is higher than the F1-score of the random evaluation run and the original evaluation run \label{obs-itm:ness-higher-best-f1}
+	\item \gls{cness} achieves achieves a higher F1-score than \gls{fness} by 4.0\%, when comparing the highest F1-scores achieved among all \gls{fness} utilizing evaluation runs and the highest mean \gls{res} best F1 score achieved among all \gls{cness} utilizing evaluation runs (\texttt{semsim-fix-lemma cn t-0.30} and \texttt{semxim-ctx e5 r-10-mean-best}) \label{obs-itm:cness-higher-best-f1-than-fness}
+	\item Lemma based \gls{fness} achieves a higher F1-score than non-lemma \gls{fness} by 3.2\%, when comparing the highest F1-scores achieved by evaluation runs utilizing one of the two variants (\texttt{semsim-fix w2v t-0.27} and \texttt{semsim-fix-lemma cn t-0.30}) \label{obs-itm:lemma-based-fness-higher-best-f1}
+	\item For lemma based \gls{fness}, the conceptnet-numberbatch model achieves a higher best F1-score than the word2vec model by 4.2\% \\ (\texttt{semsim-fix-lemma cn t-0.30} vs \texttt{semsim-fix-lemma w2v t-0.33}) \label{obs-itm:lemma-fness-cn-better-than-w2v}
+	\item For not lemma based \gls{fness}, the word2vec model achieves a higher best F1-score than the conceptnet-numberbatch model by 1.4\% \\ (\texttt{semsim-fix w2v t-0.27} vs \texttt{semsim-fix cn t-0.25}) \label{obs-itm:word-fness-w2v-better-than-cn}
+	\item \gls{cness} with the \gls{at} option disabled achieves a higher or equal mean \gls{res} best F1-score than \gls{cness} with \gls{at} option enabled in 6/6 (100\%) direct comparisons \\(\texttt{semsim-ctx NM r-N-mean-best} vs \texttt{semsim-ctx NM-at r-N-mean-best}) \label{obs-itm:cness-better-without-AT}
+	\item \gls{cness} with the E5 model achieves a higher or equal mean \gls{res} best F1-score than \gls{cness} with the GTE model in 6/6 (100\%) direct comparisons \\ (\texttt{semsim-ctx e5-* r-N-mean-best} vs \texttt{semsim-ctx gte-* r-N-mean-best}) \label{obs-itm:cness-e5-better-than-gte}
+	\item \gls{cness} with the \gls{at} option enabled has a lower standard deviation of best F1-score than \gls{cness} with the \gls{at} option disabled in 5/6 (83\%) direct comparisons \\ (\texttt{semsim-ctx NM-at r-N-mean-best} vs \texttt{semsim-ctx NM r-N-mean-best}) \label{obs-itm:cness-lower-variation-with-at}
+%	\item \gls{cness} with the gte model has a lower standard deviation of best F1-score than \gls{cness} with the e5 model in 4/6 (67\%) direct comparisons \\ (\texttt{semsim-ctx gte-* r-N-mean-best} vs \texttt{semsim-ctx e-* r-N-mean-best})
+%	\item For \gls{cness} with the \gls{at} option disabled, the gte model has a lower standard deviation of best F1-score than the e5 model in 3/3 (100\%) direct comparisons \\ (\texttt{semsim-ctx gte r-N-mean-best} vs \texttt{semsim-ctx e5 r-N-mean-best})
+\end{enumerate}
+
+
 \subsection{Evaluation Metric vs. Similarity Threshold}
 \label{sec:eval-metrics-vs-st}
 
@@ -2095,9 +2153,9 @@ These plots visualise the resulting evaluation scores for the different evaluati
 
 \Cref{fig:best-f1-per-pattern} shows the F1-score vs. the \gls{st} for the best performing evaluation runs for each conflict pattern. That means for every conflict pattern, this shows the evaluation run(s) with the configuration that resulted in the highest best F1-score. For the \texttt{random} and \texttt{original} evaluation runs, there is obviously no configuration to choose from. 
 
-For the \gls{fness} utilizing evaluation runs, the evaluation run with the highest F1-score in the ERSs of the form \texttt{semsim-fix(-lemma) NM} is selected. This means for the semsim-fix and semxim-fix-lemma conflict patterns the corresponding best F1-score evaluation runs of the best performing model are selected..
+For the \gls{fness} utilizing evaluation runs, the evaluation run with the highest F1-score in the \gls{ers}s of the form \texttt{semsim-fix(-lemma) NM} is selected. This means for the semsim-fix and semxim-fix-lemma conflict patterns the corresponding best F1-score evaluation runs of the best performing model are selected..
 
-For the \gls{cness} utilizing evaluation runs, the evaluation runs which correspond to highest mean RES best F1-score are selected. This means the ERS of the form \texttt{semsim-ctx NM-AT r-N-*} which resulted in the highest mean value of best F1-scores. This ERS consists of five evaluation runs, wich each have the form \texttt{semsim-ctx NM-AT r-N-X}. The F1-scores for these runs are plotted with a lighter curve. The additional synthetical \texttt{semsim-ctx NM-AT r-N-mean} score is plotted with a normally bold curve. 
+For the \gls{cness} utilizing evaluation runs, the evaluation runs which correspond to highest mean \gls{res} best F1-score are selected. This means the \gls{ers} of the form \texttt{semsim-ctx NM-AT r-N-*} which resulted in the highest mean value of best F1-scores. This \gls{ers} consists of five evaluation runs, wich each have the form \texttt{semsim-ctx NM-AT r-N-X}. The F1-scores for these runs are plotted with a lighter curve. The additional synthetical \texttt{semsim-ctx NM-AT r-N-mean} score is plotted with a normally bold curve. 
 
 % All evaluation runs  evaluation runs correspond to those highlighted by bold letters in \cref{tab:best-f1-score-mean-best}.
 
@@ -2110,38 +2168,7 @@ The plots in this section are selected because they are deemed to be most releva
 \paragraph{Active Similarity Threshold Range}
 To facilitate the description of observation for this perspective on the result data, the concept of the \textit{active similarity threshold range} (ASTR) is introduced. For a given E\gls{sr} of the form \texttt{semsim-* NM(-AT) (r-N-X)}, the ASTR describes the range of \(t_s\) for which the recall (\(r\)) that is achieved by these evaluation runs is \(r \neq r_{max} = 1 \) and \(r \neq r_{min}\). Here \(r_{min}\) and \(r_{max}\) are the lowest and highest recall values, which correspond to \(t_{s1}\) <= \(t_{s2}\), since the function \(r(t_s)\) is monotonically decreasing.
 
-
-\subsubsection{Significant Observations}
-\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
-\refstepcounter{listcounter}% Increment the list counter
-%	\item The best F1-score of the synthetic evaluation runs \texttt{semsim-ctx e5 r-10-mean} is higher than the highest F1 score in achieved by any of the evaluation runs in \texttt{semsim-fix-*}.
-	\item The ASTR of \texttt{semsim-fix-lemma cn} is larger (\(0.0 < t_s < 1.0\)) than the ASTR of \texttt{semsim-ctx e5} (ca. \(0.625 < t_s < 0.875\)) \label{obs-itm:ASTR-lemma-fness-cn-higher-than-cness-e5}
-	\item Generally the ASTR of ERSs of the form \texttt{semsim-fix-* NM} is larger than the the ASTR of ERSs of the form \texttt{semsim-ctx} (confer also \cref{fig:prec-rec-f1-semsim-fix-lemma}, \cref{fig:prec-rec-f1-semsim-fix-lemma-model} \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:prec-rec-f1-semsim-ctx-at}) \label{obs-itm:ASTR-fness-higher-than-\gls{cness}}
-	\item The ASTRs are nearly equal for ERSs of the form \texttt{semsim-fix-* NM} \label{obs-itm:ASTR-equal-\gls{fness}} (confer \cref{fig:prec-rec-f1-semsim-fix-lemma} and \cref{fig:prec-rec-f1-semsim-fix-lemma-model}) \label{obs-itm:ASTR-fness-equal}
-	\item The ASTR of ERSs of the form \texttt{semsim-ctx gte-AT} begin at a lower value than for ERSs of the form \texttt{semsim-ctx e5-AT} (confer \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-cness-gte-starts-earlier}
-	\item The ASTR of ERSs of the form \texttt{semsim-ctx NM} begin at a lower value than for ERSs of the form \texttt{semsim-ctx NM-at} (confer \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-cness-at-starts-earlier}
-	\item The ASTRs end at nearly the same value for ERSs of the form \texttt{semsim-ctx NM-AT} \label{obs-itm:ASTR-equal-\gls{fness}} (confer \cref{fig:prec-rec-f1-semsim-ctx-model}, \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:ASTR-cness-end-equal}
-
-	\item The evaluation runs in the ERS \texttt{semsim-fix-lemma cn} achieve a higher F1 value than the evaluation run in the ERS \texttt{semsim-fix w2v} for nearly all values of \(t_s\) \label{obs-itm:lemma-fness-higher-f1-nearly-always}
-
-	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic E\gls{sr} \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:cness-highest-precision-equal-original} 	
-	\item The precision of evaluation run \texttt{semsim-fix-lemma cn}  correlates with the \gls{st} until it reaches the value achieved by the \texttt{original} evaluation run, where it plateaus \label{obs-itm:fness-st-precision-correlates}
-	\item The precision of the evaluation runs in ERS \texttt{semsim-ctx e5} correlate with the \gls{st} until precision (\(p\)) and recall (\(r\)) reach approximately the same value (\(p \approx r \approx 0.5\)), after which it fluctuates (the specific fluctuation varies with the specific RES) \label{obs-itm:cness-st-precision-correlates-until-crosspoint}
-
-	\item The precision achieved by evaluation runs in ERSs of the form \texttt{semsim-ctx e5 r-10-* t-TS} has a higher variation for \(t_s \geq 0.75\) than for \(t_s < 0.75\) \label{obs-itm:cness-precision-variation-higher-ASTR}
-	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic E\gls{sr} \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:cness-highest-precision-equal-original} 	
-	\item The evaluation metric scores of \texttt{semsim-fix-lemma cn t-1.00} are lower than those of the \texttt{original} evaluation run \label{obs-itm:fness-st-limit}
-
-%	\item Precision (\(p\)) and recall (\(r\)) have the same value (\(p \approx r \approx 0.5\)) at specific similarity thresholds \(t_1\) and \(t_2\) for the two ERSs \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5}
-
-\end{enumerate}
- 
- 
-\todo[inline]{should i quantify all these observations?}
- 
-\todo[inline]{would a more detailed analysis of precision and recall make sense? maybe a precision-recall curve or an roc? maybe recall at best precision and precision at random recall?}
- 
-\begin{figure}
+\begin{figure}[htp]
  \centering
  \begin{subfigure}{\textwidth}
 	\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5_f1}
@@ -2157,6 +2184,32 @@ To facilitate the description of observation for this perspective on the result 
  \end{subfigure}
  \caption{Evaluation metric scores vs. similarity threshold values}
 \end{figure}
+
+\subsubsection{Significant Observations}
+\begin{enumerate}[label=\arabic{listcounter}.\arabic*]
+\refstepcounter{listcounter}% Increment the list counter
+%	\item The best F1-score of the synthetic evaluation runs \texttt{semsim-ctx e5 r-10-mean} is higher than the highest F1 score in achieved by any of the evaluation runs in \texttt{semsim-fix-*}.
+	\item The ASTR of \texttt{semsim-fix-lemma cn} is larger (\(0.0 < t_s < 1.0\)) than the ASTR of \texttt{semsim-ctx e5} (ca. \(0.625 < t_s < 0.875\)) \label{obs-itm:astr-lemma-fness-cn-higher-than-cness-e5}
+	\item Generally the ASTR of \gls{ers}s of the form \texttt{semsim-fix-* NM} is larger than the the ASTR of \gls{ers}s of the form \texttt{semsim-ctx} (confer also \cref{fig:prec-rec-f1-semsim-fix-lemma}, \cref{fig:prec-rec-f1-semsim-fix-lemma-model} \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:prec-rec-f1-semsim-ctx-at}) \label{obs-itm:astr-fness-higher-than-cness}
+	\item The ASTRs are nearly equal for \gls{ers}s of the form \texttt{semsim-fix-* NM} \label{obs-itm:ASTR-equal-fness} (confer \cref{fig:prec-rec-f1-semsim-fix-lemma} and \cref{fig:prec-rec-f1-semsim-fix-lemma-model}) \label{obs-itm:astr-fness-equal}
+	\item The ASTR of \gls{ers}s of the form \texttt{semsim-ctx gte-AT} begin at a lower value than for \gls{ers}s of the form \texttt{semsim-ctx e5-AT} (confer \cref{fig:prec-rec-f1-semsim-ctx-model} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:astr-cness-gte-starts-earlier}
+	\item The ASTR of \gls{ers}s of the form \texttt{semsim-ctx NM} begin at a lower value than for \gls{ers}s of the form \texttt{semsim-ctx NM-at} (confer \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:astr-cness-at-starts-earlier}
+	\item The ASTRs end at nearly the same value for \gls{ers}s of the form \texttt{semsim-ctx NM-AT} \label{obs-itm:ASTR-equal-fness} (confer \cref{fig:prec-rec-f1-semsim-ctx-model}, \cref{fig:prec-rec-f1-semsim-ctx-at} and \cref{fig:f1-semsim-ctx-model-at}) \label{obs-itm:astr-cness-end-equal}
+
+	\item The evaluation runs in the \gls{ers} \texttt{semsim-fix-lemma cn} achieve a higher F1 value than the evaluation run in the \gls{ers} \texttt{semsim-fix w2v} for nearly all values of \(t_s\) \label{obs-itm:lemma-fness-higher-f1-nearly-always}
+
+	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic E\gls{sr} \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:cness-highest-precision-equal-original} 	
+	\item The precision of evaluation run \texttt{semsim-fix-lemma cn}  correlates with the \gls{st} until it reaches the value achieved by the \texttt{original} evaluation run, where it plateaus \label{obs-itm:fness-st-precision-correlates}
+	\item The precision of the evaluation runs in \gls{ers} \texttt{semsim-ctx e5} correlate with the \gls{st} until precision (\(p\)) and recall (\(r\)) reach approximately the same value (\(p \approx r \approx 0.5\)), after which it fluctuates (the specific fluctuation varies with the specific \gls{res}) \label{obs-itm:cness-st-precision-correlates-until-crosspoint}
+
+	\item The precision achieved by evaluation runs in \gls{ers}s of the form \texttt{semsim-ctx e5 r-10-* t-TS} has a higher variation for \(t_s \geq 0.75\) than for \(t_s < 0.75\) \label{obs-itm:cness-precision-variation-higher-ASTR}
+	\item The precision of the evaluation run which achieves the highest precision among those in the synthetic E\gls{sr} \texttt{semsim-ctx e5 r-10-mean} (\(p_\text{max}\)) and the precision of the original evaluation run (\(p_\text{og}\)) are nearly equal (\(p_\text{max} \approx p_\text{og}\)) \label{obs-itm:cness-highest-precision-equal-original} 	
+	\item The evaluation metric scores of \texttt{semsim-fix-lemma cn t-1.00} are lower than those of the \texttt{original} evaluation run \label{obs-itm:fness-st-limit}
+
+%	\item Precision (\(p\)) and recall (\(r\)) have the same value (\(p \approx r \approx 0.5\)) at specific similarity thresholds \(t_1\) and \(t_2\) for the two \gls{ers}s \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5}
+
+\end{enumerate} 
+
  
 %\begin{figure}[hp]
 %\centering
@@ -2187,37 +2240,37 @@ To facilitate the description of observation for this perspective on the result 
 
 \subsection{Best F1-Score vs. Number of Reference Edges}
 \label{sec:best-f1-vs-nref}
-\Cref{fig:best-f1-vs-nref} visualises the relation of the number of reference edges and the best-F1 score. For this purpose the number of reference edges \texttt{N} is plotted versus the mean RES best F1-score for all ERSs of the form \texttt{semsim-ctx NM-AT r-N-*}.  The standard deviation of the best F1 scores for these ERSs is visualised by the shaded areas around the curves of the mean RES best F1-scores.
+\Cref{fig:best-f1-vs-nref} visualises the relation of the number of reference edges and the best-F1 score. For this purpose the number of reference edges \texttt{N} is plotted versus the mean \gls{res} best F1-score for all \gls{ers}s of the form \texttt{semsim-ctx NM-AT r-N-*}.  The standard deviation of the best F1 scores for these \gls{ers}s is visualised by the shaded areas around the curves of the mean \gls{res} best F1-scores.
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]
 {/dataset_n_ref_edges/dataset_conflicts_1-2_pred_wildcard_subsample-2000_best-f1_nref_vs_f1}
-\caption{Mean reference edge set best F1-score for the ERSs \texttt{semsim-ctx e5 r-N-*}, \texttt{semsim-ctx e5-at r-N-*}, \texttt{semsim-ctx gte-at r-N-*} and \texttt{semsim-ctx gte-at r-N-*}}
+\caption{Mean reference edge set best F1-score for the \gls{ers}s \texttt{semsim-ctx e5 r-N-*}, \texttt{semsim-ctx e5-at r-N-*}, \texttt{semsim-ctx gte-at r-N-*} and \texttt{semsim-ctx gte-at r-N-*}}
 \label{fig:best-f1-vs-nref}
 \end{figure}
 
 \subsubsection{Significant Observations}
 \begin{enumerate}[label=\arabic{listcounter}.\arabic*]
 \refstepcounter{listcounter}% Increment the list counter
-	\item The mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is higher than the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\) \label{obs-itm:cness-more-refs-higher-mean-best-f1}
-	\item The standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is lower than the standard deviation of the mean RES best F1-score of the evaluation runs in an ERS of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\), except for \texttt{semsim-ctx et-at r-3-*} (\(sd_1 = 0.11\)) and \texttt{semsim-ctx et-at r-10-*} (\(sd_2 = 0.12\)) \label{obs-itm:cness-more-refs-lower-stddev-best-f1}
+	\item The mean \gls{res} best F1-score of the evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is higher than the mean \gls{res} best F1-score of the evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\) \label{obs-itm:cness-more-refs-higher-mean-best-f1}
+	\item The standard deviation of the mean \gls{res} best F1-score of the evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM(-AT) r-\(N_1\)-*} is lower than the standard deviation of the mean \gls{res} best F1-score of the evaluation runs in an \gls{ers} of the form \texttt{semsim-ctx NM(-AT) r-\(N_2\)-*}, if \(N_2 > N_1\) for \(N_1, N_2 \in \{1, 3, 10\}\), except for \texttt{semsim-ctx et-at r-3-*} (\(sd_1 = 0.11\)) and \texttt{semsim-ctx et-at r-10-*} (\(sd_2 = 0.12\)) \label{obs-itm:cness-more-refs-lower-stddev-best-f1}
 %	\item , where \(sd_2 > sd_2\)
 \end{enumerate}
 
 
 
 \subsection{Predicate Lemma based Evaluation Run Comparison}
-In this section it is explored how the different \gls{ness} systems differ in which edges they match. This is done by following up on the concept of the predicate lemma introduced in \cref{sec:base-edge-set}. In \cref{sec:dataset-characteristics} one of the two desired characteristics of the dataset states that it should contain the largest possible number of edges per unique predicate lemma. Specifically it is of interest, how the \gls{cness} system performs in comparison to the \gls{fness} system for subsets of edges which share the same predicate lemma. Such a subset of edges of the conflict dataset is in the following referred to as \textit{predicate lemma edge set} (PLES).
+In this section it is explored how the different \gls{ness} systems differ in which edges they match. This is done by following up on the concept of the predicate lemma introduced in \cref{sec:base-edge-set}. In \cref{sec:dataset-characteristics} one of the two desired characteristics of the dataset states that it should contain the largest possible number of edges per unique predicate lemma. Specifically it is of interest, how the \gls{cness} system performs in comparison to the \gls{fness} system for subsets of edges which share the same predicate lemma. Such a subset of edges of the conflict dataset is in the following referred to as \gls{ples}.
 
 
 %\subsubsection{Evaluation Runs Representing the \gls{ness} System Types}
 \paragraph{\gls{ness} Type Representatives}
 Two evaluation runs are selected to represent the two versions of the \gls{ness} systems for the comparison. The lemma-based version of \gls{fness} is chosen here, because of its superior performance regarding best F1-score that is observed in \cref{sec:best-f1-score-eval-run-comparison} and \cref{sec:eval-metrics-vs-st}. Specifically, the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (evaluation run \textit{A}) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (evaluation run \textit{B}) are selected as representatives of the \gls{fness} and \gls{cness} system respectively. These are the best performing evaluation runs regarding F1-score for the respective semsim conflict patterns (i.e. \gls{ness} system), which can be seen in \cref{tab:best-f1-score-mean-best} and \cref{tab:best-f1-score-mean-best-semsim-ctx}.\footnote{
-The latter table specifically shows that the evaluation runs \texttt{semsim-ctx e5 r-1-2 t-0.67}, \texttt{semsim-ctx e5 r-10-2 t-0.72} and \texttt{semsim-ctx e5 r-10-4 t-0.72} all correspond to an F1 score \(s_\text{F1} = 0.56\). The evaluation runs utilizing the RESs of size \(N = 10\) are chosen over the one utilizing an RES of size \(N = 1\), because of their generally superior performance regarding F1 score, which is observed in \cref{sec:best-f1-vs-nref}. Among the two remaining evaluation runs, \texttt{semsim-ctx e5 r-10-2 t-0.72} is selected randomly.
+The latter table specifically shows that the evaluation runs \texttt{semsim-ctx e5 r-1-2 t-0.67}, \texttt{semsim-ctx e5 r-10-2 t-0.72} and \texttt{semsim-ctx e5 r-10-4 t-0.72} all correspond to an F1 score \(s_\text{F1} = 0.56\). The evaluation runs utilizing the \gls{res}s of size \(N = 10\) are chosen over the one utilizing an \gls{res} of size \(N = 1\), because of their generally superior performance regarding F1 score, which is observed in \cref{sec:best-f1-vs-nref}. Among the two remaining evaluation runs, \texttt{semsim-ctx e5 r-10-2 t-0.72} is selected randomly.
 
 
-%While the lemma-based \gls{fness} system is only able to match all or none of the edges in a PLES, the \gls{cness} system is potentially able to differentiate between "conflict" and "no conflict" given a PLES.
+%While the lemma-based \gls{fness} system is only able to match all or none of the edges in a \gls{ples}, the \gls{cness} system is potentially able to differentiate between "conflict" and "no conflict" given a \gls{ples}.
 %It shall be noted there that the \gls{fness} system is able to differentiate between different verb forms forms corresponding to the same lemma, when using the semsim-fix and not the semsim-fix-lemma functional pattern. Nonetheless this is assumed to add relevant semantic differentiation capabilities to the \gls{fness} system based on the observed 
 
 }
@@ -2225,7 +2278,7 @@ The latter table specifically shows that the evaluation runs \texttt{semsim-ctx 
 \subsubsection{PLES Evaluation Score based Evaluation Run Comparison}
 
 \paragraph{Label Balance Ratio}
-The \textit{label balance ratio} (LBR) measures how balanced the labels in a given set of labelled edges are. It is calculated by \cref{eq:label-balance-ratio}. Here \(n_\text{pos}\) and \(n_\text{neg}\) are the number of positively ("conflict") and negatively ("no conflict") labeled edges in the edge set.
+The \gls{lbr} measures how balanced the labels in a given set of labelled edges are. It is calculated by \cref{eq:label-balance-ratio}. Here \(n_\text{pos}\) and \(n_\text{neg}\) are the number of positively ("conflict") and negatively ("no conflict") labeled edges in the edge set.
 An edge set with fully balanced labels has \(LBR = 1\) and completely unbalanced labeled edge set has \(LBR = 0\).
 
 \begin{equation}
@@ -2233,15 +2286,15 @@ LBR = 1 - \left(\frac{\left|n_{\text{pos}} - n_{\text{neg}}\right|}{n_{\text{pos
 \label{eq:label-balance-ratio}
 \end{equation}
 
-The evaluation metrics are computed for evaluation run A and B for each PLES, along with metrics that measure distributional properties of a PLES. Namely the number of edges \(n_e\), the number of positively labeled and negatively labeled edges (\(n_\text{pos}\) and \(n_\text{neg}\)), the LBR  and the entropy of a PLES.
+The evaluation metrics are computed for evaluation run A and B for each \gls{ples}, along with metrics that measure distributional properties of a \gls{ples}. Namely the number of edges \(n_e\), the number of positively labeled and negatively labeled edges (\(n_\text{pos}\) and \(n_\text{neg}\)), the \gls{lbr}  and the entropy of a \gls{ples}.
 
-\Cref{tab:predicate-lemma-highest-f1} lists the ten predicate lemmas for whose PLES the absolute difference in F1-score, which is achieved in the two evaluation runs, is the highest. Conversely \cref{tab:predicate-lemma-lowest-f1} lists the ten predicate lemma for whose PLES the difference in F1-score which is achieved in the tow evaluation runs is the lowest. In both tables the predicate lemmas have been filtered beforehand, so that only PLES with \(n_s >= 5\) samples are considered. Additionally the recalls (\(r_A, r_B\)) achieved by both evaluation runs regarding a PLES must fulfil the condition that \(r_A + r_B > 0\), i.e. at least the recall achieved by one of the evaluation runs must be non-zero. \Cref{tab:predicate-lemma-highest-f1-both-recall-non-zero} follows the same concept as \cref{tab:predicate-lemma-highest-f1}, except for the condition regarding the recalls being \(r_A * r_B > 0\), i.e. both recalls achieved by the tow evaluation runs must be non-zero. This second variant of the table is not shown for \cref{tab:predicate-lemma-lowest-f1}, because it only lists lemmas for whose PLES the F1-score achieved by both evaluation runs is zero.
+\Cref{tab:predicate-lemma-highest-f1} lists the ten predicate lemmas for whose \gls{ples} the absolute difference in F1-score, which is achieved in the two evaluation runs, is the highest. Conversely \cref{tab:predicate-lemma-lowest-f1} lists the ten predicate lemma for whose \gls{ples} the difference in F1-score which is achieved in the tow evaluation runs is the lowest. In both tables the predicate lemmas have been filtered beforehand, so that only \gls{ples} with \(n_s >= 5\) samples are considered. Additionally the recalls (\(r_A, r_B\)) achieved by both evaluation runs regarding a \gls{ples} must fulfil the condition that \(r_A + r_B > 0\), i.e. at least the recall achieved by one of the evaluation runs must be non-zero. \Cref{tab:predicate-lemma-highest-f1-both-recall-non-zero} follows the same concept as \cref{tab:predicate-lemma-highest-f1}, except for the condition regarding the recalls being \(r_A * r_B > 0\), i.e. both recalls achieved by the tow evaluation runs must be non-zero. This second variant of the table is not shown for \cref{tab:predicate-lemma-lowest-f1}, because it only lists lemmas for whose \gls{ples} the F1-score achieved by both evaluation runs is zero.
 
-\todo[inline]{should I add a table with the actual labels produced by the evaluation runs?}
-%An comparison of the actual labels that were produced  by evaluation runs A and B for all PLES corresponding to the lemmas in \cref{tab:predicate-lemma-highest-precision} can be found in \cref{app-sec:ples-eval-labels}.
+\todo[inline]{add examples of sentences that can be differentiated by CNESS but not by FNESS}
+%An comparison of the actual labels that were produced  by evaluation runs A and B for all \gls{ples} corresponding to the lemmas in \cref{tab:predicate-lemma-highest-precision} can be found in \cref{app-sec:ples-eval-labels}.
 %specifically in \cref{tab:ples-labels-1}, \cref{tab:ples-labels-2}, \cref{tab:ples-labels-3}, \cref{tab:ples-labels-4}, \cref{tab:ples-labels-5}, \cref{tab:ples-labels-6} and \cref{tab:ples-labels-7} 
 
-%\Cref{tab:predicate-lemma-f1} lists the ten predicate lemmas for whose PLES the best F1-scores are achieved in both of the two evaluation runs.
+%\Cref{tab:predicate-lemma-f1} lists the ten predicate lemmas for whose \gls{ples} the best F1-scores are achieved in both of the two evaluation runs.
 
 %\begin{table}[hp]
 %\centering
@@ -2273,7 +2326,7 @@ The evaluation metrics are computed for evaluation run A and B for each PLES, al
 \centering
 \begin{tabular}{lccccccc}
 \toprule
-Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & LBR & Entropy \\
+Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & \gls{lbr} & Entropy \\
 \midrule
 file       & 1.00      & 0.00           & 1.00           & 5               & 5/0     & 0.00 & 0.00 \\
 order      & 0.88      & 0.00           & 0.88           & 14              & 7/7     & 1.00 & 1.00 \\
@@ -2299,7 +2352,7 @@ build      & 0.67      & 0.00           & 0.67           & 6               & 1/5
 \centering
 \begin{tabular}{lccccccc}
 \toprule
-Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & LBR & Entropy \\
+Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & \gls{lbr} & Entropy \\
 \midrule
 accept     & 0.42      & 0.25           & 0.67           & 7               & 1/6     & 0.29 & 0.59 \\
 strike     & 0.30      & 0.80           & 0.50           & 9               & 6/3     & 0.67 & 0.92 \\
@@ -2326,7 +2379,7 @@ approve    & 0.08      & 0.12           & 0.20           & 16              & 1/1
 \centering
 \begin{tabular}{lccccccc}
 \toprule
-Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & LBR & Entropy \\
+Lemma      & F1 Diff. & F1 A & F1 B & \(n_e\) & \(n_\text{pos}\)/\(n_\text{neg}\) & \gls{lbr} & Entropy \\
 \midrule
 arrest     & 0.00      & 1.00           & 1.00           & 11              & 11/0    & 0.00 & 0.00 \\
 slam       & 0.00      & 0.92           & 0.92           & 7               & 6/1     & 0.29 & 0.59 \\
@@ -2350,13 +2403,13 @@ say        & 0.03      & 0.45           & 0.48           & 31              & 9/2
 \subsubsection{Significant Observations}
 \begin{enumerate}[label=\arabic{listcounter}.\arabic*]
 \refstepcounter{listcounter}% Increment the list counter
-	\item The \gls{cness} utilizing evaluation run achieves a higher F1-score than the \gls{fness} utilizing evaluation run for every PLES of the the top ten PLES regarding highest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:cness-higher-f1-for-highest-f1-difference}
-	\item The mean LBR and mean entropy of the top ten PLESs regarding the highest difference in F1-score between the two evaluation runs are higher than the mean LBR and mean entropy of the top ten PLESs regarding the lowest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:PLES-more-diverse-for-highest-f1-difference}
-	\item The differences in F1-score achieved by the two evaluation runs is higher for the recall condition \(r_A + r_B > 0\) than for \(r_A \cdot r_B > 0\), because for the first condition the F1-score of the \gls{fness} evaluation run is zero for all PLESs \label{obs-itm:fness-zero-recall-highest-f1-difference}
-	\item The lemmas corresponding to the the top ten PLES regarding highest difference in F1-score between the two evaluation runs are all not included in the conflict verbs: "accuse", "arrest", "clash", "condemn", "kill", "slam" \label{obs-itm:conflict-verbs-not-in-highest-f1-difference}
-	\item Of the lemmas corresponding to  the top ten PLES regarding lowest difference in F1-score between the two evaluation runs, five of six are included in the conflict verbs: "arrest", "condemn", "kill", "slam" ("clash" is not included) \label{obs-itm:conflict-verbs-in-lowest-f1-difference}
-%	\item Of the lemmas corresponding the to the the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A + r_B > 0\), most are intuitively not considered to clearly relate to the definition of conflict
-%	\item Of the lemmas corresponding the to  the top ten PLES regarding highest difference in F1-score given the recall condition \(r_A \cdot r_B > 0\) and of the lemmas corresponding the to the top ten PLES regarding lowest difference in F1-score, most are intuitively considered to clearly relate to the definition of conflict
+	\item The \gls{cness} utilizing evaluation run achieves a higher F1-score than the \gls{fness} utilizing evaluation run for every \gls{ples} of the the top ten \gls{ples} regarding highest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:cness-higher-f1-for-highest-f1-difference}
+	\item The mean \gls{lbr} and mean entropy of the top ten \gls{ples}s regarding the highest difference in F1-score between the two evaluation runs are higher than the mean \gls{lbr} and mean entropy of the top ten \gls{ples}s regarding the lowest difference in F1-score between the two evaluation runs (independently of the recall condition) \label{obs-itm:ples-more-diverse-for-highest-f1-difference}
+	\item The differences in F1-score achieved by the two evaluation runs is higher for the recall condition \(r_A + r_B > 0\) than for \(r_A \cdot r_B > 0\), because for the first condition the F1-score of the \gls{fness} evaluation run is zero for all \gls{ples}s \label{obs-itm:fness-zero-recall-highest-f1-difference}
+	\item The lemmas corresponding to the the top ten \gls{ples} regarding highest difference in F1-score between the two evaluation runs are all not included in the conflict predicates: "accuse", "arrest", "clash", "condemn", "kill", "slam" \label{obs-itm:conflict-verbs-not-in-highest-f1-difference}
+	\item Of the lemmas corresponding to  the top ten \gls{ples} regarding lowest difference in F1-score between the two evaluation runs, five of six are included in the conflict predicates: "arrest", "condemn", "kill", "slam" ("clash" is not included) \label{obs-itm:conflict-verbs-in-lowest-f1-difference}
+%	\item Of the lemmas corresponding the to the the top ten \gls{ples} regarding highest difference in F1-score given the recall condition \(r_A + r_B > 0\), most are intuitively not considered to clearly relate to the definition of conflict
+%	\item Of the lemmas corresponding the to  the top ten \gls{ples} regarding highest difference in F1-score given the recall condition \(r_A \cdot r_B > 0\) and of the lemmas corresponding the to the top ten \gls{ples} regarding lowest difference in F1-score, most are intuitively considered to clearly relate to the definition of conflict
 
 
 \end{enumerate}
@@ -2391,10 +2444,10 @@ In this section the previously presented evaluation results are discussed. It sy
 \begin{itemize}
 
 \item The relation of \gls{st} and \gls{ness-shpm} retrieval performance depends primarily on the \gls{ness} type (given the neural embedding models selected in this work)\\
-\textbf{Supporting Observations:} \Cref{obs-itm:ASTR-lemma-fness-cn-higher-than-cness-e5} \Cref{obs-itm:ASTR-fness-higher-than-cness} \Cref{obs-itm:ASTR-fness-equal}
+\textbf{Supporting Observations:} \Cref{obs-itm:astr-lemma-fness-cn-higher-than-cness-e5} \Cref{obs-itm:astr-fness-higher-than-cness} \Cref{obs-itm:astr-fness-equal}
 
 \item The relation of \gls{st} and \gls{cness-shpm} retrieval performance depends secondarily on the \gls{ness} model and the usage of the all tokens option \\
-\textbf{Supporting Observations:} \Cref{obs-itm:ASTR-cness-gte-starts-earlier} \Cref{obs-itm:ASTR-cness-at-starts-earlier} \Cref{obs-itm:ASTR-cness-end-equal}
+\textbf{Supporting Observations:} \Cref{obs-itm:astr-cness-gte-starts-earlier} \Cref{obs-itm:astr-cness-at-starts-earlier} \Cref{obs-itm:astr-cness-end-equal}
 
 \end{itemize}
 
@@ -2407,7 +2460,7 @@ In this section the previously presented evaluation results are discussed. It sy
 \textbf{Supporting Observations:} \Cref{obs-itm:lemma-fness-cn-better-than-w2v}, \Cref{obs-itm:word-fness-w2v-better-than-cn}, \Cref{obs-itm:cness-e5-better-than-gte}
 
 \item Using the sub tokens embedding instead of the all tokens embedding improves \gls{cness-shpm} retrieval performance, but using the all tokens embedding makes it less sensible to the selection of the reference edges
-\\ \textbf{Supporting Observations:} \Cref{obs-itm:ness-better-without-AT}, \Cref{obs-itm:cness-lower-variation-with-AT}
+\\ \textbf{Supporting Observations:} \Cref{obs-itm:cness-lower-variation-with-at}, \Cref{obs-itm:cness-lower-variation-with-at}
 
 \item \gls{cness-shpm} retrieval performance improves with a higher number of reference edges and is less sensible to the specific selection of reference edges
 \\ \textbf{Supporting Observations:} \Cref{obs-itm:cness-more-refs-higher-mean-best-f1}, \Cref{obs-itm:cness-more-refs-lower-stddev-best-f1}
@@ -2433,7 +2486,7 @@ In this section the previously presented evaluation results are discussed. It sy
 
 \begin{itemize}
 	\item \gls{cness-shpm} is able differentiate when matching against a set of edges where purely symbolic \gls{shpm} and \gls{fness-shpm}M cannot, i.e. in cases where context is needed to determine the correct semantics of a word \\
-	\textbf{Supporting Observations:} \Cref{obs-itm:cness-higher-f1-for-highest-f1-difference}, \Cref{obs-itm:PLES-more-diverse-for-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-not-in-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-in-lowest-f1-difference}
+	\textbf{Supporting Observations:} \Cref{obs-itm:cness-higher-f1-for-highest-f1-difference}, \Cref{obs-itm:ples-more-diverse-for-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-not-in-highest-f1-difference}, \Cref{obs-itm:conflict-verbs-in-lowest-f1-difference}
 	
 	\item While \gls{cness-shpm} achieves a highest difference in retrieval performance for sets of edges, where \gls{fness-shpm} does not match, it also achieves a better retrieval performance in cases where \gls{fness-shpm} does match \\
 	\textbf{Supporting Observations:} \Cref{obs-itm:cness-higher-f1-for-highest-f1-difference} \Cref{obs-itm:fness-zero-recall-highest-f1-difference}
@@ -2442,7 +2495,8 @@ In this section the previously presented evaluation results are discussed. It sy
 
 % ========== 
 \chapter{Conclusion}
-This work contributes the capability of content generalisation to the Semantic Hypergraph framework's pattern matching by integrating neural embedding-based semantic similarity measurement. Thereby enabling adaptivity of the \gls{sh} pattern matching, while providing partial control over the simultaneously introduced opaqueness, through the configuration of the similarity threshold, the ability to choose between fixed word and contextual neural embedding models, and the option to toggle sub-edge specificity of the contextual embeddings. Additionally the effectiveness of \gls{ness} extended pattern matching in regard to its retrieval performance is shown in a quantitative evaluation, specifically showcasing the systems ability for contextual differentiation.
+\label{cha:conclusion}
+This work advances the reserach on text analysis systems, specifically aimed at Computational Social Science researchers. It contributes the capability of content generalisation to the Semantic Hypergraph framework's pattern matching by integrating neural embedding-based semantic similarity measurement. Thereby enabling adaptivity of the \gls{sh} pattern matching, while providing partial control over the simultaneously introduced opaqueness, through the configuration of the similarity threshold, the ability to choose between fixed word and contextual neural embedding-based semantic similarity, and the option to toggle sub-edge specificity of the contextual embeddings. Additionally the effectiveness of \gls{ness} extended pattern matching in regard to its retrieval performance is shown in a quantitative evaluation, specifically showcasing the systems ability for contextual differentiation.
 
 In correspondence to the specific research questions posed in \cref{sec:research-questions}, we presented the following specific  contributions of this work:
 
@@ -2457,7 +2511,7 @@ In correspondence to the specific research questions posed in \cref{sec:research
 
 \item Exhibited that contextual \gls{ness} extended pattern matching is in principle able to differentiate between desired and undesired edges in cases where fixed word \gls{ness} cannot.
 
-\item Demonstrated that measuring contextual \gls{ness} utilizing sub-edge specific contextual embeddings produces better retrieval performance than by utilizing contextual embeddings of the entire edge content. While the performance of the latter approach is less sensitive to the choice of reference edges, both methods exhibit improved retrieval performance with an increased number of reference edges.
+\item Demonstrated that measuring contextual \gls{ness} utilizing sub-edge specific contextual embeddings produces better retrieval performance than by utilizing contextual embeddings of the entire edge content. While both methods exhibit improved retrieval performance with an increased number of reference edges, the performance of the latter approach is less sensitive to the choice of reference edges.
 
 \item Indicated that that retrieval precision and therefore content generalisation of \gls{ness-shpm} correlates with the controllable similarity threshold for certain a value range. This range depends on primarily on the \gls{ness} type, given the neural embedding model selection in this work. 
 %the \gls{ness} model and the utilisation of sub-edge specific embeddings in case of \gls{cness}.
