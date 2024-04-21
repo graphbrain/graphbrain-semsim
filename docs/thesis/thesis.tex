@@ -46,6 +46,7 @@
 \usepackage{soul}
 \usepackage{todonotes}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{caption}
@@ -63,21 +64,11 @@
 \usepackage{amssymb}
 \usepackage{multirow}
 \usepackage{multicol}
-\usepackage{array}
 \usepackage[export]{adjustbox}
 \usepackage[nonumberlist, nopostdot, acronym, toc]{glossaries}
 
 
-\lstset{
-  language=Python,
-  basicstyle=\ttfamily\small,  % Use small typewriter font
-  columns=flexible,            % Use flexible spacing between characters
-  captionpos=b,                % Place the caption below the listing
-  frame=tb,                    % Add top and bottom frames to the listing
-  keepspaces=true              % Preserve spaces in the code, useful for alignment
-}
-
-
+%\setcounter{secnumdepth}{3}
 
 %\usepackage{array}  % needed for '\newcolumntype' command
 %\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}  % define "L" column type
@@ -107,6 +98,14 @@
 \crefname{hedge}{hyperedge}{hyperedges}
 
 
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,  % Use small typewriter font
+  columns=flexible,            % Use flexible spacing between characters
+  captionpos=b,                % Place the caption below the listing
+  frame=tb,                    % Add top and bottom frames to the listing
+  keepspaces=true              % Preserve spaces in the code, useful for alignment
+}
 
 \DeclareFloatingEnvironment[
   listname = {List of Pseudocodes} ,
@@ -247,7 +246,7 @@ There exists a great variety of approaches for determining the semantic similari
 
 In the context of this thesis, \gls{ness-shpm} is conceptualised and implemented by integrating it into the existing software package \textit{graphbrain}\footnote{graphbrain: \url{https://graphbrain.net/}}. Additionally it subjected to a comprehensive quantitative evaluation on a labeled dataset of conflict expressions.
 
-The rest of this thesis is structured as follows: \Cref{cha:background} introduces the necessary background in regards to the Semantic Hypergraph framework and discusses the state-of-the-art of semantic similarity measures. \Cref{cha:problem-statement} delves into the problem outlined earlier, detailing it and formulating the subsequent research questions. \Cref{cha:solution-approach} devises the concept of \gls{ness-shpm} as approach to solving the stated problem. \Cref{cha:implementation} describes the specific software implementation of the proposed solution. \Cref{cha:evaluation} provides a thorough quantitive evaluation of the implemented system and discusses the results. 
+The rest of this thesis is structured as follows: \Cref{cha:background} introduces the necessary background in regards to the Semantic Hypergraph framework and discusses the state-of-the-art of semantic similarity measures. \Cref{cha:problem-statement} outlines the problem introduced earlier in more detail and formulates the subsequent research questions. \Cref{cha:solution-approach} devises the concept of \gls{ness-shpm} as approach to solving the stated problem. \Cref{cha:implementation} describes the specific software implementation of the proposed solution. \Cref{cha:evaluation} provides a thorough quantitive evaluation of the implemented system and discusses the results. 
 \Cref{cha:conclusion} concludes this thesis by presenting the contributions made herein and suggesting possible avenues for further work.
 
 % ========== 
@@ -256,7 +255,7 @@ The rest of this thesis is structured as follows: \Cref{cha:background} introduc
 \glsreset{ness}
 
 \label{cha:background}
-In this chapter the necessary background for this work is presented. This includes on the one hand the \gls{sh} framework and its pattern matching capabilities in particular. On the other hand the concept of semantic relatedness and specifically semantic similarity is explained with a focus on its realisation in the form of \gls{ness}.
+In this chapter the necessary background for this work is presented. This includes on the one hand the \gls{sh} framework and its pattern matching capabilities in particular. On the other hand the concept of semantic relatedness and specifically semantic similarity is discussed with a focus on its realisation in the form of \gls{ness}.
 
 \section{Semantic Hypergraph Framework}
 \label{sec:semantic-hypergraph-framework}
@@ -340,11 +339,11 @@ Every hyperedge in a semantic hypergraph has a specific type. All types that an 
 %\end{table}
 
 \paragraph{Type Inference Rules}
-The type of a parent hyperedge is inferred based on the types and the order of its child hyperedges following specific inference rules. These rules can be inspected in \citef[p. 8]{menezesSemanticHypergraphs2021}, but are omitted here because they are deemed mostly irrelevant for this work.
+The type of a parent hyperedge is inferred based on the types and the order of its child hyperedges following specific inference rules. These rules can be inspected in \citef[p. 8]{menezesSemanticHypergraphs2021}, but are omitted here, because they are deemed mostly irrelevant for this work.
 
 
 \subsubsection{Hyperedge Content}
-The textual representation of an edge is referred to as \textit{edge content} or \textit{edge text}. For atoms this is generally a word, except for special symbols (see below). Generally speaking, a hyperedges content is the reconstruction of the word, phrase or sentence that it represents, which can be produced by following the hyperedge structure.
+The textual representation of an edge is referred to as \textit{edge content} or \textit{edge text}. For atoms this is generally a word, except for semantically relevant punctuation characters and special symbols (see below). Generally speaking, a hyperedges content is the reconstruction of the word, phrase or sentence that it represents, which can be produced by following the hyperedge structure.
 
 \paragraph{Special Content Symbols}
 \label{sec:special-type-symbols}
@@ -735,7 +734,7 @@ This limitation in content matching generalisation capability means that all acc
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( play/P ann/C */C )
+  ( plays/P ann/C */C )
   \caption{"Ann plays something" pattern}
   \label{pat:ann-plays-something}
 \end{pattern}
@@ -743,7 +742,7 @@ This limitation in content matching generalisation capability means that all acc
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( likes/P ann/C [piano, theatre]/C )
+  ( plays/P ann/C [piano, theatre]/C )
   \caption{"Ann plays piano or theatre" pattern}
   \label{pat:ann-plays-piano-theatre}
 \end{pattern}
@@ -778,7 +777,6 @@ An in integration of \gls{fness} into the \gls{sh} pattern matching could allevi
 
 %which can generally be divided into \textit{Corpus-based Measures} and \textit{Knowledge-based measures} \cite[Section~1.3.2]{harispeSemanticSimilarityNatural2015}. The latter approaches may generally provide the openness in the measurement determination that is desired by \gls{css} researchers. However among the former recent ML-based and especially DL-based approaches have been outperforming most other approaches \cite{chandrasekaranEvolutionSemanticSimilarity2021}. They generally rely on computing a vector space representation (or embedding) of texts which can then be used to calculate their similarity and will therefore be referred to as neural embedding-based semantic similarity (\gls{ness}) measures.
 
-
 To retrieve all sentences that convey the meaning we are interested in, we probably also want to the query pattern to match hyperedges that are more structurally diverse than those, which we have inspected above. \Cref{hed:ann-plays-drama} is such an example, which would be matched by the structurally more complex \cref{pat:ann-plays-something-complex}. However, this pattern would also match \cref{hed:ann-plays-company}, which again is probably not what we want to express. 
 
 \begin{hedge}[h!]
@@ -792,7 +790,7 @@ To retrieve all sentences that convey the meaning we are interested in, we proba
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( plays/P ann/C */C */S)
+  ( plays/P ann/C */C */S )
   \caption{Structurally more complex "Ann plays something" pattern}
   \label{pat:ann-plays-something-complex}
 \end{pattern}
@@ -839,7 +837,7 @@ Integrating neural embedding-based semantic similarity measures into the pattern
 % ========== 
 \section{Research Questions}
 \label{sec:research-questions}
-Based on the problem statement outlined above, we pose the following research questions:
+Based on the problem statement described previously, we articulate the following research questions. The \textit{general research question} establishes a broader, more abstract research objective, while the \textit{specific research questions} divide this overarching goal into smaller, more directly investigable queries.
 
 \subsection{General Research Question}
 \textbf{R} Can neural embedding-based semantic similarity measures be be integrated into the pattern matching of the Semantic Hypergraph framework to allow for more semantically generalising matching regarding edge content while providing some control over the level of generalisation and therefore maintaining some openness of the pattern matching process?
@@ -847,27 +845,27 @@ Based on the problem statement outlined above, we pose the following research qu
 \subsection{Specific Research Questions}
 \begin{enumerate}[label=\textbf{R.\arabic*}, leftmargin=0pt, labelwidth=*, align=left, labelsep=0.5em, itemindent=0pt, listparindent=\parindent]
 	\item How can neural embedding based semantic similarity effectively and efficiently be integrated into the Semantic Hypergraph pattern matching?
-    \todo[inline]{answered by the solution approach design and its working implementation}
+%    \todo[inline]{answered by the solution approach design and its working implementation}
 
     \item Which specific neural embedding models would be the most suitable for assessing semantic similarity within the Semantic Hypergraph pattern matching process while addressing the challenges posed by contextuality?
-    \todo[inline]{answered by background chapter and implementation specific considerations}
+%    \todo[inline]{answered by background chapter and implementation specific considerations}
 
 	\item How can the retrieval performance of the \gls{sh} pattern matching be quantitatively evaluated?
 
     \item Does integrating neural embedding-based semantic similarity measurements into the \gls{sh} pattern matching improve the systems retrieval performance and how does it impact recall and precision?
-    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
+%    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
 
     \item Does the utilisation of contextual \gls{ness} enable the \gls{sh} pattern matching to differentiate between desired and undesired edges in cases, which cannot be differentiated when utilising fixed word \gls{ness}?
-    \todo[inline]{answered by \cref{sec:result-contextual-differentiation-ability}}
+%    \todo[inline]{answered by \cref{sec:result-contextual-differentiation-ability}}
     
     \item How does measuring contextual \gls{ness} corresponding to sub-edge content influence retrieval performance in comparison to measuring the semantic similarity between the entire candidate and reference content context items?
-    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> sub tokens is better but more variation regarding the selection of reference edges, more ref. edges means less variation and better results in general}
+%    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> sub tokens is better but more variation regarding the selection of reference edges, more ref. edges means less variation and better results in general}
 
     \item How can the level of edge content related generalisation in the pattern matching process be effectively and transparently controlled and how does this impact precision, recall and general retrieval performance?
-    \todo[inline]{answered by the implementation of the similarity threshold and by the results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
+%    \todo[inline]{answered by the implementation of the similarity threshold and by the results of \cref{sec:result-retrieval-performance-improvement} and \cref{sec:result-retrieval-precision-behaviour}}
 
     \item What impact does the the selection of a specific \gls{ness} model -- both fixed word and contextual -- have on \gls{sh} pattern matching retrieval performance?
-    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> better model does not clearly mean better result, but only two models for each \gls{ness} type were compared}
+%    \todo[inline]{answered by results of \cref{sec:result-retrieval-performance-improvement} --> better model does not clearly mean better result, but only two models for each \gls{ness} type were compared}
 \end{enumerate}
 
 
@@ -906,8 +904,19 @@ Leveraging the core principles of the \gls{sh} framework, the most logical and s
 
 Therefore, the incorporation of \gls{ness-shpm} into the existing \gls{sh} framework encompasses three principal components: the extension of the pattern language, the requisite modifications to the pattern language processing and adding the components necessary for the actual \gls{ness} measurement calculations.
 
-\todo[inline]{Here is probably the most suitable point to add a system/approach schema}
-\newpage
+
+A visual representation of the solution approach is depicted by \cref{fig:concept-diagram}.\footnote{This diagram utilises the pattern \textsf{( (semsim-ctx */P ) ann/C */C * )}. It shall be noted, that the last wildcard operator \textsf{*} is not restricted by hyperedge type or argument roles and is therefore meant to match any sub-edge. This also includes no sub-edge, i.e. the pattern matches all reference edges.} In this figure two different candidate edges are matched against two patterns, which make use of the extended pattern language. One of the illustrated matching processes utilises \gls{fness-shpm}, while the other leverages \gls{cness-shpm}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{diagrams/concept-diagram.pdf}
+\caption{Visualisation of the structure of both \gls{ness-shpm} variants, each matching a candidate edge against a pattern. Left side depicts \gls{fness-shpm}, while the right side illustrates \gls{cness-shpm}.}
+% , as well as the SemSim instance post-processing}
+\label{fig:concept-diagram}
+\end{figure}
+
+
+%\newpage
 
 \subsection{Extention of the Pattern Language}
 \label{sec:extension-pattern-language}
@@ -915,15 +924,42 @@ For the inclusion of \gls{ness}-based content matching within the \gls{sh} patte
 
 
 \subsubsection{SemSim Functional Pattern}
-When constructing a \gls{sh} pattern that should be matched against a hypergraph, the \textit{SemSim} functional pattern can be utilised at those points in the pattern, where content should be matched by \gls{ness}. The added SemSim functional pattern (also referred to as SemSim pattern) has one of the following syntactical structures:
+When constructing a \gls{sh} pattern that should be matched against a hypergraph, the \textit{SemSim} functional pattern can be utilised at those points in the pattern, where content should be matched by \gls{ness}. The added SemSim functional pattern -- also referred to as SemSim pattern -- has one of two syntactical structures: One that does include a variable and one that does not. 
+Both variants of the SemSim pattern and examples of their usage are illustrated in the \cref{tab:semsim-pattern}. The SemSim pattern consists of different syntactical components, represented by placeholders that are enclosed in brackets (\texttt{<>}). These components are explained in detail below. Examples usages of SemSim patterns as sub-pattern inside other patterns are shown below the component explanations.
 
-\begin{center}
-%	\texttt{<semsim function> <reference content>/<hyperedge type>.<argument roles> <similarity threshold>}
-	\texttt{<SF> <IA><RC>/<HT>.<AR> <\gls{st}>}\ or \\
-	\texttt{<SF> <IA><VA>/<HT>.<AR> <RC> <\gls{st}>}\
-\end{center}
+\begin{table*}[h!]
+\centering
+\normalfont\sffamily
+\setlength{\tabcolsep}{0pt}
+\begin{tabular}{c@{\hspace{20pt}}ccccccccc}
+\toprule
+\textrm{No Variable}   & \texttt{<SF>} & \texttt{<IA>} & \texttt{<RC>} & \texttt{/} & \texttt{<HT>} & \texttt{.} & \texttt{<AR>} &  & \texttt{<ST>} \\
+\midrule
+\multirow{5}{*}{}
+ & semsim-fix & & piano & / & C &  &   & & \\
+ & semsim-fix & > & piano & / & C &  &   & & \\
+ & semsim-fix & & piano & / & C & . & so & & \\
+ & semsim-fix & & [piano, theatre] & / & C &  &   & & \\
+ & semsim-fix & & piano & / & C &  &   & & 0.5 \\
+ & semsim-fix & > & [piano, theatre] & / & C & . & so & & 0.5 \\
+ & semsim-fix-lemma & > & [piano, theatre] & / & C & . & so & & 0.5 \\
+ & semsim-ctx &  & * & / & C & . & so & & 0.5 \\
+\midrule
+\midrule
+\textrm{With Variable} & \texttt{<SF>} & \texttt{<IA>} & \texttt{<VA>} & \texttt{/} & \texttt{<HT>} & \texttt{.} & \texttt{<AR>} & \texttt{<RC>} & \texttt{<ST>} \\
+\midrule
+ & semsim-fix & > & ART & / & C & . & so & [piano, theatre] & 0.5\\
+ & semsim-fix-lemma & > & ART & / & C & . & so & [piano, theatre] & 0.5\\
+ & semsim-ctx &  & ART & / & C & . & so & * & 0.5 \\
+\bottomrule
+\end{tabular}
+\caption{
+Syntactical structure of SemSim Pattern with specific examples.\\
+Syntactical components: SemSim Function (\texttt{SF}), Reference Content (\texttt{RC}),  Variable Declaration (\texttt{VA}), Hyperedge Type (\texttt{HT}), Argument Roles (\texttt{AR}), Innermost Atom Operator (\texttt{IA}), Similarity Threshold (\texttt{\gls{st}})
+}
+\label{tab:semsim-pattern}
+\end{table*}
 
-It consists of different syntactical components, here represented by placeholders that are enclosed in brackets (\texttt{<>}). These components are explained in the following:
 
 %\subsubsection{SemSim Function (\texttt{SF})}
 \paragraph{SemSim Function (\texttt{SF})}
@@ -949,32 +985,33 @@ Hyperedge type and argument roles are matched following the symbolic rules also 
 The similarity threshold \(t_s\) can optionally be specified for a specific occurrence of the SemSim functional pattern, but it can also be given as a global parameter of the matching process (see \cref{sec:ness-config}). 
 
 \subsubsection{Example Usages}
+\label{sec:semsim-pattern-example-usages}
 
-To illustrate the usage of the SemSim functional pattern, some examples are given:
+To illustrate the usage of the SemSim functional pattern as sub-pattern in another pattern, some examples are given below. We restrict these examples here to the \texttt{semsim-fix} pattern, since the \texttt{semsim-ctx} pattern additionally requires the definition of reference edges.
 
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( likes/P Ann/C (semsim-fix apples/C) )
-  \caption{"Ann likes something similar to apples" pattern}
-  \label{pat:ann-likes-semsim-aplles}
+  ( plays/P ann/C (semsim-fix piano/C) )
+  \caption{"Ann plays something similar to piano" pattern}
+%  \label{pat:ann-likes-semsim-aplles}
 \end{pattern}
 
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( likes/P ann/C (semsim-fix [apples, bananas]/C) )
-  \caption{"Ann likes similar to apples or bananas" pattern}
-  \label{pat:ann-likes-apples-and-bananas}
+  ( plays/P ann/C (semsim-fix [piano, theatre]/C) )
+  \caption{"Ann plays something similar to piano or theatre" pattern}
+%  \label{pat:ann-likes-apples-and-bananas}
 \end{pattern}
 
 
 \begin{pattern}[h!]
   \normalfont\sffamily
   \centering
-  ( likes/P Ann/C (semsim-fix mangos/C 0.5) )
-  \caption{"Ann likes something similar to mangos" pattern with \(t_s = 0.5\)}
-  \label{pat:ann-likes-semsim-aplles}
+  ( plays/P ann/C (semsim-fix theatre/C 0.5) )
+  \caption{"Ann plays something similar to theatre" pattern with \(t_s = 0.5\)}
+%  \label{pat:ann-likes-semsim-aplles}
 \end{pattern}
 
 
@@ -989,7 +1026,7 @@ This section outlines the integration of SemSim functional pattern processing wi
 %of the hyperedge type and possibly argument, as well as the application of the innermost atom operator, if specified. 
 Additionally the necessary information for \gls{ness} measurement computations is extracted.
 
-The operation of SemSim pattern processing changes based on the specific SemSim function applied. With \gls{fness-shpm} or L\gls{fness-shpm}, the process extracts the candidate word(s) or their lemma(s) from the identified sub-edge and the reference word(s) from the pattern. This extraction process requires the sub-edge to be atomic, which implies combination with the innermost atom operator to ensure functionality in all cases. For \gls{cness}, it conducts a standard string-based matching of the reference content. Therefore  utilizing the wildcard operator as a reference content argument is sensible in most practical use cases. For any \gls{ness-shpm} variant, the similarity threshold is extracted from the SemSim pattern, if given
+The operation of SemSim pattern processing changes based on the specific SemSim function applied. With \gls{fness-shpm} or L\gls{fness-shpm}, the process extracts the candidate word(s) or their lemma(s) from the identified sub-edge and the reference word(s) from the pattern. This extraction process requires the sub-edge to be atomic, which implies combination with the innermost atom operator to ensure functionality in all cases. For \gls{cness}, it conducts a standard string-based matching of the reference content. Therefore  utilizing the wildcard operator as a reference content argument is sensible in most practical use cases. For any \gls{ness-shpm} variant, the similarity threshold is extracted from the SemSim pattern, if given.
 
 Existing components manage the symbolic matching of hyperedge type and argument roles, as well as the application of the innermost atom operator, consistent with the standard pattern matching. The SemSim function, along with the similarity threshold (when provided), candidate words and reference words for (L)\gls{fness-shpm}, are passed to the newly designed \gls{ness} computation components.
 
@@ -1022,11 +1059,24 @@ Existing components manage the symbolic matching of hyperedge type and argument 
 \label{sec:neural-embedding-based-semantic-similarity-measurement}
 Upon reaching this phase, the \gls{ness-shpm} process has already either extracted candidate and reference contents via pattern language processing (in case of \gls{fness-shpm}) or received them through software interface arguments (in case of \gls{cness-shpm}). Similarly, the similarity threshold has been either derived from the SemSim pattern or assigned as a default parameter through the software interface. Consequently, the process is set to obtain the respective embeddings for the candidate and reference content, which are crucial for conducting the similarity assessment.
 
-\todo{How it the \gls{ness} model specified? talk about ness config?}
+We denote the arguments of to the embedding construction (\(A_e\)) as follows:
+Pattern (\(p\)), candidate content (\(c_\text{can}\)), reference content(s) (\(C_\text{ref}\)) and similarity threshold (\(t_s\)). The candidate content is either a candidate word (\(w_\text{can}\)) or a candidate edge (\(e_\text{can}\)). The reference content is either a set of reference words (\(W_\text{ref}\)) or a set of reference edges (\(E_\text{ref}\)). The similarity threshold is either extracted from the pattern (\(t_\text{pat}\)) or given as a default (\(t_\text{def}\)).
 
+\[ A_e = \{p, c_\text{can}, C_\text{ref}, t_s\} \]
+\[ c_\text{can} \in \{w_\text{can}, e_\text{can}\} \ ,\ C_\text{ref} \in \{W_\text{ref}, E_\text{ref}\}\ ,\ W_\text{ref} = \{w_0, ..., w_n\}, E_\text{ref} = \{e_0, ..., e_m\} \ ,\ n,m \in \mathbb{N}^+
+\]
+\[ 
+\text{if} \  c_\text{can} = w_\text{can} \ \text{then} \ C_\text{ref} = W_\text{ref},\ 
+\text{if} \  c_\text{can} = e_\text{can} \ \text{then} \ C_\text{ref} = E_\text{ref} 
+\]
+\[
+t_s \in \{t_\text{pat}, t_\text{def}\}
+\]
 
 \subsubsection{Fixed Neural Embeddings}
-The creation of fixed neural embeddings necessitates only the candidate and reference words. Given that each word maps directly to a specific embedding, a straightforward lookup in the chosen fixed neural embedding model suffices to produce the necessary embeddings for both candidate and reference.
+The creation of fixed neural embeddings necessitates only the candidate and reference words. Given that each word maps directly to a specific embedding, a straightforward lookup in the chosen fixed neural embedding model suffices to produce the necessary embeddings for both candidate and reference. The embedding \(v_w\) of word \(w\), generated by fixed word neural embedding model \(M_\text{fix}\) is denoted as:
+
+\[v_w = M_\text{fix}(w) \]
 
 \subsubsection{Contextual Neural Embeddings}
 The development of contextual embeddings for the candidate and reference involves a sequence of steps, premised on the assumption that these embeddings should mirror the specific sub-edge of the candidate edge captured by the SemSim pattern and its analogous sub-edge(s) in the reference edge(s). Thereby the reference edges need to structurally match (with disregard to edge content) the pattern which contains the SemSim functional pattern, so that these reference sub-edges can be identified. An alternative approach to constructing contextual neural embeddings does not account for sub-edge matching and only consists of the initial two stages of the construction process outlined below:
@@ -1038,38 +1088,63 @@ The development of contextual embeddings for the candidate and reference involve
     \item Associating the identified candidate and reference sub-edges with their respective sub-embeddings derived from the context item embeddings.
     \item Generating the final embeddings for both candidate and reference based on these sub-embeddings.
 \end{enumerate}
+
+The embedding \(v_e\) of edge \(e\), generated by the contextual neural embedding model \(M_\text{ctx}\) when considering pattern \(p\), is denoted as:
+
+
+\[v_e = M_\text{ctx}(e, p) \]
+
     
 \subsubsection{Embedding Similarity Measurement}
-The procedure calculates the cosine similarity between the embeddings of candidate and reference content, comparing it to the pre-established similarity threshold. If the resultant similarity score surpasses this threshold, the candidate and reference contents are considered to match. Given multiple reference content items (and therefore multiple reference embeddings), the pairwise similarities between the candidate and the reference embedding is computed. The maximum of these similarities is then compared to the similarity threshold to asses whether the candidate and reference contents match.
+The procedure calculates the cosine similarity between the embeddings of candidate and reference content, comparing it to the pre-established similarity threshold. If the resultant similarity score surpasses this threshold, the candidate and reference contents are considered to match. Given multiple reference content items (and therefore multiple reference embeddings), the pairwise similarities between the candidate and the reference embedding is computed. The maximum of these similarities is then compared to the similarity threshold to asses whether the candidate and reference contents match. Semantic similarity \(f_\text{semsim}\) given the embedding arguments \(A_e = \{p, c_\text{can}, C_\text{ref}, t_s\}\) is therefore computed by:
 
+\[f_\text{semsim}(A_e) = max(\{cos_\text{sim}(M(c_\text{can}, p^*), M(c_\text{ref}, p^*))\ |\ c_\text{ref} \in C_\text{ref}\}) \geq t_s \]
+%\[f_\text{semsim}(A_e) = max(\{cos_\text{sim}(v_c_\text{can}, v_c_\text{ref})) \geq t_s \ |\ c_\text{ref} \in C_\text{ref} \} \]
+\[M \in \{M_\text{fix}, M_\text{ctx}\},\ \text{if}\ M = M_\text{fix}\ \text{then}\ p^* = \varnothing,\ \text{if}\ M = M_\text{ctx}\ \text{then}\ p^* = p \]
 
-\todo{why cosine similarity? why max similarity?}
+Cosine similarity is chosen as spatial measure, since it has been show well suited for assessing semantic similarity (see \cref{sec:corpus-based-semantic-similarity}) and is an established measure in the context neural embeddings (see \cref{sec:neural-embedding-semantic-similarity}). The maximum of the pairwise similarities is used for comparison with the similarity threshold, because in case of FNESS, we want the reference words always to be deemed semantically similar to themselves. 
+
+%This would not necessarily be case when using e.g. the mean of the pairwise similarities. However, other methods such as e.g a weighted mean could principally also be of interest, especially for CNESS.
+
 
 
 
 % ========== 
 \chapter{Implementation}
 \label{cha:implementation}
+\glsreset{ness-shpm}
 
-In this chapter we will present and explain the implementation of the solution approach described above in \cref{cha:solution-approach} in form of a software realisation of \gls{ness-shpm}.
+In this chapter we will present and explain the implementation of the solution approach conceived in \cref{cha:solution-approach}, which takes the form of a software realisation of \gls{ness-shpm}.
+
+The entailing software design and development is centred around integrating the necessary functionality in the existing publicly available software package \textit{graphbrain}\footnote{graphbrain: \url{https://graphbrain.net/index.html}}, which includes an implementation of the Semantic Hypergraph framework. This integration consists of two primary aspects: Modifying and augmenting the existing pattern language processing components to accommodate the extended pattern language (confer \cref{sec:extension-pattern-language} and \cref{sec:modifications-pattern-language-processing}), as well as constructing new software components to realise the \gls{ness} measurement (confer \cref{sec:neural-embedding-based-semantic-similarity-measurement}).
 
 Implementation details, which are considered not to contribute to the general understanding of the software system, are omitted or  have been modified for better readability and clarity. This means that all code listing presented below are pseudocode.
 
 
 
 \section{Overview of \textit{graphbrain}}
-An implementation of the Semantic Hypergraph framework is provided as part of the publicly available Python package \textit{graphbrain}.\footnote{graphbrain: \url{https://graphbrain.net/index.html}} The package contains the \texttt{graphbrain} Pyhton module, which itself consists of multiple submodules. 
+This section offers a concise overview of the essential elements of the graphbrain package, detailing its software architecture. It also describes specific aspects of the hypergraph data structure and the \gls{nl} to \gls{sh} parsing procedure that are of peripheral relevance here.
 
-Here, we focus on two submodules: Firstly on the \texttt{graphbrain.patterns} submodule, which is primarily responsible for implementing the pattern matching process and therefore was the central object  of modifications and extension. Secondly, we focus on the newly created \texttt{graphbrain.semsim} submodule, in which the \gls{ness} measurement are implemented.
+The graphbrain package contains the \texttt{graphbrain} Python module, which consists of several submodules. The architecture of the key parts of the modified and extened \texttt{graphbrain} module is depicted in \cref{fig:graphbrain-architecture}. This diagram highlights the primary call chain and data flow involved in the pattern matching process, while the return chain is excluded to enhance the diagram's clarity. Further details on the software structure and procedural flow are elaborated in subsequent sections.
 
-Of secondary importance are the \texttt{graphbrain.hypergraph} and \texttt{graphbrain.hyperedge} submodules, which implement the hypergraph and hyyperedge structure themselves. 
+Here, we focus on two particular submodules: the \texttt{graphbrain.patterns} submodule, which is primarily responsible for the pattern matching process and has therefore been significantly modified and expanded, and the newly created \texttt{graphbrain.semsim} submodule, which hosts the implementations of \gls{ness} measurements. 
+
+Of secondary importance are the \texttt{graphbrain.hypergraph} and \texttt{graphbrain.hyperedge} submodules, which are responsible for implementing the structures of the hypergraph and hyperedge, respectively.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{diagrams/graphbrain-architecture.pdf}
+\caption{Simplified architecture diagram of the modified and extended \texttt{graphbrain} Python module, with primary call chain and data stream for the pattern matching process (return chain is omitted for visual clarity).}
+% , as well as the SemSim instance post-processing}
+\label{fig:graphbrain-architecture}
+\end{figure}
 
 
 \subsubsection{Hypergraph Implementation}
 A specific hypergraph is implemented in form of a key-value storage, for which currently \textit{LevelDB}\footnote{LevelDB: \url{https://github.com/google/leveldb}} and \textit{SQLite}\footnote{SQLite: \url{https://www.sqlite.org/}} are support as database backends. Interfaces for the key-value storages are implemented in \texttt{graphbrain.memory}. However, details of this implementation are irrelevant for this work.
 
 
-\subsubsection{NL to \gls{sh} Parser Implementation}
+\subsubsection{\gls{nl} to \gls{sh} Parser Implementation}
 \label{sec:nl-to-sh-parser-implementation}
 The translation process from natural language to the Semantic Hypergraph representations (see \cref{sec:sh-translation-process}), depends significantly on the established NLP library \textit{spaCy} \cite{honnibal2020spacy}. Although the translation itself holds limited relevance for this work, it is important to note that the atomic edges in a \gls{sh} representation of a sentence closely relate to the tokens resulting from the tokenisation of this sentence by spaCy's lexical tokeniser.\footnote{spaCy Lexical Tokeniser: \url{https://spacy.io/usage/linguistic-features\#tokenization}}
 
@@ -1360,6 +1435,7 @@ The \texttt{graphbrain.semsim} module contains the required functionality for th
 
 \subsubsection{\texttt{graphbrain.semsim.interface}}
 \label{sec:graphbrain.semsim.interface}
+\label{sec:ness-config}
 This module contains the \texttt{semsim} entry-point function, as well as an \texttt{init\_matcher} function. Additionally it includes the 
 %\texttt{SemSimType} and 
 \texttt{SemSimConfig} class definition. Core functionality of the module is to maintain different matcher objects that correspond to the different SemSim types, to avoid repeating the computationally expensive initialisation of these objects.
@@ -1367,6 +1443,7 @@ This module contains the \texttt{semsim} entry-point function, as well as an \te
 The \texttt{semsim} function retrieves the matcher that corresponds to the given SemSim type and passes on the received keyword arguments to this matcher object (see \cref{psd:semsim-function}). A specific matcher object with a specific configuration for a SemSim type can be initialised via the \texttt{init\_matcher} function, which is publicly exposed. 
 %The \texttt{SemSimType} is an enum class with the members \texttt{SemSimType.FIX} and \texttt{SemSimType.CTX}, corresponding to \gls{fness} and \gls{cness}. 
 SemSim configurations can be provided via an instance of the \texttt{SemSimConfig} data class (see \cref{psd:semsimconfig-class}), which always contains the \gls{ness} model name and may also contain a default similarity threshold value. In case of \gls{cness}, the configuration also specifies the usage of the all-tokens option, which is further elaborated in \cref{sec:contextual-embedding-matchter}.
+\todo{add SemSimType?}
 
 \begin{pseudo}
 \begin{lstlisting}
