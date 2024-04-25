@@ -1,3 +1,52 @@
+\section{Example Edges}
+\label{app-sec:example-edges}
+
+\begin{table}[H]
+\begin{tabular}{p{12.5cm} c}
+\toprule
+Edge Content & Label \\
+\midrule
+Kidnapped U.S. journalist missing in Syria for six weeks & - \\
+Germany A Generation of Uncertainty & - \\
+Rival Sudans hold summit on Friday, signal concessions & - \\
+In El Salvador, Tooth Decay Blamed on Junk Food, Lack of Information & - \\
+Greeks fight back against corruption & - \\
+Tentative steps: Pakistani girl shot by Taliban leaves hospital to live with family in UK & - \\
+Indian police to officially charge 5 suspects with murder in gang-rape case & - \\
+Turkey accuses EU of bigotry, says its reforms are ignored & - \\
+The Basque nationalist party Batasuna, outlawed in Spain in 2003, is closing its doors in France & - \\
+Latvia is hailed as proof that austerity can work & - \\
+\midrule
+UK Council for Child Internet Safety will draw up a list of approved sites offering advice about topics such as sex and drugs & - \\
+North Korea praises knife attack on US ambassador to South Korea & - \\
+Typhoon Goni lashes Japan & - \\
+Bosnian Serb paramilitary leader gets 45 years for war crimes & - \\
+We're Not Hacking You, Promise & - \\
+Boko Haram violence affects millions of schoolchildren & - \\
+China takes cautious step towards carbon emissions trading & - \\
+Myanmar military plane crash kills four & - \\
+North Korea condemns Japan's 'black-hearted' whaling industry & - \\
+Major Political Donors Have Access to TPP Documents & - \\
+South Korea Urges North to Be Serious Before Talks & - \\
+\midrule
+Abandonment and Empty Streets Characterize Crisis in Rio & no conflict \\
+Sister says don't make missing Flight 370 pilot the fall guy & no conflict \\
+Taliban Announce Spring Offensive in Afghanistan & conflict \\
+Israel warns Lebanon to curb Hezbollah reprisals for air strike & conflict \\
+Bainimarama says NZ easing of sanctions 'insincere & no conflict \\
+Iran's Nuclear Program May Have Cost the Country \$500 Billion or More & no conflict \\
+Paddy Power sponsors Dennis Rodman return trip to North Korea & no conflict \\
+Avramopoulos is visiting Slovenia to discuss the migrant crisis & no conflict \\
+Oh NO NOT Again: "Toyota Recalls 369K Vehicles Globally & no conflict \\
+Air raids on Syrian city of Raqqa kill 39 & no conflict \\
+\bottomrule
+\end{tabular}
+\caption{Randomly sampled exemplary edges contents of the Worldnews-SH, the Filtered Base Edge Set and the Conflict Dataset (in that order). Edges from the Conflict Dataset are listed with their corresponding labels.}
+\label{tab:example-edges}
+\end{table}
+
+
+
 \section{Reference Edge Sets}
 \label{app-sec:ref-edge-sets}
 
@@ -302,6 +351,12 @@ semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 
 \label{fig:prec-rec-f1-semsim-ctx-at}
 \end{figure}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{dataset_conflicts_1-2_pred_wildcard_subsample-2000_evaluation_original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5_mcc}
+\caption{Matthews Correlation Coefficient (MCC) vs. ST for the evaluation runs \texttt{random}, \texttt{original}, \texttt{semsim-fix w2v}, \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5 r-10-X}}
+\label{fig:mcc}
+\end{figure}
 
 
 %\newpage
@@ -314,7 +369,7 @@ semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 
 %\toprule
 %Lemma (\(n\_s\)) & Edge Content & Label Dataset & Label Eval. A & Label Eval. B \\
 %\midrule
-%capture (7) & Video captures horror of Istanbul airport attack & no conflict & conflict & no conflict) \\
+%capture (7) & Video captures horror of Istanbul airport attack & no conflict & conflict & no conflict \\
 %& Syrian Troops Capture Village Near Northern City of Aleppo & no conflict & conflict & no conflict \\
 %& Iraqi forces capture key parts of Mosul neighborhood & no conflict & conflict & no conflict \\
 %& Iraqi forces capture west Mosul's main buildings in pre-dawn raid & no conflict & conflict & no conflict \\
@@ -550,5 +605,3 @@ semsim-ctx & gte-at & r-10-mean-best & 0.72 & 0.338 & 0.900 & 0.491 & +/- 0.008 
 %\caption{Dataset labels and evaluation labels for edges corresponding to predicate lemmas with the highest abs. diff. in precision between the evaluation runs with recall \(> 0\) and number of samples per lemma \(n_s >= 5\) for the evaluation runs \texttt{semsim-fix-lemma cn t-0.30} (A) and \texttt{semsim-ctx e5 r-10-2 t-0.72} (B)  (Num. ten of top ten lemma)}
 %\label{tab:ples-labels-7}
 %\end{sidewaystable}
-
-
