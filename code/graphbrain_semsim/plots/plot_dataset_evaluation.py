@@ -149,6 +149,7 @@ def get_random_baseline_plot_info(dataset_id: str) -> DatasetEvaluationPlotInfo:
     precision = t_p / (t_p + f_p)
     recall = t_p / (t_p + f_n)
     f1_score = 2 * (precision * recall) / (precision + recall)
+    mcc = (t_p * t_n - f_p * f_n) / ((t_p + f_p) * (t_p + f_n) * (t_n + f_p) * (t_n + f_n)) ** 0.5
 
     return DatasetEvaluationPlotInfo(
         dataset_eval_id=f"{dataset_id}_random",
@@ -163,7 +164,8 @@ def get_random_baseline_plot_info(dataset_id: str) -> DatasetEvaluationPlotInfo:
                 accuracy=accuracy,
                 recall=recall,
                 precision=precision,
-                f1=f1_score
+                f1=f1_score,
+                mcc=mcc,
             )
         ),
         plot_line_color=get_plot_line_color(dataset_id),
@@ -312,107 +314,107 @@ if __name__ == "__main__":
         add_random_baseline=True,
         plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
     )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "1-1_original-pattern",
-    #         "2-1_pred_semsim-fix_wildcard_w2v",
-    #         "2-2_pred_semsim-fix-lemma_wildcard_cn",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
-    #     ],
-    #     eval_metrics=["f1"],
-    #     add_random_baseline=True,
-    #     plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
-    # )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "1-1_original-pattern",
-    #         "2-2_pred_semsim-fix-lemma_wildcard_cn",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall"],
-    #     add_random_baseline=True,
-    #     plot_name_suffix="original_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
-    # )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "1-1_original-pattern",
-    #         "2-2_pred_semsim-fix-lemma_wildcard_cn",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall", "f1"],
-    #     plot_name_suffix="original_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
-    # )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "2-2_pred_semsim-fix-lemma_wildcard_cn",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall", "f1"],
-    #     plot_name_suffix="semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
-    # )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-1",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-3",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
-    #     ],
-    #     eval_metrics=["f1"],
-    #     plot_name_suffix="semsim-ctx_e5_nref-1_vs_nref-3_vs_nref-10"
-    # )
-    # # ----- SemSim CTX - E5-AT -----
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall", "f1"],
-    #     plot_name_suffix="semsim-ctx_nref-10_e5-vs_e5-at"
-    # )
-    # # ----- SemSim CTX - GTE -----
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_gte_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall", "f1"],
-    #     plot_name_suffix="semsim-ctx_nref-10_e5_vs_gte"
-    # )
-    # # ----- SemSim CTX - GTE-AT -----
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "1-1_original-pattern",
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
-    #     ],
-    #     eval_metrics=["precision", "recall"],
-    #     add_random_baseline=True,
-    #     plot_name_suffix="original_vs_semsim-ctx_nref-10_e5_vs_gte-at"
-    # )
-    # plot(
-    #     case_study=CASE_STUDY,
-    #     dataset_name="1-2_pred_wildcard_subsample-2000",
-    #     dataset_eval_names=[
-    #         "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_gte_nref-10",
-    #         "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
-    #     ],
-    #     eval_metrics=["f1"],
-    #     plot_name_suffix="semsim-ctx_nref-10_e5_e5-at_gte_gte-at"
-    # )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "1-1_original-pattern",
+            "2-1_pred_semsim-fix_wildcard_w2v",
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["f1"],
+        add_random_baseline=True,
+        plot_name_suffix="original_vs_semsim-fix_w2v_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "1-1_original-pattern",
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["precision", "recall"],
+        add_random_baseline=True,
+        plot_name_suffix="original_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "1-1_original-pattern",
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["precision", "recall", "f1"],
+        plot_name_suffix="original_vs_semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "2-2_pred_semsim-fix-lemma_wildcard_cn",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["precision", "recall", "f1"],
+        plot_name_suffix="semsim-fix-lemma_cn_vs_semsim-ctx_nref-10_e5"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-1",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-3",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10"
+        ],
+        eval_metrics=["f1"],
+        plot_name_suffix="semsim-ctx_e5_nref-1_vs_nref-3_vs_nref-10"
+    )
+    # ----- SemSim CTX - E5-AT -----
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10"
+        ],
+        eval_metrics=["precision", "recall", "f1"],
+        plot_name_suffix="semsim-ctx_nref-10_e5-vs_e5-at"
+    )
+    # ----- SemSim CTX - GTE -----
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte_nref-10"
+        ],
+        eval_metrics=["precision", "recall", "f1"],
+        plot_name_suffix="semsim-ctx_nref-10_e5_vs_gte"
+    )
+    # ----- SemSim CTX - GTE-AT -----
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "1-1_original-pattern",
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
+        ],
+        eval_metrics=["precision", "recall"],
+        add_random_baseline=True,
+        plot_name_suffix="original_vs_semsim-ctx_nref-10_e5_vs_gte-at"
+    )
+    plot(
+        case_study=CASE_STUDY,
+        dataset_name="1-2_pred_wildcard_subsample-2000",
+        dataset_eval_names=[
+            "2-3_pred_semsim-ctx_wildcard_e5_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_e5-at_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte_nref-10",
+            "2-3_pred_semsim-ctx_wildcard_gte-at_nref-10"
+        ],
+        eval_metrics=["f1"],
+        plot_name_suffix="semsim-ctx_nref-10_e5_e5-at_gte_gte-at"
+    )

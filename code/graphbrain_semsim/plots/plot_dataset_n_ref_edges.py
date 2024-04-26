@@ -13,8 +13,9 @@ from graphbrain_semsim.eval_tools.result_data.dataset_evals import (
 )
 from graphbrain_semsim.eval_tools.utils.pretty_names import prettify_eval_name
 from graphbrain_semsim.plots import plot_base_config
-from graphbrain_semsim.plots._base_config import get_plot_line_color, PLOT_LINE_WEIGHTS, PLOT_LINE_STYLES, \
-    EVAL_METRIC_LABELS
+from graphbrain_semsim.plots._base_config import (
+    get_plot_line_color, PLOT_LINE_WEIGHTS, PLOT_LINE_STYLES, EVAL_METRIC_LABELS
+)
 
 from graphbrain_semsim.case_studies.conflicts.config import CASE_STUDY
 
