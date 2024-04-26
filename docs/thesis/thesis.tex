@@ -1164,6 +1164,7 @@ The entailing software design and development is centred around integrating the 
 
 Implementation details, which are considered not to contribute to the general understanding of the software system, are omitted or  have been modified for better readability and clarity. This means that all code listing presented below are pseudocode.
 
+The particular version of graphbrain employed in this work is available in a dedicated repository, established specifically for this purpose.\footnote{Thesis implementation: \url{https://github.com/wuxmax/graphbrain-thesis}}
 
 
 \section{Overview of \textit{graphbrain}}
@@ -1799,7 +1800,7 @@ The embeddings are computed for the candidate edge and reference edges and their
 \label{cha:evaluation}
 In this chapter the conceived concept (see \cref{cha:solution-approach}) and specific implementation (see \cref{cha:implementation}) of the neural embedding-based semantic similarity extended Semantic Hypergraph pattern matching system is evaluated to answer research questions posed in \cref{sec:research-questions}.  Therefore a a case study is conducted to evaluate the system for a specific use case. 
 
-\todo[inline]{add reference to evaluation implementation}
+The software code specific to the evaluation is available in a separate repository.\footnote{Thesis evaluation implementation: \url{https://github.com/wuxmax/graphbrain-semsim-thesis}}
 
 \section{Case Study: Conflicts}
 The conflicts case study follows the approach presented in \citef{menezesSemanticHypergraphs2021}, where expressions of conflict are extracted from a given \gls{sh} using a single \gls{sh} pattern. In their work they build upon the information extracted by the pattern to conduct further analyses, which are not in the scope of this work. Here the evaluation is limited to the task of classifying whether the content of a given edge in the \gls{sh} is an expression of conflict or not. Or framed differently, the task is to retrieve exactly all those edges whose content is an expression of conflict. The evaluation will compare the retrieval performance of a suitable set of different \gls{sh} patterns and corresponding configuration of the \gls{ness-shpm} system by matching them against a labelled dataset of hyperedges.
@@ -2620,7 +2621,9 @@ Prior to the result synthesis, we discuss some general limitations of this evalu
 \paragraph{Retrieval Performance Metric}
 In this evaluation, F1-Score is chosen as overall retrieval performance metric, since it is an established metric for text retrieval and classification tasks and closely relates to precision and recall. There exists other metrics, such as the \textit{Matthews Correlation Coefficient} (MCC), which can be used to assess retrieval or classification performance. The MMC has recently been identified to be more suitable for many binary classification tasks \cite{chiccoAdvantagesMatthewsCorrelation2020}, which is a possible framing for the task evaluated here. Nonetheless, we use F1-Score because it is very well established and relates closely to precision and recall, specifically sharing the same value range. This makes it especially useful for jointly plotting these metrics. However, it shall be noted that the F1-Score of the original evaluation run is lower than of the random evaluation run, which indicates a legitimate interest for using another metric to assess retrieval (or classification) performance  in this case study. An MCC plot for the evaluation runs \texttt{random}, \texttt{original}, \texttt{semsim-fix w2v}, \texttt{semsim-fix-lemma cn} and \texttt{semsim-ctx e5 r-10-X} is given in \cref{fig:mcc} in \cref{app-sec:eval-metric-vs-st-plots}. Here the random evaluation run shows lower retrieval performance than the original evaluation run. The relation of the retrieval performance of \gls{ness-shpm} and symbolic matching (i.e. the original conflict pattern) does not change in principle. Though, the effect of \gls{ness} type and \gls{ness} configurations on retrieval performance of \gls{ness-shpm} differs in comparison to an F1-Score based evaluation.
 
-\todo[inline]{Add missing breakpoints "no breakpoints" discussion?}
+%\todo[inline]{Add missing breakpoints "no breakpoints" discussion?}
+\subsection*{\large{Result Synthesis}} 
+The following section consolidates the primary insights obtained from examining the signification observations across the different result data perspectives.
 
 \subsection{Retrieval Performance Improvement}
 \label{sec:result-retrieval-performance-improvement}
