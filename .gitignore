@@ -1,9 +1,13 @@
 data/_old_results
 data/evaluations/*
 data/plots/_util_data/*
+
 docs/resources/
 !docs/resources/MA.bib
+!docs/resources/imgs/diagrams/*
+!docs/resources/imgs/logos/*
 
+orga
 
 .idea
 .DS_Store
