@@ -33,6 +33,7 @@ def get_best_evaluations_and_results_and_thresholds(
             f"precision={best_evaluation_result.precision:.3f}, "
             f"recall={best_evaluation_result.recall:.3f}, "
             f"f1={best_evaluation_result.f1:.3f}"
+            f"mcc={best_evaluation_result.mcc:.3f}, "
         )
         if best_threshold is not None:
             logger.info(f"--> best threshold: {best_threshold:.2f}")
@@ -152,7 +153,7 @@ def get_best_results_and_thresholds_for_multi_eval(
 
 def get_best_result_and_threshold_for_single_eval(
         symbolic_eval_result: EvaluationResult,
-        semsim_eval_results: EvaluationResult,
+        semsim_eval_results: dict[float, EvaluationResult],
         eval_metric: str
 ) -> tuple[EvaluationResult, float | None]:
     if symbolic_eval_result:
@@ -172,7 +173,7 @@ def compute_mean_semsim_eval_results(sub_evaluations: list[DatasetEvaluation]) -
     # compute mean values for each semsim threshold
     return {
         t: EvaluationResult(**{
-            eval_metric: mean([sub_eval.semsim_eval_results[t][eval_metric] for sub_eval in sub_evaluations])
+            eval_metric: mean(getattr(sub_eval.semsim_eval_results[t], eval_metric) for sub_eval in sub_evaluations)
             for eval_metric in EvaluationMetrics
         }) for t in sub_evaluations[0].semsim_eval_results.keys()
     }
