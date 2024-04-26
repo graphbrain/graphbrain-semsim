@@ -85,13 +85,16 @@ class StandardDeviation(BaseModel):
 
 
 class EvaluationResult(BaseModel):
+    num_matches: Optional[int] = None
     matches: Optional[list[Hyperedge]] = None
     correct: Optional[list[Hyperedge]] = None
-    accuracy: float
-    precision: float
-    recall: float
-    f1: float
-    mcc: float
+
+    accuracy: Optional[float] = None
+    precision: Optional[float] = None
+    recall: Optional[float] = None
+    f1: Optional[float] = None
+    mcc: Optional[float] = None
+
     std_dev: Optional[StandardDeviation] = None
 
 
@@ -99,8 +102,8 @@ class DatasetEvaluation(BaseModel):
     dataset_id: str
     pattern_eval_config_id: str
     num_samples: int
-    num_positive: int
-    num_negative: int
+    num_positive: Optional[int] = None
+    num_negative: Optional[int] = None
     semsim_configs: Optional[dict[SemSimType, SemSimConfig]] = None
     sample_mod: Optional[int] = None
     ref_words: Optional[list[str]] = None

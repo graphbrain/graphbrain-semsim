@@ -30,23 +30,35 @@ def evaluate_dataset_for_pattern(
         ref_words: list[str] = None,
         n_ref_edges: int = None,
         sample_mod: int = None,
-        override: bool = False
+        override: bool = False,
+        only_count_matches: bool = False,
+        ref_edges_dataset_id: str = None,
 ) -> DatasetEvaluation:
     logger.info("-" * 80)
     logger.info(f"Evaluating dataset '{dataset_id}' for pattern '{pattern_config_name}'...")
 
     # Load dataset from file
     dataset: LemmaDataset = load_json(DATASET_DIR / f"{dataset_id}.json", LemmaDataset, exit_on_error=True)
-    dataset_positives, dataset_negatives = get_positives_and_negatives(dataset.all_lemma_matches)
-    log_dataset_statistics(dataset, dataset_positives, dataset_negatives)
+
+    ref_edges_dataset = load_json(
+        DATASET_DIR / f"{ref_edges_dataset_id}.json", LemmaDataset, exit_on_error=True
+    ) if ref_edges_dataset_id else dataset
+
+    dataset_positives, dataset_negatives = None, None
+    if not only_count_matches:
+        dataset_positives, dataset_negatives = get_positives_and_negatives(dataset.all_lemma_matches)
+        log_dataset_statistics(dataset, dataset_positives, dataset_negatives)
+
+    dataset_positives_ref, _ = get_positives_and_negatives(ref_edges_dataset.all_lemma_matches)
 
     # Get pattern evaluation parse_config and run
     pattern_eval_config, pattern_eval_run = get_pattern_eval(
         pattern_configs, pattern_config_name, dataset, override=override
     )
 
-    ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives, n_ref_edges, sample_mod)
-    dataset_positives = filter_dataset_positives(dataset_positives, ref_edges)
+    ref_edges: list[Hyperedge] | None = get_ref_edges(dataset_positives_ref, n_ref_edges, sample_mod)
+    if not ref_edges_dataset_id and not only_count_matches:
+        dataset_positives = filter_dataset_positives(dataset_positives, ref_edges)
 
     semsim_configs: dict[SemSimType, SemSimConfig] | None = get_semsim_configs(
         semsim_configs_name, semsim_eval_configs
@@ -56,31 +68,47 @@ def evaluate_dataset_for_pattern(
         dataset_id=dataset_id,
         pattern_eval_config_id=pattern_eval_config.id,
         num_samples=dataset.n_samples,
-        num_positive=len(dataset_positives),
-        num_negative=len(dataset_negatives),
+        num_positive=len(dataset_positives) if dataset_positives else None,
+        num_negative=len(dataset_negatives) if dataset_negatives else None,
         semsim_configs=semsim_configs,
         sample_mod=sample_mod,
         ref_words=ref_words,
         ref_edges=ref_edges,
     )
-
     produce_eval_results(
         dataset_evaluation,
         pattern_eval_run,
         semsim_threshold_range,
-        pattern_eval_config.hypergraph,
+        {lemma_match.match.edge for lemma_match in dataset.all_lemma_matches},
         dataset_positives,
         dataset_negatives,
+        pattern_eval_config.hypergraph,
     )
 
-    produce_lemma_eval_results(dataset_evaluation, dataset.lemma_matches)
+    produce_lemma_eval_results(dataset_evaluation, dataset.lemma_matches, only_count_matches)
 
     dataset_evaluation_file_path: Path = get_dataset_evaluation_file_path(
         dataset.id, pattern_eval_config.id, semsim_configs_name, n_ref_edges, sample_mod,
     )
 
+    if only_count_matches:
+        remove_all_matches(dataset_evaluation)
+
     save_json(dataset_evaluation, dataset_evaluation_file_path)
     return dataset_evaluation
+
+def remove_all_matches(dataset_evaluation: DatasetEvaluation):
+    if dataset_evaluation.symbolic_eval_result:
+        dataset_evaluation.symbolic_eval_result.matches = None
+        for lemma in dataset_evaluation.lemma_symbolic_eval_results:
+            dataset_evaluation.lemma_symbolic_eval_results[lemma].matches = None
+
+    if dataset_evaluation.semsim_eval_results:
+        for threshold in dataset_evaluation.semsim_eval_results:
+            dataset_evaluation.semsim_eval_results[threshold].matches = None
+        for lemma in dataset_evaluation.lemma_semsim_eval_results:
+            for threshold in dataset_evaluation.lemma_semsim_eval_results[lemma]:
+                dataset_evaluation.lemma_semsim_eval_results[lemma][threshold].matches = None
 
 
 def get_positives_and_negatives(matches: list[LemmaMatch]) -> tuple[list[Hyperedge], list[Hyperedge]]:
@@ -177,9 +205,10 @@ def produce_eval_results(
         dataset_evaluation: DatasetEvaluation,
         pattern_eval_run: PatternEvaluationRun,
         semsim_threshold_range: list[float] | None,
+        all_dataset_edges: list[Hyperedge],
+        dataset_positives: list[Hyperedge] | None,
+        dataset_negatives: list[Hyperedge] | None,
         hg_name: str,
-        dataset_positives: list[Hyperedge],
-        dataset_negatives: list[Hyperedge],
 ):
     if semsim_threshold_range:
         assert dataset_evaluation.ref_words or dataset_evaluation.ref_edges, (
@@ -192,34 +221,35 @@ def produce_eval_results(
             dataset_evaluation.ref_words,
             dataset_evaluation.ref_edges,
             hg_name,
+            all_dataset_edges,
             dataset_positives,
             dataset_negatives,
-
         )
     else:
         dataset_evaluation.symbolic_eval_result = get_symbolic_eval_results(
-            pattern_eval_run, dataset_positives, dataset_negatives
+            pattern_eval_run, all_dataset_edges, dataset_positives, dataset_negatives
         )
 
 
 def get_symbolic_eval_results(
         pattern_eval_run: PatternEvaluationRun,
+        all_dataset_edges: set[Hyperedge],
         dataset_positives: list[Hyperedge],
         dataset_negatives: list[Hyperedge],
 ) -> EvaluationResult:
     logger.info(f"Processing symbolic pattern matches...")
-    eval_run_positives: list[Hyperedge] = [
+    eval_run_positives: set[Hyperedge] = {
         match.edge for match in pattern_eval_run.matches
-    ]
-    eval_run_negatives: list[Hyperedge] = [
-        edge for edge in dataset_positives + dataset_negatives
-        if edge not in eval_run_positives
-    ]
+    }
+    eval_run_negatives: set[Hyperedge] = (
+        all_dataset_edges - eval_run_positives
+    )
+
     logger.info("Done!")
 
     return compute_eval_result(
-        eval_run_positives,
-        eval_run_negatives,
+        list(eval_run_positives),
+        list(eval_run_negatives),
         dataset_positives,
         dataset_negatives,
     )
@@ -232,6 +262,7 @@ def get_semsim_eval_results(
         ref_words: list[str],
         ref_edges: list[Hyperedge],
         hg_name: str,
+        all_dataset_edges: set[Hyperedge],
         dataset_positives: list[Hyperedge],
         dataset_negatives: list[Hyperedge],
 ) -> dict[float, EvaluationResult]:
@@ -250,13 +281,12 @@ def get_semsim_eval_results(
     eval_scores: dict[float, EvaluationResult] = {}
     with tqdm(total=total_iterations) as pbar:
         for semsim_threshold in semsim_threshold_range:
-            eval_run_positives: list[Hyperedge] = get_post_semsim_match_edges(
-                pattern_eval_run, semsim_threshold, ref_words, ref_edges, hg, pbar
+            edge_similarities: dict[Hyperedge, float] = {}
+
+            eval_run_positives: set[Hyperedge] = get_post_semsim_match_edges(
+                edge_similarities, pattern_eval_run, semsim_threshold, ref_words, ref_edges, hg, pbar
             )
-            eval_run_negatives: list[Hyperedge] = [
-                match.edge for match in pattern_eval_run.matches
-                if match.edge not in eval_run_positives
-            ]
+            eval_run_negatives: set[Hyperedge] = all_dataset_edges - eval_run_positives
 
             eval_scores[semsim_threshold] = compute_eval_result(
                 eval_run_positives,
@@ -270,40 +300,55 @@ def get_semsim_eval_results(
 
 
 def get_post_semsim_match_edges(
+        edge_similarities: dict[Hyperedge, float],
         pattern_eval_run: PatternEvaluationRun,
         threshold: float,
         ref_words: list[str],
         ref_edges: list[Hyperedge],
         hg: Hypergraph,
         pbar: tqdm,
-) -> list[Hyperedge]:
+) -> set[Hyperedge]:
     post_semsim_match_edges: list[Hyperedge] = []
+
     for match in pattern_eval_run.matches:
-        # either match has no semsim instances
-        # or they need to be matched now
-        if not match.semsim_instances or match_semsim_instances(
-            semsim_instances=match.semsim_instances,
-            pattern=hedge(pattern_eval_run.pattern),
-            edge=match.edge,
-            hg=hg,
-            threshold=threshold,
-            ref_words=ref_words,
-            ref_edges=ref_edges,
-        ):
+        # if the match has no semsim instances,
+        # it cannot be excluded by semsim.
+        # this should not happen, but just in case
+        if not match.semsim_instances:
             post_semsim_match_edges.append(match.edge)
+            pbar.update()
+            continue
+
+        if match.edge not in edge_similarities:
+            edge_similarities[match.edge] = match_semsim_instances(
+                semsim_instances=match.semsim_instances,
+                pattern=hedge(pattern_eval_run.pattern),
+                edge=match.edge,
+                hg=hg,
+                ref_words=ref_words,
+                ref_edges=ref_edges,
+                return_similarities=True
+            )
+
+        if all(similarity >= threshold for similarity in edge_similarities[match.edge]) :
+            post_semsim_match_edges.append(match.edge)
+
         pbar.update()
-    return post_semsim_match_edges
+    return set(post_semsim_match_edges)
 
 
 def produce_lemma_eval_results(
         dataset_evaluation: DatasetEvaluation,
         lemma_matches: dict[str, list[LemmaMatch]],
+        only_count_matches: bool = False,
 ):
     if dataset_evaluation.semsim_eval_results:
         dataset_evaluation.lemma_semsim_eval_results = {
             lemma: {
                 semsim_threshold: compute_eval_result(
-                    *get_lemma_positives_and_negatives(lemma_matches_, semsim_eval_result.matches)
+                    *get_lemma_positives_and_negatives(
+                        lemma_matches_, semsim_eval_result.matches, only_count_matches
+                    )
                 ) for semsim_threshold, semsim_eval_result in dataset_evaluation.semsim_eval_results.items()
             } for lemma, lemma_matches_ in lemma_matches.items()
         }
@@ -311,16 +356,21 @@ def produce_lemma_eval_results(
     if dataset_evaluation.symbolic_eval_result:
         dataset_evaluation.lemma_symbolic_eval_results = {
             lemma: compute_eval_result(
-                *get_lemma_positives_and_negatives(lemma_matches_, dataset_evaluation.symbolic_eval_result.matches)
+                *get_lemma_positives_and_negatives(
+                    lemma_matches_, dataset_evaluation.symbolic_eval_result.matches, only_count_matches
+                )
             ) for lemma, lemma_matches_ in lemma_matches.items()
         }
 
 
 def get_lemma_positives_and_negatives(
         lemma_matches: list[LemmaMatch],
-        eval_result_matches: list[PatternMatch]
-) -> tuple[list[Hyperedge], list[Hyperedge], list[Hyperedge], list[Hyperedge]]:
-    lemma_dataset_positives, lemma_dataset_negatives = get_positives_and_negatives(lemma_matches)
+        eval_result_matches: list[PatternMatch],
+        only_count_matches: bool = False,
+) -> tuple[list[Hyperedge], list[Hyperedge], list[Hyperedge] | None, list[Hyperedge] | None]:
+    lemma_dataset_positives, lemma_dataset_negatives = None, None
+    if not only_count_matches:
+        lemma_dataset_positives, lemma_dataset_negatives = get_positives_and_negatives(lemma_matches)
 
     lemma_eval_run_positives: list[Hyperedge] = [
         lemma_match.match.edge for lemma_match in lemma_matches if lemma_match.match.edge in eval_result_matches
@@ -333,11 +383,14 @@ def get_lemma_positives_and_negatives(
 
 
 def compute_eval_result(
-        eval_run_positives: list[Hyperedge],
+        eval_run_positives: list[Hyperedge] ,
         eval_run_negatives: list[Hyperedge],
-        dataset_positives: list[Hyperedge],
-        dataset_negatives: list[Hyperedge],
+        dataset_positives: list[Hyperedge] | None,
+        dataset_negatives: list[Hyperedge] | None
 ) -> EvaluationResult:
+    if dataset_positives is None or dataset_negatives is None:
+        return EvaluationResult(matches=eval_run_positives, num_matches=len(eval_run_positives))
+
     true_positives: list[Hyperedge] = list(set(dataset_positives) & set(eval_run_positives))
     t_p: int = len(true_positives)
     t_n: int = len(set(dataset_negatives) & set(eval_run_negatives))
