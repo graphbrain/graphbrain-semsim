@@ -79,6 +79,8 @@ def compare_lemma_results_by_eval_metric_diff(
     # lemma_compare_metric: str = "precision"
     lemma_compare_metric: str = "f1"
 
+    both_recalls_non_zero: bool = True
+
     # get lemmas with the highest difference in evaluation score for the two dataset evaluations
     best_evaluation_1, _, best_threshold_1 = best_evaluations_results_thresholds[dataset_eval_names[0]]
     best_evaluation_2, _, best_threshold_2 = best_evaluations_results_thresholds[dataset_eval_names[1]]
@@ -113,8 +115,12 @@ def compare_lemma_results_by_eval_metric_diff(
         best_lemma_result_1: EvaluationResult = best_lemma_results_1[lemma]
         best_lemma_result_2: EvaluationResult = best_lemma_results_2[lemma]
 
-        if best_lemma_result_1.recall > 0 and best_lemma_result_2.recall > 0:
-        # if best_lemma_result_1.recall > 0 or best_lemma_result_2.recall > 0:
+        if both_recalls_non_zero:
+            recall_condition: bool = best_lemma_result_1.recall > 0 and best_lemma_result_2.recall > 0
+        else:
+            recall_condition: bool = best_lemma_result_1.recall > 0 or best_lemma_result_2.recall > 0
+
+        if recall_condition:
             best_lemma_result_score_1: float = getattr(best_lemma_result_1, lemma_compare_metric)
             best_lemma_result_score_2: float = getattr(best_lemma_result_2, lemma_compare_metric)
             lemma_results_scores_and_diffs.append((
