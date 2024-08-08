@@ -7,8 +7,6 @@ docs/resources/
 !docs/resources/imgs/diagrams/*
 !docs/resources/imgs/logos/*
 
-orga
-
 .idea
 .DS_Store
 .texpadtmp
