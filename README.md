@@ -1,5 +1,6 @@
 # Extending Semantic Hypergraphs by Neural Embedding-based Semantic Similarity for Pattern Matching
-This repository contains the evaluation code, evaluation datasets, and evaluation results -- as well as thesis documents -- for the master's thesis in computer science at TU Berlin (in association with the Computation Social Science team at Centre Marc Bloch):  
+This repository contains the evaluation code, evaluation datasets, and evaluation results - as well as thesis documents - for the following master's thesis in computer science at TU Berlin (in association with the Computation Social Science team at Centre Marc Bloch):  
+
 **"Extending Semantic Hypergraphs by Neural Embedding-based Semantic Similarity for Pattern Matching"** ([PDF](docs/thesis/thesis.pdf)) by Max Reinhard
 
 ### Semantic Hypergraph Framework
